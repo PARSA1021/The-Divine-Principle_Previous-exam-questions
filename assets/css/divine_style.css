@@ -4,22 +4,23 @@ body {
     text-align: center;
     background-color: #f4f4f9;
     margin: 0;
-    padding: 20px;
+    padding: 10px;
 }
 
 /* 제목 스타일 */
 h1 {
     color: #002366;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
+    margin-bottom: 15px;
 }
 
 /* 문제 컨테이너 */
 #quiz-container {
-    max-width: 700px;
+    max-width: 90%;
     margin: 20px auto;
     background: white;
-    padding: 30px;
+    padding: 20px;
     border-radius: 15px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
     transition: opacity 0.5s ease-in-out;
@@ -27,7 +28,7 @@ h1 {
 
 /* 문제 텍스트 */
 .question-text {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     margin-bottom: 15px;
     line-height: 1.6;
@@ -36,11 +37,11 @@ h1 {
 /* 빈칸 스타일 */
 .blank {
     display: inline-block;
-    width: 80px;
-    height: 25px;
+    width: 70px;
+    height: 22px;
     border-bottom: 2px solid #002366;
     color: #999;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
 }
 
@@ -48,7 +49,6 @@ h1 {
     background-color: #ddd;
 }
 
-/* 빈칸 선택 시 색상 변화 */
 .blank.selected {
     color: #000;
     border-bottom: 2px solid #1e3a8a;
@@ -59,18 +59,18 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 8px;
+    margin-top: 15px;
 }
 
 .option-btn {
     background-color: #ddd;
     color: #333;
-    font-size: 16px;
-    padding: 10px 15px;
+    font-size: 14px;
+    padding: 10px;
     border: none;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 6px;
     transition: background-color 0.3s, transform 0.2s;
 }
 
@@ -79,11 +79,11 @@ h1 {
     transform: scale(1.05);
 }
 
-/* 정답 및 피드백 스타일 */
+/* 피드백 스타일 */
 .feedback {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .correct {
@@ -94,14 +94,13 @@ h1 {
     color: red;
 }
 
-/* 경고 피드백 스타일 (JavaScript에서 사용) */
 .feedback.warning {
     color: orange;
 }
 
 /* 진행 상황 스타일 */
 #progress {
-    font-size: 18px;
+    font-size: 16px;
     color: #333;
     margin: 10px 0;
 }
@@ -109,59 +108,38 @@ h1 {
 /* 버튼 컨테이너 스타일 */
 .button-container {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-/* 정답 확인 버튼 */
-#check-answer {
-    display: none;
-    background-color: #1e3a8a;
-    color: white;
-    font-size: 15px;
-    padding: 15px 30px;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     margin-top: 15px;
 }
 
-#check-answer:hover {
-    background-color: #162d6a;
-}
-
-/* 다음 문제 버튼 */
-#next-question {
-    display: none;
-    background-color: #1e3a8a;
-    color: white;
-    font-size: 18px;
-    padding: 12px 25px;
+/* 버튼 스타일 */
+button {
+    width: 100%;
+    max-width: 300px;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
-    border-radius: 8px;
-    margin-top: 15px;
 }
 
-#next-question:hover {
-    background-color: #162d6a;
-}
-
-#timer {
+#check-answer, #next-question, #restart {
+    background-color: #1e3a8a;
+    color: white;
     font-size: 16px;
-    color: #666;
-    margin-top: 10px;
+    padding: 12px;
+}
+
+#check-answer:hover, #next-question:hover, #restart:hover {
+    background-color: #162d6a;
 }
 
 #show-explanation {
     background-color: #28a745;
     color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
+    padding: 10px;
 }
 
 #show-explanation:hover {
@@ -169,48 +147,15 @@ h1 {
 }
 
 #explanation {
-    font-size: 16px;
+    font-size: 14px;
     color: #333;
     background: #f0f0f0;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
 }
 
-#restart {
-    background-color: #007BFF;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-#restart:hover {
-    background-color: #0056b3;
-}
-
-/* 📱 모바일 반응형 */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    #quiz-container {
-        padding: 20px;
-        max-width: 100%;
-    }
-    .button-container {
-        flex-direction: column;
-        align-items: center;
-    }
-    button {
-        width: 100%;
-        font-size: 14px;
-        padding: 12px;
-    }
-}
-
-@media (max-width: 400px) {
+/* 반응형 디자인 */
+@media (max-width: 768px) {
     h1 {
         font-size: 24px;
     }
@@ -221,5 +166,27 @@ h1 {
         width: 60px;
         height: 20px;
         font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 22px;
+    }
+    .question-text {
+        font-size: 14px;
+    }
+    .blank {
+        width: 50px;
+        height: 18px;
+        font-size: 12px;
+    }
+    .option-btn {
+        font-size: 12px;
+        padding: 8px;
+    }
+    button {
+        font-size: 14px;
+        padding: 10px;
     }
 }
