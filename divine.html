@@ -2,10 +2,12 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- iOS 전체 화면 모드 -->
+    <meta name="mobile-web-app-capable" content="yes"> <!-- 안드로이드 전체 화면 모드 -->
     <title>원리강론 퀴즈</title>
     <link rel="stylesheet" href="assets/css/divine_style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* 🌍 전체 페이지 스타일 */
         body {
@@ -14,7 +16,7 @@
             background-color: #eef2f3;
             margin: 0;
             padding: 20px;
-            background-image: url('ffwpu-background.jpg'); /* 배경 이미지 */
+            background-image: url('ffwpu-background.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -22,6 +24,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+            overflow-x: hidden; /* 가로 스크롤 방지 */
         }
 
         /* 🔆 로고 스타일 */
@@ -29,14 +33,17 @@
             display: flex;
             justify-content: center;
             margin-bottom: 15px;
+            touch-action: manipulation; /* 터치 확대 방지 */
         }
 
         .logo-container img {
-            width: 60px; /* 로고 크기 작게 조정 */
+            width: 60px;
             height: auto;
             border-radius: 50%;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
             animation: fadeIn 1s ease-in;
+            -webkit-user-select: none; /* 텍스트 선택 방지 */
+            user-select: none;
         }
 
         /* 📊 진행 상황 */
@@ -70,6 +77,7 @@
             gap: 15px;
             margin-top: 30px;
             flex-wrap: wrap;
+            touch-action: manipulation; /* 터치 최적화 */
         }
 
         /* 🔘 버튼 스타일 */
@@ -86,7 +94,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px; /* 아이콘과 텍스트 간격 */
+            gap: 8px;
+            -webkit-tap-highlight-color: transparent; /* 클릭 하이라이트 제거 */
         }
 
         button.blue {
@@ -99,16 +108,19 @@
             color: white;
         }
 
-        button:hover:not(:disabled) {
+        button:hover:not(:disabled),
+        button:active:not(:disabled) {
             transform: scale(1.05);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        button.blue:hover:not(:disabled) {
+        button.blue:hover:not(:disabled),
+        button.blue:active:not(:disabled) {
             background-color: #162d6a;
         }
 
-        button.gold:hover:not(:disabled) {
+        button.gold:hover:not(:disabled),
+        button.gold:active:not(:disabled) {
             background-color: #b9972e;
         }
 
@@ -129,14 +141,15 @@
             .button-container {
                 flex-direction: column;
                 align-items: center;
+                gap: 10px; /* 버튼 간격 줄임 */
             }
             button {
                 width: 100%;
-                height: 50px;
+                height: 55px; /* 터치 영역 확장 */
                 font-size: 16px;
             }
             .logo-container img {
-                width: 50px; /* 모바일에서 더 작게 */
+                width: 50px;
             }
         }
 
@@ -145,11 +158,21 @@
                 font-size: 0.9rem;
             }
             button {
-                height: 45px;
+                height: 50px;
                 font-size: 14px;
             }
             .logo-container img {
                 width: 40px;
+            }
+            #quiz-container {
+                padding: 10px;
+            }
+        }
+
+        /* iOS 스타일 개선 */
+        @media (max-width: 600px) and (-webkit-min-device-pixel-ratio: 2) {
+            button {
+                padding: 10px; /* 터치 영역 추가 확장 */
             }
         }
 
@@ -195,6 +218,16 @@
                     document.getElementById("total-questions").textContent = data.length;
                 })
                 .catch(error => console.error("JSON 파일 로드 실패:", error));
+        });
+
+        // 모바일 터치 이벤트 추가
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.classList.add('active');
+            });
+            button.addEventListener('touchend', function() {
+                this.classList.remove('active');
+            });
         });
     </script>
 </body>
