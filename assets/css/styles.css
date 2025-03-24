@@ -1,205 +1,224 @@
 /* 전체 페이지 스타일 */
 body {
-    font-family: 'Noto Sans KR', Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     text-align: center;
-    background: linear-gradient(135deg, #eef2f3, #d1d9e6);
+    background-color: #f9f9fb;
     margin: 0;
-    padding: 10px;
+    padding: 20px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: fadeIn 0.5s ease-in;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.container {
-    max-width: 800px;
-    width: 90%;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s;
-}
-
-.container:hover {
-    transform: scale(1.02);
-}
-
+/* 제목 스타일 */
 h1 {
-    color: #002366;
-    font-size: 30px;
+    color: #1a237e;
+    font-size: 32px;
     font-weight: bold;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
 }
 
+/* 문제 컨테이너 */
 #quiz-container {
-    margin: 20px 0;
+    width: 90%;
+    max-width: 750px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.4s ease-in-out, transform 0.2s;
+    text-align: center;
 }
 
+/* 문제 텍스트 */
 .question-text {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     line-height: 1.6;
-    color: #333;
+    text-align: center;
 }
 
+/* 빈칸 스타일 */
 .blank {
     display: inline-block;
     width: 90px;
-    height: 24px;
-    border-bottom: 2px solid #002366;
-    color: #999;
+    height: 26px;
+    border-bottom: 3px solid #1a237e;
+    color: #444;
     font-size: 18px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: background-color 0.3s;
+    text-align: center;
+    font-weight: bold;
 }
 
 .blank:hover {
-    background-color: #ddd;
+    background-color: #e3e3e3;
 }
 
 .blank.selected {
     color: #000;
-    border-bottom: 2px solid #1e3a8a;
-    background-color: #f5f5f5;
+    border-bottom: 3px solid #3949ab;
+    background-color: #f0f0f0;
+    padding: 2px 0;
 }
 
+/* 객관식 버튼 스타일 */
 .options-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     margin-top: 20px;
+    width: 100%;
 }
 
 .option-btn {
-    background-color: #1e3a8a;
-    color: white;
-    font-size: 16px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 18px;
+    padding: 16px 20px;
+    border: none;
     cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+    text-align: center;
+    width: 45%;
+    min-width: 140px;
 }
 
-.option-btn:hover {
-    background-color: #162d6a;
+.option-btn:hover, .option-btn.selected {
+    background-color: #3949ab;
+    color: white;
     transform: scale(1.08);
 }
 
-.option-btn.selected {
-    background: #d4af37;
-}
-
+/* 피드백 스타일 */
 .feedback {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 18px;
+    text-align: center;
 }
 
 .correct {
-    color: green;
+    color: #2e7d32;
 }
 
 .incorrect {
-    color: red;
+    color: #c62828;
 }
 
 .feedback.warning {
-    color: orange;
+    color: #fbc02d;
 }
 
+/* 진행 상황 스타일 */
 #progress {
-    font-size: 16px;
+    font-size: 18px;
     color: #333;
-    margin: 10px 0;
+    margin: 18px 0;
+    text-align: center;
 }
 
+/* 버튼 컨테이너 스타일 */
 .button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 14px;
+    margin-top: 25px;
+    width: 100%;
 }
 
+/* 버튼 스타일 */
 button {
-    width: 100%;
-    max-width: 300px;
-    font-size: 16px;
-    padding: 14px;
+    width: 90%;
+    max-width: 330px;
+    font-size: 17px;
+    padding: 15px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
     font-weight: bold;
-    background: #1e3a8a;
+    transition: background 0.3s, transform 0.2s;
+    text-align: center;
+}
+
+#check-answer, #next-question, #restart {
+    background-color: #3949ab;
     color: white;
-    transition: all 0.3s ease;
 }
 
-button:hover {
-    background: #162d6a;
-    transform: scale(1.08);
-}
-
-button:disabled {
-    background: #999;
-    cursor: not-allowed;
+#check-answer:hover, #next-question:hover, #restart:hover {
+    background-color: #283593;
+    transform: scale(1.06);
 }
 
 #show-explanation {
-    background-color: #28a745;
+    background-color: #43a047;
     color: white;
     padding: 12px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
 }
 
 #show-explanation:hover {
-    background-color: #218838;
-    transform: scale(1.08);
+    background-color: #2e7d32;
 }
 
 #explanation {
-    font-size: 16px;
+    font-size: 17px;
     color: #333;
-    background: rgba(255, 255, 255, 0.85);
+    background: #f0f0f0;
     padding: 12px;
-    border-radius: 10px;
-    display: none;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    width: 90%;
+    max-width: 750px;
 }
 
-#check-btn:hover:not(:disabled),
-#check-btn:active:not(:disabled) {
-    background-color: #162d6a;
-    padding: 14px 22px;
-    border-radius: 12px;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
-    transition: all 0.3s ease;
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 28px;
+    }
+    .question-text {
+        font-size: 20px;
+    }
+    .blank {
+        width: 75px;
+        height: 24px;
+        font-size: 16px;
+    }
+    .option-btn {
+        font-size: 16px;
+        padding: 14px 18px;
+        width: 100%;
+    }
 }
 
-@media (max-width: 600px) {
-    h1 { font-size: 26px; }
-    .question-text { font-size: 16px; }
-    .option-btn { font-size: 14px; padding: 10px 15px; }
-    button { width: 100%; font-size: 14px; padding: 12px; }
-    .container { padding: 20px; }
-    .options-container { flex-direction: column; gap: 12px; }
-}
-
-@media (max-width: 400px) {
-    h1 { font-size: 22px; }
-    .question-text { font-size: 14px; }
-    button { width: 100%; height: 42px; font-size: 13px; }
-    .option-btn { padding: 8px 12px; font-size: 12px; }
-    .container { padding: 15px; }
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+@media (max-width: 480px) {
+    h1 {
+        font-size: 26px;
+    }
+    .question-text {
+        font-size: 18px;
+    }
+    .blank {
+        width: 65px;
+        height: 22px;
+        font-size: 15px;
+    }
+    .option-btn {
+        font-size: 15px;
+        padding: 12px 16px;
+    }
+    button {
+        font-size: 15px;
+        padding: 13px;
+    }
 }

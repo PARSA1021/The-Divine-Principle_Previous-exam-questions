@@ -1,179 +1,220 @@
 /* 전체 페이지 스타일 */
 body {
-    font-family: 'Noto Sans KR', Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     text-align: center;
-    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    background-color: #f9f9fb;
     margin: 0;
-    padding: 10px;
+    padding: 20px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.container {
-    max-width: 800px;
-    width: 90%;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.5s ease-in-out;
-}
-
+/* 제목 스타일 */
 h1 {
-    color: #1e40af;
-    font-size: 30px;
+    color: #1a237e;
+    font-size: 34px;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
+/* 문제 컨테이너 */
 #quiz-container {
-    margin: 25px 0;
+    width: 90%;
+    max-width: 750px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.4s ease-in-out;
+    text-align: center;
 }
 
+/* 문제 텍스트 */
 .question-text {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     line-height: 1.6;
-    color: #1e293b;
+    text-align: center;
 }
 
+/* 빈칸 스타일 */
 .blank {
     display: inline-block;
-    width: 85px;
-    height: 24px;
-    border-bottom: 2px solid #1e40af;
-    color: #888;
-    font-size: 17px;
+    width: 90px;
+    height: 26px;
+    border-bottom: 3px solid #1a237e;
+    color: #444;
+    font-size: 18px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: background-color 0.3s;
+    text-align: center;
+    font-weight: bold;
 }
 
 .blank:hover {
-    background-color: #f3f4f6;
+    background-color: #e3e3e3;
 }
 
 .blank.selected {
     color: #000;
-    border-bottom: 2px solid #2563eb;
+    border-bottom: 3px solid #3949ab;
 }
 
+/* 객관식 버튼 스타일 */
 .options-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
     justify-content: center;
-    gap: 10px;
     margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
 }
 
 .option-btn {
-    background-color: #2563eb;
-    color: white;
-    font-size: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    transition: background-color 0.3s, transform 0.2s;
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 18px;
+    padding: 16px 20px;
+    border: none;
     cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+    text-align: center;
+    width: 100%;
 }
 
 .option-btn:hover {
-    background-color: #1e3a8a;
-    transform: scale(1.07);
+    background-color: #bdbdbd;
+    transform: scale(1.06);
 }
 
-.option-btn.selected {
-    background: #facc15;
-    color: #333;
-}
-
+/* 피드백 스타일 */
 .feedback {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: bold;
-    margin-top: 12px;
+    margin-top: 18px;
+    text-align: center;
 }
 
-.correct { color: green; }
-.incorrect { color: red; }
-.feedback.warning { color: orange; }
+.correct {
+    color: #2e7d32;
+}
 
+.incorrect {
+    color: #c62828;
+}
+
+.feedback.warning {
+    color: #fbc02d;
+}
+
+/* 진행 상황 스타일 */
 #progress {
-    font-size: 17px;
+    font-size: 18px;
     color: #333;
-    margin: 12px 0;
+    margin: 18px 0;
+    text-align: center;
 }
 
+/* 버튼 컨테이너 스타일 */
 .button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 14px;
+    margin-top: 25px;
+    width: 100%;
 }
 
+/* 버튼 스타일 */
 button {
-    width: 100%;
-    max-width: 320px;
-    font-size: 15px;
-    padding: 14px;
+    width: 90%;
+    max-width: 330px;
+    font-size: 17px;
+    padding: 15px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
     font-weight: bold;
-    background: #2563eb;
+    transition: background 0.3s, transform 0.2s;
+    text-align: center;
+}
+
+#check-answer, #next-question, #restart {
+    background-color: #3949ab;
     color: white;
-    transition: all 0.3s;
 }
 
-button:hover {
-    background: #1e3a8a;
-    transform: scale(1.07);
-}
-
-button:disabled {
-    background: #a1a1aa;
-    cursor: not-allowed;
+#check-answer:hover, #next-question:hover, #restart:hover {
+    background-color: #283593;
+    transform: scale(1.06);
 }
 
 #show-explanation {
-    background-color: #10b981;
+    background-color: #43a047;
     color: white;
     padding: 12px;
-    border-radius: 8px;
 }
 
 #show-explanation:hover {
-    background-color: #059669;
+    background-color: #2e7d32;
 }
 
 #explanation {
-    font-size: 15px;
-    color: #374151;
-    background: rgba(255, 255, 255, 0.85);
+    font-size: 17px;
+    color: #333;
+    background: #f0f0f0;
     padding: 12px;
-    border-radius: 10px;
-    display: none;
+    border-radius: 8px;
+    text-align: center;
+    width: 90%;
+    max-width: 750px;
 }
 
-@media (max-width: 600px) {
-    h1 { font-size: 26px; }
-    .question-text { font-size: 18px; }
-    .option-btn { font-size: 14px; padding: 10px 15px; }
-    button { width: 100%; font-size: 14px; padding: 12px; }
-    .container { padding: 20px; }
-    .options-container { flex-direction: column; gap: 12px; }
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 28px;
+    }
+    .question-text {
+        font-size: 20px;
+    }
+    .blank {
+        width: 75px;
+        height: 24px;
+        font-size: 16px;
+    }
+    .option-btn {
+        font-size: 16px;
+        padding: 14px 18px;
+    }
 }
 
-@media (max-width: 400px) {
-    h1 { font-size: 24px; }
-    .question-text { font-size: 16px; }
-    button { width: 100%; height: 42px; font-size: 14px; }
-    .option-btn { padding: 8px 12px; font-size: 13px; }
-    .container { padding: 15px; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+@media (max-width: 480px) {
+    h1 {
+        font-size: 26px;
+    }
+    .question-text {
+        font-size: 18px;
+    }
+    .blank {
+        width: 65px;
+        height: 22px;
+        font-size: 15px;
+    }
+    .option-btn {
+        font-size: 15px;
+        padding: 12px 16px;
+    }
+    button {
+        font-size: 15px;
+        padding: 13px;
+    }
 }
