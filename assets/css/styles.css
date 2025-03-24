@@ -1,0 +1,109 @@
+/* 🌍 전체 페이지 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #eef2f3;
+    margin: 0;
+    padding: 20px;
+    background-image: url('ffwpu-background.jpg'); /* 배경 이미지 */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* 🔆 로고 스타일 */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    width: 120px; /* 적절한 크기로 조정 */
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 🌟 제목 스타일 */
+h1 {
+    color: #002366;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* 📜 문단 스타일 */
+p {
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 12px;
+    display: inline-block;
+    margin: 10px auto;
+    max-width: 600px;
+    line-height: 1.6;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 버튼 컨테이너 */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* 🔘 버튼 기본 스타일 */
+button {
+    width: 180px;
+    max-width: 90%;
+    height: 60px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    font-weight: bold;
+}
+
+/* 🎨 버튼 스타일 */
+button.blue {
+    background-color: #1e3a8a; /* 네이비 블루 */
+    color: white;
+}
+
+button.gold {
+    background-color: #d4af37; /* 따뜻한 금색 */
+    color: white;
+}
+
+/* 🖱️ 버튼 호버 효과 */
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.blue:hover {
+    background-color: #162d6a;
+}
+
+button.gold:hover {
+    background-color: #b9972e;
+}
+
+/* 📱 모바일 반응형 */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 26px;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 100%;
+    }
+}
