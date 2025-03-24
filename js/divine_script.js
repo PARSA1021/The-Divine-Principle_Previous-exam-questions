@@ -6,25 +6,34 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentQuestionIndex = 0;
     let questions = [];
     let selectedAnswers = [];
-    let score = 0;
+    let score = 0; // 로컬 스토리지 제거로 초기화
     let timer;
-    const timeLimit = 60; // 초 단위
-    let answeredCorrectly = false; // 정답 여부 추적
+    let timeLeft = 60; // 타이머 초기값
+    const timeLimit = 60;
+    let answeredCorrectly = false;
+    let isPaused = false; // 타이머 일시정지 상태
 
     // JSON 파일 로드
-    fetch("assets/data/divine_pr.json")
-        .then(response => response.json())
-        .then(data => {
-            questions = data;
-            updateProgress();
-            showQuestion();
-        })
-        .catch(error => {
-            console.error("JSON 파일을 불러오는 중 오류 발생:", error);
-            quizContainer.innerHTML = "<p>문제를 불러오는 데 실패했습니다. 다시 시도해주세요.</p>";
-        });
+    function loadQuestions() {
+        fetch("assets/data/divine_pr.json")
+            .then(response => response.json())
+            .then(data => {
+                questions = shuffleArray([...data]);
+                updateProgress();
+                showQuestion();
+            })
+            .catch(error => {
+                console.error("JSON 파일을 불러오는 중 오류 발생:", error);
+                quizContainer.innerHTML = `
+                    <p>문제를 불러오는 데 실패했습니다.</p>
+                    <button id="retry-load" class="action-btn">재시도</button>
+                `;
+                document.getElementById("retry-load").addEventListener("click", loadQuestions);
+            });
+    }
+    loadQuestions();
 
-    // 배열을 무작위로 섞는 함수 (Fisher-Yates Shuffle)
+    // 배열을 무작위로 섞는 함수
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -43,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         selectedAnswers = new Array(questions[currentQuestionIndex].answers.length).fill(null);
         answeredCorrectly = false;
+        timeLeft = timeLimit; // 타이머 초기화
         const q = questions[currentQuestionIndex];
         const shuffledOptions = shuffleArray([...q.options]);
 
@@ -52,9 +62,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 ${shuffledOptions.map(option => `<button class="option-btn" onclick="selectAnswer('${option}')">${option}</button>`).join('')}
             </div>
             <p class="feedback" id="feedback"></p>
+            <button id="pause-timer" class="pause-btn">타이머 일시정지</button>
             <button id="show-explanation" style="display: none;" class="explanation-btn">설명 보기</button>
             <div id="explanation" style="display: none; margin-top: 15px; padding: 10px; background: #f9f9f9; border-radius: 8px;"></div>
-            <div id="timer" class="timer">남은 시간: ${timeLimit}초</div>
+            <div id="timer" class="timer">남은 시간: ${timeLeft}초</div>
         `;
 
         quizContainer.innerHTML = questionHTML;
@@ -63,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         checkButton.disabled = false;
         startTimer();
         updateProgress();
-        updateOptionButtons(); // 선택지 버튼 상태 초기화
+        updateOptionButtons();
     }
 
     // 진행 상황 업데이트
@@ -73,16 +84,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 타이머 설정
     function startTimer() {
-        let timeLeft = timeLimit;
         const timerDisplay = document.getElementById("timer");
         timerDisplay.style.color = "#333";
         timer = setInterval(() => {
-            timeLeft--;
-            timerDisplay.textContent = `남은 시간: ${timeLeft}초`;
-            if (timeLeft <= 10) timerDisplay.style.color = "red"; // 10초 남으면 빨간색으로
-            if (timeLeft <= 0) {
-                clearTimer();
-                checkAnswer(true);
+            if (!isPaused) {
+                timeLeft--;
+                timerDisplay.textContent = `남은 시간: ${timeLeft}초`;
+                if (timeLeft <= 10) timerDisplay.style.color = "red";
+                if (timeLeft <= 0) {
+                    clearTimer();
+                    checkAnswer(true);
+                }
             }
         }, 1000);
     }
@@ -91,11 +103,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (timer) clearInterval(timer);
     }
 
+    // 타이머 일시정지/재개
+    window.togglePause = function () {
+        const pauseButton = document.getElementById("pause-timer");
+        isPaused = !isPaused;
+        pauseButton.textContent = isPaused ? "타이머 재개" : "타이머 일시정지";
+    };
+
     // 빈칸 클릭 시 선택 취소
     window.toggleBlank = function (index) {
-        if (answeredCorrectly) return; // 정답 맞춘 후에는 수정 불가
+        if (answeredCorrectly) return;
         const blank = document.getElementById(`blank${index}`);
-        if (selectedAnswers[index]) {
+        if (blank && selectedAnswers[index]) {
             blank.textContent = "[선택]";
             blank.classList.remove("selected");
             selectedAnswers[index] = null;
@@ -106,10 +125,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 선택한 답을 빈칸에 채우거나 제거
     window.selectAnswer = function (selectedAnswer) {
-        if (answeredCorrectly) return; // 정답 맞춘 후에는 수정 불가
+        if (answeredCorrectly) return;
         const blanks = document.querySelectorAll(".blank");
 
-        // 이미 선택된 단어인지 확인하고 제거
         const existingIndex = selectedAnswers.indexOf(selectedAnswer);
         if (existingIndex !== -1) {
             const blank = document.getElementById(`blank${existingIndex}`);
@@ -121,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // 빈칸에 채우기
         let filled = false;
         blanks.forEach((blank, i) => {
             if (!selectedAnswers[i] && !filled) {
@@ -200,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 feedback.textContent = `❌ 오답입니다! 정답: ${q.answers.join(", ")}`;
                 feedback.className = "feedback incorrect";
                 explanationBtn.style.display = "block";
-                nextButton.style.display = "block"; // 오답이어도 다음으로 이동 가능
+                nextButton.style.display = "block";
             }
             clearTimer();
             updateProgress();
@@ -216,13 +233,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // 설명 보기 함수
+    // 이벤트 리스너 설정
     quizContainer.addEventListener("click", (e) => {
         if (e.target.id === "show-explanation") {
             const explanationDiv = document.getElementById("explanation");
             explanationDiv.textContent = questions[currentQuestionIndex].explanation;
             explanationDiv.style.display = "block";
             e.target.style.display = "none";
+        } else if (e.target.id === "pause-timer") {
+            togglePause();
         }
     });
 
@@ -257,10 +276,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("restart").addEventListener("click", () => {
             currentQuestionIndex = 0;
             score = 0;
-            showQuestion();
+            loadQuestions();
         });
         document.getElementById("back-to-menu").addEventListener("click", () => {
-            window.location.href = "index.html"; // 메인 페이지로 이동
+            window.location.href = "index.html";
         });
     }
 
