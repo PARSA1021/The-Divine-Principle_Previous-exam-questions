@@ -119,8 +119,8 @@ h1 {
     display: none;
     background-color: #1e3a8a;
     color: white;
-    font-size: 18px;
-    padding: 12px 25px;
+    font-size: 15px;
+    padding: 15px 30px;
     border: none;
     cursor: pointer;
     border-radius: 8px;
@@ -147,6 +147,7 @@ h1 {
 #next-question:hover {
     background-color: #162d6a;
 }
+
 #timer {
     font-size: 16px;
     color: #666;
@@ -188,19 +189,37 @@ h1 {
 #restart:hover {
     background-color: #0056b3;
 }
-.question-text { font-size: 1.2rem; margin-bottom: 20px; }
-.blank { cursor: pointer; padding: 5px 10px; background: #e0e0e0; border-radius: 5px; }
-.blank.selected { background: #1e3a8a; color: white; }
-.options-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-.option-btn { padding: 10px 20px; background: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
-.option-btn:hover:not(:disabled) { background: #d0d0d0; }
-.option-btn.selected-option { background: #1e3a8a; color: white; }
-.option-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.feedback.correct { color: green; }
-.feedback.incorrect { color: red; }
-.feedback.warning { color: orange; }
-.timer { font-weight: bold; margin-top: 15px; }
-.explanation-btn { background: #d4af37; color: white; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; }
-.action-btn { margin: 10px; padding: 10px 20px; }
-.action-btn.gold { background: #d4af37; color: white; }
-.result-message { font-size: 1.1rem; margin: 15px 0; }
+
+/* 📱 모바일 반응형 */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    #quiz-container {
+        padding: 20px;
+        max-width: 100%;
+    }
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    button {
+        width: 100%;
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    h1 {
+        font-size: 24px;
+    }
+    .question-text {
+        font-size: 16px;
+    }
+    .blank {
+        width: 60px;
+        height: 20px;
+        font-size: 14px;
+    }
+}
