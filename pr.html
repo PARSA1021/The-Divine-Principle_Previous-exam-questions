@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>말씀 검색 - 천지인참부모효정 천주 축복식 40일 정성 워크북</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 테마 (기존 light-theme) */
+        :root {
+            --primary-color: #4a6da7; /* 약간 어두운 파랑 */
+            --secondary-color: #f9a826; /* 주황/황금색 계열 */
+            --text-color: #333;
+            --bg-color: #f5f7fa; /* 밝은 회색 배경 */
+            --card-bg: #ffffff; /* 카드 배경 흰색 */
+            --border-color: #e0e0e0;
+            --header-bg: #3a5a99; /* 헤더 배경 파랑 */
+            --header-text: #ffffff; /* 헤더 텍스트 흰색 */
+            --font-main: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 10px;
+            --transition: all 0.3s ease;
+        }
+
+        /* 다크 모드 테마 */
+        .dark-theme {
+            --primary-color: #6d8cc7; /* 밝은 파랑 */
+            --secondary-color: #ffb74d; /* 밝은 주황 */
+            --text-color: #e0e0e0; /* 밝은 회색 */
+            --bg-color: #121212; /* 어두운 배경 */
+            --card-bg: #1e1e1e; /* 어두운 카드 배경 */
+            --border-color: #333;
+            --header-bg: #1a2947; /* 더 어두운 파랑 */
+            --header-text: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 세계평화통일가정연합 테마 (레드, 화이트, 블루, 골드 기반) */
+        .ffwpu-theme {
+            --primary-color: #0a4c8c; /* 깊은 파랑 */
+            --secondary-color: #e32b2b; /* 선명한 빨강 */
+            --text-color: #333;
+            --bg-color: #f0f0f0; /* 아주 밝은 회색 */
+            --card-bg: #ffffff; /* 카드 배경 흰색 */
+            --border-color: #cccccc;
+            --header-bg: #ffffff; /* 헤더 배경 흰색 */
+            --header-text: #0a4c8c; /* 헤더 텍스트 깊은 파랑 */
+            --font-main: 'Noto Sans KR', sans-serif;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            --radius: 8px;
+        }
+
+        .ffwpu-theme .btn {
+             background-color: var(--primary-color); /* 버튼 배경 파랑 */
+             color: white;
+             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+         .ffwpu-theme .btn:hover {
+             background-color: #083a6d; /* 호버 시 더 어두운 파랑 */
+         }
+
+        .ffwpu-theme h2 {
+            color: var(--primary-color); /* 제목 색상 파랑 */
+        }
+
+        .ffwpu-theme h2::after {
+            background-color: var(--secondary-color); /* 제목 밑줄 빨강 */
+        }
+
+        .ffwpu-theme .search-input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(10, 76, 140, 0.2); /* 포커스 테두리 파랑 */
+        }
+
+        .ffwpu-theme .search-input-group .search-icon {
+            color: var(--primary-color); /* 검색 아이콘 파랑 */
+        }
+
+        .ffwpu-theme #search-results li {
+            border-left-color: var(--secondary-color); /* 검색 결과 왼쪽 테두리 빨강 */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .ffwpu-theme #search-results li:hover {
+             border-left-color: var(--primary-color); /* 호버 시 파랑 */
+             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .ffwpu-theme #search-results strong {
+            color: var(--primary-color); /* 강조 텍스트 파랑 */
+        }
+
+        .ffwpu-theme #search-results .message-source {
+            color: var(--primary-color); /* 출처 텍스트 파랑 */
+            border-top-color: #dddddd;
+        }
+        
+        .ffwpu-theme #search-results .message-text mark {
+             background-color: rgba(227, 43, 43, 0.3); /* 검색어 강조 빨강 투명 */
+        }
+        
+        .ffwpu-theme .filter-btn {
+             background-color: #e0e0e0;
+             border-color: #cccccc;
+             color: var(--text-color);
+        }
+
+        .ffwpu-theme .filter-btn:hover {
+            background-color: rgba(10, 76, 140, 0.1); /* 호버 시 파랑 투명 */
+        }
+
+        .ffwpu-theme .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+
+        /* 천심원 테마 (영롱한 보라색, 금색, 흰색 기반) */
+        .cheonshimwon-theme {
+            --primary-color: #9370db; /* 영롱한 보라색 */
+            --secondary-color: #ffd700; /* 금색 */
+            --text-color: #444;
+            --bg-color: #f8f2ff; /* 아주 연한 보라색 배경 */
+            --card-bg: #ffffff; /* 카드 배경 흰색 */
+            --border-color: #e6d8f5; /* 연한 보라색 테두리 */
+            --header-bg: #ffffff; /* 헤더 배경 흰색 */
+            --header-text: #9370db; /* 헤더 텍스트 보라색 */
+            --font-main: 'Noto Sans KR', sans-serif;
+            --shadow: 0 6px 12px rgba(147, 112, 219, 0.2); /* 보라색 그림자 */
+            --radius: 12px;
+             /* 영롱한 효과를 위한 그라디언트 배경 추가 */
+            background: linear-gradient(135deg, #f8f2ff 0%, #e6d8f5 100%);
+        }
+        
+        .cheonshimwon-theme body {
+            background: none; /* 바디 자체 배경은 그라디언트 사용 */
+        }
+
+        .cheonshimwon-theme header {
+            background: rgba(255, 255, 255, 0.8); /* 헤더 배경 반투명 흰색 */
+            backdrop-filter: blur(5px); /* 블러 효과 */
+            box-shadow: var(--shadow);
+        }
+
+         .cheonshimwon-theme .btn {
+             background: linear-gradient(45deg, #ffd700, #ffcc00); /* 금색 그라디언트 버튼 */
+             color: #444;
+             border: none;
+             box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3); /* 금색 그림자 */
+             font-weight: bold;
+         }
+
+         .cheonshimwon-theme .btn:hover {
+             transform: translateY(-3px);
+             box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4);
+         }
+
+
+        .cheonshimwon-theme section {
+             background: rgba(255, 255, 255, 0.9); /* 카드 배경 반투명 흰색 */
+             backdrop-filter: blur(5px); /* 블러 효과 */
+             box-shadow: var(--shadow);
+        }
+
+        .cheonshimwon-theme h2 {
+            color: var(--primary-color); /* 제목 색상 보라색 */
+        }
+
+        .cheonshimwon-theme h2::after {
+            background-color: var(--secondary-color); /* 제목 밑줄 금색 */
+        }
+
+        .cheonshimwon-theme .search-input-group {
+             box-shadow: 0 2px 5px rgba(147, 112, 219, 0.1);
+             border-radius: var(--radius);
+             overflow: hidden; /* input과 icon 포함 */
+             margin-bottom: 15px; /* 입력창 그룹 간 간격 */
+        }
+
+         .cheonshimwon-theme #search-container {
+             margin-bottom: 20px; /* 컨테이너 자체의 하단 마진 유지 */
+         }
+
+
+        .cheonshimwon-theme .search-input-group input {
+            border: 2px solid var(--border-color);
+            background-color: rgba(255, 255, 255, 0.7); /* 입력창 배경 반투명 흰색 */
+             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cheonshimwon-theme .search-input-group input:focus {
+            border-color: var(--primary-color); /* 포커스 테두리 보라색 */
+            box-shadow: 0 0 0 3px rgba(147, 112, 219, 0.3); /* 포커스 그림자 보라색 투명 */
+             background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cheonshimwon-theme .search-input-group .search-icon {
+            color: var(--primary-color); /* 검색 아이콘 보라색 */
+        }
+
+        .cheonshimwon-theme #search-results li {
+            background-color: rgba(255, 255, 255, 0.8); /* 결과 항목 배경 반투명 흰색 */
+            border-left: 4px solid var(--primary-color); /* 왼쪽 테두리 보라색 */
+             box-shadow: 0 2px 6px rgba(147, 112, 219, 0.1);
+             transition: all 0.3s ease;
+        }
+
+        .cheonshimwon-theme #search-results li:hover {
+             transform: translateY(-3px);
+             border-left-color: var(--secondary-color); /* 호버 시 왼쪽 테두리 금색 */
+             box-shadow: 0 4px 10px rgba(147, 112, 219, 0.2);
+        }
+
+        .cheonshimwon-theme #search-results strong {
+            color: var(--primary-color); /* 강조 텍스트 보라색 */
+        }
+
+        .cheonshimwon-theme #search-results .message-text {
+             color: var(--text-color);
+        }
+
+        .cheonshimwon-theme #search-results .message-text mark {
+            background-color: rgba(255, 215, 0, 0.4); /* 검색어 강조 금색 투명 */
+            color: var(--text-color);
+        }
+
+        .cheonshimwon-theme #search-results .message-source {
+            color: var(--primary-color); /* 출처 텍스트 보라색 */
+            border-top-color: #e6d8f5;
+        }
+
+        .cheonshimwon-theme .filter-options {
+             background-color: rgba(255, 255, 255, 0.7); /* 필터 배경 반투명 흰색 */
+             padding: 15px;
+             border-radius: var(--radius);
+             margin: 20px auto; /* 가운데 정렬 */
+             width: fit-content; /* 내용만큼 너비 */
+             box-shadow: 0 2px 5px rgba(147, 112, 219, 0.1);
+        }
+
+        .cheonshimwon-theme .filter-btn {
+            background-color: rgba(147, 112, 219, 0.1); /* 보라색 투명 버튼 */
+            border: 1px solid var(--border-color);
+            color: var(--primary-color); /* 보라색 텍스트 */
+            transition: all 0.3s ease;
+        }
+
+        .cheonshimwon-theme .filter-btn:hover {
+            background-color: rgba(147, 112, 219, 0.3); /* 호버 시 보라색 투명도 증가 */
+            border-color: var(--primary-color);
+        }
+
+        .cheonshimwon-theme .filter-btn.active {
+            background-color: var(--primary-color); /* 활성 버튼 보라색 */
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .cheonshimwon-theme .no-results, .cheonshimwon-theme .loading {
+            color: var(--primary-color); /* 보라색 텍스트 */
+        }
+
+        .cheonshimwon-theme .loading-spinner {
+            border-color: rgba(147, 112, 219, 0.3);
+            border-top-color: var(--primary-color);
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6; /* 기본 줄 간격 개선 */
+            transition: background-color 0.3s ease, color 0.3s ease; /* 테마 전환 부드럽게 */
+            padding-bottom: 40px;
+            font-size: 16px; /* 기본 폰트 사이즈 설정 (모바일 고려) */
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* 테마 전환 부드럽게 */
+        }
+
+        header h1 {
+            font-size: 2rem; /* 제목 글자 크기 약간 키움 */
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem; /* 부제목 글자 크기 약간 키움 */
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+         .event-date {
+             font-size: 1rem; /* 날짜 글자 크기 조정 */
+             opacity: 0.9;
+             margin-bottom: 20px; /* 하단 간격 증가 */
+         }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px; /* 버튼 패딩 증가 (터치 영역 확보) */
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem; /* 버튼 글자 크기 */
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* 아이콘과 텍스트 간격 */
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            min-width: 100px; /* 최소 버튼 너비 */
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn i {
+            font-size: 1.1rem; /* 버튼 아이콘 크기 */
+        }
+
+        /* 메인 콘텐츠 */
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px; /* 양옆 패딩 추가 */
+        }
+
+        section {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px; /* 섹션 패딩 증가 */
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 테마 전환 부드럽게 */
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px; /* 제목 하단 간격 증가 */
+            font-size: 1.8rem; /* 섹션 제목 글자 크기 증가 */
+            position: relative;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px; /* 밑줄 두께 증가 */
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+            transition: background-color 0.3s ease; /* 테마 전환 부드럽게 */
+        }
+
+        /* 검색 입력 스타일 */
+        #search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-input-group {
+             position: relative;
+             margin-bottom: 15px; /* 각 입력창 그룹 하단 간격 */
+        }
+
+
+        .search-input-group input {
+            width: 100%;
+            padding: 15px 45px 15px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 1.1rem; /* 입력창 글자 크기 증가 */
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .search-input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.2);
+        }
+
+        .search-input-group .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 1.3rem; /* 검색 아이콘 크기 증가 */
+             pointer-events: none; /* 아이콘 클릭 방지 */
+        }
+
+        /* 검색 결과 스타일 */
+        #search-results {
+            margin-top: 20px;
+        }
+
+        #search-results ul {
+            list-style-type: none;
+            padding: 0; /* ul 기본 패딩 제거 */
+        }
+
+        #search-results li {
+            background-color: var(--bg-color);
+            padding: 20px; /* 결과 항목 패딩 증가 */
+            margin-bottom: 15px;
+            border-radius: var(--radius);
+            border-left: 5px solid var(--secondary-color); /* 왼쪽 테두리 두께 증가 */
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease-out; /* 개별 결과에 애니메이션 적용 */
+        }
+
+        #search-results li:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* 출처별 색상 구분 (기존 테마 기준) */
+        #search-results li[data-source*="천성경"],
+        #search-results li[data-source*="천선경"] {
+            border-left-color: #4a6da7; /* 파랑 계열 */
+        }
+        
+        #search-results li[data-source*="성경"] {
+            border-left-color: #43a047; /* 녹색 계열 */
+        }
+        
+        #search-results li[data-source*="통일교회 말씀"] {
+            border-left-color: #f9a826; /* 주황/황금색 계열 */
+        }
+        
+        #search-results li[data-source="기타"] {
+            border-left-color: #9c27b0; /* 보라색 계열 */
+        }
+
+         /* 천심원 테마에서의 출처별 색상 오버라이드 */
+        .cheonshimwon-theme #search-results li[data-source*="천성경"],
+        .cheonshimwon-theme #search-results li[data-source*="천선경"],
+        .cheonshimwon-theme #search-results li[data-source*="성경"],
+        .cheonshimwon-theme #search-results li[data-source*="통일교회 말씀"],
+        .cheonshimwon-theme #search-results li[data-source="기타"] {
+             border-left-color: var(--primary-color); /* 천심원 테마는 보라색으로 통일 */
+        }
+
+
+        #search-results strong {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.2rem; /* 일차 글자 크기 증가 */
+             display: block; /* 줄바꿈 */
+             margin-bottom: 10px; /* 하단 간격 증가 */
+        }
+
+        /* 말씀 스타일 */
+        #search-results .message-text {
+            margin: 15px 0; /* 상하 간격 증가 */
+            line-height: 1.9; /* 줄 간격 증가 */
+            font-size: 1.1rem; /* 말씀 텍스트 크기 증가 */
+            letter-spacing: -0.4px;
+            word-break: keep-all;
+            text-align: justify;
+            color: var(--text-color); /* 텍스트 색상 변수 사용 */
+        }
+
+        #search-results .message-text mark {
+            background-color: rgba(249, 168, 38, 0.3); /* 기본 검색어 강조색 */
+            padding: 2px 0;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+
+         /* FFWPU 및 천심원 테마 검색어 강조색 오버라이드 */
+        .ffwpu-theme #search-results .message-text mark {
+             background-color: rgba(227, 43, 43, 0.3); /* 빨강 투명 */
+        }
+
+        .cheonshimwon-theme #search-results .message-text mark {
+             background-color: rgba(255, 215, 0, 0.4); /* 금색 투명 */
+        }
+
+
+        #search-results .message-source {
+            color: var(--primary-color);
+            font-size: 1rem; /* 출처 텍스트 크기 증가 */
+            font-style: italic;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 10px; /* 상단 패딩 증가 */
+            margin-top: 15px; /* 상단 마진 증가 */
+             display: block; /* 줄바꿈 */
+        }
+        
+        /* 필터 옵션 */
+        .filter-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px; /* 버튼 간 간격 증가 */
+            margin: 25px 0; /* 상하 마진 증가 */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 테마 전환 부드럽게 */
+        }
+        
+        .filter-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: var(--radius);
+            padding: 10px 15px; /* 필터 버튼 패딩 증가 */
+            font-size: 0.95rem; /* 필터 버튼 글자 크기 */
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 80px; /* 최소 너비 설정 */
+             text-align: center; /* 텍스트 가운데 정렬 */
+        }
+        
+        .filter-btn:hover {
+            background-color: rgba(74, 109, 167, 0.1);
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .filter-btn i {
+            margin-right: 5px;
+        }
+
+        /* 확인 메시지 스타일 */
+        .confirmation {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: var(--transition);
+            display: none;
+        }
+
+        .confirmation.success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            display: block;
+        }
+
+        .confirmation.error {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            display: block;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem; /* 모바일 헤더 제목 크기 조정 */
+            }
+            
+            header p {
+                font-size: 1.1rem; /* 모바일 헤더 부제목 크기 조정 */
+            }
+            
+            main {
+                padding: 0 15px;
+            }
+            
+            section {
+                padding: 25px; /* 모바일 섹션 패딩 조정 */
+            }
+            
+            .btn {
+                padding: 10px 15px; /* 모바일 버튼 패딩 조정 */
+                font-size: 0.95rem; /* 모바일 버튼 글자 크기 조정 */
+                 min-width: auto; /* 모바일에서는 최소 너비 해제 */
+            }
+
+             h2 {
+                 font-size: 1.6rem; /* 모바일 섹션 제목 크기 조정 */
+             }
+
+             .search-input-group input {
+                 font-size: 1rem; /* 모바일 입력창 글자 크기 조정 */
+                 padding: 14px 40px 14px 14px; /* 모바일 입력창 패딩 조정 */
+             }
+
+             .search-input-group .search-icon {
+                 font-size: 1.2rem; /* 모바일 검색 아이콘 크기 조정 */
+             }
+
+             #search-results strong {
+                 font-size: 1.1rem; /* 모바일 일차 글자 크기 조정 */
+             }
+
+            #search-results .message-text {
+                font-size: 1rem; /* 모바일 말씀 텍스트 크기 조정 */
+                line-height: 1.7; /* 모바일 줄 간격 조정 */
+                 margin: 10px 0; /* 모바일 말씀 텍스트 상하 간격 조정 */
+            }
+
+             #search-results .message-source {
+                 font-size: 0.9rem; /* 모바일 출처 글자 크기 조정 */
+                 padding-top: 8px;
+                 margin-top: 10px;
+             }
+
+             .filter-btn {
+                 padding: 8px 12px; /* 모바일 필터 버튼 패딩 조정 */
+                 font-size: 0.9rem; /* 모바일 필터 버튼 글자 크기 조정 */
+             }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.6rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+             .search-input-group input {
+                padding: 12px 35px 12px 12px; /* 작은 모바일 입력창 패딩 조정 */
+                font-size: 0.95rem;
+            }
+             .search-input-group .search-icon {
+                 font-size: 1.1rem;
+                 right: 12px;
+             }
+            
+            #search-results strong {
+                font-size: 1rem;
+            }
+            
+            #search-results .message-text {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+             .filter-options {
+                 flex-direction: column; /* 작은 모바일에서 필터 버튼 세로 정렬 */
+                 align-items: stretch;
+                 gap: 8px; /* 세로 정렬 시 간격 */
+             }
+
+             .filter-btn {
+                 text-align: center;
+                 padding: 10px 12px; /* 작은 모바일 필터 버튼 패딩 */
+             }
+
+             #search-results li {
+                 padding: 15px; /* 작은 모바일 결과 항목 패딩 */
+             }
+        }
+
+        /* 애니메이션 효과 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* section, #search-results li {
+            animation: fadeIn 0.5s ease-out;
+        } */ /* 개별 li에만 애니메이션 적용 */
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: var(--primary-color);
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Loading indicator */
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(74, 109, 167, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+             transition: border-top-color 0.3s ease, border-color 0.3s ease; /* 테마 전환 부드럽게 */
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>천지인참부모효정 천주 축복식</h1>
+        <p>40일 정성 워크북</p>
+        <div class="event-date">
+            <i class="fas fa-calendar-alt"></i> 축복식: 2025년 4월 12일 (토요일)
+        </div>
+        <div class="nav-container">
+            <button id="theme-toggle" class="btn" aria-label="테마 변경">
+                <i class="fas fa-paint-brush"></i> <span id="theme-text">테마 변경</span>
+            </button>
+            <a href="/" class="btn" aria-label="홈으로 돌아가기">
+                <i class="fas fa-home"></i> <span>홈</span>
+            </a>
+            <a href="/workbook" class="btn" aria-label="정성 워크북으로 이동">
+                <i class="fas fa-book"></i> <span>워크북</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2>말씀 검색</h2>
+            <div id="search-container">
+                <div class="search-input-group">
+                    <input type="text" id="message-search-input" placeholder="말씀 내용이나 일차를 검색하세요" aria-label="말씀 검색 입력" autofocus>
+                    <i class="search-icon fas fa-search"></i>
+                </div>
+                 <div class="search-input-group">
+                     <input type="text" id="source-search-input" placeholder="출처를 검색하세요 (예: 천성경, 성경)" aria-label="출처 검색 입력">
+                     <i class="search-icon fas fa-book"></i>
+                 </div>
+            </div>
+            
+            <div class="filter-options">
+                <button class="filter-btn active" data-filter="all"><i class="fas fa-list"></i> 전체</button>
+                <button class="filter-btn" data-filter="천성경"><i class="fas fa-book-open"></i> 천성경</button>
+                <button class="filter-btn" data-filter="통일교회"><i class="fas fa-church"></i> 통일교회</button>
+                <button class="filter-btn" data-filter="성경"><i class="fas fa-bible"></i> 성경</button>
+                <button class="filter-btn" data-filter="기타"><i class="fas fa-quote-right"></i> 기타</button>
+            </div>
+            
+            <div id="search-confirm" class="confirmation"></div>
+            <div id="search-results"></div>
+        </section>
+    </main>
+
+    <script>
+        class SearchPage {
+            constructor() {
+                // 테마 순서: light -> dark -> ffwpu -> cheonshimwon
+                this.themes = ['light', 'dark', 'ffwpu', 'cheonshimwon'];
+                this.currentThemeIndex = 0;
+                this.messages = []; // 여기에 말씀 데이터를 불러올 예정
+                this.currentFilter = 'all';
+                this.elements = {
+                    body: document.body,
+                    messageSearchInput: document.getElementById("message-search-input"), // 말씀 검색 입력창
+                    sourceSearchInput: document.getElementById("source-search-input"), // 출처 검색 입력창
+                    searchResults: document.getElementById("search-results"),
+                    searchConfirm: document.getElementById("search-confirm"),
+                    themeToggle: document.getElementById("theme-toggle"),
+                    themeIcon: document.querySelector("#theme-toggle i"),
+                    themeText: document.getElementById("theme-text"),
+                    filterButtons: document.querySelectorAll(".filter-btn")
+                };
+                this.MESSAGES = {
+                    LOAD_ERROR: "말씀 데이터를 불러오는 중 오류가 발생했습니다. 백업 데이터를 사용합니다.",
+                    SEARCH_NO_RESULTS: "검색 결과가 없습니다. 다른 키워드를 시도해주세요."
+                };
+                this.themeTexts = {
+                    light: '어두운 테마',
+                    dark: 'FFWPU 테마',
+                    ffwpu: '천심원 테마',
+                    cheonshimwon: '기본 테마'
+                };
+                 this.themeIcons = {
+                    light: 'fas fa-moon',
+                    dark: 'fas fa-church', // FFWPU 아이콘 (교회 건물 형태)
+                    ffwpu: 'fas fa-gem', // 천심원 아이콘 (보석 형태)
+                    cheonshimwon: 'fas fa-sun' // 기본 테마 아이콘 (햇님)
+                };
+            }
+
+            async initialize() {
+                try {
+                    await this.loadMessages();
+                    this.setupEventListeners();
+                    // 저장된 테마 불러오기
+                    const savedTheme = localStorage.getItem('theme');
+                    if (savedTheme) {
+                        const savedIndex = this.themes.indexOf(savedTheme);
+                        if (savedIndex !== -1) {
+                            this.currentThemeIndex = savedIndex;
+                            this.setTheme(savedTheme); // 저장된 테마 적용
+                        } else {
+                             this.setTheme(this.themes[0]); // 저장된 테마가 이상하면 기본 테마 적용
+                        }
+                    } else {
+                        this.setTheme(this.themes[0]); // 기본 테마 적용
+                    }
+
+                    this.elements.messageSearchInput.focus(); // 말씀 검색창에 기본 포커스
+                    this.performSearch(); // 초기 전체 말씀 로드 및 표시
+                } catch (error) {
+                    console.error('Search page initialization error:', error);
+                    this.showConfirmation(this.MESSAGES.LOAD_ERROR, true);
+                     this.messages = this.getBackupMessages(); // 백업 데이터 로드
+                     this.performSearch(); // 백업 데이터로 검색 결과 표시
+                }
+            }
+
+            async loadMessages() {
+                try {
+                    // messages.json 파일에서 데이터 불러오기
+                    const response = await fetch('messages.json');
+                    if (!response.ok) {
+                        throw new Error('메시지 데이터를 불러올 수 없습니다.');
+                    }
+                    this.messages = await response.json();
+                    console.log("Messages loaded successfully:", this.messages.length);
+                    return this.messages;
+                } catch (error) {
+                    console.error('Error loading messages:', error);
+                    throw error; // 에러를 다시 throw하여 initialize에서 처리
+                }
+            }
+
+             // 백업 데이터 (messages.json 로드 실패 시 사용) - 이전 코드와 동일
+            getBackupMessages() {
+                return [
+                    {
+                        "day": 1,
+                        "text": "통일교회에서는 결혼을 축복이라고 합니다. 내가 홀로 가는 길 앞에, 사랑을 찾아가는 길 앞에 외로웠던 남자와 여자의 길을 버리고 서로가 외로울때 위로할수있고, 기쁠때 같이 기뻐할수 있고, 어려울때 힘이 되어줄수 있는 상대적 입장에 서서 하나는 바른발이 되고 하나는 왼발이 되고, 하나는 바른손이 되고 하나는 왼손이 되어서 하나님을 찬양하고 하나님의 사랑을 우리 생활무대에 깔고 나간다고 하는 그런 생활이 결혼생활입니다.",
+                        "source": "천선경 p 516, 제5편 참가정, 제2장 본연의 남녀사랑과 축복결혼"
+                    },
+                    {
+                        "day": 2,
+                        "text": "축복은 인간만을 위한 것이 아닙니다. 또 하늘땅만을 위한 것도 아닙니다. 하나님은 당신의 내적인 심정의 기반으로부터 전부를 투입하여 축복하셨습니다. 그 축복이 그대로 이루어졌으면 이 세계, 이 천지는 승리의 영광이 충만했을 것입니다. 그러한 세계 가운데서 하나님의 심정적인 모든 내용을 완비한 표시체인 인간으로 하여금 하나님이 기뻐할 수 있는 가정적인 기반을 꾸며 놓고, 거기에서 천적인 성업을 인간적인 성업으로 받아드려 영원무궁한 행복의 복지를 건설하게 하셨을 것입니다. 이것이 하나님의 이상이며 소원이었습니다",
+                        "source": "천성경 p 1199, 제11편 예식과명절, 제3장 예식과의식"
+                    },
+                    {
+                        "day": 3,
+                        "text": "가정은 사랑의 뿌리입니다. 오늘 가족에게 따뜻한 말을 전해보세요.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 4,
+                        "text": "작은 실천이 큰 변화를 만듭니다. 오늘 한 가지 선행을 실천하세요.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 5,
+                        "text": "감사는 마음을 풍요롭게 합니다. 오늘 감사할 수 있는 순간을 찾아보세요.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 6,
+                        "text": "하나님의 뜻을 따르는 삶은 진정한 자유를 가져옵니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 7,
+                        "text": "사랑은 나누는 만큼 커집니다. 오늘 누군가와 사랑을 나누세요.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 8,
+                        "text": "참된 기쁨은 정성 어린 마음에서 비롯됩니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 9,
+                        "text": "오늘의 작은 노력은 내일의 큰 열매로 돌아옵니다.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 10,
+                        "text": "하나님의 말씀은 우리의 길을 밝히는 등불입니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 11,
+                        "text": "진정한 평화는 서로를 이해하는 마음에서 시작됩니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 12,
+                        "text": "오늘 하루를 하나님께 바치는 마음으로 살아보세요.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 13,
+                        "text": "사랑과 용서는 마음을 자유롭게 합니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 14,
+                        "text": "하나님의 섭리는 모든 것을 조화롭게 이끌어갑니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 15,
+                        "text": "정성은 하늘과 땅을 이어주는 다리입니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 16,
+                        "text": "오늘의 기도는 내일의 희망을 낳습니다.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 17,
+                        "text": "참된 삶은 하나님의 뜻을 실천하는 데 있습니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 18,
+                        "text": "사랑은 모든 갈등을 녹이는 열쇠입니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 19,
+                        "text": "하나님의 은혜는 매일 새롭게 우리에게 주어집니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 20,
+                        "text": "정성의 씨앗은 평화의 열매를 맺습니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 21,
+                        "text": "오늘의 작은 선행이 세상을 바꿀 수 있습니다.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 22,
+                        "text": "하나님의 사랑 안에서 우리는 하나가 됩니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 23,
+                        "text": "감사의 마음은 삶을 풍요롭게 합니다.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 24,
+                        "text": "하나님의 말씀은 우리의 마음을 정화합니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 25,
+                        "text": "진정한 행복은 나누는 데서 옵니다.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 26,
+                        "text": "오늘의 정성은 내일의 축복이 됩니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 27,
+                        "text": "하나님의 뜻을 따르는 자는 평화를 얻습니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 28,
+                        "text": "사랑은 우리의 삶을 빛나게 합니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 29,
+                        "text": "정성의 길은 하나님께로 인도합니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 30,
+                        "text": "오늘의 기도는 우리의 마음을 하나로 묶습니다.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 31,
+                        "text": "하나님의 사랑은 끝없는 샘물과 같습니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 32,
+                        "text": "참된 삶은 정성을 통해 완성됩니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 33,
+                        "text": "사랑과 평화는 우리의 손으로 만들어갑니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 34,
+                        "text": "하나님의 은혜는 매 순간 우리와 함께합니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 35,
+                        "text": "정성은 우리의 마음을 하늘과 연결합니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 36,
+                        "text": "오늘의 작은 실천이 큰 사랑으로 이어집니다.",
+                        "source": "기타"
+                    },
+                    {
+                        "day": 37,
+                        "text": "하나님의 말씀은 우리의 삶을 인도합니다.",
+                        "source": "성경"
+                    },
+                    {
+                        "day": 38,
+                        "text": "사랑은 모든 것을 하나로 묶는 힘입니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 39,
+                        "text": "정성의 여정은 하나님의 축복으로 완성됩니다.",
+                        "source": "통일교회 말씀"
+                    },
+                    {
+                        "day": 40,
+                        "text": "40일의 정성을 통해 우리는 하나님의 사랑 안에서 하나가 되었습니다.",
+                        "source": "통일교회 말씀"
+                    }
+                ];
+            }
+
+
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            displayResults(messages, messageQuery, sourceQuery) {
+                this.elements.searchResults.innerHTML = '';
+                if (!messages || messages.length === 0) {
+                    this.elements.searchResults.innerHTML = '<div class="no-results"><i class="fas fa-search"></i> 검색 결과가 없습니다. 다른 키워드를 시도해주세요.</div>';
+                    this.showConfirmation(this.MESSAGES.SEARCH_NO_RESULTS, true);
+                    return;
+                }
+                
+                const ul = document.createElement('ul');
+                messages.forEach(m => {
+                    const li = document.createElement('li');
+                    // 출처에 따라 데이터 속성 추가
+                    li.setAttribute('data-source', m.source);
+                    
+                    // 출처에 따른 아이콘 선택
+                    let sourceIcon = 'fas fa-book';
+                    if (m.source && m.source.includes('성경')) {
+                        sourceIcon = 'fas fa-bible';
+                    } else if (m.source && (m.source.includes('천성경') || m.source.includes('천선경'))) {
+                        sourceIcon = 'fas fa-book-open';
+                    } else if (m.source && m.source.includes('통일교회')) {
+                        sourceIcon = 'fas fa-church';
+                    } else {
+                        sourceIcon = 'fas fa-quote-right';
+                    }
+                    
+                    li.innerHTML = `
+                        <strong><i class="fas fa-calendar-day"></i> ${m.day}일차</strong>
+                        <div class="message-text">${this.highlightSearchTerm(m.text, messageQuery)}</div>
+                        <div class="message-source"><i class="${sourceIcon}"></i> 출처: ${this.highlightSearchTerm(m.source || '알 수 없음', sourceQuery)}</div>
+                    `;
+                    ul.appendChild(li);
+                });
+                this.elements.searchResults.appendChild(ul);
+            }
+
+             // 검색어 강조 함수 (말씀 내용과 출처에 모두 사용)
+            highlightSearchTerm(text, searchTerm) {
+                if (!searchTerm || !searchTerm.trim() || !text) return text; // text가 null/undefined인 경우 처리
+                
+                const normalizedText = text.toLowerCase();
+                const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+                // 정규식에서 특수문자 이스케이프
+                const escapedSearchTerm = normalizedSearchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
+
+                // 원래 텍스트에서 일치하는 부분을 찾아 마크업 적용
+                let lastIndex = 0;
+                let result = [];
+                let match;
+
+                while ((match = regex.exec(text)) !== null) {
+                    // 일치하지 않는 부분 추가
+                    result.push(text.substring(lastIndex, match.index));
+                    // 일치하는 부분에 마크업 적용
+                    result.push(`<mark>${match[0]}</mark>`);
+                    lastIndex = regex.lastIndex;
+                }
+
+                // 나머지 부분 추가
+                result.push(text.substring(lastIndex));
+
+                return result.join('');
+            }
+
+
+            performSearch() {
+                const messageQuery = this.elements.messageSearchInput.value.trim().toLowerCase();
+                const sourceQuery = this.elements.sourceSearchInput.value.trim().toLowerCase();
+
+                // 검색어 또는 필터가 적용된 경우 로딩 표시
+                 if (messageQuery.length > 0 || sourceQuery.length > 0 || this.currentFilter !== 'all') {
+                     this.elements.searchResults.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+                 } else {
+                     // 검색어 없고 필터 전체인 경우 바로 결과 표시 (로딩 스피너 불필요)
+                     this.displayResults(this.messages, messageQuery, sourceQuery);
+                     return;
+                 }
+
+
+                setTimeout(() => {
+                    let filteredMessages = this.messages;
+                    
+                    // 말씀 내용 및 일차로 필터링
+                    if (messageQuery) {
+                        filteredMessages = filteredMessages.filter(
+                            m => (m.text && m.text.toLowerCase().includes(messageQuery)) ||
+                                 (m.day && m.day.toString().includes(messageQuery))
+                        );
+                    }
+
+                    // 출처로 필터링
+                    if (sourceQuery) {
+                        filteredMessages = filteredMessages.filter(
+                            m => m.source && m.source.toLowerCase().includes(sourceQuery)
+                        );
+                    }
+                    
+                    // 현재 선택된 출처 필터 적용 (기존 출처 필터와 출처 검색은 별개로 작동)
+                    if (this.currentFilter !== 'all') {
+                         const currentFilterLower = this.currentFilter.toLowerCase();
+                        filteredMessages = filteredMessages.filter(
+                            // 출처에 필터 키워드가 포함되는 경우 (부분 일치)
+                            m => m.source && m.source.toLowerCase().includes(currentFilterLower)
+                            // 또는 정확히 일치하는 경우를 원하면 아래처럼 변경
+                            // m => m.source && m.source.toLowerCase() === currentFilterLower
+                        );
+                    }
+                    
+                    this.displayResults(filteredMessages, messageQuery, sourceQuery);
+                }, 300); // 검색 효과를 위한 지연
+            }
+
+            showConfirmation(message, isError = false) {
+                this.elements.searchConfirm.textContent = message;
+                this.elements.searchConfirm.className = `confirmation ${isError ? 'error' : 'success'}`;
+                
+                setTimeout(() => {
+                    this.elements.searchConfirm.className = 'confirmation';
+                }, 5000);
+            }
+
+            setTheme(themeName) {
+                this.elements.body.className = ''; // 기존 테마 클래스 모두 제거
+                if (themeName !== 'light') { // 기본 테마는 클래스 없이
+                    this.elements.body.classList.add(`${themeName}-theme`);
+                }
+                
+                // 테마 토글 버튼 텍스트 및 아이콘 업데이트
+                const nextThemeIndex = (this.themes.indexOf(themeName) + 1) % this.themes.length;
+                const nextThemeName = this.themes[nextThemeIndex];
+                this.elements.themeText.textContent = this.themeTexts[nextThemeName]; // 다음에 적용될 테마 이름 표시
+                this.elements.themeIcon.className = this.themeIcons[nextThemeName]; // 다음에 적용될 테마 아이콘 표시
+
+                localStorage.setItem('theme', themeName);
+            }
+
+            toggleTheme() {
+                this.currentThemeIndex = (this.currentThemeIndex + 1) % this.themes.length;
+                const nextThemeName = this.themes[this.currentThemeIndex];
+                this.setTheme(nextThemeName);
+            }
+            
+            applyFilter(filter) {
+                this.currentFilter = filter;
+                this.elements.filterButtons.forEach(btn => {
+                    if (btn.getAttribute('data-filter') === filter) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                this.performSearch(); // 필터 적용 후 검색 다시 실행
+            }
+
+
+            setupEventListeners() {
+                // 말씀 검색 입력창 이벤트 리스너
+                this.elements.messageSearchInput?.addEventListener('input', this.debounce(() => {
+                    this.performSearch();
+                }, 300));
+
+                // 출처 검색 입력창 이벤트 리스너
+                 this.elements.sourceSearchInput?.addEventListener('input', this.debounce(() => {
+                     this.performSearch();
+                 }, 300));
+                
+                // 테마 토글 버튼 이벤트 리스너
+                this.elements.themeToggle?.addEventListener('click', () => this.toggleTheme());
+
+                // 필터 버튼 이벤트 리스너
+                this.elements.filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        this.applyFilter(button.getAttribute('data-filter'));
+                    });
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchApp = new SearchPage();
+            searchApp.initialize();
+        });
+    </script>
+</body>
+</html>

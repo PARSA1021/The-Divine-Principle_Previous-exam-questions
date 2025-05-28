@@ -6,103 +6,307 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#eef2f3">
-    <title>원리강론 퀴즈 WebApp</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#dbeafe">
+    <title>세계평화통일가정연합 - 원리강론 퀴즈</title>
+    <link rel="stylesheet" href="assets/css/styles.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 기본 스타일 */
+        /* 기본 설정 */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth; /* 부드러운 스크롤 */
+            font-size: 16px; /* 기본 폰트 크기 설정 (rem 기준) */
+        }
+
         body {
             font-family: 'Noto Sans KR', 'Arial', sans-serif;
             text-align: center;
-            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
-            padding: 20px;
+            background: linear-gradient(135deg, #dbeafe, #f8fafc);
+            padding: 1.5rem; /* 24px */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: fadeIn 0.8s ease-in;
+            animation: fadeIn 1s ease-in;
             -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            color: #333; /* 기본 텍스트 색상 */
         }
 
-        /* 헤더 컨테이너 */
-        .header {
+        /* 다크 테마 */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1f2937, #374151);
+            color: #f3f4f6;
+        }
+
+        body.dark-theme .header,
+        body.dark-theme .search-container,
+        body.dark-theme .instructions,
+        body.dark-theme .footer,
+        body.dark-theme .result-item,
+        body.dark-theme .nav-bar,
+        body.dark-theme .theme-option {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            color: #f3f4f6;
+        }
+
+        body.dark-theme .result-item .source,
+        body.dark-theme .instructions i,
+        body.dark-theme .header h1,
+        body.dark-theme .header h2,
+        body.dark-theme .search-container h2,
+        body.dark-theme .search-options label,
+        body.dark-theme .result-item h3 {
+            color: #93c5fd;
+        }
+
+        body.dark-theme .search-stats {
+            background: linear-gradient(135deg, #4b5563, #6b7280);
+            color: #f3f4f6;
+        }
+
+        body.dark-theme .no-results {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+            color: #fecaca;
+            border-color: #f87171;
+        }
+
+        body.dark-theme .search-box input {
+            border-color: #93c5fd;
+            background-color: #2d3748;
+            color: #f3f4f6;
+        }
+        body.dark-theme .search-box input:focus {
+            box-shadow: 0 0 0.5rem rgba(147, 197, 253, 0.5); /* 0 0 8px */
+        }
+        body.dark-theme .highlight {
+            background: linear-gradient(120deg, #6366f1, #818cf8);
+            color: #e0e7ff;
+        }
+
+        /* 자연 테마 */
+        body.nature-theme {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        }
+
+        body.nature-theme .header,
+        body.nature-theme .search-container,
+        body.nature-theme .instructions,
+        body.nature-theme .footer,
+        body.nature-theme .result-item,
+        body.nature-theme .nav-bar,
+        body.nature-theme .theme-option {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        }
+
+        body.nature-theme .result-item .source,
+        body.nature-theme .instructions i,
+        body.nature-theme .header h1,
+        body.nature-theme .header h2,
+        body.nature-theme .search-container h2,
+        body.nature-theme .search-options label,
+        body.nature-theme .result-item h3 {
+            color: #065f46;
+        }
+
+        body.nature-theme .search-stats {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            color: #065f46;
+        }
+
+        body.nature-theme .no-results {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            color: #b91c1c;
+            border-color: #fca5a5;
+        }
+
+        body.nature-theme .search-box input {
+            border-color: #065f46;
+            background-color: #e0ffe0;
+            color: #065f46;
+        }
+        body.nature-theme .search-box input:focus {
+            box-shadow: 0 0 0.5rem rgba(6, 95, 70, 0.3);
+        }
+        body.nature-theme .highlight {
+            background: linear-gradient(120deg, #dcfce7, #86efac);
+            color: #166534;
+        }
+
+        /* 내비게이션 바 */
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem; /* 16px */
+            margin: 1.5rem 0; /* 24px */
+            width: 100%;
+            max-width: 38rem; /* 608px */
+            flex-wrap: wrap;
+            background: linear-gradient(135deg, #ffffff, #fff9e6);
+            padding: 1rem; /* 16px */
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* 0 4px 12px */
+            position: sticky;
+            top: 1.5rem; /* 24px */
+            z-index: 10;
+        }
+
+        .nav-bar button {
+            background: linear-gradient(135deg, #1e3a8a, #60a5fa);
+            color: white;
+            font-size: 1.1rem; /* 17.6px */
+            font-weight: 500;
+            height: 3.5rem; /* 56px */
+            width: 8rem; /* 128px */
+            border-radius: 0.875rem; /* 14px */
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            margin: 20px 0 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            gap: 0.625rem; /* 10px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* 0 4px 12px */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-bar button.active {
+            background: linear-gradient(135deg, #d4af37, #facc15);
+            box-shadow: 0 0 0.625rem rgba(212, 175, 55, 0.5); /* 0 0 10px */
+            transform: translateY(-0.1875rem); /* -3px */
+        }
+
+        .nav-bar button:hover:not(.active) {
+            transform: translateY(-0.1875rem) rotate(2deg); /* -3px */
+            box-shadow: 0 0.375rem 0.875rem rgba(0, 0, 0, 0.2); /* 0 6px 14px */
+        }
+
+        .nav-bar button:active {
+            transform: scale(0.97);
+            box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.2); /* 0 2px 6px */
+        }
+
+        /* 페이지 컨테이너 */
+        .page-container {
             width: 100%;
-            max-width: 500px;
-            animation: slideDown 0.5s ease-out;
+            max-width: 42rem; /* 672px */ /* 더 넓게 */
+            flex: 1;
+        }
+
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* 헤더 */
+        .header {
+            margin: 1.5rem 0; /* 24px */
+            padding: 2rem; /* 32px */
+            background: linear-gradient(135deg, #ffffff, #fff9e6);
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* 0 4px 12px */
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 15rem; /* 240px */
+            height: 15rem; /* 240px */
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent);
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            border-radius: 50%;
         }
 
         .header .logo-container {
-            margin-bottom: 15px;
+            margin-bottom: 1.5rem; /* 24px */
+            z-index: 1;
+            position: relative;
         }
 
         .header img {
-            width: 80px;
+            width: 7.5rem; /* 120px */
             height: auto;
             border-radius: 50%;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2); /* 0 4px 12px */
             transition: transform 0.3s ease;
             -webkit-user-select: none;
             user-select: none;
             -webkit-user-drag: none;
         }
 
-        .header img:active {
-            transform: scale(1.1);
+        .header img:hover {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .header h1 {
             color: #002366;
-            font-size: 2.2rem;
+            font-size: 2.5rem; /* 40px */
             font-weight: 700;
             margin: 0;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 0.0625rem 0.0625rem 0.25rem rgba(0, 0, 0, 0.1); /* 1px 1px 4px */
+            z-index: 1;
+            position: relative;
+        }
+
+        .header h2 {
+            color: #1e3a8a;
+            font-size: 1.8rem; /* 28.8px */
+            margin: 0.875rem 0; /* 14px */
+            font-weight: 600;
+            z-index: 1;
+            position: relative;
         }
 
         .header p {
-            color: #555;
-            font-size: 1rem;
-            margin: 8px 0 0;
-            line-height: 1.5;
-            background: none;
-            padding: 0;
+            color: #444;
+            font-size: 1.15rem; /* 18.4px */
+            margin: 0.75rem 0; /* 12px */
+            line-height: 1.6;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* 구분선 */
+        .divider {
+            width: 80%;
+            height: 0.125rem; /* 2px */
+            background: linear-gradient(90deg, transparent, #d4ad37f7, transparent);
+            margin: 1.5rem 0; /* 24px */
         }
 
         /* 버튼 컨테이너 */
         .button-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            margin: 30px 0;
+            gap: 1.5rem; /* 24px */
+            margin: 2rem 0; /* 32px */
             width: 100%;
-            max-width: 400px;
             touch-action: manipulation;
         }
 
-        /* 버튼 스타일 */
-        button {
+        button.quiz-button {
             width: 100%;
-            height: 60px;
-            font-size: 1.2rem;
-            border-radius: 12px;
+            height: 4.5rem; /* 72px */
+            font-size: 1.4rem; /* 22.4px */
+            border-radius: 1rem; /* 16px */
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -110,51 +314,341 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            gap: 0.75rem; /* 12px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2); /* 0 4px 12px */
             -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
+            position: relative;
+            overflow: hidden;
+            color: white; /* 텍스트 색상 명시 */
+        }
+
+        button.quiz-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0; /* 내용 아래에 위치 */
+        }
+
+        button.quiz-button:hover::after {
+            width: 20rem; /* 320px */
+            height: 20rem; /* 320px */
         }
 
         button.blue {
             background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-            color: white;
         }
 
         button.gold {
             background: linear-gradient(135deg, #d4af37, #facc15);
-            color: white;
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        button.quiz-button:hover {
+            transform: translateY(-0.1875rem); /* -3px */
+            box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.25); /* 0 6px 16px */
         }
 
-        button:active {
+        button.quiz-button:active {
             transform: scale(0.97);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.2); /* 0 2px 8px */
         }
 
-        /* 사용 방법 섹션 */
-        .instructions {
-            margin: 30px 0;
+        /* 검색 컨테이너 */
+        .search-container {
             width: 100%;
-            max-width: 500px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #ffffff, #fff9e6);
+            padding: 2rem; /* 32px */
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* 0 4px 12px */
+            margin: 1.5rem 0; /* 24px */
+        }
+
+        .search-container h2 {
+            color: #002366;
+            font-size: 1.8rem; /* 28.8px */
+            margin-bottom: 1.5rem; /* 24px */
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* 12px */
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem; /* 14px */
+            margin-bottom: 1.75rem; /* 28px */
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1rem; /* 16px */
+            font-size: 1.2rem; /* 19.2px */
+            border: 0.15rem solid #1e3a8a; /* 2.4px */
+            border-radius: 0.75rem; /* 12px */
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #f8fafc;
+            color: #333;
+            height: 3.5rem; /* 56px */
+        }
+
+        .search-box input::placeholder {
+            color: #777;
+            font-style: italic;
+        }
+
+        .search-box input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 0.625rem rgba(212, 175, 55, 0.3); /* 0 0 10px */
+        }
+
+        .search-box button {
+            width: 3.5rem; /* 56px */
+            height: 3.5rem; /* 56px */
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* 검색 버튼 색상 변경 */
+            color: white;
+            font-size: 1.4rem; /* 22.4px */
+            border-radius: 0.75rem; /* 12px */
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15); /* 0 4px 10px */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .search-box button:hover {
+            transform: translateY(-0.125rem); /* -2px */
+            box-shadow: 0 0.375rem 0.75rem rgba(0, 0, 0, 0.2); /* 0 6px 12px */
+        }
+
+        .clear-search {
+            width: 3.5rem; /* 56px */
+            height: 3.5rem; /* 56px */
+            background: linear-gradient(135deg, #6b7280, #9ca3af);
+            color: white;
+            font-size: 1.2rem; /* 19.2px */
+            border-radius: 0.75rem; /* 12px */
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15); /* 0 4px 10px */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .clear-search:hover {
+            transform: translateY(-0.125rem); /* -2px */
+            box-shadow: 0 0.375rem 0.75rem rgba(0, 0, 0, 0.2); /* 0 6px 12px */
+        }
+
+        .search-options {
+            display: flex;
+            gap: 1rem; /* 16px */
+            margin-bottom: 1.5rem; /* 24px */
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center; /* 중앙 정렬 */
+        }
+
+        .search-options label {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem; /* 10px */
+            color: #444;
+            font-size: 1.1rem; /* 17.6px */
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .search-options label i {
+            color: #1e3a8a;
+            font-size: 1.2rem; /* 19.2px */
+        }
+
+        .search-options input[type="checkbox"] {
+            width: 1.25rem; /* 20px */
+            height: 1.25rem; /* 20px */
+            accent-color: #1e3a8a;
+            cursor: pointer;
+            transform: scale(1.1); /* 체크박스 크기 약간 키움 */
+        }
+
+        .category-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.875rem; /* 14px */
+            justify-content: center;
+            margin-bottom: 1.5rem; /* 24px */
+        }
+
+        .category-container button {
+            background: linear-gradient(135deg, #4b5563, #6b7280);
+            color: white;
+            font-size: 1.05rem; /* 16.8px */
+            font-weight: 500;
+            height: 3rem; /* 48px */
+            min-width: 7.5rem; /* 120px */
+            padding: 0 0.75rem; /* 12px */
+            border-radius: 0.875rem; /* 14px */
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15); /* 0 4px 10px */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .category-container button.active {
+            background: linear-gradient(135deg, #d4af37, #facc15);
+            transform: translateY(-0.125rem); /* -2px */
+            box-shadow: 0 0.375rem 0.75rem rgba(0, 0, 0, 0.2); /* 0 6px 12px */
+        }
+
+        .category-container button:hover:not(.active) {
+            background: linear-gradient(135deg, #1e3a8a, #60a5fa);
+            transform: translateY(-0.125rem); /* -2px */
+        }
+
+        .category-container button:active {
+            transform: scale(0.95);
+        }
+
+        /* 검색 통계 */
+        .search-stats {
+            margin-bottom: 1.5rem; /* 24px */
+            padding: 1rem; /* 16px */
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border-radius: 0.625rem; /* 10px */
+            color: #374151;
+            font-size: 1rem; /* 16px */
+            text-align: left;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        /* 검색 결과 */
+        .search-results {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem; /* 24px */
+        }
+
+        .result-item {
+            background: linear-gradient(135deg, #ffffff, #fff9e6);
+            padding: 1.5rem; /* 24px */
+            border-radius: 0.875rem; /* 14px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* 0 4px 12px */
+            text-align: left;
             animation: slideUp 0.5s ease-out;
+            border-left: 0.3125rem solid #1e3a8a; /* 5px */
+        }
+
+        .result-item.highlighted {
+            border-left-color: #d4af37;
+            box-shadow: 0 0.25rem 0.75rem rgba(212, 175, 55, 0.2); /* 0 4px 12px */
+        }
+
+        .result-item h3 {
+            color: #002366;
+            font-size: 1.4rem; /* 22.4px */
+            margin-bottom: 0.75rem; /* 12px */
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem; /* 10px */
+        }
+
+        .result-item p {
+            color: #444;
+            font-size: 1.1rem; /* 17.6px */
+            line-height: 1.6;
+            margin-bottom: 0.75rem; /* 12px */
+        }
+
+        .result-item .source {
+            color: #1e3a8a;
+            font-size: 0.95rem; /* 15.2px */
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem; /* 6px */
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fef3c7, #fbbf24);
+            padding: 0.1875rem 0.375rem; /* 3px 6px */
+            border-radius: 0.25rem; /* 4px */
+            font-weight: 600;
+            color: #92400e;
+            box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1); /* 0 1px 3px */
+        }
+
+        .match-count {
+            background: #1e3a8a;
+            color: white;
+            font-size: 0.9rem; /* 14.4px */
+            padding: 0.1875rem 0.5rem; /* 3px 8px */
+            border-radius: 0.75rem; /* 12px */
+            margin-left: 0.75rem; /* 12px */
+            flex-shrink: 0; /* 크기 줄어들지 않도록 */
+        }
+
+        .no-results {
+            color: #b91c1c;
+            font-size: 1.2rem; /* 19.2px */
+            text-align: center;
+            margin: 1.5rem 0; /* 24px */
+            padding: 3rem; /* 48px */
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border-radius: 0.875rem; /* 14px */
+            border: 0.15rem dashed #fca5a5; /* 2.4px */
+        }
+
+        /* 로딩 스피너 */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem; /* 12px */
+            color: #1e3a8a;
+            font-size: 1.2rem; /* 19.2px */
+            margin: 1.5rem 0; /* 24px */
+            min-height: 4rem; /* 로딩 스피너 공간 확보 */
+        }
+
+        .loading .spinner {
+            width: 1.5rem; /* 24px */
+            height: 1.5rem; /* 24px */
+            border: 0.1875rem solid #e5e7eb; /* 3px */
+            border-top: 0.1875rem solid #1e3a8a; /* 3px */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* 사용 방법 */
+        .instructions {
+            margin: 2rem 0; /* 32px */
+            width: 100%;
+            background: linear-gradient(135deg, #ffffff, #fff9e6);
+            padding: 2rem; /* 32px */
+            border-radius: 1rem; /* 16px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* 0 4px 12px */
+            animation: fadeIn 0.8s ease-out; /* 새로운 애니메이션 추가 */
         }
 
         .instructions h2 {
             color: #002366;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+            font-size: 1.8rem; /* 28.8px */
+            margin-bottom: 1.5rem; /* 24px */
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.75rem; /* 12px */
+            font-weight: 600;
         }
 
         .instructions ul {
@@ -162,81 +656,273 @@
             padding: 0;
             text-align: left;
             color: #444;
-            font-size: 1rem;
+            font-size: 1.15rem; /* 18.4px */
         }
 
         .instructions li {
-            margin: 12px 0;
+            margin: 1.125rem 0; /* 18px */
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            line-height: 1.6;
+            gap: 0.875rem; /* 14px */
+            line-height: 1.7;
+            animation: slideInLeft 0.6s ease-out forwards; /* 리스트 아이템 애니메이션 */
+            opacity: 0; /* 초기 투명하게 설정 */
         }
+        .instructions li:nth-child(1) { animation-delay: 0.1s; }
+        .instructions li:nth-child(2) { animation-delay: 0.2s; }
+        .instructions li:nth-child(3) { animation-delay: 0.3s; }
+        .instructions li:nth-child(4) { animation-delay: 0.4s; }
+        .instructions li:nth-child(5) { animation-delay: 0.5s; }
+        .instructions li:nth-child(6) { animation-delay: 0.6s; }
+
 
         .instructions i {
             color: #1e3a8a;
-            font-size: 1.1rem;
+            font-size: 1.3rem; /* 20.8px */
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: 0.125rem; /* 2px */
         }
 
         /* 푸터 */
         .footer {
             margin-top: auto;
-            padding: 15px;
-            color: #666;
-            font-size: 0.9rem;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem; /* 24px */
+            color: #444;
+            font-size: 1.05rem; /* 16.8px */
+            background: linear-gradient(135deg, #ffffff, #fff9e6);
+            border-radius: 0.875rem; /* 14px */
+            box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1); /* 0 2px 8px */
             width: 100%;
-            max-width: 500px;
+            max-width: 38rem; /* 608px */
+            text-align: center;
         }
 
-        /* 반응형 디자인 */
-        @media (min-width: 600px) {
-            .button-container {
-                flex-direction: row;
-                gap: 25px;
+        /* 테마 선택기 */
+        .theme-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem; /* 24px */
+            width: 100%;
+        }
+
+        .theme-option {
+            padding: 1.5rem; /* 24px */
+            border-radius: 0.875rem; /* 14px */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 0.125rem solid transparent; /* 2px */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08); /* 초기 그림자 */
+            text-align: left;
+        }
+
+        .theme-option:hover {
+            transform: translateY(-0.1875rem); /* -3px */
+            box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.15); /* 0 6px 16px */
+        }
+
+        .theme-option.active {
+            border-color: #d4af37;
+            box-shadow: 0 0 0.9375rem rgba(212, 175, 55, 0.3); /* 0 0 15px */
+        }
+
+        .theme-option h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem; /* 10px */
+            margin-bottom: 0.625rem; /* 10px */
+            font-size: 1.25rem; /* 20px */
+            color: inherit; /* 부모 테마의 텍스트 색상 상속 */
+        }
+        .theme-option h3 i {
+            font-size: 1.3rem; /* 20.8px */
+        }
+
+        .theme-option p {
+            font-size: 1rem; /* 16px */
+            color: inherit; /* 부모 테마의 텍스트 색상 상속 */
+        }
+
+        /* 테마 색상 미리보기 (실제 적용되는 배경색) */
+        .theme-default {
+            background: linear-gradient(135deg, #dbeafe, #f8fafc);
+            color: #333;
+        }
+
+        .theme-dark {
+            background: linear-gradient(135deg, #1f2937, #374151);
+            color: white;
+        }
+
+        .theme-nature {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+        }
+
+        /* 미디어 쿼리 - 태블릿 및 데스크톱 (min-width 기준) */
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem; /* 32px */
             }
 
-            button {
-                width: 200px;
+            .nav-bar {
+                top: 2rem; /* 32px */
+                padding: 1.25rem; /* 20px */
+                gap: 1.25rem; /* 20px */
+            }
+
+            .nav-bar button {
+                width: 9.5rem; /* 152px */
+                font-size: 1.2rem; /* 19.2px */
+                height: 3.8rem; /* 60.8px */
+            }
+
+            .button-container {
+                flex-direction: row;
+                gap: 1.875rem; /* 30px */
+            }
+
+            button.quiz-button {
+                width: 15.625rem; /* 250px */
+                height: 4.8rem; /* 76.8px */
+                font-size: 1.6rem; /* 25.6px */
             }
 
             .header h1 {
-                font-size: 2.5rem;
+                font-size: 2.8rem; /* 44.8px */
+            }
+
+            .header h2 {
+                font-size: 2rem; /* 32px */
             }
 
             .header p {
-                font-size: 1.1rem;
+                font-size: 1.3rem; /* 20.8px */
             }
 
-            .instructions h2 {
-                font-size: 1.6rem;
+            .instructions h2, .search-container h2 {
+                font-size: 2rem; /* 32px */
             }
 
             .instructions ul {
-                font-size: 1rem;
+                font-size: 1.2rem; /* 19.2px */
+            }
+
+            .category-container button {
+                width: 8.5rem; /* 136px */
+                height: 3.25rem; /* 52px */
+                font-size: 1.1rem; /* 17.6px */
+            }
+
+            .search-box input {
+                padding: 1.125rem; /* 18px */
+                font-size: 1.3rem; /* 20.8px */
+            }
+
+            .search-box button, .clear-search {
+                width: 3.8rem; /* 60.8px */
+                height: 3.8rem; /* 60.8px */
+                font-size: 1.5rem; /* 24px */
+            }
+
+            .result-item {
+                padding: 1.875rem; /* 30px */
+            }
+
+            .result-item h3 {
+                font-size: 1.55rem; /* 24.8px */
+            }
+
+            .result-item p {
+                font-size: 1.2rem; /* 19.2px */
+            }
+
+            .footer {
+                padding: 1.875rem; /* 30px */
+                font-size: 1.1rem; /* 17.6px */
             }
         }
 
-        @media (max-width: 400px) {
+        /* 미디어 쿼리 - 작은 모바일 기기 (max-width 기준) */
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px; /* 작은 화면에서 기본 폰트 크기 조정 */
+            }
+            body {
+                padding: 1rem; /* 16px */
+            }
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 2rem; /* 32px */
+            }
+
+            .header h2 {
+                font-size: 1.6rem; /* 25.6px */
             }
 
             .header p {
-                font-size: 0.9rem;
-            }
-
-            button {
-                height: 55px;
-                font-size: 1.1rem;
+                font-size: 1rem; /* 16px */
             }
 
             .header img {
-                width: 60px;
+                width: 6rem; /* 96px */
+            }
+
+            button.quiz-button {
+                height: 4rem; /* 64px */
+                font-size: 1.3rem; /* 20.8px */
+            }
+
+            .nav-bar button {
+                width: 7rem; /* 112px */
+                font-size: 1rem; /* 16px */
+                height: 3.2rem; /* 51.2px */
+            }
+
+            .category-container button {
+                width: 6.5rem; /* 104px */
+                font-size: 0.95rem; /* 15.2px */
+                height: 2.8rem; /* 44.8px */
+            }
+
+            .search-container h2 {
+                font-size: 1.6rem; /* 25.6px */
+            }
+
+            .search-box input {
+                font-size: 1.05rem; /* 16.8px */
+                padding: 0.8rem; /* 12.8px */
+                height: 3.2rem; /* 51.2px */
+            }
+
+            .search-box button, .clear-search {
+                width: 3.2rem; /* 51.2px */
+                height: 3.2rem; /* 51.2px */
+                font-size: 1.3rem; /* 20.8px */
+            }
+
+            .result-item {
+                padding: 1.25rem; /* 20px */
+            }
+
+            .result-item h3 {
+                font-size: 1.3rem; /* 20.8px */
+            }
+
+            .result-item p {
+                font-size: 1rem; /* 16px */
+            }
+
+            .instructions ul {
+                font-size: 1.05rem; /* 16.8px */
+            }
+
+            .instructions li {
+                margin: 0.8rem 0; /* 12.8px */
+                gap: 0.6rem; /* 9.6px */
+            }
+
+            .footer {
+                padding: 1.25rem; /* 20px */
+                font-size: 1.1rem; /* 16px */
             }
         }
 
@@ -247,48 +933,515 @@
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
+            from { transform: translateY(-1.25rem); opacity: 0; } /* -20px */
             to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
+            from { transform: translateY(1.25rem); opacity: 0; } /* 20px */
             to { transform: translateY(0); opacity: 1; }
         }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 새로운 애니메이션: 슬라이드 인 (왼쪽에서) */
+        @keyframes slideInLeft {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* 홈 섹션 전용 스타일 (강조) */
+        #home .header {
+            background: linear-gradient(135deg, #e0f2fe, #d4f0ff); /* 더 밝고 부드러운 그라데이션 */
+            border: 0.125rem solid #a7d9f7; /* 2px */
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15); /* 그림자 강화 */
+            padding: 3rem 2rem; /* 48px 32px */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #home .header::before {
+            background: radial-gradient(circle, rgba(175, 212, 255, 0.3), transparent 70%); /* 배경 원형 그라데이션 색상 조정 */
+            width: 20rem; /* 320px */
+            height: 20rem; /* 320px */
+            animation: pulse 4s infinite ease-in-out; /* 새로운 애니메이션 추가 */
+        }
+
+        #home .header img {
+            width: 9rem; /* 144px */
+            height: 9rem; /* 144px */
+            border: 0.25rem solid #ffffff; /* 4px */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25); /* 로고 그림자 강화 */
+            transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+        }
+
+        #home .header img:hover {
+            transform: scale(1.15) rotate(7deg);
+            box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.35);
+        }
+
+        #home .header h1 {
+            color: #0d47a1; /* 더 진한 파란색 */
+            font-size: 3rem; /* 48px */
+            margin-top: 1.5rem; /* 24px */
+            text-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.15); /* 1.6px 1.6px 4.8px */
+        }
+
+        #home .header h2 {
+            color: #1565c0; /* 중간 파란색 */
+            font-size: 2.2rem; /* 35.2px */
+            margin: 1rem 0; /* 16px */
+        }
+
+        #home .header p {
+            color: #333;
+            font-size: 1.25rem; /* 20px */
+            max-width: 90%;
+            margin: 0.8rem auto; /* 12.8px */
+        }
+
+        #home .button-container {
+            flex-direction: row; /* 데스크톱 기본으로 설정 */
+            flex-wrap: wrap; /* 반응형으로 줄바꿈 */
+            justify-content: center;
+            gap: 2rem; /* 32px */
+            margin: 2.5rem 0; /* 40px */
+        }
+
+        #home button.quiz-button {
+            height: 5rem; /* 80px */
+            min-width: 16rem; /* 256px */
+            font-size: 1.6rem; /* 25.6px */
+            border-radius: 1.25rem; /* 20px */
+            box-shadow: 0 0.6rem 1.5rem rgba(0, 0, 0, 0.2); /* 버튼 그림자 강화 */
+            letter-spacing: 0.05rem; /* 텍스트 간격 */
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* 부드러운 전환 효과 */
+        }
+
+        #home button.quiz-button.blue {
+            background: linear-gradient(135deg, #1976d2, #2196f3); /* 더 부드러운 파란색 그라데이션 */
+        }
+
+        #home button.quiz-button.gold {
+            background: linear-gradient(135deg, #ffb300, #ffca28); /* 더 선명한 골드 그라데이션 */
+        }
+
+        #home button.quiz-button:hover {
+            transform: translateY(-0.35rem) scale(1.02); /* -5.6px */
+            box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.3); /* 호버 시 그림자 더 강조 */
+        }
+
+        #home button.quiz-button::after {
+            background: rgba(255, 255, 255, 0.4); /* 클릭 효과 투명도 증가 */
+        }
+
+        /* 다크 테마 홈 스타일 */
+        body.dark-theme #home .header {
+            background: linear-gradient(135deg, #2d3748, #4a5568);
+            border-color: #4b5563;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+        }
+        body.dark-theme #home .header::before {
+            background: radial-gradient(circle, rgba(74, 85, 104, 0.4), transparent 70%);
+        }
+        body.dark-theme #home .header h1 {
+            color: #90caf9;
+        }
+        body.dark-theme #home .header h2 {
+            color: #64b5f6;
+        }
+        body.dark-theme #home .header p {
+            color: #e0e7ff;
+        }
+        body.dark-theme #home button.quiz-button.blue {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+        }
+        body.dark-theme #home button.quiz-button.gold {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+
+        /* 자연 테마 홈 스타일 */
+        body.nature-theme #home .header {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            border-color: #80deea;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+        }
+        body.nature-theme #home .header::before {
+            background: radial-gradient(circle, rgba(178, 235, 242, 0.3), transparent 70%);
+        }
+        body.nature-theme #home .header h1 {
+            color: #00796b;
+        }
+        body.nature-theme #home .header h2 {
+            color: #00897b;
+        }
+        body.nature-theme #home .header p {
+            color: #26a69a;
+        }
+        body.nature-theme #home button.quiz-button.blue {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+        }
+        body.nature-theme #home button.quiz-button.gold {
+            background: linear-gradient(135deg, #cddc39, #d4e157);
+        }
+
+        /* 반응형 디자인 (홈 섹션) */
+        @media (max-width: 768px) {
+            #home .header {
+                padding: 2rem 1.5rem; /* 32px 24px */
+            }
+            #home .header h1 {
+                font-size: 2.2rem; /* 35.2px */
+            }
+            #home .header h2 {
+                font-size: 1.8rem; /* 28.8px */
+            }
+            #home .header p {
+                font-size: 1.1rem; /* 17.6px */
+            }
+            #home .header img {
+                width: 7rem; /* 112px */
+                height: 7rem; /* 112px */
+            }
+            #home .button-container {
+                flex-direction: column; /* 모바일에서 세로로 정렬 */
+                gap: 1.5rem; /* 24px */
+            }
+            #home button.quiz-button {
+                height: 4.5rem; /* 72px */
+                font-size: 1.4rem; /* 22.4px */
+                min-width: unset; /* 최소 너비 제한 해제 */
+                width: 100%; /* 너비 100% */
+            }
+        }
+
+        /* 새로운 애니메이션: 배경 원형 효과 */
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+        }
+
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo-container">
-            <img src="assets/images/FFWPU.png" alt="FFWPU 로고">
-        </div>
-        <h1><i class="fas fa-book"></i> 원리강론 퀴즈</h1>
-        <p>원리 교육 문제풀이 WebApp입니다.</p>
-        <p>다양한 문제를 풀며 원리를 깊이 배워보세요!</p>
-    </div>
+    <nav class="nav-bar" aria-label="메인 내비게이션">
+        <button data-page="home" class="active" aria-current="page"><i class="fas fa-home"></i> 홈</button>
+        <button data-page="workbook"><i class="fas fa-book-open"></i> 워크북</button>
+        <button data-page="theme"><i class="fas fa-palette"></i> 테마</button>
+    </nav>
 
-    <div class="button-container">
-        <button class="blue" onclick="startQuiz('원리강론')"><i class="fas fa-play"></i> 원리강론 문제</button>
-        <button class="gold" onclick="startQuiz('성경')"><i class="fas fa-bible"></i> 성경 문제</button>
-    </div>
+    <main class="page-container">
+        <section class="page active" id="home" role="region" aria-labelledby="home-heading">
+            <header class="header">
+                <div class="logo-container">
+                    <img src="assets/images/FFWPU.png" alt="세계평화통일가정연합 로고" width="100" height="100">
+                </div>
+                <h1 id="home-heading"><i class="fas fa-book-reader"></i> 원리강론 퀴즈</h1> <h2><i class="fas fa-lightbulb"></i> 배움을 즐기는 새로운 방법</h2> <p>세계평화통일가정연합 교육 플랫폼입니다. 심오한 원리와 성경을 통해 지혜를 넓히고, 참부모님의 말씀을 깊이 이해하는 여정에 함께하세요.</p>
+                <p>재미있는 퀴즈와 심도 있는 검색 기능으로 영적 성장을 경험하세요!</p>
+            </header>
+            <div class="divider" aria-hidden="true"></div>
+            <div class="button-container">
+                <button class="quiz-button blue" onclick="startQuiz('원리강론')" aria-label="원리강론 문제 시작">
+                    <i class="fas fa-school"></i> 원리강론 문제
+                </button>
+                <button class="quiz-button gold" onclick="startQuiz('성경')" aria-label="성경 문제 시작">
+                    <i class="fas fa-cross"></i> 성경 문제
+                </button>
+            </div>
+            <div class="divider" aria-hidden="true"></div>
+            <section class="instructions" role="complementary" aria-labelledby="instructions-heading">
+                <h2 id="instructions-heading"><i class="fas fa-info-circle"></i> 사용 방법</h2>
+                <ul>
+                    <li><i class="fas fa-hand-pointer"></i> <strong>퀴즈 선택:</strong> "원리강론 문제" 또는 "성경 문제" 버튼을 클릭하여 원하는 퀴즈를 시작하세요.</li>
+                    <li><i class="fas fa-question-circle"></i> <strong>문제 풀이:</strong> 빈칸에 알맞은 답을 선택지에서 클릭하여 채웁니다.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>정답 확인:</strong> 모든 빈칸을 채운 후 "정답 확인" 버튼을 눌러 결과를 확인하세요.</li>
+                    <li><i class="fas fa-arrow-right"></i> <strong>다음 문제:</strong> 정답이 맞으면 "다음 문제" 버튼으로 이동합니다.</li>
+                    <li><i class="fas fa-redo"></i> <strong>다시 시작:</strong> 퀴즈 완료 후 "다시 시작" 버튼으로 새로 시작할 수 있습니다.</li>
+                    <li><i class="fas fa-lightbulb"></i> <strong>팁:</strong> 선택을 잘못했을 경우, 빈칸이나 선택지를 다시 클릭하면 선택이 취소됩니다!</li>
+                </ul>
+            </section>
+        </section>
 
-    <div class="instructions">
-        <h2><i class="fas fa-info-circle"></i> 사용 방법</h2>
-        <ul>
-            <li><i class="fas fa-hand-pointer"></i> 원하는 퀴즈를 선택하세요: "원리강론 문제 풀이" 또는 "성경 문제 풀이" 버튼을 클릭합니다.</li>
-            <li><i class="fas fa-question-circle"></i> 문제 풀기: 빈칸에 알맞은 답을 선택지에서 클릭하여 채웁니다.</li>
-            <li><i class="fas fa-check-circle"></i> 정답 확인: 모든 빈칸을 채운 후 "정답 확인" 버튼을 눌러 결과를 확인하세요.</li>
-            <li><i class="fas fa-arrow-right"></i> 다음 문제: 정답이 맞으면 "다음 문제" 버튼으로 이동합니다.</li>
-            <li><i class="fas fa-redo"></i> 다시 시작: 퀴즈 완료 후 "다시 시작" 버튼으로 새로 시작할 수 있습니다.</li>
-            <li><i class="fas fa-lightbulb"></i> 팁: 선택을 잘못했을 경우, 빈칸이나 선택지를 다시 클릭하면 취소됩니다!</li>
-        </ul>
-    </div>
+        <section class="page" id="workbook" role="region" aria-labelledby="workbook-heading">
+            <header class="header">
+                <div class="logo-container">
+                    <img src="assets/images/FFWPU.png" alt="세계평화통일가정연합 로고" width="100" height="100">
+                </div>
+                <h1 id="workbook-heading"><i class="fas fa-book-open"></i> 천지인참부모효정 천주 축복식</h1>
+                <h2>40일 정성 워크북</h2>
+                <p>축복식: 2025년 4월 12일 (토요일)</p>
+                <p>세계평화통일가정연합의 말씀을 통해 축복을 준비하세요.</p>
+            </header>
+            <div class="divider" aria-hidden="true"></div>
+            <div class="search-container">
+                <h2><i class="fas fa-search"></i> 고급 말씀 검색</h2>
+                <div class="search-box">
+                    <label for="search-input" class="sr-only">검색어 입력</label>
+                    <input type="text" id="search-input" placeholder="검색어를 입력하세요 (예: 사랑, 축복, 가정)" aria-label="검색어 입력 필드">
+                    <button onclick="searchMessages()" title="검색 실행" aria-label="검색"><i class="fas fa-search"></i></button>
+                    <button class="clear-search" onclick="clearSearch()" title="검색 초기화" aria-label="검색 초기화"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <div class="search-options" role="group" aria-label="검색 옵션">
+                    <label>
+                        <input type="checkbox" id="exact-match" onchange="searchMessages()">
+                        <i class="fas fa-quote-left"></i> 정확한 단어 일치
+                    </label>
+                    <label>
+                        <input type="checkbox" id="case-sensitive" onchange="searchMessages()">
+                        <i class="fas fa-font"></i> 대소문자 구분
+                    </label>
+                    <label>
+                        <input type="checkbox" id="whole-word" onchange="searchMessages()">
+                        <i class="fas fa-signature"></i> 전체 단어만
+                    </label>
+                </div>
 
-    <div class="footer">
-        <p>&copy; 2025 원리강론 퀴즈 WebApp. All rights reserved.</p>
-    </div>
+                <div class="category-container" role="group" aria-label="카테고리 필터">
+                    <button class="active" data-category="전체" aria-pressed="true">전체</button>
+                    <button data-category="천성경" aria-pressed="false">천성경</button>
+                    <button data-category="통일원리" aria-pressed="false">통일원리</button>
+                    <button data-category="성경" aria-pressed="false">성경</button>
+                    <button data-category="평화메시지" aria-pressed="false">평화메시지</button>
+                    <button data-category="기타" aria-pressed="false">기타</button>
+                </div>
+
+                <div id="search-stats" class="search-stats" style="display: none;" role="status" aria-live="polite"></div>
+                <div id="search-loading" class="loading" style="display: none;" aria-live="assertive" aria-atomic="true">
+                    <div class="spinner" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="검색 중"></div>
+                    검색 중...
+                </div>
+                <div id="search-results" class="search-results" role="list"></div>
+            </div>
+        </section>
+
+        <section class="page" id="theme" role="region" aria-labelledby="theme-heading">
+            <header class="header">
+                <div class="logo-container">
+                    <img src="assets/images/FFWPU.png" alt="세계평화통일가정연합 로고" width="100" height="100">
+                </div>
+                <h1 id="theme-heading"><i class="fas fa-palette"></i> 테마 변경</h1>
+                <p>원하는 테마를 선택하여 더욱 아름다운 경험을 즐기세요.</p>
+            </header>
+            <div class="divider" aria-hidden="true"></div>
+            <div class="theme-selector" role="radiogroup" aria-labelledby="theme-heading">
+                <div class="theme-option theme-default active" data-theme="default" tabindex="0" role="radio" aria-checked="true" aria-label="기본 테마 선택">
+                    <h3><i class="fas fa-sun"></i> 기본 테마</h3>
+                    <p>깔끔하고 밝은 기본 디자인입니다.</p>
+                </div>
+                <div class="theme-option theme-dark" data-theme="dark" tabindex="-1" role="radio" aria-checked="false" aria-label="다크 테마 선택">
+                    <h3><i class="fas fa-moon"></i> 다크 테마</h3>
+                    <p>눈이 편안한 어두운 테마입니다.</p>
+                </div>
+                <div class="theme-option theme-nature" data-theme="nature" tabindex="-1" role="radio" aria-checked="false" aria-label="자연 테마 선택">
+                    <h3><i class="fas fa-leaf"></i> 자연 테마</h3>
+                    <p>자연스럽고 평화로운 녹색 테마입니다.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <p>© 2025 세계평화통일가정연합 - 원리강론 퀴즈 WebApp. All rights reserved.</p>
+    </footer>
 
     <script>
+        let messages = [];
+        let currentCategory = '전체';
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+        let currentTheme = localStorage.getItem('theme') || 'default';
+        let debounceTimeout;
+
+        // 테마 적용 함수
+        function applyTheme(theme) {
+            document.body.classList.remove('default-theme', 'dark-theme', 'nature-theme');
+            document.body.classList.add(`${theme}-theme`);
+            currentTheme = theme;
+            localStorage.setItem('theme', theme);
+
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.remove('active');
+                option.setAttribute('aria-checked', 'false');
+                option.tabIndex = -1; // 접근성: 선택되지 않은 요소는 탭 순서에서 제외
+                if (option.getAttribute('data-theme') === theme) {
+                    option.classList.add('active');
+                    option.setAttribute('aria-checked', 'true');
+                    option.tabIndex = 0; // 접근성: 선택된 요소는 탭 순서에 포함
+                }
+            });
+        }
+
+        // JSON 데이터 로드
+        async function loadMessages() {
+            const loading = document.getElementById('search-loading');
+            const resultsContainer = document.getElementById('search-results');
+            loading.style.display = 'flex';
+            resultsContainer.innerHTML = ''; // 기존 결과 비움
+
+            try {
+                const response = await fetch('messages.json');
+                if (!response.ok) throw new Error('Failed to load messages.json');
+                messages = await response.json();
+                searchMessages(); // 데이터 로드 후 바로 검색 (초기 전체 목록 표시)
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                resultsContainer.innerHTML = '<p class="no-results" role="alert">메시지를 로드하는 데 실패했습니다. 네트워크 연결을 확인하거나 나중에 다시 시도해주세요.</p>';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        // 검색어 하이라이트 함수
+        function highlightText(text, query, isCaseSensitive, isWholeWord) {
+            if (!query) return text;
+            let regex;
+            try {
+                const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // 특수문자 이스케이프
+                let pattern = escapedQuery;
+                if (isWholeWord) {
+                    pattern = `\\b${escapedQuery}\\b`; // 단어 단위 일치
+                }
+                regex = new RegExp(pattern, isCaseSensitive ? 'g' : 'gi');
+            } catch (e) {
+                console.warn('Invalid regex query, returning original text:', e);
+                return text; // 유효하지 않은 정규식인 경우 원본 텍스트 반환
+            }
+            return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+        }
+
+        // 검색 함수 (디바운스 적용)
+        function searchMessages() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                const query = document.getElementById('search-input').value.trim();
+                const isExactMatch = document.getElementById('exact-match').checked;
+                const isCaseSensitive = document.getElementById('case-sensitive').checked;
+                const isWholeWord = document.getElementById('whole-word').checked;
+                const resultsContainer = document.getElementById('search-results');
+                const statsContainer = document.getElementById('search-stats');
+                const loading = document.getElementById('search-loading');
+
+                loading.style.display = 'flex';
+                resultsContainer.innerHTML = '';
+                statsContainer.style.display = 'none';
+
+                const startTime = performance.now();
+                let filteredMessages = messages;
+
+                // 카테고리 필터링
+                if (currentCategory !== '전체') {
+                    filteredMessages = filteredMessages.filter(msg => {
+                        const sourceText = isCaseSensitive ? msg.source : msg.source.toLowerCase();
+                        return sourceText.includes(isCaseSensitive ? currentCategory : currentCategory.toLowerCase());
+                    });
+                }
+
+                // 검색어 필터링 및 하이라이트 (text 필드에서만 검색)
+                if (query) {
+                    filteredMessages = filteredMessages.filter(msg => {
+                        const textToSearch = isCaseSensitive ? msg.text : msg.text.toLowerCase();
+                        const searchQuery = isCaseSensitive ? query : query.toLowerCase();
+
+                        if (isWholeWord) {
+                            const wordRegex = new RegExp(`\\b${searchQuery}\\b`, isCaseSensitive ? '' : 'i');
+                            return wordRegex.test(textToSearch);
+                        } else if (isExactMatch) {
+                            return textToSearch.includes(searchQuery);
+                        } else {
+                            return textToSearch.includes(searchQuery);
+                        }
+                    });
+
+                    // 검색 기록 저장
+                    if (query && !searchHistory.includes(query)) {
+                        searchHistory.unshift(query);
+                        if (searchHistory.length > 5) searchHistory.pop(); // 최대 5개 유지
+                        localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+                    }
+                }
+
+                // 결과 렌더링
+                const endTime = performance.now();
+                const searchTime = (endTime - startTime).toFixed(2);
+
+                if (filteredMessages.length === 0) {
+                    resultsContainer.innerHTML = '<p class="no-results" role="alert">검색 결과가 없습니다. 다른 검색어를 시도해 보세요.</p>';
+                } else {
+                    resultsContainer.innerHTML = filteredMessages.map(msg => {
+                        // text 필드에만 하이라이트 적용
+                        const highlightedText = highlightText(msg.text, query, isCaseSensitive, isWholeWord);
+                        const originalSource = msg.source; // source는 하이라이트하지 않음
+                        
+                        let matchCount = 0;
+                        if (query) {
+                            const queryRegex = new RegExp(isWholeWord ? `\\b${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b` : query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), isCaseSensitive ? 'g' : 'gi');
+                            // text 필드에서만 일치 횟수 계산
+                            matchCount = (msg.text.match(queryRegex) || []).length;
+                        }
+                        
+                        return `
+                            <div class="result-item ${query && matchCount > 0 ? 'highlighted' : ''}" role="listitem">
+                                <h3>제${msg.day}일 ${matchCount > 0 ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</h3>
+                                <p>${highlightedText}</p>
+                                <p class="source"><i class="fas fa-book" aria-hidden="true"></i> ${originalSource}</p>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                statsContainer.style.display = 'block';
+                statsContainer.innerHTML = `검색 결과: ${filteredMessages.length}개 (소요 시간: ${searchTime}ms)`;
+                loading.style.display = 'none';
+            }, 300); // 300ms 디바운스
+        }
+
+        // 검색 초기화 함수
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('exact-match').checked = false;
+            document.getElementById('case-sensitive').checked = false;
+            document.getElementById('whole-word').checked = false;
+            document.querySelectorAll('.category-container button').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+                if (btn.getAttribute('data-category') === '전체') {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-pressed', 'true');
+                }
+            });
+            currentCategory = '전체';
+            searchMessages(); // 초기화 후 다시 검색 실행하여 전체 목록 표시
+        }
+
+        // 페이지 전환 함수
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelector(`#${pageId}`).classList.add('active');
+
+            document.querySelectorAll('.nav-bar button').forEach(button => {
+                button.classList.remove('active');
+                button.setAttribute('aria-current', 'false');
+            });
+            const activeButton = document.querySelector(`.nav-bar button[data-page="${pageId}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+                activeButton.setAttribute('aria-current', 'page');
+            }
+
+            if (pageId === 'workbook' && messages.length === 0) {
+                loadMessages(); // 워크북 페이지로 이동 시 데이터 로드
+            } else if (pageId === 'workbook') {
+                searchMessages(); // 워크북 페이지로 다시 올 때 기존 검색 결과 표시 (필요시)
+            }
+
+            window.scrollTo(0, 0); // 페이지 전환 시 상단으로 스크롤
+        }
+
+        // 퀴즈 시작 함수
         function startQuiz(type) {
             if (type === '원리강론') {
                 window.location.href = 'divine.html';
@@ -297,15 +1450,95 @@
             }
         }
 
-        // 모바일 터치 반응성 개선
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('touchstart', () => button.classList.add('active'), { passive: true });
-            button.addEventListener('touchend', () => button.classList.remove('active'), { passive: true });
-            button.addEventListener('touchcancel', () => button.classList.remove('active'), { passive: true });
+        // 이벤트 리스너 설정
+        document.addEventListener('DOMContentLoaded', () => {
+            // 테마 초기화
+            applyTheme(currentTheme);
+
+            // 내비게이션 버튼
+            document.querySelectorAll('.nav-bar button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const pageId = button.getAttribute('data-page');
+                    showPage(pageId);
+                });
+            });
+
+            // 카테고리 버튼
+            document.querySelectorAll('.category-container button').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.category-container button').forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-pressed', 'false');
+                    });
+                    button.classList.add('active');
+                    button.setAttribute('aria-pressed', 'true');
+                    currentCategory = button.getAttribute('data-category');
+                    searchMessages();
+                });
+            });
+
+            // 검색 입력 (실시간 검색)
+            document.getElementById('search-input').addEventListener('input', searchMessages);
+            // 검색 옵션 변경 시 검색 재실행
+            document.getElementById('exact-match').addEventListener('change', searchMessages);
+            document.getElementById('case-sensitive').addEventListener('change', searchMessages);
+            document.getElementById('whole-word').addEventListener('change', searchMessages);
+
+
+            // 테마 선택
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const theme = option.getAttribute('data-theme');
+                    applyTheme(theme);
+                });
+                // 키보드 접근성: Enter 키로 테마 선택 가능
+                option.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault(); // 스페이스바의 기본 동작(스크롤) 방지
+                        const theme = option.getAttribute('data-theme');
+                        applyTheme(theme);
+                    }
+                });
+            });
+
+            // 모바일 터치 반응성 (버튼 활성화/비활성화 시각 피드백)
+            document.querySelectorAll('button, .theme-option').forEach(element => {
+                element.addEventListener('touchstart', () => element.classList.add('active-touch'), { passive: true });
+                element.addEventListener('touchend', () => element.classList.remove('active-touch'), { passive: true });
+                element.addEventListener('touchcancel', () => element.classList.remove('active-touch'), { passive: true });
+            });
+
+            // 키보드 접근성: 검색 입력 필드에서 Enter 키 입력 시 검색 실행
+            document.getElementById('search-input').addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    searchMessages();
+                }
+            });
+
+            // 초기 페이지 설정
+            showPage('home');
         });
 
-        // 페이지 로드 시 스크롤 최상단으로
-        window.addEventListener('load', () => window.scrollTo(0, 0));
+        // 스크린 리더 사용자에게 숨길 요소에 sr-only 클래스 추가 (CSS 필요)
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+            .active-touch { /* 터치 시 활성화 상태 표시 */
+                transform: scale(0.97);
+                box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.2);
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
