@@ -850,10 +850,10 @@
                 <div class="category-container" role="group" aria-label="카테고리 필터">
                     <button class="active" data-category="전체" aria-pressed="true">전체</button>
                     <button data-category="천성경" aria-pressed="false">천성경</button>
-                    <button data-category="통일원리" aria-pressed="false">통일원리</button>
                     <button data-category="성경" aria-pressed="false">성경</button>
                     <button data-category="평화메시지" aria-pressed="false">평화메시지</button>
                     <button data-category="기타" aria-pressed="false">기타</button>
+                    <button data-category="참부모님 말씀" aria-pressed="false">참부모님 말씀</button>
                 </div>
                 <div id="search-stats" class="search-stats" style="display: none;" role="status" aria-live="polite"></div>
             </div>
@@ -904,8 +904,8 @@
                     if (!msg.category) {
                         if (msg.source.includes('천성경')) msg.category = '천성경';
                         else if (msg.source.includes('성경')) msg.category = '성경';
-                        else if (msg.source.includes('통일원리')) msg.category = '통일원리';
                         else if (msg.source.includes('평화메시지')) msg.category = '평화메시지';
+                        else if (msg.source.includes('참부모님 말씀')) msg.category = '참부모님 말씀';
                         else msg.category = '기타';
                     }
                     return msg;
