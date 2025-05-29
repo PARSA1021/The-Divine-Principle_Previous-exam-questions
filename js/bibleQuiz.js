@@ -1,6 +1,7 @@
 let questions = [];
 let currentQuestionIndex = 0;
 let selectedAnswers = [];
+let selectedCounts = {}; // Track count of each selected option
 let score = 0;
 let isListMode = false;
 
@@ -13,12 +14,14 @@ async function loadQuestions() {
             throw new Error(`HTTP 오류! 상태: ${response.status} - ${response.statusText}`);
         }
         questions = await response.json();
+        questions = shuffleArray([...questions]);
         updateProgress();
         loadQuestion();
     } catch (error) {
         console.error('JSON 로드 실패:', error);
         document.getElementById('quiz-container').innerHTML = `
-            <p>문제를 불러오는 데 실패했습니다: ${error.message}. <button onclick="loadQuestions()">재시도</button></p>
+            <p class="error-message">문제를 불러오는 데 실패했습니다: ${error.message}</p>
+            <button onclick="loadQuestions()" class="action-btn" title="문제를 다시 불러옵니다">재시도</button>
         `;
     } finally {
         document.getElementById('loading').style.display = 'none';
@@ -45,20 +48,30 @@ function loadQuestion() {
         return;
     }
     const q = questions[currentQuestionIndex];
-    const questionWithBlanks = q.question.replace(/___/g, '<span class="blank">___</span>');
+    const questionWithBlanks = q.question.replace(/___/g, (_, i) => `<span class="blank" id="blank${i}" onclick="toggleBlank(${i})">[선택]</span>`);
     const shuffledOptions = shuffleArray([...q.options]);
     
+    selectedAnswers = new Array(q.answers.length).fill(null);
+    selectedCounts = {};
+
     document.getElementById('quiz-container').innerHTML = `
         <div class="question">${questionWithBlanks}</div>
-        <div class="options">${shuffledOptions.map(a => `
-            <button class="option-btn" onclick="selectAnswer('${a}')">${a}</button>
-        `).join('')}</div>
+        <div class="options">
+            ${shuffledOptions.map(a => `
+                <button class="option-btn" onclick="selectAnswer('${a.replace(/'/g, "\\'")}')" title="이 선택지를 빈칸에 추가">${a}</button>
+            `).join('')}
+        </div>
+        <div class="button-group">
+            <button id="reset-answers" class="reset-btn" onclick="resetAnswers()" title="현재 문제의 선택을 초기화">선택 초기화</button>
+        </div>
+        <div id="result" class="result"></div>
+        <div id="explanation" class="explanation" style="display: none;"></div>
     `;
-    selectedAnswers = [];
     document.getElementById('result').innerHTML = '';
     document.getElementById('explanation').style.display = 'none';
     document.getElementById('next-btn').disabled = true;
     updateProgress();
+    updateOptionButtons();
 }
 
 function displayQuestionList() {
@@ -66,7 +79,7 @@ function displayQuestionList() {
         <h2>문제 목록</h2>
         <ul class="question-list">
             ${questions.map((q, index) => `
-                <li onclick="selectQuestion(${index})">${q.question}</li>
+                <li onclick="selectQuestion(${index})" title="이 문제를 풀기">${q.question}</li>
             `).join('')}
         </ul>
     `;
@@ -81,45 +94,123 @@ function selectQuestion(index) {
     loadQuestion();
 }
 
-function selectAnswer(answer) {
-    const blanks = document.querySelectorAll('.blank');
-    
-    if (selectedAnswers.length < 2 && !selectedAnswers.includes(answer)) {
-        selectedAnswers.push(answer);
-        if (selectedAnswers.length <= blanks.length) {
-            blanks[selectedAnswers.length - 1].textContent = answer;
-        }
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            if (btn.textContent === answer) btn.classList.add('selected');
-        });
+function toggleBlank(index) {
+    if (document.getElementById('next-btn').disabled === false) return;
+    const blank = document.getElementById(`blank${index}`);
+    if (blank && selectedAnswers[index]) {
+        const removedAnswer = selectedAnswers[index];
+        blank.textContent = "[선택]";
+        blank.classList.remove("selected");
+        selectedAnswers[index] = null;
+        selectedCounts[removedAnswer] = (selectedCounts[removedAnswer] || 1) - 1;
+        if (selectedCounts[removedAnswer] <= 0) delete selectedCounts[removedAnswer];
+        checkAnswers();
+        updateOptionButtons();
+    }
+}
 
-        // 두 개 모두 선택되었을 때 즉시 확인
-        if (selectedAnswers.length === 2) {
-            const q = questions[currentQuestionIndex];
-            const correct = q.answers.every(a => selectedAnswers.includes(a)) && selectedAnswers.every(a => q.answers.includes(a));
-            document.getElementById('result').innerHTML = correct ? '정답입니다!' : '틀렸습니다.';
-            document.getElementById('explanation').innerHTML = q.explanation;
-            document.getElementById('explanation').style.display = 'block';
-            
-            // 버튼 비활성화 및 점수 업데이트
-            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-            if (correct) {
-                score += 10;
-                document.getElementById('next-btn').disabled = false;
-            }
-            updateProgress();
+function selectAnswer(answer) {
+    if (document.getElementById('next-btn').disabled === false) return;
+    const blanks = document.querySelectorAll('.blank');
+
+    // Deselect if already selected
+    const existingIndex = selectedAnswers.indexOf(answer);
+    if (existingIndex !== -1) {
+        const blank = document.getElementById(`blank${existingIndex}`);
+        blank.textContent = "[선택]";
+        blank.classList.remove("selected");
+        selectedAnswers[existingIndex] = null;
+        selectedCounts[answer] = (selectedCounts[answer] || 1) - 1;
+        if (selectedCounts[answer] <= 0) delete selectedCounts[answer];
+        checkAnswers();
+        updateOptionButtons();
+        return;
+    }
+
+    // Add new answer to first empty blank
+    let filled = false;
+    blanks.forEach((blank, i) => {
+        if (!selectedAnswers[i] && !filled) {
+            blank.textContent = answer;
+            blank.classList.add("selected");
+            selectedAnswers[i] = answer;
+            selectedCounts[answer] = (selectedCounts[answer] || 0) + 1;
+            filled = true;
         }
-    } else if (selectedAnswers.includes(answer)) {
-        const index = selectedAnswers.indexOf(answer);
-        selectedAnswers.splice(index, 1);
-        blanks.forEach((blank, i) => {
-            blank.textContent = i < selectedAnswers.length ? selectedAnswers[i] : '___';
+    });
+
+    checkAnswers();
+    updateOptionButtons();
+}
+
+function updateOptionButtons() {
+    const q = questions[currentQuestionIndex];
+    const optionButtons = document.querySelectorAll(".option-btn");
+    optionButtons.forEach(btn => {
+        const optionText = btn.textContent;
+        const maxAllowed = q.answers.filter(ans => ans === optionText).length;
+        const currentCount = selectedCounts[optionText] || 0;
+        if (currentCount >= maxAllowed) {
+            btn.classList.add("selected-option");
+            btn.disabled = true;
+        } else {
+            btn.classList.remove("selected-option");
+            btn.disabled = false;
+        }
+    });
+}
+
+function resetAnswers() {
+    if (document.getElementById('next-btn').disabled === false) return;
+    if (confirm("현재 문제의 선택을 초기화하시겠습니까?")) {
+        selectedAnswers = new Array(questions[currentQuestionIndex].answers.length).fill(null);
+        selectedCounts = {};
+        const blanks = document.querySelectorAll(".blank");
+        blanks.forEach(blank => {
+            blank.textContent = "[선택]";
+            blank.classList.remove("selected");
         });
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            if (btn.textContent === answer) btn.classList.remove('selected');
+        document.getElementById('result').textContent = "";
+        document.getElementById('explanation').style.display = "none";
+        updateOptionButtons();
+    }
+}
+
+function checkAnswers() {
+    const q = questions[currentQuestionIndex];
+    const resultDiv = document.getElementById('result');
+    const explanationDiv = document.getElementById('explanation');
+
+    if (selectedAnswers.every(answer => answer !== null)) {
+        const answerCounts = {};
+        selectedAnswers.forEach(ans => {
+            answerCounts[ans] = (answerCounts[ans] || 0) + 1;
         });
-        document.getElementById('result').innerHTML = '';
-        document.getElementById('explanation').style.display = 'none';
+        const correctCounts = {};
+        q.answers.forEach(ans => {
+            correctCounts[ans] = (correctCounts[ans] || 0) + 1;
+        });
+        const isCorrect = Object.keys(answerCounts).every(ans => answerCounts[ans] === correctCounts[ans]) &&
+                         Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
+
+        if (isCorrect) {
+            resultDiv.textContent = "✅ 정답입니다! 다음 문제로 이동할 수 있습니다.";
+            resultDiv.className = "result correct";
+            explanationDiv.innerHTML = q.explanation;
+            explanationDiv.style.display = "block";
+            score += 10;
+            document.getElementById('next-btn').disabled = false;
+        } else {
+            resultDiv.textContent = `❌ 오답입니다! 정답: ${q.answers.join(", ")}`;
+            resultDiv.className = "result incorrect";
+            explanationDiv.innerHTML = q.explanation;
+            explanationDiv.style.display = "block";
+            document.getElementById('next-btn').disabled = false;
+        }
+        updateProgress();
+    } else {
+        resultDiv.textContent = "";
+        explanationDiv.style.display = "none";
     }
 }
 
@@ -128,7 +219,7 @@ function nextQuestion() {
     if (currentQuestionIndex < questions.length) {
         loadQuestion();
     } else {
-        alert(`모든 문제를 풀었습니다! 최종 점수: ${score}`);
+        alert(`🎉 모든 문제를 풀었습니다! 최종 점수: ${score}`);
         currentQuestionIndex = 0;
         score = 0;
         loadQuestion();
@@ -143,6 +234,7 @@ function toggleListMode() {
         loadQuestion();
     }
     document.getElementById('list-btn').textContent = isListMode ? '퀴즈 모드' : '문제 목록';
+    document.getElementById('list-btn').title = isListMode ? '퀴즈 모드로 전환' : '문제 목록 보기';
 }
 
 window.onload = loadQuestions;

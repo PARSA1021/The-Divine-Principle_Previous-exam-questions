@@ -6,12 +6,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentQuestionIndex = 0;
     let questions = [];
     let selectedAnswers = [];
-    let score = 0; // 로컬 스토리지 제거로 초기화
+    let selectedCounts = {}; // Track count of each selected option
+    let score = 0;
     let timer;
-    let timeLeft = 60; // 타이머 초기값
+    let timeLeft = 60;
     const timeLimit = 60;
     let answeredCorrectly = false;
-    let isPaused = false; // 타이머 일시정지 상태
+    let isPaused = false;
 
     // JSON 파일 로드
     function loadQuestions() {
@@ -25,8 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => {
                 console.error("JSON 파일을 불러오는 중 오류 발생:", error);
                 quizContainer.innerHTML = `
-                    <p>문제를 불러오는 데 실패했습니다.</p>
-                    <button id="retry-load" class="action-btn">재시도</button>
+                    <p class="error-message">문제를 불러오는 데 실패했습니다.</p>
+                    <button id="retry-load" class="action-btn" title="문제를 다시 불러옵니다">재시도</button>
                 `;
                 document.getElementById("retry-load").addEventListener("click", loadQuestions);
             });
@@ -50,21 +51,25 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        selectedAnswers = new Array(questions[currentQuestionIndex].answers.length).fill(null);
-        answeredCorrectly = false;
-        timeLeft = timeLimit; // 타이머 초기화
         const q = questions[currentQuestionIndex];
+        selectedAnswers = new Array(q.answers.length).fill(null);
+        selectedCounts = {}; // Reset selection counts
+        answeredCorrectly = false;
+        timeLeft = timeLimit;
         const shuffledOptions = shuffleArray([...q.options]);
 
         let questionHTML = `
             <p class="question-text">${q.question.replace(/___/g, (_, i) => `<span class="blank" id="blank${i}" onclick="toggleBlank(${i})">[선택]</span>`)}</p>
             <div class="options-container">
-                ${shuffledOptions.map(option => `<button class="option-btn" onclick="selectAnswer('${option}')">${option}</button>`).join('')}
+                ${shuffledOptions.map(option => `<button class="option-btn" onclick="selectAnswer('${option.replace(/'/g, "\\'")}')" title="이 선택지를 빈칸에 추가">${option}</button>`).join('')}
             </div>
             <p class="feedback" id="feedback"></p>
-            <button id="pause-timer" class="pause-btn">타이머 일시정지</button>
-            <button id="show-explanation" style="display: none;" class="explanation-btn">설명 보기</button>
-            <div id="explanation" style="display: none; margin-top: 15px; padding: 10px; background: #f9f9f9; border-radius: 8px;"></div>
+            <div class="button-group">
+                <button id="pause-timer" class="pause-btn" title="타이머를 일시정지 또는 재개">${isPaused ? "타이머 재개" : "타이머 일시정지"}</button>
+                <button id="reset-answers" class="reset-btn" title="현재 문제의 선택을 초기화">선택 초기화</button>
+                <button id="show-explanation" style="display: none;" class="explanation-btn" title="정답 설명 보기">설명 보기</button>
+            </div>
+            <div id="explanation" style="display: none; margin-top: 15px; padding: 15px; background: #f0f4f8; border-radius: 8px; border: 1px solid #ddd;"></div>
             <div id="timer" class="timer">남은 시간: ${timeLeft}초</div>
         `;
 
@@ -86,6 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function startTimer() {
         const timerDisplay = document.getElementById("timer");
         timerDisplay.style.color = "#333";
+        timerDisplay.classList.remove("paused");
         timer = setInterval(() => {
             if (!isPaused) {
                 timeLeft--;
@@ -106,8 +112,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // 타이머 일시정지/재개
     window.togglePause = function () {
         const pauseButton = document.getElementById("pause-timer");
+        const timerDisplay = document.getElementById("timer");
         isPaused = !isPaused;
         pauseButton.textContent = isPaused ? "타이머 재개" : "타이머 일시정지";
+        pauseButton.title = isPaused ? "타이머를 다시 시작" : "타이머를 일시정지";
+        timerDisplay.classList.toggle("paused", isPaused);
     };
 
     // 빈칸 클릭 시 선택 취소
@@ -115,9 +124,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (answeredCorrectly) return;
         const blank = document.getElementById(`blank${index}`);
         if (blank && selectedAnswers[index]) {
+            const removedAnswer = selectedAnswers[index];
             blank.textContent = "[선택]";
             blank.classList.remove("selected");
             selectedAnswers[index] = null;
+            selectedCounts[removedAnswer] = (selectedCounts[removedAnswer] || 1) - 1;
+            if (selectedCounts[removedAnswer] <= 0) delete selectedCounts[removedAnswer];
             checkAutoCorrect();
             updateOptionButtons();
         }
@@ -128,23 +140,28 @@ document.addEventListener("DOMContentLoaded", function () {
         if (answeredCorrectly) return;
         const blanks = document.querySelectorAll(".blank");
 
+        // Check if answer is already selected and remove it
         const existingIndex = selectedAnswers.indexOf(selectedAnswer);
         if (existingIndex !== -1) {
             const blank = document.getElementById(`blank${existingIndex}`);
             blank.textContent = "[선택]";
             blank.classList.remove("selected");
             selectedAnswers[existingIndex] = null;
+            selectedCounts[selectedAnswer] = (selectedCounts[selectedAnswer] || 1) - 1;
+            if (selectedCounts[selectedAnswer] <= 0) delete selectedCounts[selectedAnswer];
             checkAutoCorrect();
             updateOptionButtons();
             return;
         }
 
+        // Add new answer to first empty blank
         let filled = false;
         blanks.forEach((blank, i) => {
             if (!selectedAnswers[i] && !filled) {
                 blank.textContent = selectedAnswer;
                 blank.classList.add("selected");
                 selectedAnswers[i] = selectedAnswer;
+                selectedCounts[selectedAnswer] = (selectedCounts[selectedAnswer] || 0) + 1;
                 filled = true;
             }
         });
@@ -155,10 +172,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 선택지 버튼 상태 업데이트
     function updateOptionButtons() {
+        const q = questions[currentQuestionIndex];
         const optionButtons = document.querySelectorAll(".option-btn");
         optionButtons.forEach(btn => {
             const optionText = btn.textContent;
-            if (selectedAnswers.includes(optionText)) {
+            const maxAllowed = q.answers.filter(ans => ans === optionText).length;
+            const currentCount = selectedCounts[optionText] || 0;
+            if (currentCount >= maxAllowed) {
                 btn.classList.add("selected-option");
                 btn.disabled = true;
             } else {
@@ -168,6 +188,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // 선택 초기화
+    window.resetAnswers = function () {
+        if (answeredCorrectly) return;
+        if (confirm("현재 문제의 선택을 초기화하시겠습니까?")) {
+            selectedAnswers = new Array(questions[currentQuestionIndex].answers.length).fill(null);
+            selectedCounts = {};
+            const blanks = document.querySelectorAll(".blank");
+            blanks.forEach(blank => {
+                blank.textContent = "[선택]";
+                blank.classList.remove("selected");
+            });
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = "";
+            updateOptionButtons();
+        }
+    };
+
     // 자동 정답 확인 및 피드백
     function checkAutoCorrect() {
         const q = questions[currentQuestionIndex];
@@ -175,7 +212,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const explanationBtn = document.getElementById("show-explanation");
 
         if (selectedAnswers.every(answer => answer !== null)) {
-            let isCorrect = selectedAnswers.every((answer, i) => answer === q.answers[i]);
+            const answerCounts = {};
+            selectedAnswers.forEach(ans => {
+                answerCounts[ans] = (answerCounts[ans] || 0) + 1;
+            });
+            const correctCounts = {};
+            q.answers.forEach(ans => {
+                correctCounts[ans] = (correctCounts[ans] || 0) + 1;
+            });
+            const isCorrect = Object.keys(answerCounts).every(ans => answerCounts[ans] === correctCounts[ans]) &&
+                             Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
 
             if (isCorrect) {
                 feedback.textContent = "✅ 정답입니다! 다음 문제로 이동할 수 있습니다.";
@@ -203,7 +249,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const explanationBtn = document.getElementById("show-explanation");
 
         if (selectedAnswers.every(answer => answer !== null)) {
-            let isCorrect = selectedAnswers.every((answer, i) => answer === q.answers[i]);
+            const answerCounts = {};
+            selectedAnswers.forEach(ans => {
+                answerCounts[ans] = (answerCounts[ans] || 0) + 1;
+            });
+            const correctCounts = {};
+            q.answers.forEach(ans => {
+                correctCounts[ans] = (correctCounts[ans] || 0) + 1;
+            });
+            const isCorrect = Object.keys(answerCounts).every(ans => answerCounts[ans] === correctCounts[ans]) &&
+                             Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
 
             if (isCorrect) {
                 feedback.textContent = "✅ 정답입니다! 다음 문제로 이동할 수 있습니다.";
@@ -242,6 +297,8 @@ document.addEventListener("DOMContentLoaded", function () {
             e.target.style.display = "none";
         } else if (e.target.id === "pause-timer") {
             togglePause();
+        } else if (e.target.id === "reset-answers") {
+            resetAnswers();
         }
     });
 
@@ -267,8 +324,10 @@ document.addEventListener("DOMContentLoaded", function () {
             <h2>🎉 퀴즈 완료!</h2>
             <p>최종 점수: ${score} / ${questions.length} (${percentage.toFixed(1)}%)</p>
             <p class="result-message">${message}</p>
-            <button id="restart" class="action-btn">다시 시작</button>
-            <button id="back-to-menu" class="action-btn gold">메뉴로 돌아가기</button>
+            <div class="button-group">
+                <button id="restart" class="action-btn" title="퀴즈를 처음부터 다시 시작">다시 시작</button>
+                <button id="back-to-menu" class="action-btn gold" title="메인 메뉴로 돌아가기">메뉴로 돌아가기</button>
+            </div>
         `;
         nextButton.style.display = "none";
         checkButton.style.display = "none";
