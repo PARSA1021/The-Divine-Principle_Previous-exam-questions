@@ -20,13 +20,22 @@
         html {
             scroll-behavior: smooth;
             font-size: 16px;
+            transition: font-size 0.3s ease;
+        }
+
+        html.font-large {
+            font-size: 18px;
+        }
+
+        html.font-extra-large {
+            font-size: 20px;
         }
 
         body {
             font-family: 'Noto Sans KR', 'Arial', sans-serif;
             background: linear-gradient(135deg, #e0f2fe, #f8fafc);
             color: #1e3a8a;
-            padding: 1.5rem;
+            padding: 1rem;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -41,38 +50,79 @@
             color: #e0f2fe;
         }
 
+        body.high-contrast {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        body.dark-mode.high-contrast {
+            background: #000000;
+            color: #ffffff;
+        }
+
         body.dark-mode .header,
         body.dark-mode .nav-bar,
         body.dark-mode .search-container,
         body.dark-mode .instructions,
         body.dark-mode .footer,
-        body.dark-mode .result-item {
+        body.dark-mode .result-item,
+        body.dark-mode .onboarding-tip {
             background: #2d3748;
             color: #e0f2fe;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        body.dark-mode .search-box input {
+        body.high-contrast .header,
+        body.high-contrast .nav-bar,
+        body.high-contrast .search-container,
+        body.high-contrast .instructions,
+        body.high-contrast .footer,
+        body.high-contrast .result-item,
+        body.high-contrast .onboarding-tip {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        body.dark-mode.high-contrast .header,
+        body.dark-mode.high-contrast .nav-bar,
+        body.dark-mode.high-contrast .search-container,
+        body.dark-mode.high-contrast .instructions,
+        body.dark-mode.high-contrast .footer,
+        body.dark-mode.high-contrast .result-item,
+        body.dark-mode.high-contrast .onboarding-tip {
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+        }
+
+        body.dark-mode .search-box input,
+        body.dark-mode .search-suggestions {
             background: #4b5563;
             color: #e0f2fe;
             border-color: #60a5fa;
         }
 
-        body.dark-mode .search-stats {
-            background: #4b5563;
-            color: #e0f2fe;
+        body.high-contrast .search-box input,
+        body.high-contrast .search-suggestions {
+            background: #ffffff;
+            color: #000000;
+            border-color: #000000;
         }
 
-        body.dark-mode .no-results {
-            background: #7f1d1d;
-            color: #f9fafb;
+        body.dark-mode.high-contrast .search-box input,
+        body.dark-mode.high-contrast .search-suggestions {
+            background: #000000;
+            color: #ffffff;
+            border-color: #ffffff;
         }
 
         .nav-bar {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 0.75rem;
+            margin: 1rem 0;
             width: 100%;
             max-width: 40rem;
             background: #ffffff;
@@ -80,7 +130,7 @@
             border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: sticky;
-            top: 1rem;
+            top: 0.5rem;
             z-index: 100;
         }
 
@@ -97,10 +147,24 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            min-width: 8rem;
+            touch-action: manipulation;
         }
 
         body.dark-mode .nav-bar button {
             background: #60a5fa;
+        }
+
+        body.high-contrast .nav-bar button {
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+        }
+
+        body.dark-mode.high-contrast .nav-bar button {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #ffffff;
         }
 
         .nav-bar button.active {
@@ -113,24 +177,36 @@
             transform: translateY(-2px);
         }
 
-        .dark-mode-toggle {
-            background: #6b7280;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
+        .accessibility-controls {
             display: flex;
-            align-items: center;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
-        .dark-mode-toggle:hover {
+        .accessibility-controls button {
+            background: #6b7280;
+            padding: 0.75rem;
+            min-width: 0;
+        }
+
+        .accessibility-controls button:hover {
             background: #9ca3af;
         }
 
-        body.dark-mode .dark-mode-toggle {
+        body.dark-mode .accessibility-controls button {
             background: #9ca3af;
+        }
+
+        body.high-contrast .accessibility-controls button {
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+        }
+
+        body.dark-mode.high-contrast .accessibility-controls button {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #ffffff;
         }
 
         .page-container {
@@ -151,8 +227,8 @@
         }
 
         .header {
-            margin: 1.5rem 0;
-            padding: 2rem;
+            margin: 1rem 0;
+            padding: 1.5rem;
             background: #ffffff;
             border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -161,7 +237,7 @@
         }
 
         .header img {
-            width: 6rem;
+            width: 5rem;
             height: auto;
             border-radius: 50%;
             margin-bottom: 1rem;
@@ -173,21 +249,14 @@
         }
 
         .header h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: #0d47a1;
             margin-bottom: 0.5rem;
         }
 
-        body.dark-mode .header h1,
-        body.dark-mode .header h2,
-        body.dark-mode .instructions h2,
-        body.dark-mode .search-container h2 {
-            color: #bbdefb;
-        }
-
         .header h2 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 500;
             color: #1e3a8a;
             margin-bottom: 0.75rem;
@@ -199,25 +268,63 @@
             line-height: 1.6;
         }
 
+        body.dark-mode .header h1,
+        body.dark-mode .header h2,
+        body.dark-mode .instructions h2,
+        body.dark-mode .search-container h2 {
+            color: #bbdefb;
+        }
+
+        body.high-contrast .header h1,
+        body.high-contrast .header h2,
+        body.high-contrast .instructions h2,
+        body.high-contrast .search-container h2 {
+            color: #000000;
+        }
+
+        body.dark-mode.high-contrast .header h1,
+        body.dark-mode.high-contrast .header h2,
+        body.dark-mode.high-contrast .instructions h2,
+        body.dark-mode.high-contrast .search-container h2 {
+            color: #ffffff;
+        }
+
         body.dark-mode .header p,
         body.dark-mode .instructions ul,
         body.dark-mode .result-item p,
-        body.dark-mode .footer {
+        body.dark-mode .footer,
+        body.dark-mode .onboarding-tip {
             color: #d1d5db;
+        }
+
+        body.high-contrast .header p,
+        body.high-contrast .instructions ul,
+        body.high-contrast .result-item p,
+        body.high-contrast .footer,
+        body.high-contrast .onboarding-tip {
+            color: #000000;
+        }
+
+        body.dark-mode.high-contrast .header p,
+        body.dark-mode.high-contrast .instructions ul,
+        body.dark-mode.high-contrast .result-item p,
+        body.dark-mode.high-contrast .footer,
+        body.dark-mode.high-contrast .onboarding-tip {
+            color: #ffffff;
         }
 
         .divider {
             width: 50%;
             height: 2px;
             background: linear-gradient(90deg, transparent, #d4af37, transparent);
-            margin: 1.5rem auto;
+            margin: 1rem auto;
         }
 
         .button-container {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            margin: 2rem 0;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
             width: 100%;
         }
 
@@ -237,10 +344,23 @@
             gap: 0.5rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
+            min-height: 3.5rem;
         }
 
         button.quiz-button.gold {
             background: linear-gradient(135deg, #d4af37, #facc15);
+        }
+
+        body.high-contrast button.quiz-button {
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+        }
+
+        body.dark-mode.high-contrast button.quiz-button {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #ffffff;
         }
 
         button.quiz-button:hover {
@@ -256,7 +376,7 @@
             transform: translateX(-50%);
             background: #1e3a8a;
             color: white;
-            padding: 0.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             font-size: 0.9rem;
             white-space: nowrap;
@@ -264,6 +384,7 @@
             transition: opacity 0.3s ease;
             pointer-events: none;
             z-index: 10;
+            margin-bottom: 0.5rem;
         }
 
         button.quiz-button:hover::after {
@@ -273,17 +394,17 @@
         .search-container {
             width: 100%;
             background: #ffffff;
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin: 1.5rem 0;
+            margin: 1rem 0;
         }
 
         .search-container h2 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 500;
             color: #0d47a1;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -292,7 +413,7 @@
         .search-box {
             display: flex;
             gap: 0.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             position: relative;
         }
 
@@ -304,6 +425,7 @@
             border-radius: 0.5rem;
             outline: none;
             transition: border-color 0.3s ease;
+            min-height: 2.5rem;
         }
 
         .search-box input:focus {
@@ -319,10 +441,27 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .clear-search {
             background: #6b7280;
+        }
+
+        body.high-contrast .search-box button,
+        body.high-contrast .clear-search {
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+        }
+
+        body.dark-mode.high-contrast .search-box button,
+        body.dark-mode.high-contrast .clear-search {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #ffffff;
         }
 
         .search-box button:hover, .clear-search:hover {
@@ -337,21 +476,18 @@
             background: #ffffff;
             border: 1px solid #d4af37;
             border-radius: 0.5rem;
-            max-height: 150px;
+            max-height: 10rem;
             overflow-y: auto;
             z-index: 10;
             display: none;
-        }
-
-        body.dark-mode .search-suggestions {
-            background: #4b5563;
-            color: #e0f2fe;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .search-suggestions div {
-            padding: 0.5rem;
+            padding: 0.75rem;
             cursor: pointer;
             transition: background 0.3s ease;
+            font-size: 1rem;
         }
 
         .search-suggestions div:hover {
@@ -364,9 +500,9 @@
 
         .search-options {
             display: flex;
-            gap: 1rem;
             flex-wrap: wrap;
-            margin-bottom: 1rem;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
             justify-content: center;
         }
 
@@ -374,19 +510,15 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #444;
             cursor: pointer;
         }
 
-        body.dark-mode .search-options label {
-            color: #d1d5db;
-        }
-
         .search-options input[type="checkbox"] {
             accent-color: #1e3a8a;
-            width: 1rem;
-            height: 1rem;
+            width: 1.2rem;
+            height: 1.2rem;
         }
 
         .category-container {
@@ -394,22 +526,19 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             justify-content: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .category-container button {
             background: #6b7280;
             color: white;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            padding: 0.75rem 1.25rem;
             border-radius: 0.5rem;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-        }
-
-        body.dark-mode .category-container button {
-            background: #4b5563;
+            min-height: 2.5rem;
         }
 
         .category-container button.active {
@@ -421,18 +550,18 @@
         }
 
         .search-stats {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #444;
             background: #f3f4f6;
-            padding: 0.5rem;
+            padding: 0.75rem;
             border-radius: 0.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .search-results {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .result-item {
@@ -441,6 +570,7 @@
             border-radius: 0.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: left;
+            position: relative;
         }
 
         .result-item h3 {
@@ -460,6 +590,7 @@
             font-size: 0.9rem;
             color: #1e3a8a;
             font-style: italic;
+            margin-top: 0.5rem;
         }
 
         .highlight {
@@ -475,6 +606,7 @@
             padding: 0.2rem 0.5rem;
             border-radius: 0.5rem;
             margin-left: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .no-results {
@@ -508,19 +640,19 @@
         }
 
         .loading .spinner {
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid #e5e7eb;
-            border-top: 2px solid #1e3a8a;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #1e3a8a;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         .progress-bar {
             width: 100%;
-            height: 4px;
+            height: 6px;
             background: #e5e7eb;
-            border-radius: 2px;
+            border-radius: 3px;
             overflow: hidden;
             margin-top: 0.5rem;
         }
@@ -533,19 +665,19 @@
         }
 
         .instructions {
-            margin: 2rem 0;
+            margin: 1rem 0;
             width: 100%;
             background: #ffffff;
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .instructions h2 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 500;
             color: #0d47a1;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .instructions ul {
@@ -576,8 +708,9 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 40rem;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #444;
+            text-align: center;
         }
 
         .back-to-top {
@@ -586,7 +719,7 @@
             right: 1rem;
             background: #1e3a8a;
             color: white;
-            padding: 0.75rem;
+            padding: 1rem;
             border-radius: 50%;
             cursor: pointer;
             display: none;
@@ -599,6 +732,79 @@
             transform: translateY(-2px);
         }
 
+        .magnifier-overlay {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #1e3a8a;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            font-size: 1.5rem;
+            line-height: 1.4;
+            z-index: 1000;
+            display: none;
+            max-width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .magnifier-overlay {
+            background: rgba(45, 55, 72, 0.9);
+            color: #e0f2fe;
+            border-color: #60a5fa;
+        }
+
+        body.high-contrast .magnifier-overlay {
+            background: #ffffff;
+            color: #000000;
+            border-color: #000000;
+        }
+
+        body.dark-mode.high-contrast .magnifier-overlay {
+            background: #000000;
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        .onboarding-tip {
+            background: #e0f2fe;
+            color: #1e3a8a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .onboarding-tip button {
+            background: #1e3a8a;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            right: 1rem;
+        }
+
+        body.dark-mode .onboarding-tip {
+            background: #4b5563;
+            color: #e0f2fe;
+        }
+
+        body.high-contrast .onboarding-tip {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        body.dark-mode.high-contrast .onboarding-tip {
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+        }
+
         @media (min-width: 768px) {
             .nav-bar {
                 padding: 1.25rem;
@@ -608,23 +814,27 @@
                 padding: 0.75rem 2rem;
             }
             .header h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             .header h2 {
-                font-size: 1.75rem;
+                font-size: 1.6rem;
             }
             .header p {
                 font-size: 1.1rem;
             }
+            .header img {
+                width: 6rem;
+            }
             .button-container {
                 flex-direction: row;
                 justify-content: center;
+                gap: 1rem;
             }
             button.quiz-button {
                 width: 12rem;
             }
             .search-container h2 {
-                font-size: 1.75rem;
+                font-size: 1.6rem;
             }
             .search-box input {
                 font-size: 1.1rem;
@@ -640,26 +850,52 @@
                 font-size: 14px;
             }
             body {
-                padding: 1rem;
+                padding: 0.75rem;
+            }
+            .nav-bar {
+                flex-direction: column;
+                align-items: center;
+                padding: 0.75rem;
+            }
+            .nav-bar button {
+                width: 100%;
+                justify-content: center;
+                font-size: 1rem;
+                padding: 0.75rem;
+            }
+            .accessibility-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+            .accessibility-controls button {
+                width: 100%;
+                justify-content: center;
             }
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
             .header h2 {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
             .header p {
                 font-size: 0.9rem;
             }
             .header img {
-                width: 5rem;
+                width: 4rem;
             }
             button.quiz-button {
                 font-size: 1.1rem;
+                padding: 0.75rem;
             }
-            .nav-bar button {
-                font-size: 1rem;
-                padding: 0.5rem 1rem;
+            .search-box input {
+                font-size: 0.9rem;
+            }
+            .search-options label,
+            .category-container button,
+            .search-stats,
+            .result-item h3,
+            .result-item p {
+                font-size: 0.9rem;
             }
             .back-to-top {
                 display: flex;
@@ -681,26 +917,38 @@
     <nav class="nav-bar" aria-label="메인 내비게이션">
         <button data-page="home" class="active" aria-current="page"><i class="fas fa-home"></i> 홈</button>
         <button data-page="workbook"><i class="fas fa-book-open"></i> 말씀 DB</button>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="다크 모드 전환"><i class="fas fa-moon"></i></button>
+        <div class="accessibility-controls">
+            <button onclick="toggleDarkMode()" aria-label="다크 모드 전환" data-tooltip="다크 모드와 라이트 모드를 전환합니다"><i class="fas fa-moon"></i></button>
+            <button onclick="toggleHighContrast()" aria-label="고대비 모드 전환" data-tooltip="고대비 모드로 전환하여 시인성을 높입니다"><i class="fas fa-adjust"></i></button>
+            <button onclick="changeFontSize('normal')" aria-label="기본 글꼴 크기" data-tooltip="기본 글꼴 크기로 설정합니다">A</button>
+            <button onclick="changeFontSize('large')" aria-label="큰 글꼴 크기" data-tooltip="큰 글꼴 크기로 설정하여 읽기 쉽게 합니다">A+</button>
+            <button onclick="changeFontSize('extra-large')" aria-label="매우 큰 글꼴 크기" data-tooltip="매우 큰 글꼴 크기로 설정합니다">A++</button>
+            <button onclick="toggleMagnifier()" aria-label="돋보기 기능 전환" data-tooltip="텍스트를 확대하여 읽을 수 있는 돋보기 기능을 켭니다"><i class="fas fa-search-plus"></i></button>
+            <button onclick="showOnboarding()" aria-label="사용 방법 보기" data-tooltip="앱 사용 방법을 다시 확인합니다"><i class="fas fa-question-circle"></i></button>
+        </div>
     </nav>
 
     <main class="page-container">
         <section class="page active" id="home" role="region" aria-labelledby="home-heading">
+            <div class="onboarding-tip" id="onboarding-home" role="alert">
+                <i class="fas fa-info-circle"></i> 원리강론 또는 성경 퀴즈를 시작하려면 아래 버튼을 누르세요!
+                <button onclick="dismissOnboarding('home')" aria-label="온보딩 메시지 닫기">닫기</button>
+            </div>
             <header class="header">
                 <div class="logo-container">
-                    <img src="assets/images/FFWPU.png" alt="세계평화통일가정연합 로고" width="100" height="100">
+                    <img src="assets/images/FFWPU.png" alt="세계평화통일가정연합 로고" width="80" height="80">
                 </div>
                 <h1 id="home-heading">말씀 퀴즈</h1>
                 <h2>영감과 지혜의 여정</h2>
                 <p>세계평화통일가정연합의 말씀을 통해 영적 성장을 경험하세요.</p>
-                <p>원리강론과 성경 퀴즈로 지혜를 쌓고, 깊이 있는 검색으로 말씀을 탐구하세요.</p>
+                <p>퀴즈와 말씀 검색으로 신앙의 깊이를 더하세요.</p>
             </header>
             <div class="divider" aria-hidden="true"></div>
             <div class="button-container">
-                <button class="quiz-button blue" onclick="startQuiz('원리강론')" aria-label="원리강론 퀴즈 시작" data-tooltip="원리강론을 기반으로 한 퀴즈로 통일원리를 탐구하세요">
+                <button class="quiz-button blue" onclick="startQuiz('원리강론')" aria-label="원리강론 퀴즈 시작" data-tooltip="원리강론 퀴즈로 통일원리를 탐구하세요">
                     <i class="fas fa-school"></i> 원리강론 퀴즈
                 </button>
-                <button class="quiz-button gold" onclick="startQuiz('성경')" aria-label="성경 퀴즈 시작" data-tooltip="성경 말씀을 통해 신앙을 깊이 이해하세요">
+                <button class="quiz-button gold" onclick="startQuiz('성경')" aria-label="성경 퀴즈 시작" data-tooltip="성경 말씀으로 신앙을 깊이 이해하세요">
                     <i class="fas fa-cross"></i> 성경 퀴즈
                 </button>
             </div>
@@ -708,19 +956,23 @@
             <section class="instructions" role="complementary" aria-labelledby="instructions-heading">
                 <h2 id="instructions-heading"><i class="fas fa-info-circle"></i> 사용 방법</h2>
                 <ul>
-                    <li><i class="fas fa-hand-pointer"></i> <strong>퀴즈 시작:</strong> 원리강론 또는 성경 퀴즈 버튼을 클릭하세요.</li>
-                    <li><i class="fas fa-question-circle"></i> <strong>답변 선택:</strong> 빈칸에 맞는 답을 선택하세요.</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>정답 확인:</strong> 답변 후 "정답 확인"을 클릭하세요.</li>
-                    <li><i class="fas fa-arrow-right"></i> <strong>다음 문제:</strong> 정답 시 다음 문제로 이동합니다.</li>
-                    <li><i class="fas fa-redo"></i> <strong>다시 시작:</strong> 퀴즈 완료 후 "다시 시작"을 클릭하세요.</li>
+                    <li><i class="fas fa-hand-pointer"></i> <strong>퀴즈 시작:</strong> 원리강론 또는 성경 퀴즈 버튼을 누르세요.</li>
+                    <li><i class="fas fa-question-circle"></i> <strong>답변 선택:</strong> 문제에 맞는 답을 선택하세요.</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>정답 확인:</strong> 답변 후 "정답 확인"을 누르세요.</li>
+                    <li><i class="fas fa-arrow-right"></i> <strong>다음 문제:</strong> 다음 문제로 이동합니다.</li>
+                    <li><i class="fas fa-search"></i> <strong>말씀 검색:</strong> 말씀 DB에서 원하는 말씀을 검색하세요.</li>
                 </ul>
             </section>
         </section>
 
         <section class="page" id="workbook" role="region" aria-labelledby="workbook-heading">
+            <div class="onboarding-tip" id="onboarding-workbook" role="alert">
+                <i class="fas fa-info-circle"></i> 검색창에 단어를 입력하거나 카테고리를 선택해 말씀을 찾아보세요!
+                <button onclick="dismissOnboarding('workbook')" aria-label="온보딩 메시지 닫기">닫기</button>
+            </div>
             <header class="header">
                 <div class="logo-container">
-                    <img src="assets/images/FFWPU.png" alt="세계평화통일가정연합 로고" width="100" height="100">
+                    <img src="assets/images/FFWPU.png" alt="세계평화통일가정연합 로고" width="80" height="80">
                 </div>
                 <h1 id="workbook-heading"><i class="fas fa-book-open"></i> 말씀 데이터베이스</h1>
                 <h2>말씀의 보물창고</h2>
@@ -773,7 +1025,8 @@
         <p>© 2025 세계평화통일가정연합. All rights reserved.</p>
     </footer>
 
-    <button class="back-to-top" onclick="scrollToTop()" aria-label="페이지 맨 위로 이동"><i class="fas fa-arrow-up"></i></button>
+    <button class="back-to-top" onclick="scrollToTop()" aria-label="페이지 맨 위로 이동" data-tooltip="페이지 맨 위로 이동합니다"><i class="fas fa-arrow-up"></i></button>
+    <div class="magnifier-overlay" id="magnifier-overlay"></div>
 
     <script>
         let messages = [];
@@ -782,14 +1035,59 @@
         let debounceTimeout;
         let currentPage = 1;
         const resultsPerPage = 10;
+        let magnifierEnabled = false;
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+            triggerHapticFeedback();
+        }
+
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            localStorage.setItem('highContrast', document.body.classList.contains('high-contrast') ? 'enabled' : 'disabled');
+            triggerHapticFeedback();
+        }
+
+        function changeFontSize(size) {
+            document.documentElement.classList.remove('font-large', 'font-extra-large');
+            if (size === 'large') document.documentElement.classList.add('font-large');
+            else if (size === 'extra-large') document.documentElement.classList.add('font-extra-large');
+            localStorage.setItem('fontSize', size);
+            triggerHapticFeedback();
+        }
+
+        function toggleMagnifier() {
+            magnifierEnabled = !magnifierEnabled;
+            const magnifierButton = document.querySelector('button[aria-label="돋보기 기능 전환"]');
+            magnifierButton.classList.toggle('active');
+            document.getElementById('magnifier-overlay').style.display = magnifierEnabled ? 'block' : 'none';
+            triggerHapticFeedback();
+        }
+
+        function triggerHapticFeedback() {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+        }
+
+        function showOnboarding() {
+            localStorage.removeItem('onboardingDismissed');
+            document.getElementById('onboarding-home').style.display = 'flex';
+            document.getElementById('onboarding-workbook').style.display = 'flex';
+        }
+
+        function dismissOnboarding(section) {
+            document.getElementById(`onboarding-${section}`).style.display = 'none';
+            const dismissed = JSON.parse(localStorage.getItem('onboardingDismissed')) || {};
+            dismissed[section] = true;
+            localStorage.setItem('onboardingDismissed', JSON.stringify(dismissed));
+            triggerHapticFeedback();
         }
 
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            triggerHapticFeedback();
         }
 
         async function loadMessages() {
@@ -860,6 +1158,7 @@
             document.getElementById('search-input').value = query;
             document.getElementById('search-suggestions').style.display = 'none';
             searchMessages();
+            triggerHapticFeedback();
         }
 
         function searchMessages(page = 1) {
@@ -935,7 +1234,7 @@
 
                     if (filteredMessages.length > endIndex) {
                         resultsContainer.innerHTML += `
-                            <button onclick="searchMessages(${page + 1})" class="quiz-button blue" aria-label="다음 페이지">다음 페이지</button>
+                            <button onclick="searchMessages(${page + 1})" class="quiz-button blue" aria-label="다음 페이지" data-tooltip="다음 검색 결과를 확인합니다">다음 페이지</button>
                         `;
                     }
                     resultsContainer.style.display = 'flex';
@@ -974,13 +1273,14 @@
             statsContainer.style.display = 'none';
             document.getElementById('search-suggestions').style.display = 'none';
             searchMessages();
+            triggerHapticFeedback();
         }
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.querySelector(`#${pageId}`).classList.add('active');
 
-            document.querySelectorAll('.nav-bar button').forEach(button => {
+            document.querySelectorAll('.nav-bar button[data-page]').forEach(button => {
                 button.classList.remove('active');
                 button.setAttribute('aria-current', 'false');
             });
@@ -1009,6 +1309,7 @@
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            triggerHapticFeedback();
         }
 
         function startQuiz(type) {
@@ -1017,17 +1318,30 @@
             } else if (type === '성경') {
                 window.location.href = 'bible.html';
             }
+            triggerHapticFeedback();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('darkMode') === 'enabled') {
                 document.body.classList.add('dark-mode');
             }
+            if (localStorage.getItem('highContrast') === 'enabled') {
+                document.body.classList.add('high-contrast');
+            }
+            if (localStorage.getItem('fontSize')) {
+                changeFontSize(localStorage.getItem('fontSize'));
+            }
+
+            const dismissed = JSON.parse(localStorage.getItem('onboardingDismissed')) || {};
+            if (!dismissed['home']) document.getElementById('onboarding-home').style.display = 'flex';
+            if (!dismissed['workbook']) document.getElementById('onboarding-workbook').style.display = 'flex';
 
             document.querySelectorAll('.nav-bar button[data-page]').forEach(button => {
                 button.addEventListener('click', () => {
                     showPage(button.getAttribute('data-page'));
                 });
+                button.addEventListener('touchstart', () => button.classList.add('active'));
+                button.addEventListener('touchend', () => button.classList.remove('active'));
             });
 
             document.querySelectorAll('.category-container button').forEach(button => {
@@ -1041,6 +1355,7 @@
                     currentCategory = button.getAttribute('data-category');
                     localStorage.setItem('currentCategory', currentCategory);
                     searchMessages();
+                    triggerHapticFeedback();
                 });
                 if (button.getAttribute('data-category') === currentCategory) {
                     button.classList.add('active');
@@ -1063,12 +1378,13 @@
                 if (e.key === 'Enter') {
                     searchMessages();
                     document.getElementById('search-suggestions').style.display = 'none';
+                    triggerHapticFeedback();
                 }
             });
 
-            document.getElementById('exact-match').addEventListener('change', searchMessages);
-            document.getElementById('case-sensitive').addEventListener('change', searchMessages);
-            document.getElementById('whole-word').addEventListener('change', searchMessages);
+            document.getElementById('exact-match').addEventListener('change', () => { searchMessages(); triggerHapticFeedback(); });
+            document.getElementById('case-sensitive').addEventListener('change', () => { searchMessages(); triggerHapticFeedback(); });
+            document.getElementById('whole-word').addEventListener('change', () => { searchMessages(); triggerHapticFeedback(); });
 
             window.addEventListener('scroll', () => {
                 const backToTop = document.querySelector('.back-to-top');
@@ -1082,6 +1398,38 @@
                         element.click();
                     }
                 });
+                element.addEventListener('touchstart', () => element.classList.add('active'));
+                element.addEventListener('touchend', () => element.classList.remove('active'));
+            });
+
+            document.addEventListener('mousemove', e => {
+                if (!magnifierEnabled) return;
+                const target = e.target.closest('p, h1, h2, h3, li, .search-stats');
+                const overlay = document.getElementById('magnifier-overlay');
+                if (target && target.textContent.trim()) {
+                    overlay.textContent = target.textContent;
+                    overlay.style.display = 'block';
+                    overlay.style.left = `${Math.min(e.clientX + 10, window.innerWidth - overlay.offsetWidth - 10)}px`;
+                    overlay.style.top = `${Math.min(e.clientY + 10, window.innerHeight - overlay.offsetHeight - 10)}px`;
+                } else {
+                    overlay.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('touchstart', e => {
+                if (!magnifierEnabled) return;
+                const target = e.target.closest('p, h1, h2, h3, li, .search-stats');
+                const overlay = document.getElementById('magnifier-overlay');
+                if (target && target.textContent.trim()) {
+                    overlay.textContent = target.textContent;
+                    overlay.style.display = 'block';
+                    const touch = e.touches[0];
+                    overlay.style.left = `${Math.min(touch.clientX + 10, window.innerWidth - overlay.offsetWidth - 10)}px`;
+                    overlay.style.top = `${Math.min(touch.clientY + 10, window.innerHeight - overlay.offsetHeight - 10)}px`;
+                    triggerHapticFeedback();
+                } else {
+                    overlay.style.display = 'none';
+                }
             });
 
             showPage('home');
