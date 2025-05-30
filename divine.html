@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- iOS 전체 화면 모드 -->
-    <meta name="mobile-web-app-capable" content="yes"> <!-- 안드로이드 전체 화면 모드 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>원리강론 퀴즈</title>
     <link rel="stylesheet" href="assets/css/divine_style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
     <style>
         /* 🌍 전체 페이지 스타일 */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Noto Sans KR', 'Arial', sans-serif;
             text-align: center;
-            background-color: #eef2f3;
+            background-color: #f0f4f8;
             margin: 0;
             padding: 20px;
             background-image: url('ffwpu-background.jpg');
@@ -24,108 +25,128 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
-            overflow-x: hidden; /* 가로 스크롤 방지 */
+            -webkit-overflow-scrolling: touch;
+            overflow-x: hidden;
+            color: #333;
         }
 
         /* 🔆 로고 스타일 */
         .logo-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 15px;
-            touch-action: manipulation; /* 터치 확대 방지 */
+            margin-bottom: 16px; /* Golden ratio: 10px * 1.618 */
+            touch-action: manipulation;
         }
 
         .logo-container img {
             width: 60px;
             height: auto;
             border-radius: 50%;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             animation: fadeIn 1s ease-in;
-            -webkit-user-select: none; /* 텍스트 선택 방지 */
             user-select: none;
+            -webkit-user-drag: none;
         }
 
         /* 📊 진행 상황 */
         #progress {
-            color: #333;
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 500;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 8px 15px;
+            padding: 10px 16px;
             border-radius: 12px;
-            margin: 15px 0;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 16px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .progress-bar-container {
+            width: 61.8%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #1e3a8a;
+            transition: width 0.3s ease-in-out;
         }
 
         /* 📦 퀴즈 컨테이너 */
         #quiz-container {
-            max-width: 90%;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            width: 61.8%; /* Golden ratio proportion */
+            max-width: 600px;
+            aspect-ratio: 1.618 / 1; /* Golden ratio */
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.5s ease-out;
-            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.6s ease-out;
+            margin-bottom: 32px; /* Golden ratio: 20px * 1.618 */
         }
 
         /* 📌 버튼 컨테이너 */
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 16px;
+            margin-top: 32px;
             flex-wrap: wrap;
-            touch-action: manipulation; /* 터치 최적화 */
+            touch-action: manipulation;
         }
 
         /* 🔘 버튼 스타일 */
         button {
             width: 180px;
-            max-width: 90%;
-            height: 60px;
-            font-size: 18px;
-            border-radius: 10px;
+            height: 111px; /* Golden ratio: 180 / 1.618 ≈ 111 */
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
-            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            -webkit-tap-highlight-color: transparent; /* 클릭 하이라이트 제거 */
+            -webkit-tap-highlight-color: transparent;
         }
 
         button.blue {
-            background-color: #1e3a8a;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             color: white;
         }
 
         button.gold {
-            background-color: #d4af37;
+            background: linear-gradient(135deg, #d4af37, #facc15);
             color: white;
         }
 
         button:hover:not(:disabled),
         button:active:not(:disabled) {
             transform: scale(1.05);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
         button.blue:hover:not(:disabled),
         button.blue:active:not(:disabled) {
-            background-color: #162d6a;
+            background: linear-gradient(135deg, #162d6a, #2563eb);
         }
 
         button.gold:hover:not(:disabled),
         button.gold:active:not(:disabled) {
-            background-color: #b9972e;
+            background: linear-gradient(135deg, #b9972e, #eab308);
         }
 
         button:disabled {
-            background-color: #cccccc;
+            background: #cccccc;
             cursor: not-allowed;
             opacity: 0.7;
         }
@@ -136,17 +157,18 @@
                 font-size: 1rem;
             }
             #quiz-container {
-                padding: 15px;
+                width: 90%;
+                padding: 16px;
             }
             .button-container {
                 flex-direction: column;
                 align-items: center;
-                gap: 10px; /* 버튼 간격 줄임 */
+                gap: 10px;
             }
             button {
                 width: 100%;
-                height: 55px; /* 터치 영역 확장 */
-                font-size: 16px;
+                height: 68px; /* Golden ratio: 110 / 1.618 ≈ 68 */
+                font-size: 0.9rem;
             }
             .logo-container img {
                 width: 50px;
@@ -155,78 +177,114 @@
 
         @media (max-width: 400px) {
             #progress {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             button {
-                height: 50px;
-                font-size: 14px;
+                height: 62px;
+                font-size: 0.85rem;
             }
             .logo-container img {
                 width: 40px;
             }
             #quiz-container {
-                padding: 10px;
+                padding: 12px;
             }
         }
 
         /* iOS 스타일 개선 */
         @media (max-width: 600px) and (-webkit-min-device-pixel-ratio: 2) {
             button {
-                padding: 10px; /* 터치 영역 추가 확장 */
+                padding: 12px;
             }
         }
 
         /* ✨ 애니메이션 */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
+            from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* 접근성 개선 */
+        button:focus {
+            outline: 2px solid #1e3a8a;
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo-container">
-            <img src="assets/images/FFWPU.png" alt="FFWPU 로고">
+            <img src="assets/images/FFWPU.png" alt="FFWPU 로고" aria-label="FFWPU 로고">
         </div>
     </header>
 
-    <div id="progress">문제 1 / <span id="total-questions">?</span></div>
+    <div id="progress" role="status" aria-live="polite">
+        <span>문제 <span id="current-question">1</span> / <span id="total-questions">?</span></span>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
+        </div>
+    </div>
 
     <main>
-        <div id="quiz-container">
+        <div id="quiz-container" role="region" aria-label="퀴즈 내용">
             <!-- 문제와 선택지가 동적으로 삽입됩니다 -->
         </div>
     </main>
 
     <div class="button-container">
-        <button id="check-answer" class="blue" aria-label="정답"><i class="fas fa-check"></i> 정답</button>
-        <button id="next-question" class="gold" style="display: none;" aria-label="다음 문제"><i class="fas fa-arrow-right"></i> 다음</button>
+        <button id="check-answer" class="blue" aria-label="정답 확인"><i class="fas fa-check"></i> 정답 확인</button>
+        <button id="next-question" class="gold" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
     </div>
+
+    <div id="error-message" style="display: none; color: #dc2626; margin-top: 16px;" role="alert"></div>
 
     <script src="js/divine_script.js"></script>
     <script>
-        // 총 문제 수를 동적으로 표시
         document.addEventListener("DOMContentLoaded", () => {
+            // 총 문제 수와 진행 상황 업데이트
             fetch("pr.json")
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("total-questions").textContent = data.length;
+                    const totalQuestions = data.length;
+                    document.getElementById("total-questions").textContent = totalQuestions;
+                    updateProgressBar(1, totalQuestions);
                 })
-                .catch(error => console.error("JSON 파일 로드 실패:", error));
-        });
+                .catch(error => {
+                    console.error("JSON 파일 로드 실패:", error);
+                    const errorMessage = document.getElementById("error-message");
+                    errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
+                    errorMessage.style.display = "block";
+                });
 
-        // 모바일 터치 이벤트 추가
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('touchstart', function() {
-                this.classList.add('active');
-            });
-            button.addEventListener('touchend', function() {
-                this.classList.remove('active');
+            // 진행 바 업데이트 함수
+            function updateProgressBar(current, total) {
+                const progressBar = document.getElementById("progress-bar");
+                const percentage = (current / total) * 100;
+                progressBar.style.width = `${percentage}%`;
+            }
+
+            // 버튼 터치 및 키보드 이벤트
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.classList.add('active');
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50); // 짧은 진동 피드백
+                    }
+                });
+                button.addEventListener('touchend', function() {
+                    this.classList.remove('active');
+                });
+                button.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
             });
         });
     </script>
