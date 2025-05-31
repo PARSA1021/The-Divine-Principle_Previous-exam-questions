@@ -527,6 +527,58 @@
             color: #1e3a8a;
         }
 
+        .copy-button {
+            background: #1e3a8a;
+            color: white;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        body.dark-mode .copy-button {
+            background: #60a5fa;
+        }
+
+        .copy-button:hover {
+            transform: translateY(-2px);
+            background: #2563eb;
+        }
+
+        body.dark-mode .copy-button:hover {
+            background: #93c5fd;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e3a8a;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        body.dark-mode .toast {
+            background: #60a5fa;
+            color: #1e3a8a;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .donation-section {
             margin: 2rem 0;
             width: 100%;
@@ -954,11 +1006,32 @@
         function copyAccountNumber() {
             const accountNumber = "02060204230715";
             navigator.clipboard.writeText(accountNumber).then(() => {
-                alert("계좌번호(02060204230715)가 복사되었습니다!\n은행: 국민은행\n예금주: 문성민");
+                showToast("계좌번호가 복사되었습니다!");
             }).catch(err => {
                 console.error("계좌번호 복사 실패:", err);
                 alert("계좌번호 복사에 실패했습니다. 계좌번호: 국민은행 020602-04-230715 (예금주: 문성민)");
             });
+        }
+
+        function copyMessageToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("말씀이 복사되었습니다!");
+            }).catch(err => {
+                console.error("복사 실패:", err);
+                alert("말씀 복사에 실패했습니다. 수동으로 복사해 주세요.");
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add("show"), 100);
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
         async function loadMessages() {
@@ -1098,6 +1171,9 @@
                                 <h3><i class="fas fa-book" aria-hidden="true"></i> ${msg.category}</h3>
                                 <p>${highlightedText} ${matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</p>
                                 <p class="source"><i class="fas fa-book" aria-hidden="true"></i> ${msg.source}</p>
+                                <button class="copy-button" onclick="copyMessageToClipboard('${msg.text.replace(/'/g, "\\'")}')" aria-label="${msg.category} 말씀 복사">
+                                    <i class="fas fa-copy"></i> 복사하기
+                                </button>
                             </div>
                         `;
                     }).join('');
@@ -1107,13 +1183,18 @@
                             <button onclick="searchMessages(${page + 1})" class="quiz-button blue" aria-label="다음 페이지">다음 페이지</button>
                         `;
                     }
+                    resultsContainer.innerHTML += `
+                        <button class="back-to-top" onclick="scrollToTop()" aria-label="검색 결과 맨 위로 이동" style="position: static; margin: 1rem auto; display: block;">
+                            <i class="fas fa-arrow-up"></i> 맨 위로
+                        </button>
+                    `;
                     resultsContainer.style.display = 'flex';
                 }
 
                 const endTime = performance.now();
                 if (query || currentCategory !== '전체') {
                     statsContainer.style.display = 'block';
-                    statsContainer.innerHTML = `검색 결과: ${filteredMessages.length}개 (현재 페이지: ${page}, 소요 시간: ${(endTime - startTime).toFixed(2)}ms)`;
+                    statsContainer.innerHTML = `총 ${filteredMessages.length}개의 결과`;
                 }
                 loading.style.display = 'none';
                 progressBar.style.width = '100%';
@@ -1159,21 +1240,24 @@
                 activeButton.setAttribute('aria-current', 'page');
             }
 
-            if (pageId === 'workbook' && messages.length === 0) {
-                loadMessages().then(() => {
+            if (pageId === 'workbook') {
+                document.getElementById('search-input').focus();
+                if (messages.length === 0) {
+                    loadMessages().then(() => {
+                        if (!document.getElementById('search-input').value.trim() && currentCategory === '전체') {
+                            document.getElementById('search-results').style.display = 'none';
+                            document.getElementById('search-stats').style.display = 'none';
+                        } else {
+                            searchMessages();
+                        }
+                    });
+                } else {
                     if (!document.getElementById('search-input').value.trim() && currentCategory === '전체') {
                         document.getElementById('search-results').style.display = 'none';
                         document.getElementById('search-stats').style.display = 'none';
                     } else {
                         searchMessages();
                     }
-                });
-            } else if (pageId === 'workbook') {
-                if (!document.getElementById('search-input').value.trim() && currentCategory === '전체') {
-                    document.getElementById('search-results').style.display = 'none';
-                    document.getElementById('search-stats').style.display = 'none';
-                } else {
-                    searchMessages();
                 }
             }
 
