@@ -1083,6 +1083,7 @@
                 <div class="category-container" role="group" aria-label="카테고리 필터">
                     <button class="active" data-category="전체" aria-pressed="true">전체</button>
                     <button data-category="천성경" aria-pressed="false">천성경</button>
+                    <button data-category="참부모경" aria-pressed="false">참부모경</button>
                     <button data-category="참부모님 말씀" aria-pressed="false">참부모님 말씀</button>
                     <button data-category="참어머님 말씀" aria-pressed="false">참어머님 말씀</button>
                 </div>
@@ -1165,6 +1166,7 @@
                 messages = messages.map(msg => {
                     if (!msg.category) {
                         if (msg.source.includes('천성경')) msg.category = '천성경';
+                        else if (msg.source.includes('참부모경')) msg.category = '참부모경';
                         else if (msg.source.includes('참부모님 말씀')) msg.category = '참부모님 말씀';
                         else if (msg.source.includes('참어머님 말씀')) msg.category = '참어머님 말씀';
                     }
