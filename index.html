@@ -358,62 +358,118 @@
             background: #60a5fa;
         }
 
-        .search-options {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-
-        .search-options label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: #444;
-            cursor: pointer;
-        }
-
-        body.dark-mode .search-options label {
-            color: #d1d5db;
-        }
-
-        .search-options input[type="checkbox"] {
-            accent-color: #1e3a8a;
-            width: 1rem;
-            height: 1rem;
-        }
-
         .category-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            justify-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #e0f2fe, #ffffff);
+            border-radius: 1.2rem;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        body.dark-mode .category-container {
+            background: linear-gradient(135deg, #2d3748, #4b5563);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         }
 
         .category-container button {
-            background: #6b7280;
-            color: white;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: none;
+            background: #ffffff;
+            color: #1e3a8a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            border: 2px solid #1e3a8a;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            justify-content: center;
         }
 
         body.dark-mode .category-container button {
             background: #4b5563;
+            color: #e0f2fe;
+            border-color: #60a5fa;
+        }
+
+        .category-container button[data-category="전체"] {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            border: none;
+        }
+
+        .category-container button[data-category="천성경"] {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+            border: none;
+        }
+
+        .category-container button[data-category="참부모경"] {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+        }
+
+        .category-container button[data-category="참부모님 말씀"] {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            border: none;
+        }
+
+        .category-container button[data-category="참어머님 말씀"] {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: white;
+            border: none;
         }
 
         .category-container button.active {
-            background: #d4af37;
+            background: linear-gradient(135deg, #d4af37, #facc15);
+            color: white;
+            border: none;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        body.dark-mode .category-container button.active {
+            background: linear-gradient(135deg, #60a5fa, #93c5fd);
         }
 
         .category-container button:hover:not(.active) {
-            background: #1e3a8a;
+            transform: translateY(-3px) rotate(2deg);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-container button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .category-container button:hover::before {
+            left: 100%;
+        }
+
+        .category-container button i {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .category-container button:hover i {
+            transform: rotate(15deg);
         }
 
         .search-stats {
@@ -611,6 +667,11 @@
 
         body.dark-mode .copy-button:hover {
             background: #93c5fd;
+        }
+
+        .next-page-button {
+            margin: 1rem auto;
+            display: block;
         }
 
         .toast {
@@ -886,6 +947,9 @@
                 width: 3rem;
                 height: 3rem;
             }
+            .category-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
             .donation-section h2 {
                 font-size: 1.75rem;
             }
@@ -986,6 +1050,14 @@
                 font-size: 0.9rem;
                 padding: 0.6rem 1.2rem;
             }
+            .category-container {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                padding: 1rem;
+            }
+            .category-container button {
+                font-size: 0.95rem;
+                padding: 0.75rem 1rem;
+            }
         }
 
         @keyframes fadeIn {
@@ -1066,26 +1138,12 @@
                     <button onclick="searchMessages()" title="검색 실행" aria-label="검색"><i class="fas fa-search"></i></button>
                     <button class="clear-search" onclick="clearSearch()" title="검색 초기화" aria-label="검색 초기화"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="search-options" role="group" aria-label="검색 옵션">
-                    <label>
-                        <input type="checkbox" id="exact-match">
-                        <i class="fas fa-quote-left"></i> 정확한 단어
-                    </label>
-                    <label>
-                        <input type="checkbox" id="case-sensitive">
-                        <i class="fas fa-font"></i> 대소문자 구분
-                    </label>
-                    <label>
-                        <input type="checkbox" id="whole-word">
-                        <i class="fas fa-signature"></i> 전체 단어
-                    </label>
-                </div>
                 <div class="category-container" role="group" aria-label="카테고리 필터">
-                    <button class="active" data-category="전체" aria-pressed="true">전체</button>
-                    <button data-category="천성경" aria-pressed="false">천성경</button>
-                    <button data-category="참부모경" aria-pressed="false">참부모경</button>
-                    <button data-category="참부모님 말씀" aria-pressed="false">참부모님 말씀</button>
-                    <button data-category="참어머님 말씀" aria-pressed="false">참어머님 말씀</button>
+                    <button class="active" data-category="전체" aria-pressed="true"><i class="fas fa-globe"></i> 전체</button>
+                    <button data-category="천성경" aria-pressed="false"><i class="fas fa-book"></i> 천성경</button>
+                    <button data-category="참부모경" aria-pressed="false"><i class="fas fa-pray"></i> 참부모경</button>
+                    <button data-category="참부모님 말씀" aria-pressed="false"><i class="fas fa-quote-left"></i> 참부모님 말씀</button>
+                    <button data-category="참어머님 말씀" aria-pressed="false"><i class="fas fa-female"></i> 참어머님 말씀</button>
                 </div>
                 <div id="search-stats" class="search-stats" style="display: none;" role="status" aria-live="polite"></div>
             </div>
@@ -1119,6 +1177,13 @@
 
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToResultsTop() {
+            const resultsContainer = document.getElementById('search-results');
+            if (resultsContainer) {
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function copyAccountNumber() {
@@ -1187,13 +1252,12 @@
             }
         }
 
-        function highlightText(text, query, isCaseSensitive, isWholeWord) {
+        function highlightText(text, query) {
             if (!query) return text;
             let regex;
             try {
                 const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const pattern = isWholeWord ? `\\b${escapedQuery}\\b` : escapedQuery;
-                regex = new RegExp(pattern, isCaseSensitive ? 'g' : 'gi');
+                regex = new RegExp(escapedQuery, 'gi');
             } catch (e) {
                 console.warn('Invalid regex query:', e);
                 return text;
@@ -1225,9 +1289,6 @@
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
                 const query = document.getElementById('search-input').value.trim();
-                const isExactMatch = document.getElementById('exact-match').checked;
-                const isCaseSensitive = document.getElementById('case-sensitive').checked;
-                const isWholeWord = document.getElementById('whole-word').checked;
                 const resultsContainer = document.getElementById('search-results');
                 const statsContainer = document.getElementById('search-stats');
                 const loading = document.getElementById('search-loading');
@@ -1248,16 +1309,9 @@
 
                 if (query) {
                     filteredMessages = filteredMessages.filter(msg => {
-                        const textToSearch = isCaseSensitive ? msg.text : msg.text.toLowerCase();
-                        const searchQuery = isCaseSensitive ? query : query.toLowerCase();
-                        if (isWholeWord) {
-                            const regex = new RegExp(`\\b${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, isCaseSensitive ? '' : 'i');
-                            return regex.test(textToSearch);
-                        } else if (isExactMatch) {
-                            return textToSearch.includes(searchQuery);
-                        } else {
-                            return textToSearch.includes(searchQuery);
-                        }
+                        const textToSearch = msg.text.toLowerCase();
+                        const searchQuery = query.toLowerCase();
+                        return textToSearch.includes(searchQuery);
                     });
 
                     if (!searchHistory.includes(query)) {
@@ -1265,8 +1319,6 @@
                         if (searchHistory.length > 5) searchHistory.pop();
                         localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
                     }
-                } else if (currentCategory === '전체') {
-                    filteredMessages = [];
                 }
 
                 const startTime = performance.now();
@@ -1277,11 +1329,11 @@
 
                 if (filteredMessages.length === 0 && (query || currentCategory !== '전체')) {
                     resultsContainer.innerHTML = '<p class="no-results" role="alert">검색 결과가 없습니다.</p>';
-                    resultsContainer.style.display = 'block';
+                    resultsContainer.style.display = "block";
                 } else if (paginatedMessages.length > 0) {
                     resultsContainer.innerHTML = paginatedMessages.map(msg => {
-                        const highlightedText = query ? highlightText(msg.text, query, isCaseSensitive, isWholeWord) : msg.text;
-                        const queryRegex = query ? new RegExp(isWholeWord ? `\\b${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b` : query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), isCaseSensitive ? 'g' : 'gi') : null;
+                        const highlightedText = query ? highlightText(msg.text, query) : msg.text;
+                        const queryRegex = query ? new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi') : null;
                         const matchCount = query ? (msg.text.match(queryRegex) || []).length : 0;
                         return `
                             <div class="result-item" role="listitem">
@@ -1297,7 +1349,7 @@
 
                     if (filteredMessages.length > endIndex) {
                         resultsContainer.innerHTML += `
-                            <button onclick="searchMessages(${page + 1})" class="quiz-button blue" aria-label="다음 페이지">다음 페이지</button>
+                            <button onclick="searchMessages(${page + 1})" class="quiz-button blue next-page-button" aria-label="다음 페이지">다음 페이지</button>
                         `;
                     }
                     resultsContainer.innerHTML += `
@@ -1309,21 +1361,19 @@
                 }
 
                 const endTime = performance.now();
-                if (query || currentCategory !== '전체') {
-                    statsContainer.style.display = 'block';
-                    statsContainer.innerHTML = `총 ${filteredMessages.length}개의 결과`;
-                }
+                statsContainer.style.display = 'block';
+                statsContainer.innerHTML = `총 ${filteredMessages.length}개의 결과`;
                 loading.style.display = 'none';
                 progressBar.style.width = '100%';
-                setTimeout(() => progressBar.style.width = '0', 300);
+                setTimeout(() => {
+                    progressBar.style.width = '0';
+                    scrollToResultsTop();
+                }, 300);
             }, 300);
         }
 
         function clearSearch() {
             document.getElementById('search-input').value = '';
-            document.getElementById('exact-match').checked = false;
-            document.getElementById('case-sensitive').checked = false;
-            document.getElementById('whole-word').checked = false;
             document.querySelectorAll('.category-container button').forEach(btn => {
                 btn.classList.remove('active');
                 btn.setAttribute('aria-pressed', 'false');
@@ -1414,10 +1464,6 @@
                 }
             });
 
-            document.getElementById('exact-match').addEventListener('change', searchMessages);
-            document.getElementById('case-sensitive').addEventListener('change', searchMessages);
-            document.getElementById('whole-word').addEventListener('change', searchMessages);
-
             window.addEventListener('scroll', () => {
                 const backToTop = document.querySelector('.back-to-top');
                 if (backToTop) {
@@ -1425,7 +1471,7 @@
                 }
             });
 
-            document.querySelectorAll('button, input[type="checkbox"]').forEach(element => {
+            document.querySelectorAll('button').forEach(element => {
                 element.addEventListener('keydown', e => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
