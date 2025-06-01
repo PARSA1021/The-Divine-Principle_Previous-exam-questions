@@ -9,11 +9,44 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
     <style>
-        /* 🌍 전체 페이지 스타일 */
+        :root {
+            --bg-color: #f5f7fa;
+            --text-color: #2d3748;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: #e2e8f0;
+            --primary-blue: #2563eb;
+            --primary-gold: #f59e0b;
+            --primary-green: #10b981;
+            --option-bg: #f7fafc;
+            --option-hover: #edf2f7;
+            --correct-bg: #d4f4e2;
+            --incorrect-bg: #fee2e2;
+            --explanation-bg: #f1f5f9;
+            --progress-bg: #e2e8f0;
+            --shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1f2937;
+            --text-color: #e5e7eb;
+            --card-bg: rgba(31, 41, 55, 0.95);
+            --card-border: #4b5563;
+            --primary-blue: #3b82f6;
+            --primary-gold: #facc15;
+            --primary-green: #34d399;
+            --option-bg: #374151;
+            --option-hover: #4b5563;
+            --correct-bg: #064e3b;
+            --incorrect-bg: #7f1d1d;
+            --explanation-bg: #2d3748;
+            --progress-bg: #4b5563;
+            --shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
         body {
-            font-family: 'Noto Sans KR', 'Arial', sans-serif;
+            font-family: 'Noto Sans KR', sans-serif;
             text-align: center;
-            background-color: #f5f7fa;
+            background-color: var(--bg-color);
             margin: 0;
             padding: 20px;
             background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('assets/images/ffwpu-background.jpg');
@@ -24,12 +57,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #2d3748;
+            color: var(--text-color);
             -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
+            transition: background-color 0.3s ease;
         }
 
-        /* 🔆 헤더 및 로고 */
         header {
             margin-bottom: 1.5rem;
         }
@@ -38,7 +71,7 @@
             width: 80px;
             height: auto;
             border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             animation: fadeIn 1s ease-in;
             user-select: none;
             -webkit-user-drag: none;
@@ -47,122 +80,194 @@
         h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #1a3c6e;
+            color: var(--text-color);
             margin: 0.5rem 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
         }
 
-        /* 📊 진행 상황 및 점수 */
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-gold));
+            border-radius: 2px;
+        }
+
+        .theme-toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: var(--option-hover);
+        }
+
         #progress {
             font-size: 1.1rem;
             font-weight: 500;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 12px 20px;
-            border-radius: 10px;
+            background-color: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 12px;
             margin: 1rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            backdrop-filter: blur(12px);
         }
 
         .progress-bar-container {
             width: 100%;
             max-width: 400px;
-            height: 10px;
-            background-color: #e2e8f0;
-            border-radius: 5px;
+            height: 12px;
+            background-color: var(--progress-bg);
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-gold));
             transition: width 0.4s ease-in-out;
         }
 
         #score {
             font-size: 1rem;
-            color: #1a3c6e;
+            color: var(--text-color);
         }
 
-        /* 📦 퀴즈 컨테이너 */
         #quiz-container {
             width: 90%;
             max-width: 700px;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             backdrop-filter: blur(12px);
             padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             animation: slideUp 0.5s ease-out;
             margin-bottom: 2rem;
         }
 
         .question-text {
-            font-size: 1.3rem;
-            font-weight: 500;
+            font-size: 1.4rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
-            color: #1a3c6e;
+            color: var(--text-color);
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .question-text strong {
+            color: var(--primary-blue);
+            font-weight: 700;
         }
 
         .option {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            background: #f7fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            background: var(--option-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
 
         .option:hover {
-            background: #edf2f7;
-            border-color: #3b82f6;
+            background: var(--option-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .option:active {
+            transform: scale(0.98);
         }
 
         .option input {
             margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option label {
+            flex: 1;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .option.selected {
+            border-color: var(--primary-blue);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.1));
         }
 
         .option.correct {
-            background: #d4f4e2;
-            border-color: #10b981;
+            background: var(--correct-bg);
+            border-color: var(--primary-green);
+            animation: pulse 0.5s ease;
         }
 
         .option.incorrect {
-            background: #fee2e2;
+            background: var(--incorrect-bg);
             border-color: #ef4444;
+            animation: pulse 0.5s ease;
         }
 
         .explanation {
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             font-size: 1rem;
-            color: #4b5563;
-            background: #f1f5f9;
-            padding: 1rem;
-            border-radius: 8px;
+            color: var(--text-color);
+            background: var(--explanation-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
             text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
             animation: fadeIn 0.5s ease-in;
         }
 
-        /* 🔘 버튼 스타일 */
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            gap: 1.5rem;
+            margin-top: 2rem;
             flex-wrap: wrap;
         }
 
         button {
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
             font-weight: 500;
-            border-radius: 10px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -170,38 +275,44 @@
             align-items: center;
             gap: 0.5rem;
             -webkit-tap-highlight-color: transparent;
+            min-width: 150px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         button.blue {
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
             color: white;
         }
 
         button.gold {
-            background: linear-gradient(135deg, #f59e0b, #facc15);
+            background: linear-gradient(135deg, var(--primary-gold), #facc15);
             color: white;
         }
 
         button.green {
-            background: linear-gradient(135deg, #10b981, #34d399);
+            background: linear-gradient(135deg, var(--primary-green), #34d399);
             color: white;
         }
 
         button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.95);
         }
 
         button.blue:hover:not(:disabled) {
-            background: linear-gradient(135deg, #1e40af, #2563eb);
+            background: linear-gradient(135deg, #1e40af, var(--primary-blue));
         }
 
         button.gold:hover:not(:disabled) {
-            background: linear-gradient(135deg, #d97706, #eab308);
+            background: linear-gradient(135deg, #d97706, var(--primary-gold));
         }
 
         button.green:hover:not(:disabled) {
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: linear-gradient(135deg, #059669, var(--primary-green));
         }
 
         button:disabled {
@@ -210,27 +321,40 @@
             opacity: 0.6;
         }
 
-        /* 📱 모바일 반응형 */
+        .loading {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin: 2rem 0;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.5rem;
             }
             #progress {
                 font-size: 1rem;
+                padding: 12px 20px;
             }
             #quiz-container {
                 width: 95%;
                 padding: 1.5rem;
             }
             .question-text {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
+            }
+            .option {
+                padding: 0.8rem;
+            }
+            .option label {
+                font-size: 1rem;
             }
             .explanation {
                 font-size: 0.9rem;
             }
             button {
-                padding: 0.7rem 1.5rem;
-                font-size: 0.9rem;
+                padding: 0.9rem 2rem;
+                font-size: 1rem;
+                min-width: 130px;
             }
             .logo-container img {
                 width: 60px;
@@ -248,7 +372,13 @@
                 padding: 1rem;
             }
             .question-text {
-                font-size: 1rem;
+                font-size: 1.1rem;
+            }
+            .option {
+                padding: 0.7rem;
+            }
+            .option label {
+                font-size: 0.95rem;
             }
             .explanation {
                 font-size: 0.85rem;
@@ -256,16 +386,28 @@
             button {
                 width: 100%;
                 padding: 0.8rem;
-                font-size: 0.85rem;
+                font-size: 0.95rem;
+                min-width: 0;
             }
             .logo-container img {
                 width: 50px;
             }
+            .button-container {
+                gap: 1rem;
+            }
+            .theme-toggle-container {
+                top: 10px;
+                right: 10px;
+            }
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3rem;
+            }
         }
 
-        /* ✨ 애니메이션 */
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
 
@@ -274,53 +416,36 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* 접근성 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         button:focus, .option:focus-within {
-            outline: 3px solid #2563eb;
+            outline: 3px solid var(--primary-blue);
             outline-offset: 2px;
         }
 
-        /* 고대비 모드 지원 */
         @media (prefers-contrast: high) {
-            body {
-                background: #ffffff;
-                color: #000000;
-            }
-            button.blue {
-                background: #0000ff;
-            }
-            button.gold {
-                background: #ffaa00;
-            }
-            button.green {
-                background: #008000;
-            }
-        }
-
-        /* 색상 약시 지원 */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: #1f2937;
-                color: #e5e7eb;
-            }
-            #quiz-container {
-                background: rgba(31, 41, 55, 0.95);
-            }
-            .option {
-                background: #374151;
-                border-color: #4b5563;
-            }
-            .option:hover {
-                background: #4b5563;
-            }
-            .explanation {
-                background: #2d3748;
-                color: #d1d5db;
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #000000;
+                --card-bg: #ffffff;
+                --option-bg: #f0f0f0;
+                --correct-bg: #00ff00;
+                --incorrect-bg: #ff0000;
             }
         }
     </style>
 </head>
 <body>
+    <div class="theme-toggle-container">
+        <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
     <header>
         <div class="logo-container">
             <img src="assets/images/FFWPU.png" alt="FFWPU 로고" aria-label="FFWPU 로고">
@@ -337,6 +462,7 @@
     </div>
 
     <main>
+        <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> 로딩 중...</div>
         <div id="quiz-container" role="region" aria-label="퀴즈 내용">
             <div class="question-text" id="question-text"></div>
             <div id="options-container"></div>
@@ -357,6 +483,22 @@
             let currentQuestionIndex = 0;
             let questions = [];
             let score = 0;
+            let originalQuestionText = "";
+
+            // 테마 설정
+            const themeToggle = document.getElementById("theme-toggle");
+            const body = document.body;
+            const savedTheme = localStorage.getItem("theme") || "light";
+            body.setAttribute("data-theme", savedTheme);
+            themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
+
+            themeToggle.addEventListener("click", () => {
+                const currentTheme = body.getAttribute("data-theme");
+                const newTheme = currentTheme === "light" ? "dark" : "light";
+                body.setAttribute("data-theme", newTheme);
+                localStorage.setItem("theme", newTheme);
+                themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
+            });
 
             // JSON 데이터 로드
             fetch("assets/data/divine_pr.json")
@@ -367,6 +509,8 @@
                 .then(data => {
                     questions = data;
                     document.getElementById("total-questions").textContent = questions.length;
+                    document.getElementById("quiz-container").style.display = "block";
+                    document.getElementById("loading").style.display = "none";
                     loadQuestion(currentQuestionIndex);
                     updateProgressBar(currentQuestionIndex + 1, questions.length);
                 })
@@ -375,6 +519,7 @@
                     const errorMessage = document.getElementById("error-message");
                     errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
                     errorMessage.style.display = "block";
+                    document.getElementById("loading").style.display = "none";
                 });
 
             // 문제 로드 함수
@@ -385,11 +530,10 @@
                 const explanation = document.getElementById("explanation");
                 const currentQuestion = questions[index];
 
-                // 문제 텍스트에 선택해야 할 답변 수 추가
                 const blanks = currentQuestion.answers.length;
-                questionText.textContent = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
+                originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
+                questionText.innerHTML = originalQuestionText;
 
-                // 선택지 초기화
                 optionsContainer.innerHTML = "";
                 currentQuestion.options.forEach((option, i) => {
                     const optionDiv = document.createElement("div");
@@ -402,18 +546,44 @@
                         if (e.target.tagName !== "INPUT") {
                             const checkbox = document.getElementById(`option${i}`);
                             checkbox.checked = !checkbox.checked;
+                            updateSelectedAnswers();
+                            optionDiv.classList.toggle("selected", checkbox.checked);
                         }
+                    });
+                    optionDiv.querySelector("input").addEventListener("change", () => {
+                        updateSelectedAnswers();
+                        optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
                     });
                     optionsContainer.appendChild(optionDiv);
                 });
 
-                // 설명 및 버튼 상태 초기화
                 explanation.style.display = "none";
                 document.getElementById("check-answer").style.display = "block";
                 document.getElementById("next-question").style.display = "none";
                 document.getElementById("restart-quiz").style.display = "none";
                 document.getElementById("check-answer").disabled = false;
                 document.getElementById("error-message").style.display = "none";
+            }
+
+            // 선택된 답변으로 빈칸 채우기
+            function updateSelectedAnswers() {
+                const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
+                const questionText = document.getElementById("question-text");
+                let updatedText = originalQuestionText;
+                const selectedTexts = Array.from(selectedOptions).map(opt => {
+                    const label = document.querySelector(`label[for="${opt.id}"]`);
+                    return label.textContent;
+                });
+
+                let blankIndex = 0;
+                updatedText = updatedText.replace(/___/g, () => {
+                    if (blankIndex < selectedTexts.length) {
+                        return `<strong>${selectedTexts[blankIndex++]}</strong>`;
+                    }
+                    return '___';
+                });
+
+                questionText.innerHTML = updatedText;
             }
 
             // 진행 바 및 점수 업데이트
@@ -433,26 +603,22 @@
                 const explanation = document.getElementById("explanation");
                 const blanks = currentQuestion.answers.length;
 
-                // 선택된 답변 수 확인
                 if (selectedOptions.length !== blanks) {
                     errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedOptions.length}개 선택)`;
                     errorMessage.style.display = "block";
                     return;
                 }
 
-                // 선택된 답변 인덱스 추출
                 const selectedValues = Array.from(selectedOptions).map(opt => parseInt(opt.value));
                 const correctAnswers = currentQuestion.options
                     .map((option, index) => ({ option, index }))
                     .filter(opt => currentQuestion.answers.includes(opt.option))
                     .map(opt => opt.index);
 
-                // 정답 여부 확인
                 const isCorrect = selectedValues.length === correctAnswers.length &&
                     selectedValues.every(val => correctAnswers.includes(val)) &&
                     correctAnswers.every(val => selectedValues.includes(val));
 
-                // 선택지 피드백
                 const options = document.querySelectorAll(".option");
                 options.forEach((option, i) => {
                     if (correctAnswers.includes(i)) {
@@ -463,10 +629,8 @@
                     option.style.pointerEvents = "none";
                 });
 
-                // 점수 업데이트
                 if (isCorrect) score++;
 
-                // 결과 및 설명 표시
                 errorMessage.textContent = isCorrect ? "정답입니다!" : "오답입니다.";
                 errorMessage.style.color = isCorrect ? "#10b981" : "#ef4444";
                 errorMessage.style.display = "block";
@@ -499,6 +663,7 @@
             document.getElementById("restart-quiz").addEventListener("click", () => {
                 currentQuestionIndex = 0;
                 score = 0;
+                document.getElementById("quiz-container").style.display = "block";
                 loadQuestion(currentQuestionIndex);
                 updateProgressBar(currentQuestionIndex + 1, questions.length);
             });
@@ -507,9 +672,7 @@
             document.querySelectorAll('button, .option').forEach(element => {
                 element.addEventListener('touchstart', function() {
                     this.classList.add('active');
-                    if (navigator.vibrate) {
-                        navigator.vibrate(50);
-                    }
+                    if (navigator.vibrate) navigator.vibrate(50);
                 });
                 element.addEventListener('touchend', function() {
                     this.classList.remove('active');
