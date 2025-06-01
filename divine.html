@@ -23,7 +23,11 @@
             --incorrect-bg: #fee2e2;
             --explanation-bg: #f1f5f9;
             --progress-bg: #e2e8f0;
-            --shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --golden-ratio: 1.618;
+            --base-font-size: clamp(16px, 4vw, 18px);
+            --base-padding: clamp(8px, 2vw, 10px);
+            --base-margin: calc(var(--base-padding) * var(--golden-ratio));
         }
 
         [data-theme="dark"] {
@@ -40,68 +44,37 @@
             --incorrect-bg: #7f1d1d;
             --explanation-bg: #2d3748;
             --progress-bg: #4b5563;
-            --shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            text-align: center;
             background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('assets/images/ffwpu-background.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--text-color);
+            font-size: var(--base-font-size);
+            touch-action: manipulation;
             -webkit-overflow-scrolling: touch;
-            overflow-x: hidden;
-            transition: background-color 0.3s ease;
-        }
-
-        header {
-            margin-bottom: 1.5rem;
-        }
-
-        .logo-container img {
-            width: 80px;
-            height: auto;
-            border-radius: 50%;
-            box-shadow: var(--shadow);
-            animation: fadeIn 1s ease-in;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin: 0.5rem 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-            display: inline-block;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--primary-gold));
-            border-radius: 2px;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('assets/images/ffwpu-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: hidden;
         }
 
         .theme-toggle-container {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: var(--base-padding);
+            right: var(--base-padding);
             z-index: 1000;
         }
 
@@ -117,7 +90,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease;
             box-shadow: var(--shadow);
         }
 
@@ -126,27 +99,51 @@
             background: var(--option-hover);
         }
 
-        #progress {
-            font-size: 1.1rem;
-            font-weight: 500;
-            background-color: var(--card-bg);
-            padding: 15px 25px;
-            border-radius: 12px;
-            margin: 1rem 0;
-            box-shadow: var(--shadow);
+        header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-            backdrop-filter: blur(12px);
+            margin: var(--base-margin) 0;
+        }
+
+        .logo-container img {
+            width: clamp(50px, 10vw, 60px);
+            height: auto;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 6vw, 1.8rem);
+            font-weight: 700;
+            color: var(--text-color);
+            margin-top: calc(var(--base-margin) / var(--golden-ratio));
+            text-align: center;
+        }
+
+        #progress {
+            width: 100%;
+            max-width: 61.8vw;
+            background: var(--card-bg);
+            padding: var(--base-padding);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            margin-bottom: var(--base-margin);
+            backdrop-filter: blur(8px);
         }
 
         .progress-bar-container {
-            width: 100%;
-            max-width: 400px;
-            height: 12px;
-            background-color: var(--progress-bg);
-            border-radius: 6px;
+            width: 50%;
+            height: 8px;
+            background: var(--progress-bg);
+            border-radius: 4px;
             overflow: hidden;
         }
 
@@ -156,29 +153,27 @@
             transition: width 0.4s ease-in-out;
         }
 
-        #score {
-            font-size: 1rem;
-            color: var(--text-color);
-        }
-
         #quiz-container {
-            width: 90%;
-            max-width: 700px;
+            width: 100%;
+            max-width: 61.8vw;
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            padding: 2rem;
-            border-radius: 15px;
+            padding: var(--base-padding);
+            border-radius: 12px;
             box-shadow: var(--shadow);
-            animation: slideUp 0.5s ease-out;
-            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            height: calc(80vh - var(--base-margin) * 2);
+            backdrop-filter: blur(8px);
+            overflow: hidden;
         }
 
         .question-text {
-            font-size: 1.4rem;
+            font-size: clamp(1.1rem, 4.5vw, 1.3rem);
             font-weight: 600;
-            margin-bottom: 1.5rem;
             color: var(--text-color);
             text-align: left;
+            padding: var(--base-padding);
+            flex: 1;
             line-height: 1.4;
         }
 
@@ -187,25 +182,40 @@
             font-weight: 700;
         }
 
+        #options-container {
+            flex: 2;
+            overflow-y: auto;
+            padding: var(--base-padding);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-blue) var(--card-bg);
+        }
+
+        #options-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #options-container::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 3px;
+        }
+
         .option {
             display: flex;
             align-items: center;
-            padding: 1rem;
-            margin: 0.75rem 0;
+            padding: calc(var(--base-padding) * 0.618);
+            margin: calc(var(--base-margin) / 2) 0;
             background: var(--option-bg);
             border: 2px solid var(--card-border);
-            border-radius: 12px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
+            min-height: 48px;
+            touch-action: manipulation;
         }
 
         .option:hover {
             background: var(--option-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         .option:active {
@@ -213,7 +223,7 @@
         }
 
         .option input {
-            margin-right: 1rem;
+            margin-right: calc(var(--base-padding) * 0.618);
             width: 20px;
             height: 20px;
             cursor: pointer;
@@ -221,7 +231,7 @@
 
         .option label {
             flex: 1;
-            font-size: 1.1rem;
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
             color: var(--text-color);
             cursor: pointer;
         }
@@ -244,39 +254,40 @@
         }
 
         .explanation {
-            margin-top: 1.5rem;
-            font-size: 1rem;
+            font-size: clamp(0.85rem, 3vw, 0.95rem);
             color: var(--text-color);
             background: var(--explanation-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
+            padding: calc(var(--base-padding) * 0.618);
+            border-radius: 8px;
             text-align: left;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            animation: fadeIn 0.5s ease-in;
+            margin-top: calc(var(--base-margin) / 2);
+            flex: 1;
+            overflow-y: auto;
         }
 
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-top: 2rem;
+            gap: calc(var(--base-margin) / 2);
+            padding: var(--base-padding);
             flex-wrap: wrap;
         }
 
         button {
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
+            padding: calc(var(--base-padding) * 0.618) calc(var(--base-padding) * 1.618);
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
             font-weight: 500;
-            border-radius: 12px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            -webkit-tap-highlight-color: transparent;
-            min-width: 150px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 120px;
+            min-height: 48px;
+            box-shadow: var(--shadow);
+            touch-action: manipulation;
         }
 
         button.blue {
@@ -295,24 +306,12 @@
         }
 
         button:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         button:active:not(:disabled) {
             transform: scale(0.95);
-        }
-
-        button.blue:hover:not(:disabled) {
-            background: linear-gradient(135deg, #1e40af, var(--primary-blue));
-        }
-
-        button.gold:hover:not(:disabled) {
-            background: linear-gradient(135deg, #d97706, var(--primary-gold));
-        }
-
-        button.green:hover:not(:disabled) {
-            background: linear-gradient(135deg, #059669, var(--primary-green));
         }
 
         button:disabled {
@@ -322,87 +321,48 @@
         }
 
         .loading {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 4vw, 1.2rem);
             color: var(--text-color);
-            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-            #progress {
-                font-size: 1rem;
-                padding: 12px 20px;
+        #error-message {
+            font-size: clamp(0.85rem, 3vw, 0.95rem);
+            margin: calc(var(--base-margin) / 2) 0;
+            text-align: center;
+            flex: 0;
+        }
+
+        @media (max-width: 360px) {
+            :root {
+                --base-font-size: clamp(14px, 3.5vw, 16px);
+                --base-padding: clamp(6px, 1.5vw, 8px);
             }
             #quiz-container {
-                width: 95%;
-                padding: 1.5rem;
-            }
-            .question-text {
-                font-size: 1.2rem;
+                padding: calc(var(--base-padding) * 0.618);
             }
             .option {
-                padding: 0.8rem;
-            }
-            .option label {
-                font-size: 1rem;
-            }
-            .explanation {
-                font-size: 0.9rem;
+                padding: calc(var(--base-padding) * 0.5);
             }
             button {
-                padding: 0.9rem 2rem;
-                font-size: 1rem;
-                min-width: 130px;
-            }
-            .logo-container img {
-                width: 60px;
+                min-width: 100px;
+                padding: calc(var(--base-padding) * 0.5) calc(var(--base-padding));
             }
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.3rem;
-            }
-            #progress {
-                font-size: 0.9rem;
+        @media (min-width: 768px) {
+            :root {
+                --base-font-size: clamp(18px, 4.5vw, 20px);
+                --base-padding: clamp(10px, 2.5vw, 12px);
             }
             #quiz-container {
-                padding: 1rem;
-            }
-            .question-text {
-                font-size: 1.1rem;
-            }
-            .option {
-                padding: 0.7rem;
-            }
-            .option label {
-                font-size: 0.95rem;
-            }
-            .explanation {
-                font-size: 0.85rem;
-            }
-            button {
-                width: 100%;
-                padding: 0.8rem;
-                font-size: 0.95rem;
-                min-width: 0;
-            }
-            .logo-container img {
-                width: 50px;
-            }
-            .button-container {
-                gap: 1rem;
-            }
-            .theme-toggle-container {
-                top: 10px;
-                right: 10px;
-            }
-            .theme-toggle {
-                width: 40px;
-                height: 40px;
-                font-size: 1.3rem;
+                max-width: 500px;
             }
         }
 
@@ -448,7 +408,7 @@
 
     <header>
         <div class="logo-container">
-            <img src="assets/images/FFWPU.png" alt="FFWPU 로고" aria-label="FFWPU 로고">
+            <img src="assets/images/FFWPU.png" alt="FFWPU 로고" aria-label="FFWPU 로고" loading="lazy">
         </div>
         <h1>원리강론 퀴즈</h1>
     </header>
@@ -467,16 +427,13 @@
             <div class="question-text" id="question-text"></div>
             <div id="options-container"></div>
             <div id="explanation" class="explanation" style="display: none;"></div>
+            <div id="error-message" role="alert" style="display: none;"></div>
+            <div class="button-container">
+                <button id="action-button" class="blue" aria-label="정답 확인"><i class="fas fa-check"></i> 정답 확인</button>
+                <button id="restart-quiz" class="green" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
+            </div>
         </div>
     </main>
-
-    <div class="button-container">
-        <button id="check-answer" class="blue" aria-label="정답 확인"><i class="fas fa-check"></i> 정답 확인</button>
-        <button id="next-question" class="gold" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
-        <button id="restart-quiz" class="green" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
-    </div>
-
-    <div id="error-message" style="display: none; color: #ef4444; margin-top: 1rem; font-size: 1rem;" role="alert"></div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -484,8 +441,9 @@
             let questions = [];
             let score = 0;
             let originalQuestionText = "";
+            let isCheckingAnswer = false;
+            let currentOptions = [];
 
-            // 테마 설정
             const themeToggle = document.getElementById("theme-toggle");
             const body = document.body;
             const savedTheme = localStorage.getItem("theme") || "light";
@@ -498,9 +456,9 @@
                 body.setAttribute("data-theme", newTheme);
                 localStorage.setItem("theme", newTheme);
                 themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
+                if (navigator.vibrate) navigator.vibrate(50);
             });
 
-            // JSON 데이터 로드
             fetch("assets/data/divine_pr.json")
                 .then(response => {
                     if (!response.ok) throw new Error("JSON 파일 로드 실패");
@@ -509,7 +467,7 @@
                 .then(data => {
                     questions = data;
                     document.getElementById("total-questions").textContent = questions.length;
-                    document.getElementById("quiz-container").style.display = "block";
+                    document.getElementById("quiz-container").style.display = "flex";
                     document.getElementById("loading").style.display = "none";
                     loadQuestion(currentQuestionIndex);
                     updateProgressBar(currentQuestionIndex + 1, questions.length);
@@ -517,25 +475,37 @@
                 .catch(error => {
                     console.error("JSON 파일 로드 실패:", error);
                     const errorMessage = document.getElementById("error-message");
-                    errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
+                    errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다.";
                     errorMessage.style.display = "block";
                     document.getElementById("loading").style.display = "none";
                 });
 
-            // 문제 로드 함수
+            // Fisher-Yates 셔플 함수
+            function shuffleArray(array) {
+                const newArray = [...array];
+                for (let i = newArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                }
+                return newArray;
+            }
+
             function loadQuestion(index) {
+                isCheckingAnswer = false;
                 const quizContainer = document.getElementById("quiz-container");
                 const questionText = document.getElementById("question-text");
                 const optionsContainer = document.getElementById("options-container");
                 const explanation = document.getElementById("explanation");
+                const actionButton = document.getElementById("action-button");
                 const currentQuestion = questions[index];
 
                 const blanks = currentQuestion.answers.length;
                 originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
+                currentOptions = shuffleArray(currentQuestion.options);
                 questionText.innerHTML = originalQuestionText;
 
                 optionsContainer.innerHTML = "";
-                currentQuestion.options.forEach((option, i) => {
+                currentOptions.forEach((option, i) => {
                     const optionDiv = document.createElement("div");
                     optionDiv.classList.add("option");
                     optionDiv.innerHTML = `
@@ -543,29 +513,33 @@
                         <label for="option${i}">${option}</label>
                     `;
                     optionDiv.addEventListener("click", (e) => {
-                        if (e.target.tagName !== "INPUT") {
+                        if (e.target.tagName !== "INPUT" && !isCheckingAnswer) {
                             const checkbox = document.getElementById(`option${i}`);
                             checkbox.checked = !checkbox.checked;
                             updateSelectedAnswers();
                             optionDiv.classList.toggle("selected", checkbox.checked);
+                            if (navigator.vibrate) navigator.vibrate(50);
                         }
                     });
                     optionDiv.querySelector("input").addEventListener("change", () => {
-                        updateSelectedAnswers();
-                        optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
+                        if (!isCheckingAnswer) {
+                            updateSelectedAnswers();
+                            optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
+                        }
                     });
                     optionsContainer.appendChild(optionDiv);
                 });
 
                 explanation.style.display = "none";
-                document.getElementById("check-answer").style.display = "block";
-                document.getElementById("next-question").style.display = "none";
-                document.getElementById("restart-quiz").style.display = "none";
-                document.getElementById("check-answer").disabled = false;
                 document.getElementById("error-message").style.display = "none";
+                actionButton.style.display = "block";
+                actionButton.classList.remove("gold");
+                actionButton.classList.add("blue");
+                actionButton.innerHTML = '<i class="fas fa-check"></i> 정답 확인';
+                actionButton.disabled = false;
+                document.getElementById("restart-quiz").style.display = "none";
             }
 
-            // 선택된 답변으로 빈칸 채우기
             function updateSelectedAnswers() {
                 const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
                 const questionText = document.getElementById("question-text");
@@ -586,7 +560,6 @@
                 questionText.innerHTML = updatedText;
             }
 
-            // 진행 바 및 점수 업데이트
             function updateProgressBar(current, total) {
                 const progressBar = document.getElementById("progress-bar");
                 const percentage = (current / total) * 100;
@@ -595,25 +568,30 @@
                 document.getElementById("score").textContent = `점수: ${score}`;
             }
 
-            // 정답 확인
-            document.getElementById("check-answer").addEventListener("click", () => {
+            document.getElementById("action-button").addEventListener("click", () => {
+                if (isCheckingAnswer) return;
+
                 const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
                 const currentQuestion = questions[currentQuestionIndex];
                 const errorMessage = document.getElementById("error-message");
                 const explanation = document.getElementById("explanation");
+                const actionButton = document.getElementById("action-button");
                 const blanks = currentQuestion.answers.length;
 
                 if (selectedOptions.length !== blanks) {
                     errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedOptions.length}개 선택)`;
+                    errorMessage.style.color = "#ef4444";
                     errorMessage.style.display = "block";
+                    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
                     return;
                 }
 
+                isCheckingAnswer = true;
                 const selectedValues = Array.from(selectedOptions).map(opt => parseInt(opt.value));
                 const correctAnswers = currentQuestion.options
                     .map((option, index) => ({ option, index }))
                     .filter(opt => currentQuestion.answers.includes(opt.option))
-                    .map(opt => opt.index);
+                    .map(opt => currentOptions.indexOf(opt.option));
 
                 const isCorrect = selectedValues.length === correctAnswers.length &&
                     selectedValues.every(val => correctAnswers.includes(val)) &&
@@ -630,49 +608,43 @@
                 });
 
                 if (isCorrect) score++;
-
                 errorMessage.textContent = isCorrect ? "정답입니다!" : "오답입니다.";
                 errorMessage.style.color = isCorrect ? "#10b981" : "#ef4444";
                 errorMessage.style.display = "block";
                 explanation.textContent = currentQuestion.explanation;
                 explanation.style.display = "block";
+                actionButton.style.display = "none";
 
-                document.getElementById("check-answer").style.display = "none";
-                document.getElementById("next-question").style.display = "block";
                 updateProgressBar(currentQuestionIndex + 1, questions.length);
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        loadQuestion(currentQuestionIndex);
+                        updateProgressBar(currentQuestionIndex + 1, questions.length);
+                    } else {
+                        document.getElementById("quiz-container").innerHTML = `
+                            <div class="question-text">퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}</div>
+                            <div class="button-container">
+                                <button id="restart-quiz" class="green" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
+                            </div>
+                        `;
+                        document.getElementById("restart-quiz").style.display = "block";
+                        document.getElementById("error-message").style.display = "none";
+                        document.getElementById("restart-quiz").addEventListener("click", () => {
+                            currentQuestionIndex = 0;
+                            score = 0;
+                            document.getElementById("quiz-container").style.display = "flex";
+                            loadQuestion(currentQuestionIndex);
+                            updateProgressBar(currentQuestionIndex + 1, questions.length);
+                        });
+                    }
+                }, 2000);
             });
 
-            // 다음 문제로 이동
-            document.getElementById("next-question").addEventListener("click", () => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    loadQuestion(currentQuestionIndex);
-                    updateProgressBar(currentQuestionIndex + 1, questions.length);
-                } else {
-                    document.getElementById("quiz-container").innerHTML = `
-                        <div class="question-text">퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}</div>
-                    `;
-                    document.getElementById("next-question").style.display = "none";
-                    document.getElementById("restart-quiz").style.display = "block";
-                    document.getElementById("error-message").style.display = "none";
-                    document.getElementById("explanation").style.display = "none";
-                }
-            });
-
-            // 퀴즈 다시 시작
-            document.getElementById("restart-quiz").addEventListener("click", () => {
-                currentQuestionIndex = 0;
-                score = 0;
-                document.getElementById("quiz-container").style.display = "block";
-                loadQuestion(currentQuestionIndex);
-                updateProgressBar(currentQuestionIndex + 1, questions.length);
-            });
-
-            // 터치 및 키보드 이벤트
             document.querySelectorAll('button, .option').forEach(element => {
                 element.addEventListener('touchstart', function() {
                     this.classList.add('active');
-                    if (navigator.vibrate) navigator.vibrate(50);
                 });
                 element.addEventListener('touchend', function() {
                     this.classList.remove('active');
