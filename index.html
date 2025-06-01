@@ -195,16 +195,9 @@
             margin-bottom: 0.75rem;
         }
 
-        .header p {
-            font-size: 1rem;
-            color: #444;
-            line-height: 1.6;
-        }
-
         body.dark-mode .header p,
         body.dark-mode .instructions ul,
         body.dark-mode .donation-section p,
-        body.dark-mode .result-item p,
         body.dark-mode .footer {
             color: #d1d5db;
         }
@@ -432,94 +425,157 @@
             margin-bottom: 1rem;
         }
 
+        /* --- 말씀 DB 섹션 개선 시작 --- */
         .search-results {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem; /* Increased gap for better visual separation */
+            padding: 1rem 0; /* Add some padding around the results */
         }
 
         .result-item {
             background: #ffffff;
-            padding: 1.25rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e7eaf3;
+            padding: 2rem; /* Increased padding for more breathing room */
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Stronger, softer shadow */
+            border: none; /* Remove subtle border, let shadow define separation */
             text-align: left;
-            margin-bottom: 1rem;
+            margin-bottom: 0; /* Managed by gap in search-results */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; /* For the copy button positioning */
+            overflow: hidden; /* Ensures no content spills out of border-radius */
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px); /* More pronounced lift effect */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18); /* Stronger hover shadow */
         }
 
         body.dark-mode .result-item {
             background: #2d3748;
             color: #e0f2fe;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border: 1px solid #374151;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border: none;
         }
 
         .result-item h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.6rem; /* Slightly larger heading */
+            font-weight: 700; /* Bolder heading */
             color: #0d47a1;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1.25rem; /* More space below heading */
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem; /* Increased gap for icon */
+            border-bottom: 3px solid #d4af37; /* Thicker, more prominent separator */
+            padding-bottom: 0.75rem; /* More padding for the separator */
+            position: relative;
         }
 
         body.dark-mode .result-item h3 {
             color: #a5d6fd;
         }
 
+        .result-item h3 i {
+            font-size: 1.8rem; /* Larger icon in heading */
+            color: #d4af37; /* Accent color for the icon */
+        }
+
+        body.dark-mode .result-item h3 i {
+            color: #facc15; /* Brighter accent for icon in dark mode */
+        }
+
         .result-item p:not(.source) {
-            font-size: 1rem;
-            line-height: 1.65;
+            font-size: 1.2rem; /* Larger main text for readability */
+            line-height: 1.8; /* Increased line height for comfort */
             color: #333333;
-            margin-bottom: 0.75rem;
+            background: #f8fafc; /* Lighter background for text box */
+            padding: 1.5rem; /* More padding inside text box */
+            border-radius: 0.75rem; /* More rounded text box */
+            border: 1px solid #e0f2fe;
+            margin-bottom: 1.5rem; /* More space below the text */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Subtle inner shadow */
+        }
+
+        .result-item p:not(.source):hover {
+            transform: scale(1.005); /* Very subtle scale on hover */
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); /* Slightly stronger inner shadow on hover */
         }
 
         body.dark-mode .result-item p:not(.source) {
             color: #cdd5e0;
+            background: #374151;
+            border: 1px solid #60a5fa;
         }
 
         .result-item p.source {
-            font-size: 0.9rem;
-            color: #5a67d8;
-            font-style: italic;
-            margin-top: 0.5rem;
+            font-size: 1.1rem; /* Consistent source font size */
+            font-weight: 600; /* Bolder source text */
+            color: #1e3a8a;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe); /* Soft blue gradient for source */
+            padding: 1rem 1.5rem; /* More padding for source box */
+            border-radius: 0.75rem; /* Rounded source box */
+            border: 1px solid #93c5fd; /* Softer border for source */
+            margin-top: 1rem; /* More space above source */
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 1rem; /* Increased gap for icon */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Subtle shadow for source */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .result-item p.source:hover {
+            transform: translateX(8px); /* More noticeable slide on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12); /* Stronger shadow on hover */
         }
 
         body.dark-mode .result-item p.source {
-            color: #8fa3bf;
+            color: #e0f2fe;
+            background: linear-gradient(135deg, #4b5563, #6b7280);
+            border: 1px solid #93c5fd;
         }
 
-        .result-item h3 i,
         .result-item p.source i {
-            line-height: 1;
-            font-size: inherit;
+            font-size: 1.3rem; /* Larger icon in source */
+            color: #1e3a8a; /* Consistent color for source icon */
+            transition: transform 0.3s ease;
+        }
+
+        body.dark-mode .result-item p.source i {
+            color: #a5d6fd;
+        }
+
+        .result-item p.source i:hover {
+            transform: rotate(20deg); /* More pronounced rotation */
         }
 
         .highlight {
-            background: #fef3c7;
-            color: #92400e;
-            padding: 0.2rem 0.4rem;
-            border-radius: 0.25rem;
-        }
-
-        .match-count {
-            background: #1e3a8a;
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.5rem;
-            margin-left: 0.5rem;
-            font-size: 0.8em;
-            vertical-align: middle;
+            background: #fef08a; /* Brighter yellow highlight */
+            color: #854d0e; /* Darker text on highlight */
+            padding: 0.2rem 0.5rem; /* Slightly more padding */
+            border-radius: 0.3rem; /* More rounded highlight */
+            font-weight: 700; /* Bold highlight text */
         }
 
         body.dark-mode .highlight {
-            background: #4a3a14;
-            color: #fde68a;
+            background: #a16207; /* Darker, richer highlight in dark mode */
+            color: #fcd34d;
+        }
+
+        .match-count {
+            background: #0d47a1; /* Deeper blue for match count */
+            color: white;
+            padding: 0.4rem 0.8rem; /* Larger padding */
+            border-radius: 1rem; /* Fully rounded pill shape */
+            margin-left: 1rem; /* More separation from text */
+            font-size: 0.95rem; /* Slightly larger font */
+            vertical-align: middle;
+            font-weight: 600; /* Bolder match count */
+            display: inline-flex; /* Align vertically */
+            align-items: center;
+            justify-content: center;
+            min-width: 2.5rem; /* Ensure minimum width */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
         }
 
         body.dark-mode .match-count {
@@ -530,8 +586,9 @@
         .copy-button {
             background: #1e3a8a;
             color: white;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             border: none;
             cursor: pointer;
@@ -539,6 +596,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            margin-top: 1rem; /* Added margin-top to separate from source */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
         body.dark-mode .copy-button {
@@ -546,13 +605,15 @@
         }
 
         .copy-button:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px); /* More pronounced lift */
             background: #2563eb;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
         body.dark-mode .copy-button:hover {
             background: #93c5fd;
         }
+        /* --- 말씀 DB 섹션 개선 끝 --- */
 
         .toast {
             position: fixed;
@@ -775,11 +836,20 @@
             display: none;
             z-index: 100;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .back-to-top:hover {
             background: #2563eb;
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        body.dark-mode .back-to-top {
+            background: #60a5fa;
+            color: #1e3a8a;
+        }
+        body.dark-mode .back-to-top:hover {
+            background: #93c5fd;
         }
 
         @media (min-width: 768px) {
@@ -826,6 +896,26 @@
                 font-size: 1.2rem;
                 padding: 0.75rem 2rem;
             }
+            /* Workbook specific for larger screens */
+            .result-item {
+                padding: 2.5rem;
+            }
+            .result-item h3 {
+                font-size: 1.8rem;
+            }
+            .result-item h3 i {
+                font-size: 2rem;
+            }
+            .result-item p:not(.source) {
+                font-size: 1.3rem;
+            }
+            .result-item p.source {
+                font-size: 1.2rem;
+            }
+            .match-count {
+                font-size: 1rem;
+                min-width: 3rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -866,6 +956,37 @@
             .donation-button {
                 font-size: 1rem;
                 padding: 0.5rem 1rem;
+            }
+            /* Workbook specific for smaller screens */
+            .result-item {
+                padding: 1.5rem;
+            }
+            .result-item h3 {
+                font-size: 1.4rem;
+                gap: 0.5rem;
+            }
+            .result-item h3 i {
+                font-size: 1.6rem;
+            }
+            .result-item p:not(.source) {
+                font-size: 1rem;
+                line-height: 1.7;
+                padding: 1rem;
+            }
+            .result-item p.source {
+                font-size: 1rem;
+                padding: 0.75rem 1rem;
+                gap: 0.75rem;
+            }
+            .match-count {
+                font-size: 0.85rem;
+                padding: 0.2rem 0.5rem;
+                margin-left: 0.5rem;
+                min-width: 2rem;
+            }
+            .copy-button {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
             }
         }
 
@@ -964,10 +1085,8 @@
                 <div class="category-container" role="group" aria-label="카테고리 필터">
                     <button class="active" data-category="전체" aria-pressed="true">전체</button>
                     <button data-category="천성경" aria-pressed="false">천성경</button>
-                    <button data-category="성경" aria-pressed="false">성경</button>
-                    <button data-category="평화메시지" aria-pressed="false">평화메시지</button>
-                    <button data-category="기타" aria-pressed="false">기타</button>
                     <button data-category="참부모님 말씀" aria-pressed="false">참부모님 말씀</button>
+                    <button data-category="참어머님 말씀" aria-pressed="false">참어머님 말씀</button>
                 </div>
                 <div id="search-stats" class="search-stats" style="display: none;" role="status" aria-live="polite"></div>
             </div>
@@ -1048,10 +1167,9 @@
                 messages = messages.map(msg => {
                     if (!msg.category) {
                         if (msg.source.includes('천성경')) msg.category = '천성경';
-                        else if (msg.source.includes('성경')) msg.category = '성경';
-                        else if (msg.source.includes('평화메시지')) msg.category = '평화메시지';
                         else if (msg.source.includes('참부모님 말씀')) msg.category = '참부모님 말씀';
-                        else msg.category = '기타';
+                        else if (msg.source.includes('참어머님 말씀')) msg.category = '참어머님 말씀';
+                        // Add more categories here if needed
                     }
                     return msg;
                 });
@@ -1139,16 +1257,21 @@
                         } else if (isExactMatch) {
                             return textToSearch.includes(searchQuery);
                         } else {
+                            // Default to broad search if neither exact match nor whole word is checked
                             return textToSearch.includes(searchQuery);
                         }
                     });
 
+                    // Add to search history if not already present
                     if (!searchHistory.includes(query)) {
-                        searchHistory.unshift(query);
-                        if (searchHistory.length > 5) searchHistory.pop();
+                        searchHistory.unshift(query); // Add to the beginning
+                        if (searchHistory.length > 5) searchHistory.pop(); // Keep only last 5
                         localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
                     }
                 } else if (currentCategory === '전체') {
+                    // If no query and 'All' category, show nothing by default until search button is pressed.
+                    // Or, you might want to show all messages if no query and 'All' is selected.
+                    // For now, it will show an empty result if no query.
                     filteredMessages = [];
                 }
 
@@ -1170,7 +1293,7 @@
                             <div class="result-item" role="listitem">
                                 <h3><i class="fas fa-book" aria-hidden="true"></i> ${msg.category}</h3>
                                 <p>${highlightedText} ${matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</p>
-                                <p class="source"><i class="fas fa-book" aria-hidden="true"></i> ${msg.source}</p>
+                                <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${msg.source}</p>
                                 <button class="copy-button" onclick="copyMessageToClipboard('${msg.text.replace(/'/g, "\\'")}')" aria-label="${msg.category} 말씀 복사">
                                     <i class="fas fa-copy"></i> 복사하기
                                 </button>
@@ -1178,11 +1301,13 @@
                         `;
                     }).join('');
 
+                    // Add pagination button if more results exist
                     if (filteredMessages.length > endIndex) {
                         resultsContainer.innerHTML += `
                             <button onclick="searchMessages(${page + 1})" class="quiz-button blue" aria-label="다음 페이지">다음 페이지</button>
                         `;
                     }
+                    // Always add "Back to Top" button for search results
                     resultsContainer.innerHTML += `
                         <button class="back-to-top" onclick="scrollToTop()" aria-label="검색 결과 맨 위로 이동" style="position: static; margin: 1rem auto; display: block;">
                             <i class="fas fa-arrow-up"></i> 맨 위로
@@ -1199,7 +1324,7 @@
                 loading.style.display = 'none';
                 progressBar.style.width = '100%';
                 setTimeout(() => progressBar.style.width = '0', 300);
-            }, 300);
+            }, 300); // Debounce search to prevent excessive calls
         }
 
         function clearSearch() {
@@ -1223,7 +1348,7 @@
             resultsContainer.style.display = 'none';
             statsContainer.style.display = 'none';
             document.getElementById('search-suggestions').style.display = 'none';
-            searchMessages();
+            searchMessages(); // Re-run search with cleared filters/query
         }
 
         function showPage(pageId) {
@@ -1241,76 +1366,62 @@
             }
 
             if (pageId === 'workbook') {
-                document.getElementById('search-input').focus();
-                if (messages.length === 0) {
-                    loadMessages().then(() => {
-                        if (!document.getElementById('search-input').value.trim() && currentCategory === '전체') {
-                            document.getElementById('search-results').style.display = 'none';
-                            document.getElementById('search-stats').style.display = 'none';
-                        } else {
-                            searchMessages();
-                        }
-                    });
-                } else {
-                    if (!document.getElementById('search-input').value.trim() && currentCategory === '전체') {
-                        document.getElementById('search-results').style.display = 'none';
-                        document.getElementById('search-stats').style.display = 'none';
-                    } else {
-                        searchMessages();
-                    }
-                }
+                loadMessages();
+                searchMessages(); // Initial load for workbook page
             }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            scrollToTop(); // Scroll to top when changing pages
         }
 
-        function startQuiz(type) {
-            if (type === '원리강론') {
-                window.location.href = 'divine.html';
-            } else if (type === '성경') {
-                window.location.href = 'bible.html';
-            }
+        function startQuiz(quizType) {
+            alert(`${quizType} 퀴즈 기능은 아직 구현 중입니다.`);
+            // Here you would navigate to a quiz page or start quiz logic
         }
 
+
+        // Event Listeners for category buttons
+        document.querySelectorAll('.category-container button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-container button').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-pressed', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-pressed', 'true');
+                currentCategory = this.getAttribute('data-category');
+                localStorage.setItem('currentCategory', currentCategory);
+                searchMessages(); // Re-filter results based on new category
+            });
+        });
+
+        // Initialize dark mode based on local storage
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // DOMContentLoaded event listener
         document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                document.body.classList.add('dark-mode');
+            // Set initial category button state
+            const initialCategoryButton = document.querySelector(`.category-container button[data-category="${currentCategory}"]`);
+            if (initialCategoryButton) {
+                initialCategoryButton.classList.add('active');
+                initialCategoryButton.setAttribute('aria-pressed', 'true');
             }
 
+            // Navigation button event listeners
             document.querySelectorAll('.nav-bar button[data-page]').forEach(button => {
                 button.addEventListener('click', () => {
                     showPage(button.getAttribute('data-page'));
                 });
             });
 
-            document.querySelectorAll('.category-container button').forEach(button => {
-                button.addEventListener('click', () => {
-                    document.querySelectorAll('.category-container button').forEach(btn => {
-                        btn.classList.remove('active');
-                        btn.setAttribute('aria-pressed', 'false');
-                    });
-                    button.classList.add('active');
-                    button.setAttribute('aria-pressed', 'true');
-                    currentCategory = button.getAttribute('data-category');
-                    localStorage.setItem('currentCategory', currentCategory);
-                    searchMessages();
-                });
-                if (button.getAttribute('data-category') === currentCategory) {
-                    button.classList.add('active');
-                    button.setAttribute('aria-pressed', 'true');
-                }
-            });
-
+            // Search input event listeners
             const searchInput = document.getElementById('search-input');
-            searchInput.addEventListener('input', () => {
-                searchMessages();
-                renderSearchSuggestions();
-            });
+            searchInput.addEventListener('input', renderSearchSuggestions);
             searchInput.addEventListener('focus', renderSearchSuggestions);
             searchInput.addEventListener('blur', () => {
                 setTimeout(() => {
                     document.getElementById('search-suggestions').style.display = 'none';
-                }, 200);
+                }, 200); // Delay hiding to allow click on suggestion
             });
             searchInput.addEventListener('keydown', e => {
                 if (e.key === 'Enter') {
@@ -1319,15 +1430,20 @@
                 }
             });
 
+            // Search option checkbox event listeners
             document.getElementById('exact-match').addEventListener('change', searchMessages);
             document.getElementById('case-sensitive').addEventListener('change', searchMessages);
             document.getElementById('whole-word').addEventListener('change', searchMessages);
 
+            // Back to top button visibility
             window.addEventListener('scroll', () => {
                 const backToTop = document.querySelector('.back-to-top');
-                backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+                if (backToTop) { // Ensure button exists before trying to access its style
+                    backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+                }
             });
 
+            // Accessibility: allow keyboard activation for buttons and checkboxes
             document.querySelectorAll('button, input[type="checkbox"]').forEach(element => {
                 element.addEventListener('keydown', e => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -1337,6 +1453,7 @@
                 });
             });
 
+            // Show initial page (home)
             showPage('home');
         });
     </script>
