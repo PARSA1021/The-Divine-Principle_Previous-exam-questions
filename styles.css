@@ -355,98 +355,100 @@ body.dark-mode .search-suggestions div:hover {
 /* Category Container */
 .category-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.25rem;
     justify-items: center;
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #e0f2fe, #ffffff);
-    border-radius: 1.2rem;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
+    margin-bottom: 2rem;
+    padding: 1.75rem;
+    background: linear-gradient(135deg, #f0f7ff, #fafafa);
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 body.dark-mode .category-container {
-    background: linear-gradient(135deg, #2d3748, #4b5563);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, #1e293b, #334155);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .category-container button {
     background: #ffffff;
-    color: #1e3a8a;
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
-    border: 2px solid #1e3a8a;
+    color: #1e40af;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.875rem 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid #bfdbfe;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     position: relative;
     overflow: hidden;
     width: 100%;
     justify-content: center;
+    text-align: center;
 }
 
 body.dark-mode .category-container button {
-    background: #4b5563;
-    color: #e0f2fe;
+    background: #334155;
+    color: #bfdbfe;
     border-color: #60a5fa;
 }
 
 .category-container button[data-category="전체"] {
-    background: linear-gradient(135deg, #3b82f6, #1e40af);
-    color: white;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="천성경"] {
-    background: linear-gradient(135deg, #10b981, #047857);
-    color: white;
+    background: linear-gradient(135deg, #34d399, #10b981);
+    color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="참부모경"] {
     background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
+    color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="참부모님 말씀"] {
-    background: linear-gradient(135deg, #0319e8, #252fea);
-    color: white;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="참어머님 말씀"] {
-    background: linear-gradient(135deg, #ec4899, #db2777);
-    color: white;
+    background: linear-gradient(135deg, #f472b6, #ec4899);
+    color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="천심원"] {
-    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-    color: white;
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    color: #ffffff;
     border: none;
 }
 
 .category-container button.active {
-    background: linear-gradient(135deg, #d4af37, #facc15);
-    color: white;
+    background: linear-gradient(135deg, #eab308, #ca8a04);
+    color: #ffffff;
     border: none;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 body.dark-mode .category-container button.active {
-    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    background: linear-gradient(135deg, #93c5fd, #60a5fa);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .category-container button:hover:not(.active) {
-    transform: translateY(-3px) rotate(2deg);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .category-container button::before {
@@ -456,8 +458,8 @@ body.dark-mode .category-container button.active {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.4s ease;
 }
 
 .category-container button:hover::before {
@@ -465,12 +467,12 @@ body.dark-mode .category-container button.active {
 }
 
 .category-container button i {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     transition: transform 0.3s ease;
 }
 
 .category-container button:hover i {
-    transform: rotate(15deg);
+    transform: translateX(3px);
 }
 
 /* Search Results */
