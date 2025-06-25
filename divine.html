@@ -709,6 +709,14 @@
                 if (navigator.vibrate) navigator.vibrate(50);
             });
 
+            // Fisher-Yates (Knuth) shuffle algorithm
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
             fetch("assets/data/divine_pr.json")
                 .then(response => {
                     if (!response.ok) throw new Error("JSON 파일 로드 실패");
@@ -716,6 +724,7 @@
                 })
                 .then(data => {
                     questions = data;
+                    shuffleArray(questions); // Shuffle questions
                     document.getElementById("total-questions").textContent = questions.length;
                     document.getElementById("quiz-container").style.display = "flex";
                     document.getElementById("loading").style.display = "none";
@@ -742,12 +751,18 @@
                 questionText.innerHTML = originalQuestionText;
 
                 optionsContainer.innerHTML = "";
-                currentQuestion.options.forEach((option, i) => {
+                
+                // Create an array of options with their original indices
+                let shuffledOptions = currentQuestion.options.map((option, idx) => ({ option, originalIndex: idx }));
+                shuffleArray(shuffledOptions); // Shuffle the options
+
+                shuffledOptions.forEach((item, i) => {
                     const optionDiv = document.createElement("div");
                     optionDiv.classList.add("option");
+                    // Use a data attribute to store the original index for checking answers
                     optionDiv.innerHTML = `
-                        <input type="checkbox" name="answer" id="option${i}" value="${i}">
-                        <label for="option${i}">${option}</label>
+                        <input type="checkbox" name="answer" id="option${i}" value="${item.originalIndex}">
+                        <label for="option${i}">${item.option}</label>
                     `;
                     optionDiv.addEventListener("click", (e) => {
                         if (e.target.tagName !== "INPUT") {
@@ -815,24 +830,25 @@
                     return;
                 }
 
-                const selectedValues = Array.from(selectedOptions).map(opt => parseInt(opt.value));
-                const correctAnswers = currentQuestion.options
-                    .map((option, index) => ({ option, index }))
-                    .filter(opt => currentQuestion.answers.includes(opt.option))
-                    .map(opt => opt.index);
+                // Get selected values (which are original indices)
+                const selectedOriginalIndices = Array.from(selectedOptions).map(opt => parseInt(opt.value));
+                
+                // Filter correct answers based on the original options array
+                const correctAnswers = currentQuestion.answers;
 
-                const isCorrect = selectedValues.length === correctAnswers.length &&
-                    selectedValues.every(val => correctAnswers.includes(val)) &&
-                    correctAnswers.every(val => selectedValues.includes(val));
+                // Check if all selected original indices correspond to correct answers
+                const isCorrect = selectedOriginalIndices.length === correctAnswers.length &&
+                                  selectedOriginalIndices.every(originalIdx => correctAnswers.includes(currentQuestion.options[originalIdx]));
 
                 const options = document.querySelectorAll(".option");
-                options.forEach((option, i) => {
-                    if (correctAnswers.includes(i)) {
-                        option.classList.add("correct");
-                    } else if (selectedValues.includes(i)) {
-                        option.classList.add("incorrect");
+                options.forEach((optionDiv) => {
+                    const originalIdx = parseInt(optionDiv.querySelector('input').value);
+                    if (correctAnswers.includes(currentQuestion.options[originalIdx])) {
+                        optionDiv.classList.add("correct");
+                    } else if (selectedOriginalIndices.includes(originalIdx)) {
+                        optionDiv.classList.add("incorrect");
                     }
-                    option.style.pointerEvents = "none";
+                    optionDiv.style.pointerEvents = "none";
                 });
 
                 if (isCorrect) score++;
@@ -867,6 +883,7 @@
             document.getElementById("restart-quiz").addEventListener("click", () => {
                 currentQuestionIndex = 0;
                 score = 0;
+                shuffleArray(questions); // Reshuffle questions for a new game
                 document.getElementById("quiz-container").style.display = "flex";
                 loadQuestion(currentQuestionIndex);
                 updateProgressBar(currentQuestionIndex + 1, questions.length);
