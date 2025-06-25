@@ -556,6 +556,11 @@
             #quiz-container {
                 width: 95%;
                 padding: calc(var(--base-padding) * 1.2);
+                min-height: 350px; /* Adjusted for smaller screens */
+            }
+
+            #options-container {
+                max-height: 30vh; /* Adjusted for smaller screens */
             }
         }
 
@@ -572,13 +577,33 @@
             }
             
             #quiz-container {
-                width: 100%;
+                width: calc(100% - (var(--base-padding) * 2)); /* Account for padding */
                 margin: 0 var(--base-padding);
+                padding: var(--base-padding); /* Reduced padding */
+                min-height: 300px; /* Adjusted for smallest screens */
+            }
+
+            #options-container {
+                max-height: 25vh; /* Adjusted for smallest screens */
+                padding: var(--base-padding); /* Reduced padding */
             }
             
             button {
                 width: 100%;
                 min-width: 0;
+                padding: calc(var(--base-padding) * 1) calc(var(--base-padding) * 1.5); /* Reduced button padding */
+                font-size: clamp(0.9rem, 3.5vw, 1.1rem); /* Adjusted button font size */
+            }
+
+            .option {
+                padding: var(--base-padding); /* Reduced option padding */
+                min-height: 50px; /* Adjusted option min-height */
+            }
+
+            .option input {
+                width: 20px; /* Smaller checkbox */
+                height: 20px; /* Smaller checkbox */
+                margin-right: var(--base-padding); /* Reduced margin */
             }
         }
 
@@ -757,6 +782,7 @@
                     return label.textContent;
                 });
 
+                // Replace placeholders with selected answers up to the number of blanks
                 let blankIndex = 0;
                 updatedText = updatedText.replace(/___/g, () => {
                     if (blankIndex < selectedTexts.length) {
