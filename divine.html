@@ -310,6 +310,12 @@
             background-clip: text;
         }
 
+        .question-text span.incorrect-fill {
+            color: var(--primary-emerald);
+            text-decoration: underline;
+            font-weight: 700;
+        }
+
         #options-container {
             flex-grow: 1;
             flex-shrink: 1;
@@ -776,7 +782,6 @@
                         if (navigator.vibrate) navigator.vibrate(50);
                     });
                     
-                    // No separate change listener needed here as the click listener handles everything
                     optionsContainer.appendChild(optionDiv);
                 });
 
@@ -791,7 +796,6 @@
             function updateSelectedAnswers() {
                 const questionTextElement = document.getElementById("question-text");
                 const currentQuestion = questions[currentQuestionIndex];
-                const blanksNeeded = currentQuestion.answers.length;
 
                 // Extract text content from currently selected option elements, maintaining their selection order
                 const actualSelectedTextsInOrder = selectedOptionElementsInOrder
@@ -833,28 +837,48 @@
                     return;
                 }
 
-                // Get selected values (which are original indices) from the actual checked checkboxes
+                // Get selected original indices and their corresponding texts
                 const selectedOriginalIndices = Array.from(selectedCheckboxes).map(opt => parseInt(opt.value));
-                
-                // Filter correct answers based on the original options array
-                const correctAnswers = currentQuestion.answers;
+                const selectedAnswerTexts = selectedOriginalIndices.map(idx => currentQuestion.options[idx]);
 
-                // Check if all selected original indices correspond to correct answers
-                const isCorrect = selectedOriginalIndices.length === correctAnswers.length &&
-                                  selectedOriginalIndices.every(originalIdx => correctAnswers.includes(currentQuestion.options[originalIdx]));
+                const correctAnswers = currentQuestion.answers; // These are the texts of the correct answers
+
+                // To compare, sort both arrays to ensure order doesn't matter for correctness check
+                const sortedSelectedTexts = [...selectedAnswerTexts].sort();
+                const sortedCorrectTexts = [...correctAnswers].sort();
+
+                const isCorrect = JSON.stringify(sortedSelectedTexts) === JSON.stringify(sortedCorrectTexts);
 
                 const allOptions = document.querySelectorAll(".option");
                 allOptions.forEach((optionDiv) => {
-                    const originalIdx = parseInt(optionDiv.querySelector('input').value);
-                    if (correctAnswers.includes(currentQuestion.options[originalIdx])) {
+                    const optionText = optionDiv.querySelector('label').textContent;
+                    if (correctAnswers.includes(optionText)) {
                         optionDiv.classList.add("correct");
-                    } else if (selectedOriginalIndices.includes(originalIdx)) {
+                    } else if (selectedAnswerTexts.includes(optionText)) { // If it was selected but not correct
                         optionDiv.classList.add("incorrect");
                     }
                     optionDiv.style.pointerEvents = "none"; // Disable clicks after checking answer
                 });
 
-                if (isCorrect) score++;
+                const questionTextElement = document.getElementById("question-text");
+                let blanksFilledText = originalQuestionText;
+                let blankCounter = 0;
+
+                if (!isCorrect) {
+                    // If incorrect, fill blanks with the correct answers, styled differently
+                    blanksFilledText = blanksFilledText.replace(/___/g, () => {
+                        if (blankCounter < correctAnswers.length) {
+                            // Display correct answers in the blank, e.g., underlined
+                            return `<span class="incorrect-fill">${correctAnswers[blankCounter++]}</span>`;
+                        }
+                        return '___';
+                    });
+                    questionTextElement.innerHTML = blanksFilledText;
+                } else {
+                    // If correct, updateSelectedAnswers has already populated with bold selections
+                    // Re-call it to ensure consistency if any re-rendering happened before
+                    updateSelectedAnswers(); 
+                }
 
                 errorMessage.textContent = isCorrect ? "정답입니다!" : "오답입니다.";
                 errorMessage.style.color = isCorrect ? "#10b981" : "#ef4444";
