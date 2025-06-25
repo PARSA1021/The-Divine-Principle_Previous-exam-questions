@@ -1,768 +1,738 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>성경 문제 풀이</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap">
     <style>
+      :root {
+        /* Light Theme - 남색 기반 */
+        --bg-primary: #f9fafb;
+        --bg-secondary: #e5e7eb;
+        --bg-tertiary: #ffffff;
+        --text-primary: #1C2526;
+        --text-secondary: #4b5563;
+        --text-muted: #6b7280;
+
+        /* 브랜드 색상 */
+        --brand-primary: #1C2526;
+        --brand-secondary: #f59e0b;
+        --brand-accent: #38b2ac;
+        --brand-neutral: #6b7280;
+
+        /* 그라디언트 */
+        --gradient-primary: linear-gradient(135deg, #1C2526 0%, #2b6cb0 100%);
+        --gradient-secondary: linear-gradient(135deg, #1C2526 0%, #f59e0b 100%);
+        --gradient-accent: linear-gradient(135deg, #1C2526 0%, #38b2ac 100%);
+        --gradient-warm: linear-gradient(135deg, #1C2526 0%, #f87171 100%);
+        --gradient-navy-cool: linear-gradient(135deg, #1C2526 0%, #a7f3d0 100%);
+
+        /* 기능적 색상 */
+        --success-bg: #d0f4de;
+        --success-border: #38b2ac;
+        --success-text: #064e3b;
+        --error-bg: #fee2e2;
+        --error-border: #ef4444;
+        --error-text: #991b1b;
+        --warning-bg: #fef3c7;
+        --warning-border: #f59e0b;
+        --warning-text: #92400e;
+
+        /* 컴포넌트 */
+        --card-bg: rgba(255, 255, 255, 0.9);
+        --card-border: rgba(229, 231, 235, 0.8);
+        --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        --card-shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.15);
+
+        /* 상호작용 */
+        --option-bg: #f9fafb;
+        --option-hover: #e5e7eb;
+        --option-selected: rgba(28, 37, 38, 0.1);
+        --option-selected-border: #1C2526;
+
+        /* 기타 */
+        --border-radius: 16px;
+        --border-radius-sm: 12px;
+        --border-radius-lg: 24px;
+        --backdrop-blur: blur(10px);
+        --golden-ratio: 1.618;
+        --base-font-size: clamp(16px, 2.5vw, 18px);
+        --base-padding: clamp(12px, 2vw, 16px);
+        --base-margin: calc(var(--base-padding) * var(--golden-ratio));
+      }
+
+      [data-theme="dark"] {
+        /* Dark Theme - 남색 기반 */
+        --bg-primary: #111827;
+        --bg-secondary: #1f2937;
+        --bg-tertiary: #374151;
+        --text-primary: #f3f4f6;
+        --text-secondary: #d1d5db;
+        --text-muted: #9ca3af;
+
+        --brand-primary: #1C2526;
+        --brand-secondary: #fbbf24;
+        --brand-accent: #2dd4bf;
+        --brand-neutral: #9ca3af;
+
+        --gradient-primary: linear-gradient(135deg, #1C2526 0%, #3b82f6 100%);
+        --gradient-secondary: linear-gradient(135deg, #1C2526 0%, #fbbf24 100%);
+        --gradient-accent: linear-gradient(135deg, #1C2526 0%, #2dd4bf 100%);
+        --gradient-warm: linear-gradient(135deg, #1C2526 0%, #f87171 100%);
+        --gradient-navy-cool: linear-gradient(135deg, #1C2526 0%, #a7f3d0 100%);
+
+        --success-bg: rgba(45, 212, 191, 0.1);
+        --success-border: #2dd4bf;
+        --success-text: #5eead4;
+        --error-bg: rgba(239, 68, 68, 0.1);
+        --error-border: #ef4444;
+        --error-text: #fca5a5;
+        --warning-bg: rgba(251, 191, 36, 0.1);
+        --warning-border: #fbbf24;
+        --warning-text: #fde68a;
+
+        --card-bg: rgba(31, 41, 55, 0.8);
+        --card-border: rgba(55, 65, 81, 0.8);
+        --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        --card-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.4);
+
+        --option-bg: #1f2937;
+        --option-hover: #374151;
+        --option-selected: rgba(28, 37, 38, 0.15);
+        --option-selected-border: #1C2526;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Noto Sans KR', sans-serif;
+        background: var(--bg-primary);
+        background-image: radial-gradient(circle at 30% 70%, rgba(56, 178, 172, 0.2) 0%, transparent 50%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--text-primary);
+        font-size: var(--base-font-size);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        transition: background 0.3s ease;
+      }
+
+      .theme-toggle-container {
+        position: fixed;
+        top: var(--base-padding);
+        right: var(--base-padding);
+        z-index: 1000;
+      }
+
+      .theme-toggle {
+        background: var(--card-bg);
+        backdrop-filter: var(--backdrop-blur);
+        border: 1px solid var(--card-border);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: var(--card-shadow);
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: var(--card-shadow-hover);
+      }
+
+      header {
+        margin: calc(var(--base-margin) * 2) 0;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: clamp(1.8rem, 5vw, 2.4rem);
+        font-weight: 700;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      h1 i {
+        margin-right: 0.5rem;
+        background: var(--gradient-accent);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      #progress {
+        width: 90%;
+        max-width: 600px;
+        background: var(--card-bg);
+        backdrop-filter: var(--backdrop-blur);
+        padding: var(--base-padding);
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        margin-bottom: var(--base-margin);
+        border: 1px solid var(--card-border);
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--base-padding) * 0.5);
+      }
+
+      .progress-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        font-weight: 500;
+      }
+
+      .progress-bar-container {
+        width: 100%;
+        height: 6px;
+        background: var(--bg-secondary);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: var(--gradient-primary);
+        transition: width 0.5s ease;
+      }
+
+      #score {
+        background: var(--gradient-accent);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius-sm);
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+      }
+
+      #quiz-container {
+        width: 90%;
+        max-width: 700px;
+        background: var(--card-bg);
+        backdrop-filter: var(--backdrop-blur);
+        padding: calc(var(--base-padding) * 1.5);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--card-shadow);
+        margin-bottom: var(--base-margin);
+        border: 1px solid var(--card-border);
+        display: none;
+        flex-direction: column;
+      }
+
+      .question-text {
+        font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: var(--base-padding);
+        background: var(--gradient-navy-cool);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      #options-container {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--base-padding) * 0.5);
+      }
+
+      .option {
+        display: flex;
+        align-items: center;
+        padding: var(--base-padding);
+        background: var(--option-bg);
+        border: 2px solid var(--card-border);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--card-shadow);
+      }
+
+      .option:hover {
+        background: var(--option-hover);
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow-hover);
+      }
+
+      .option input {
+        margin-right: var(--base-padding);
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--brand-primary);
+      }
+
+      .option label {
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+        color: var(--text-primary);
+        cursor: pointer;
+      }
+
+      .option.selected {
+        border-color: var(--option-selected-border);
+        background: var(--option-selected);
+      }
+
+      .option.correct {
+        background: var(--success-bg);
+        border-color: var(--success-border);
+        color: var(--success-text);
+      }
+
+      .option.incorrect {
+        background: var(--error-bg);
+        border-color: var(--error-border);
+        color: var(--error-text);
+      }
+
+      .explanation {
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        color: var(--text-secondary);
+        padding: var(--base-padding);
+        border-radius: var(--border-radius);
+        margin-top: var(--base-padding);
+        border-left: 4px solid var(--brand-primary);
+        background: var(--card-bg);
+      }
+
+      .button-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--base-padding);
+        margin: var(--base-margin) 0;
+      }
+
+      button {
+        padding: calc(var(--base-padding) * 0.8) calc(var(--base-padding) * 1.5);
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+        font-weight: 500;
+        border-radius: var(--border-radius);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 140px;
+        justify-content: center;
+        box-shadow: var(--card-shadow);
+      }
+
+      button.primary {
+        background: var(--gradient-primary);
+        color: white;
+      }
+
+      button.secondary {
+        background: var(--gradient-secondary);
+        color: white;
+      }
+
+      button.accent {
+        background: var(--gradient-accent);
+        color: white;
+      }
+
+      button.neutral {
+        background: var(--gradient-navy-cool);
+        color: var(--text-primary);
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow-hover);
+      }
+
+      button:disabled {
+        background: var(--bg-secondary);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .loading {
+        font-size: clamp(1rem, 3vw, 1.2rem);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .loading i {
+        color: var(--brand-primary);
+      }
+
+      #error-message {
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        padding: var(--base-padding);
+        border-radius: var(--border-radius);
+        text-align: center;
+        margin-top: var(--base-padding);
+      }
+
+      #error-message.success {
+        background: var(--success-bg);
+        border-left: 4px solid var(--success-border);
+        color: var(--success-text);
+      }
+
+      #error-message.error {
+        background: var(--error-bg);
+        border-left: 4px solid var(--error-border);
+        color: var(--error-text);
+      }
+
+      /* 반응형 디자인 */
+      @media (max-width: 768px) {
         :root {
-            --bg-color: #f5f7fa;
-            --text-color: #2d3748;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --card-border: #e2e8f0;
-            --primary-blue: #2563eb;
-            --primary-gold: #f59e0b;
-            --primary-green: #10b981;
-            --primary-gray: #6b7280;
-            --option-bg: #f7fafc;
-            --option-hover: #edf2f7;
-            --correct-bg: #d4f4e2;
-            --incorrect-bg: #fee2e2;
-            --explanation-bg: #f1f5f9;
-            --progress-bg: #e2e8f0;
-            --shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            --golden-ratio: 1.618;
-            --base-font-size: clamp(16px, 4vw, 18px);
-            --base-padding: clamp(12px, 3vw, 16px);
-            --base-margin: calc(var(--base-padding) * var(--golden-ratio));
+          --base-font-size: clamp(14px, 2vw, 16px);
+          --base-padding: clamp(10px, 1.5vw, 12px);
         }
 
-        [data-theme="dark"] {
-            --bg-color: #1f2937;
-            --text-color: #e5e7eb;
-            --card-bg: rgba(31, 41, 55, 0.95);
-            --card-border: #4b5563;
-            --primary-blue: #3b82f6;
-            --primary-gold: #facc15;
-            --primary-green: #34d399;
-            --primary-gray: #9ca3af;
-            --option-bg: #374151;
-            --option-hover: #4b5563;
-            --correct-bg: #064e3b;
-            --incorrect-bg: #7f1d1d;
-            --explanation-bg: #2d3748;
-            --progress-bg: #4b5563;
-            --shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: var(--bg-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-color);
-            font-size: var(--base-font-size);
-            -webkit-overflow-scrolling: touch;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('assets/images/ffwpu-background.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            overflow-x: hidden;
-            transition: background-color 0.3s ease;
-        }
-
-        .theme-toggle-container {
-            position: fixed;
-            top: var(--base-padding);
-            right: var(--base-padding);
-            z-index: 1000;
-        }
-
-        .theme-toggle {
-            background: var(--card-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            background: var(--option-hover);
-        }
-
-        header {
-            margin: var(--base-margin) 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .logo-container img {
-            width: clamp(50px, 10vw, 60px);
-            height: auto;
-            border-radius: 50%;
-            box-shadow: var(--shadow);
-            animation: fadeIn 1s ease-in;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
-
-        h1 {
-            font-size: clamp(1.5rem, 6vw, 1.8rem);
-            font-weight: 700;
-            color: var(--text-color);
-            margin-top: calc(var(--base-margin) / var(--golden-ratio));
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-            display: inline-block;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--primary-gold));
-            border-radius: 2px;
-        }
-
-        #progress {
-            width: 100%;
-            max-width: 61.8vw;
-            background: var(--card-bg);
-            padding: var(--base-padding);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: calc(var(--base-padding) * 0.618);
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            margin-bottom: var(--base-margin);
-            backdrop-filter: blur(12px);
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            max-width: 400px;
-            height: 12px;
-            background: var(--progress-bg);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-blue), var(--primary-gold));
-            transition: width 0.4s ease-in-out;
-        }
-
-        #score {
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            color: var(--text-color);
-        }
-
-        #quiz-container {
-            width: 90%;
-            max-width: 700px;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            padding: var(--base-padding);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            animation: slideUp 0.5s ease-out;
-            margin-bottom: var(--base-margin);
-            display: none;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .question-text {
-            font-size: clamp(1.1rem, 4.5vw, 1.3rem);
-            font-weight: 600;
-            color: var(--text-color);
-            text-align: left;
-            padding: calc(var(--base-padding) * 0.618);
-            line-height: 1.4;
-            flex: 1;
-        }
-
-        .question-text strong {
-            color: var(--primary-blue);
-            font-weight: 700;
-        }
-
-        #options-container {
-            flex: 2;
-            overflow-y: auto;
-            padding: calc(var(--base-padding) * 0.618);
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary-blue) var(--card-bg);
-        }
-
-        #options-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #options-container::-webkit-scrollbar-thumb {
-            background: var(--primary-blue);
-            border-radius: 3px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: calc(var(--base-padding) * 0.618);
-            margin: calc(var(--base-margin) / 2) 0;
-            background: var(--option-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            min-height: 48px;
-        }
-
-        .option:hover {
-            background: var(--option-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .option:active {
-            transform: scale(0.98);
-        }
-
-        .option input {
-            margin-right: calc(var(--base-padding) * 0.618);
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .option label {
-            flex: 1;
-            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
-            color: var(--text-color);
-            cursor: pointer;
-        }
-
-        .option.selected {
-            border-color: var(--primary-blue);
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.1));
-        }
-
-        .option.correct {
-            background: var(--correct-bg);
-            border-color: var(--primary-green);
-            animation: pulse 0.5s ease;
-        }
-
-        .option.incorrect {
-            background: var(--incorrect-bg);
-            border-color: #ef4444;
-            animation: pulse 0.5s ease;
-        }
-
-        .explanation {
-            font-size: clamp(0.85rem, 3vw, 0.95rem);
-            color: var(--text-color);
-            background: var(--explanation-bg);
-            padding: calc(var(--base-padding) * 0.618);
-            border-radius: 12px;
-            text-align: left;
-            margin-top: calc(var(--base-margin) / 2);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            animation: fadeIn 0.5s ease-in;
-            flex: 1;
-            overflow-y: auto;
+        #quiz-container, #progress {
+          width: 95%;
         }
 
         .button-container {
-            display: flex;
-            justify-content: center;
-            gap: calc(var(--base-margin) / 2);
-            margin-top: var(--base-margin);
-            flex-wrap: wrap;
+          flex-direction: column;
+          align-items: center;
         }
 
         button {
-            padding: calc(var(--base-padding) * 0.618) calc(var(--base-padding) * 1.618);
-            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
-            font-weight: 500;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            min-width: 150px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            -webkit-tap-highlight-color: transparent;
+          width: 100%;
+          max-width: 300px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        :root {
+          --base-font-size: clamp(12px, 2vw, 14px);
+          --base-padding: clamp(8px, 1.5vw, 10px);
         }
 
-        button.blue {
-            background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
-            color: white;
+        .theme-toggle {
+          width: 40px;
+          height: 40px;
+          font-size: 1rem;
         }
 
-        button.gold {
-            background: linear-gradient(135deg, var(--primary-gold), #facc15);
-            color: white;
+        h1 {
+          font-size: clamp(1.5rem, 4vw, 1.8rem);
         }
+      }
 
-        button.green {
-            background: linear-gradient(135deg, var(--primary-green), #34d399);
-            color: white;
-        }
+      /* 애니메이션 */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
 
-        button.gray {
-            background: linear-gradient(135deg, var(--primary-gray), #9ca3af);
-            color: white;
-        }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
 
-        button:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
+      #quiz-container, .option, button {
+        animation: fadeIn 0.5s ease;
+      }
 
-        button:active:not(:disabled) {
-            transform: scale(0.95);
-        }
+      .option.correct, .option.incorrect {
+        animation: pulse 0.5s ease;
+      }
 
-        button.blue:hover:not(:disabled) {
-            background: linear-gradient(135deg, #1e40af, var(--primary-blue));
+      /* 접근성 */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
         }
+      }
 
-        button.gold:hover:not(:disabled) {
-            background: linear-gradient(135deg, #d97706, var(--primary-gold));
+      @media (prefers-contrast: high) {
+        :root {
+          --text-primary: #000000;
+          --bg-primary: #ffffff;
+          --card-border: #000000;
         }
+      }
 
-        button.green:hover:not(:disabled) {
-            background: linear-gradient(135deg, #059669, var(--primary-green));
-        }
-
-        button.gray:hover:not(:disabled) {
-            background: linear-gradient(135deg, #4b5563, var(--primary-gray));
-        }
-
-        button:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .loading {
-            font-size: clamp(1rem, 4vw, 1.2rem);
-            color: var(--text-color);
-            margin: var(--base-margin) 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        #error-message {
-            font-size: clamp(0.85rem, 3vw, 0.95rem);
-            margin-top: calc(var(--base-margin) / 2);
-            color: #ef4444;
-            flex: 0;
-        }
-
-        @media (max-width: 768px) {
-            :root {
-                --base-font-size: clamp(14px, 3.5vw, 16px);
-                --base-padding: clamp(10px, 2.5vw, 14px);
-            }
-            h1 {
-                font-size: clamp(1.3rem, 5vw, 1.5rem);
-            }
-            #progress {
-                padding: calc(var(--base-padding) * 0.618);
-            }
-            #quiz-container {
-                width: 95%;
-            }
-            .question-text {
-                font-size: clamp(1rem, 4vw, 1.2rem);
-            }
-            .option {
-                padding: calc(var(--base-padding) * 0.5);
-            }
-            .option label {
-                font-size: clamp(0.9rem, 3.2vw, 1rem);
-            }
-            .explanation {
-                font-size: clamp(0.8rem, 2.8vw, 0.9rem);
-            }
-            button {
-                padding: calc(var(--base-padding) * 0.5) calc(var(--base-padding));
-                min-width: 130px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            :root {
-                --base-font-size: clamp(12px, 3vw, 14px);
-                --base-padding: clamp(8px, 2vw, 12px);
-            }
-            h1 {
-                font-size: clamp(1.2rem, 4.5vw, 1.3rem);
-            }
-            #progress {
-                padding: calc(var(--base-padding) * 0.5);
-            }
-            #quiz-container {
-                width: 100%;
-                padding: calc(var(--base-padding) * 0.618);
-            }
-            .question-text {
-                font-size: clamp(0.95rem, 3.8vw, 1.1rem);
-            }
-            .option {
-                padding: calc(var(--base-padding) * 0.4);
-            }
-            .option label {
-                font-size: clamp(0.85rem, 3vw, 0.95rem);
-            }
-            .explanation {
-                font-size: clamp(0.75rem, 2.5vw, 0.85rem);
-            }
-            button {
-                width: 100%;
-                padding: calc(var(--base-padding) * 0.4) calc(var(--base-padding) * 0.618);
-                min-width: 0;
-                font-size: clamp(0.9rem, 3.2vw, 1rem);
-            }
-            .button-container {
-                gap: calc(var(--base-margin) / 2);
-            }
-            .theme-toggle-container {
-                top: calc(var(--base-padding) * 0.618);
-                right: calc(var(--base-padding) * 0.618);
-            }
-            .theme-toggle {
-                width: 40px;
-                height: 40px;
-                font-size: 1.3rem;
-            }
-            .logo-container img {
-                width: clamp(40px, 8vw, 50px);
-            }
-        }
-
-        @media (min-width: 768px) {
-            :root {
-                --base-font-size: clamp(18px, 4.5vw, 20px);
-                --base-padding: clamp(16px, 4vw, 20px);
-            }
-            #quiz-container {
-                max-width: 500px;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        button:focus, .option:focus-within {
-            outline: 3px solid var(--primary-blue);
-            outline-offset: 2px;
-        }
-
-        @media (prefers-contrast: high) {
-            :root {
-                --bg-color: #ffffff;
-                --text-color: #000000;
-                --card-bg: #ffffff;
-                --option-bg: #f0f0f0;
-                --correct-bg: #00ff00;
-                --incorrect-bg: #ff0000;
-            }
-        }
+      button:focus, .option:focus-within, .theme-toggle:focus {
+        outline: 3px solid var(--brand-primary);
+        outline-offset: 2px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="theme-toggle-container">
-        <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">
-            <i class="fas fa-sun"></i>
-        </button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">
+        <i class="fas fa-sun"></i>
+      </button>
     </div>
 
     <header>
-        <div class="logo-container">
-            <img src="assets/images/FFWPU.png" alt="FFWPU 로고" aria-label="FFWPU 로고" loading="lazy">
-        </div>
-        <h1><i class="fas fa-bible"></i> 성경 문제 풀이</h1>
+      <h1><i class="fas fa-bible"></i> 성경 문제 풀이</h1>
     </header>
 
     <div id="progress" role="status" aria-live="polite">
+      <div class="progress-info">
         <span>문제 <span id="current-question">1</span> / <span id="total-questions">?</span></span>
         <span id="score">점수: 0</span>
-        <div class="progress-bar-container">
-            <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
-        </div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
+      </div>
     </div>
 
     <main>
-        <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> 로딩 중...</div>
-        <div id="quiz-container" role="region" aria-label="퀴즈 내용">
-            <div class="question-text" id="question-text"></div>
-            <div id="options-container"></div>
-            <div id="explanation" class="explanation" style="display: none;"></div>
-        </div>
+      <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> 로딩 중...</div>
+      <div id="quiz-container" role="region" aria-label="퀴즈 내용">
+        <div class="question-text" id="question-text"></div>
+        <div id="options-container"></div>
+        <div id="explanation" class="explanation" style="display: none;"></div>
+      </div>
     </main>
 
     <div class="button-container">
-        <button id="check-answer" class="blue" aria-label="정답 확인"><i class="fas fa-check"></i> 정답 확인</button>
-        <button id="next-question" class="gold" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
-        <button id="restart-quiz" class="green" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
-        <button id="home-btn" class="gray" aria-label="홈으로 돌아가기"><i class="fas fa-home"></i> 홈으로</button>
+      <button id="check-answer" class="primary" aria-label="정답 확인"><i class="fas fa-check"></i> 정답 확인</button>
+      <button id="next-question" class="secondary" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
+      <button id="restart-quiz" class="accent" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
+      <button id="home-btn" class="neutral" aria-label="홈으로 돌아가기"><i class="fas fa-home"></i> 홈으로</button>
     </div>
 
-    <div id="error-message" style="display: none; color: #ef4444; margin-top: calc(var(--base-margin) / 2); font-size: clamp(0.85rem, 3vw, 0.95rem);" role="alert"></div>
+    <div id="error-message" style="display: none;" role="alert"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            let currentQuestionIndex = 0;
-            let questions = [];
-            let score = 0;
-            let originalQuestionText = "";
-            let currentOptions = [];
+      document.addEventListener("DOMContentLoaded", () => {
+        let currentQuestionIndex = 0;
+        let questions = [];
+        let score = 0;
+        let originalQuestionText = "";
+        let currentOptions = [];
 
-            const themeToggle = document.getElementById("theme-toggle");
-            const body = document.body;
-            const savedTheme = localStorage.getItem("theme") || "light";
-            body.setAttribute("data-theme", savedTheme);
-            themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
+        const themeToggle = document.getElementById("theme-toggle");
+        const body = document.body;
+        const savedTheme = localStorage.getItem("theme") || "light";
+        body.setAttribute("data-theme", savedTheme);
+        themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
 
-            themeToggle.addEventListener("click", () => {
-                const currentTheme = body.getAttribute("data-theme");
-                const newTheme = currentTheme === "light" ? "dark" : "light";
-                body.setAttribute("data-theme", newTheme);
-                localStorage.setItem("theme", newTheme);
-                themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
-                if (navigator.vibrate) navigator.vibrate(50);
-            });
-
-            fetch("assets/data/bible_rp.json")
-                .then(response => {
-                    if (!response.ok) throw new Error("JSON 파일 로드 실패");
-                    return response.json();
-                })
-                .then(data => {
-                    questions = data;
-                    document.getElementById("total-questions").textContent = questions.length;
-                    document.getElementById("quiz-container").style.display = "flex";
-                    document.getElementById("loading").style.display = "none";
-                    loadQuestion(currentQuestionIndex);
-                    updateProgressBar(currentQuestionIndex + 1, questions.length);
-                })
-                .catch(error => {
-                    console.error("JSON 파일 로드 실패:", error);
-                    const errorMessage = document.getElementById("error-message");
-                    errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
-                    errorMessage.style.display = "block";
-                    document.getElementById("loading").style.display = "none";
-                });
-
-            function shuffleArray(array) {
-                const newArray = [...array];
-                for (let i = newArray.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-                }
-                return newArray;
-            }
-
-            function loadQuestion(index) {
-                const quizContainer = document.getElementById("quiz-container");
-                const questionText = document.getElementById("question-text");
-                const optionsContainer = document.getElementById("options-container");
-                const explanation = document.getElementById("explanation");
-                const currentQuestion = questions[index];
-
-                const blanks = currentQuestion.answers.length;
-                originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
-                currentOptions = shuffleArray(currentQuestion.options);
-                questionText.innerHTML = originalQuestionText;
-
-                optionsContainer.innerHTML = "";
-                currentOptions.forEach((option, i) => {
-                    const optionDiv = document.createElement("div");
-                    optionDiv.classList.add("option");
-                    optionDiv.innerHTML = `
-                        <input type="checkbox" name="answer" id="option${i}" value="${i}">
-                        <label for="option${i}">${option}</label>
-                    `;
-                    optionDiv.addEventListener("click", (e) => {
-                        if (e.target.tagName !== "INPUT") {
-                            const checkbox = document.getElementById(`option${i}`);
-                            checkbox.checked = !checkbox.checked;
-                            updateSelectedAnswers();
-                            optionDiv.classList.toggle("selected", checkbox.checked);
-                            if (navigator.vibrate) navigator.vibrate(50);
-                        }
-                    });
-                    optionDiv.querySelector("input").addEventListener("change", () => {
-                        updateSelectedAnswers();
-                        optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
-                    });
-                    optionsContainer.appendChild(optionDiv);
-                });
-
-                explanation.style.display = "none";
-                document.getElementById("check-answer").style.display = "block";
-                document.getElementById("next-question").style.display = "none";
-                document.getElementById("restart-quiz").style.display = "none";
-                document.getElementById("check-answer").disabled = false;
-                document.getElementById("error-message").style.display = "none";
-            }
-
-            function updateSelectedAnswers() {
-                const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
-                const questionText = document.getElementById("question-text");
-                let updatedText = originalQuestionText;
-                const selectedTexts = Array.from(selectedOptions).map(opt => {
-                    const label = document.querySelector(`label[for="${opt.id}"]`);
-                    return label.textContent;
-                });
-
-                let blankIndex = 0;
-                updatedText = updatedText.replace(/___/g, () => {
-                    if (blankIndex < selectedTexts.length) {
-                        return `<strong>${selectedTexts[blankIndex++]}</strong>`;
-                    }
-                    return '___';
-                });
-
-                questionText.innerHTML = updatedText;
-            }
-
-            function updateProgressBar(current, total) {
-                const progressBar = document.getElementById("progress-bar");
-                const percentage = (current / total) * 100;
-                progressBar.style.width = `${percentage}%`;
-                document.getElementById("current-question").textContent = current;
-                document.getElementById("score").textContent = `점수: ${score}`;
-            }
-
-            document.getElementById("check-answer").addEventListener("click", () => {
-                const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
-                const currentQuestion = questions[currentQuestionIndex];
-                const errorMessage = document.getElementById("error-message");
-                const explanation = document.getElementById("explanation");
-                const blanks = currentQuestion.answers.length;
-
-                if (selectedOptions.length !== blanks) {
-                    errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedOptions.length}개 선택)`;
-                    errorMessage.style.display = "block";
-                    return;
-                }
-
-                const selectedValues = Array.from(selectedOptions).map(opt => parseInt(opt.value));
-                const correctAnswers = currentQuestion.options
-                    .map((option, index) => ({ option, index }))
-                    .filter(opt => currentQuestion.answers.includes(opt.option))
-                    .map(opt => currentOptions.indexOf(opt.option));
-
-                const isCorrect = selectedValues.length === correctAnswers.length &&
-                    selectedValues.every(val => correctAnswers.includes(val)) &&
-                    correctAnswers.every(val => selectedValues.includes(val));
-
-                const options = document.querySelectorAll(".option");
-                options.forEach((option, i) => {
-                    if (correctAnswers.includes(i)) {
-                        option.classList.add("correct");
-                    } else if (selectedValues.includes(i)) {
-                        option.classList.add("incorrect");
-                    }
-                    option.style.pointerEvents = "none";
-                });
-
-                if (isCorrect) score++;
-
-                errorMessage.textContent = isCorrect ? "정답입니다!" : "오답입니다.";
-                errorMessage.style.color = isCorrect ? "#10b981" : "#ef4444";
-                errorMessage.style.display = "block";
-                explanation.textContent = currentQuestion.explanation;
-                explanation.style.display = "block";
-
-                document.getElementById("check-answer").style.display = "none";
-                document.getElementById("next-question").style.display = "block";
-                updateProgressBar(currentQuestionIndex + 1, questions.length);
-            });
-
-            document.getElementById("next-question").addEventListener("click", () => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    loadQuestion(currentQuestionIndex);
-                    updateProgressBar(currentQuestionIndex + 1, questions.length);
-                } else {
-                    document.getElementById("quiz-container").innerHTML = `
-                        <div class="question-text">퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}</div>
-                    `;
-                    document.getElementById("next-question").style.display = "none";
-                    document.getElementById("restart-quiz").style.display = "block";
-                    document.getElementById("error-message").style.display = "none";
-                    document.getElementById("explanation").style.display = "none";
-                }
-            });
-
-            document.getElementById("restart-quiz").addEventListener("click", () => {
-                currentQuestionIndex = 0;
-                score = 0;
-                document.getElementById("quiz-container").style.display = "flex";
-                loadQuestion(currentQuestionIndex);
-                updateProgressBar(currentQuestionIndex + 1, questions.length);
-            });
-
-            document.getElementById("home-btn").addEventListener("click", () => {
-                window.location.href = "index.html";
-            });
-
-            document.querySelectorAll('button, .option').forEach(element => {
-                element.addEventListener('touchstart', function() {
-                    this.classList.add('active');
-                    if (navigator.vibrate) navigator.vibrate(50);
-                });
-                element.addEventListener('touchend', function() {
-                    this.classList.remove('active');
-                });
-                element.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        this.click();
-                    }
-                });
-            });
+        themeToggle.addEventListener("click", () => {
+          const currentTheme = body.getAttribute("data-theme");
+          const newTheme = currentTheme === "light" ? "dark" : "light";
+          body.setAttribute("data-theme", newTheme);
+          localStorage.setItem("theme", newTheme);
+          themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
+          if (navigator.vibrate) navigator.vibrate(50);
         });
+
+        fetch("assets/data/bible_rp.json")
+          .then(response => {
+            if (!response.ok) throw new Error("JSON 파일 로드 실패");
+            return response.json();
+          })
+          .then(data => {
+            questions = data;
+            document.getElementById("total-questions").textContent = questions.length;
+            document.getElementById("quiz-container").style.display = "flex";
+            document.getElementById("loading").style.display = "none";
+            loadQuestion(currentQuestionIndex);
+            updateProgressBar(currentQuestionIndex + 1, questions.length);
+          })
+          .catch(error => {
+            console.error("JSON 파일 로드 실패:", error);
+            const errorMessage = document.getElementById("error-message");
+            errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
+            errorMessage.classList.add("error");
+            errorMessage.style.display = "block";
+            document.getElementById("loading").style.display = "none";
+          });
+
+        function shuffleArray(array) {
+          const newArray = [...array];
+          for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+          }
+          return newArray;
+        }
+
+        function loadQuestion(index) {
+          const questionText = document.getElementById("question-text");
+          const optionsContainer = document.getElementById("options-container");
+          const explanation = document.getElementById("explanation");
+          const currentQuestion = questions[index];
+
+          const blanks = currentQuestion.answers.length;
+          originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
+          currentOptions = shuffleArray(currentQuestion.options);
+          questionText.innerHTML = originalQuestionText;
+
+          optionsContainer.innerHTML = "";
+          currentOptions.forEach((option, i) => {
+            const optionDiv = document.createElement("div");
+            optionDiv.classList.add("option");
+            optionDiv.innerHTML = `
+              <input type="checkbox" name="answer" id="option${i}" value="${i}">
+              <label for="option${i}">${option}</label>
+            `;
+            optionDiv.addEventListener("click", (e) => {
+              if (e.target.tagName !== "INPUT") {
+                const checkbox = document.getElementById(`option${i}`);
+                checkbox.checked = !checkbox.checked;
+                updateSelectedAnswers();
+                optionDiv.classList.toggle("selected", checkbox.checked);
+                if (navigator.vibrate) navigator.vibrate(50);
+              }
+            });
+            optionDiv.querySelector("input").addEventListener("change", () => {
+              updateSelectedAnswers();
+              optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
+            });
+            optionsContainer.appendChild(optionDiv);
+          });
+
+          explanation.style.display = "none";
+          document.getElementById("check-answer").style.display = "block";
+          document.getElementById("next-question").style.display = "none";
+          document.getElementById("restart-quiz").style.display = "none";
+          document.getElementById("check-answer").disabled = false;
+          document.getElementById("error-message").style.display = "none";
+        }
+
+        function updateSelectedAnswers() {
+          const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
+          const questionText = document.getElementById("question-text");
+          let updatedText = originalQuestionText;
+          const selectedTexts = Array.from(selectedOptions).map(opt => {
+            const label = document.querySelector(`label[for="${opt.id}"]`);
+            return label.textContent;
+          });
+
+          let blankIndex = 0;
+          updatedText = updatedText.replace(/___/g, () => {
+            if (blankIndex < selectedTexts.length) {
+              return `<strong>${selectedTexts[blankIndex++]}</strong>`;
+            }
+            return '___';
+          });
+
+          questionText.innerHTML = updatedText;
+        }
+
+        function updateProgressBar(current, total) {
+          const progressBar = document.getElementById("progress-bar");
+          const percentage = (current / total) * 100;
+          progressBar.style.width = `${percentage}%`;
+          document.getElementById("current-question").textContent = current;
+          document.getElementById("score").textContent = `점수: ${score}`;
+        }
+
+        document.getElementById("check-answer").addEventListener("click", () => {
+          const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
+          const currentQuestion = questions[currentQuestionIndex];
+          const errorMessage = document.getElementById("error-message");
+          const explanation = document.getElementById("explanation");
+          const blanks = currentQuestion.answers.length;
+
+          if (selectedOptions.length !== blanks) {
+            errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedOptions.length}개 선택)`;
+            errorMessage.classList.add("error");
+            errorMessage.classList.remove("success");
+            errorMessage.style.display = "block";
+            return;
+          }
+
+          const selectedValues = Array.from(selectedOptions).map(opt => parseInt(opt.value));
+          const correctAnswers = currentQuestion.options
+            .map((option, index) => ({ option, index }))
+            .filter(opt => currentQuestion.answers.includes(opt.option))
+            .map(opt => currentOptions.indexOf(opt.option));
+
+          const isCorrect = selectedValues.length === correctAnswers.length &&
+            selectedValues.every(val => correctAnswers.includes(val)) &&
+            correctAnswers.every(val => selectedValues.includes(val));
+
+          const options = document.querySelectorAll(".option");
+          options.forEach((option, i) => {
+            if (correctAnswers.includes(i)) {
+              option.classList.add("correct");
+            } else if (selectedValues.includes(i)) {
+              option.classList.add("incorrect");
+            }
+            option.style.pointerEvents = "none";
+          });
+
+          if (isCorrect) score++;
+
+          errorMessage.textContent = isCorrect ? "정답입니다!" : "오답입니다.";
+          errorMessage.classList.toggle("success", isCorrect);
+          errorMessage.classList.toggle("error", !isCorrect);
+          errorMessage.style.display = "block";
+          explanation.textContent = currentQuestion.explanation;
+          explanation.style.display = "block";
+
+          document.getElementById("check-answer").style.display = "none";
+          document.getElementById("next-question").style.display = "block";
+          updateProgressBar(currentQuestionIndex + 1, questions.length);
+        });
+
+        document.getElementById("next-question").addEventListener("click", () => {
+          currentQuestionIndex++;
+          if (currentQuestionIndex < questions.length) {
+            loadQuestion(currentQuestionIndex);
+            updateProgressBar(currentQuestionIndex + 1, questions.length);
+          } else {
+            document.getElementById("quiz-container").innerHTML = `
+              <div class="question-text">퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}</div>
+            `;
+            document.getElementById("next-question").style.display = "none";
+            document.getElementById("restart-quiz").style.display = "block";
+            document.getElementById("error-message").style.display = "none";
+            document.getElementById("explanation").style.display = "none";
+          }
+        });
+
+        document.getElementById("restart-quiz").addEventListener("click", () => {
+          currentQuestionIndex = 0;
+          score = 0;
+          document.getElementById("quiz-container").style.display = "flex";
+          loadQuestion(currentQuestionIndex);
+          updateProgressBar(currentQuestionIndex + 1, questions.length);
+        });
+
+        document.getElementById("home-btn").addEventListener("click", () => {
+          window.location.href = "index.html";
+        });
+
+        document.querySelectorAll('button, .option').forEach(element => {
+          element.addEventListener('touchstart', function() {
+            this.classList.add('active');
+            if (navigator.vibrate) navigator.vibrate(50);
+          });
+          element.addEventListener('touchend', function() {
+            this.classList.remove('active');
+          });
+          element.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.click();
+            }
+          });
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
