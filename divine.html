@@ -282,7 +282,8 @@
             display: flex;
             flex-direction: column;
             border: 1px solid var(--card-border);
-            min-height: 400px;
+            height: auto;
+            min-height: clamp(350px, 60vh, 700px);
         }
 
         .question-text {
@@ -292,7 +293,7 @@
             text-align: left;
             padding: calc(var(--base-padding) * 1.2);
             line-height: 1.6;
-            flex: 1;
+            flex-shrink: 0;
             max-width: 100%;
             letter-spacing: -0.01em;
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
@@ -310,28 +311,12 @@
         }
 
         #options-container {
-            flex: 2;
-            overflow-y: auto;
+            flex-grow: 1;
+            flex-shrink: 1;
+            overflow-y: hidden;
             padding: calc(var(--base-padding) * 0.8);
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary-purple) var(--card-bg);
-            max-height: 100%;
+            max-height: unset;
             -webkit-overflow-scrolling: touch;
-        }
-
-        #options-container::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        #options-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
-            border-radius: 5px;
-            border: 2px solid var(--card-bg);
-        }
-
-        #options-container::-webkit-scrollbar-track {
-            background: var(--progress-bg);
-            border-radius: 5px;
         }
 
         .option {
@@ -370,7 +355,9 @@
         }
 
         .option:active {
-            transform: scale(0.98);
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(99, 102, 241, 0.2));
         }
 
         .option input {
@@ -433,10 +420,11 @@
             margin-top: calc(var(--base-margin) / 2);
             box-shadow: var(--shadow-soft);
             animation: fadeIn 0.6s ease-in;
-            flex: 1;
+            flex-shrink: 0;
             overflow-y: auto;
             line-height: 1.6;
             border: 1px solid var(--card-border);
+            max-height: 20vh;
         }
 
         .button-container {
@@ -501,7 +489,10 @@
         }
 
         button:active:not(:disabled) {
-            transform: scale(0.95);
+            transform: translateY(0) scale(0.95);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
+            opacity: 0.8;
         }
 
         button:disabled {
@@ -556,11 +547,7 @@
             #quiz-container {
                 width: 95%;
                 padding: calc(var(--base-padding) * 1.2);
-                min-height: 350px; /* Adjusted for smaller screens */
-            }
-
-            #options-container {
-                max-height: 30vh; /* Adjusted for smaller screens */
+                min-height: clamp(300px, 55vh, 600px);
             }
         }
 
@@ -577,33 +564,28 @@
             }
             
             #quiz-container {
-                width: calc(100% - (var(--base-padding) * 2)); /* Account for padding */
+                width: calc(100% - (var(--base-padding) * 2));
                 margin: 0 var(--base-padding);
-                padding: var(--base-padding); /* Reduced padding */
-                min-height: 300px; /* Adjusted for smallest screens */
-            }
-
-            #options-container {
-                max-height: 25vh; /* Adjusted for smallest screens */
-                padding: var(--base-padding); /* Reduced padding */
+                padding: var(--base-padding);
+                min-height: clamp(250px, 50vh, 500px);
             }
             
             button {
                 width: 100%;
                 min-width: 0;
-                padding: calc(var(--base-padding) * 1) calc(var(--base-padding) * 1.5); /* Reduced button padding */
-                font-size: clamp(0.9rem, 3.5vw, 1.1rem); /* Adjusted button font size */
+                padding: calc(var(--base-padding) * 1) calc(var(--base-padding) * 1.5);
+                font-size: clamp(0.9rem, 3.5vw, 1.1rem);
             }
 
             .option {
-                padding: var(--base-padding); /* Reduced option padding */
-                min-height: 50px; /* Adjusted option min-height */
+                padding: var(--base-padding);
+                min-height: 50px;
             }
 
             .option input {
-                width: 20px; /* Smaller checkbox */
-                height: 20px; /* Smaller checkbox */
-                margin-right: var(--base-padding); /* Reduced margin */
+                width: 20px;
+                height: 20px;
+                margin-right: var(--base-padding);
             }
         }
 
@@ -693,6 +675,7 @@
             let questions = [];
             let score = 0;
             let originalQuestionText = "";
+            let selectedOptionElementsInOrder = []; // Track selected option DOM elements in order of selection
 
             const themeToggle = document.getElementById("theme-toggle");
             const body = document.body;
@@ -746,37 +729,54 @@
                 const explanation = document.getElementById("explanation");
                 const currentQuestion = questions[index];
 
+                // Scroll to top of quiz container when new question loads for better UX
+                quizContainer.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Reset selected options for the new question
+                selectedOptionElementsInOrder = [];
+
                 const blanks = currentQuestion.answers.length;
                 originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
                 questionText.innerHTML = originalQuestionText;
 
                 optionsContainer.innerHTML = "";
                 
-                // Create an array of options with their original indices
                 let shuffledOptions = currentQuestion.options.map((option, idx) => ({ option, originalIndex: idx }));
                 shuffleArray(shuffledOptions); // Shuffle the options
 
                 shuffledOptions.forEach((item, i) => {
                     const optionDiv = document.createElement("div");
                     optionDiv.classList.add("option");
-                    // Use a data attribute to store the original index for checking answers
                     optionDiv.innerHTML = `
                         <input type="checkbox" name="answer" id="option${i}" value="${item.originalIndex}">
                         <label for="option${i}">${item.option}</label>
                     `;
                     optionDiv.addEventListener("click", (e) => {
+                        const checkbox = optionDiv.querySelector('input');
+
+                        // If the click was not directly on the input, toggle the input's checked state.
                         if (e.target.tagName !== "INPUT") {
-                            const checkbox = document.getElementById(`option${i}`);
                             checkbox.checked = !checkbox.checked;
-                            updateSelectedAnswers();
-                            optionDiv.classList.toggle("selected", checkbox.checked);
-                            if (navigator.vibrate) navigator.vibrate(50);
                         }
+
+                        // Now, regardless of where the click originated (div or input),
+                        // the checkbox.checked property reflects the *new* state.
+                        if (checkbox.checked) {
+                            // Add to order only if not already present
+                            if (!selectedOptionElementsInOrder.includes(optionDiv)) {
+                                selectedOptionElementsInOrder.push(optionDiv);
+                            }
+                        } else {
+                            // Remove from order
+                            selectedOptionElementsInOrder = selectedOptionElementsInOrder.filter(el => el !== optionDiv);
+                        }
+
+                        updateSelectedAnswers(); // Update the displayed blanks based on ordered selections
+                        optionDiv.classList.toggle("selected", checkbox.checked); // Update visual style
+                        if (navigator.vibrate) navigator.vibrate(50);
                     });
-                    optionDiv.querySelector("input").addEventListener("change", () => {
-                        updateSelectedAnswers();
-                        optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
-                    });
+                    
+                    // No separate change listener needed here as the click listener handles everything
                     optionsContainer.appendChild(optionDiv);
                 });
 
@@ -789,24 +789,27 @@
             }
 
             function updateSelectedAnswers() {
-                const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
-                const questionText = document.getElementById("question-text");
-                let updatedText = originalQuestionText;
-                const selectedTexts = Array.from(selectedOptions).map(opt => {
-                    const label = document.querySelector(`label[for="${opt.id}"]`);
-                    return label.textContent;
-                });
+                const questionTextElement = document.getElementById("question-text");
+                const currentQuestion = questions[currentQuestionIndex];
+                const blanksNeeded = currentQuestion.answers.length;
 
-                // Replace placeholders with selected answers up to the number of blanks
+                // Extract text content from currently selected option elements, maintaining their selection order
+                const actualSelectedTextsInOrder = selectedOptionElementsInOrder
+                    .filter(optionDiv => optionDiv.querySelector('input').checked)
+                    .map(optionDiv => optionDiv.querySelector('label').textContent);
+                
+                let updatedText = originalQuestionText;
                 let blankIndex = 0;
+
+                // Replace blanks with selected answers from the ordered list
                 updatedText = updatedText.replace(/___/g, () => {
-                    if (blankIndex < selectedTexts.length) {
-                        return `<strong>${selectedTexts[blankIndex++]}</strong>`;
+                    if (blankIndex < actualSelectedTextsInOrder.length) {
+                        return `<strong>${actualSelectedTextsInOrder[blankIndex++]}</strong>`;
                     }
                     return '___';
                 });
 
-                questionText.innerHTML = updatedText;
+                questionTextElement.innerHTML = updatedText;
             }
 
             function updateProgressBar(current, total) {
@@ -818,20 +821,20 @@
             }
 
             document.getElementById("check-answer").addEventListener("click", () => {
-                const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
+                const selectedCheckboxes = document.querySelectorAll('input[name="answer"]:checked');
                 const currentQuestion = questions[currentQuestionIndex];
                 const errorMessage = document.getElementById("error-message");
                 const explanation = document.getElementById("explanation");
                 const blanks = currentQuestion.answers.length;
 
-                if (selectedOptions.length !== blanks) {
-                    errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedOptions.length}개 선택)`;
+                if (selectedCheckboxes.length !== blanks) {
+                    errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedCheckboxes.length}개 선택)`;
                     errorMessage.style.display = "block";
                     return;
                 }
 
-                // Get selected values (which are original indices)
-                const selectedOriginalIndices = Array.from(selectedOptions).map(opt => parseInt(opt.value));
+                // Get selected values (which are original indices) from the actual checked checkboxes
+                const selectedOriginalIndices = Array.from(selectedCheckboxes).map(opt => parseInt(opt.value));
                 
                 // Filter correct answers based on the original options array
                 const correctAnswers = currentQuestion.answers;
@@ -840,15 +843,15 @@
                 const isCorrect = selectedOriginalIndices.length === correctAnswers.length &&
                                   selectedOriginalIndices.every(originalIdx => correctAnswers.includes(currentQuestion.options[originalIdx]));
 
-                const options = document.querySelectorAll(".option");
-                options.forEach((optionDiv) => {
+                const allOptions = document.querySelectorAll(".option");
+                allOptions.forEach((optionDiv) => {
                     const originalIdx = parseInt(optionDiv.querySelector('input').value);
                     if (correctAnswers.includes(currentQuestion.options[originalIdx])) {
                         optionDiv.classList.add("correct");
                     } else if (selectedOriginalIndices.includes(originalIdx)) {
                         optionDiv.classList.add("incorrect");
                     }
-                    optionDiv.style.pointerEvents = "none";
+                    optionDiv.style.pointerEvents = "none"; // Disable clicks after checking answer
                 });
 
                 if (isCorrect) score++;
@@ -884,6 +887,7 @@
                 currentQuestionIndex = 0;
                 score = 0;
                 shuffleArray(questions); // Reshuffle questions for a new game
+                selectedOptionElementsInOrder = []; // Reset selected options for a new game
                 document.getElementById("quiz-container").style.display = "flex";
                 loadQuestion(currentQuestionIndex);
                 updateProgressBar(currentQuestionIndex + 1, questions.length);
