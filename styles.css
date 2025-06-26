@@ -1027,7 +1027,7 @@ body.dark-mode .back-to-top:hover {
         font-size: 0.9rem;
     }
     .header img {
-        width: 5rem;
+        width: 50%;
     }
     button.quiz-button {
         font-size: 1.1rem;
