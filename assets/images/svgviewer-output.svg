@@ -1,0 +1,273 @@
+<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 고급 그라디언트들 -->
+    <radialGradient id="divineCore" cx="50%" cy="40%" r="80%">
+      <stop offset="0%" style="stop-color:#fff700;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#fbbf24;stop-opacity:0.95" />
+      <stop offset="60%" style="stop-color:#f59e0b;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.2" />
+    </radialGradient>
+    
+    <linearGradient id="pathFlow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0c4a6e;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <linearGradient id="textMaster" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#3730a3;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="cosmicAura" cx="50%" cy="50%" r="90%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.05" />
+      <stop offset="40%" style="stop-color:#3b82f6;stop-opacity:0.15" />
+      <stop offset="70%" style="stop-color:#2563eb;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:0.6" />
+    </radialGradient>
+    
+    <linearGradient id="holyLight" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff700;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.3" />
+    </linearGradient>
+    
+    <!-- 고급 필터 효과들 -->
+    <filter id="masterGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feColorMatrix in="coloredBlur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 2 0"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="holyAura" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" values="1 1 0 0 0  1 1 0 0 0  0.5 1 1 0 0  0 0 0 1.5 0"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="deepShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="4" dy="6" stdDeviation="5" flood-color="#000033" flood-opacity="0.4"/>
+    </filter>
+    
+    <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="blur" in2="SourceGraphic" operator="multiply"/>
+    </filter>
+    
+    <!-- 패턴 정의 -->
+    <pattern id="starField" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="0.5" fill="#fbbf24" opacity="0.3"/>
+      <circle cx="25" cy="15" r="0.3" fill="#60a5fa" opacity="0.4"/>
+      <circle cx="35" cy="30" r="0.4" fill="#f59e0b" opacity="0.2"/>
+    </pattern>
+  </defs>
+  
+  <!-- 우주적 배경 -->
+  <rect width="500" height="200" fill="url(#starField)" opacity="0.3"/>
+  
+  <!-- 거대한 우주적 아우라 -->
+  <circle cx="100" cy="100" r="90" fill="url(#cosmicAura)" opacity="0.8">
+    <animate attributeName="r" values="90;100;85;95;90" dur="8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0.9;0.6" dur="6s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 다중 회전 링 시스템 -->
+  <g opacity="0.7">
+    <!-- 외부 링 -->
+    <circle cx="100" cy="100" r="70" fill="none" stroke="url(#pathFlow)" stroke-width="2">
+      <animateTransform attributeName="transform" type="rotate" values="0 100 100;360 100 100" dur="12s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 중간 링 -->
+    <circle cx="100" cy="100" r="55" fill="none" stroke="#60a5fa" stroke-width="3" opacity="0.8">
+      <animateTransform attributeName="transform" type="rotate" values="360 100 100;0 100 100" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-dasharray" values="0 350;175 175;350 0;0 350" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 내부 링 -->
+    <circle cx="100" cy="100" r="40" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.9">
+      <animateTransform attributeName="transform" type="rotate" values="0 100 100;360 100 100" dur="6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- 성스러운 중심핵 -->
+  <circle cx="100" cy="100" r="18" fill="url(#divineCore)" filter="url(#holyAura)">
+    <animate attributeName="r" values="18;22;16;20;18" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.9;1;0.85;1;0.9" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 내부 빛나는 핵심 -->
+  <circle cx="100" cy="100" r="8" fill="#fff700" opacity="0.9">
+    <animate attributeName="r" values="8;12;6;10;8" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 성스러운 빛의 십자가 -->
+  <g filter="url(#masterGlow)">
+    <!-- 수직 광선 -->
+    <rect x="98" y="40" width="4" height="25" fill="url(#holyLight)" rx="2">
+      <animate attributeName="height" values="25;35;20;30;25" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.6;0.9;0.7" dur="1.8s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="98" y="135" width="4" height="25" fill="url(#holyLight)" rx="2">
+      <animate attributeName="height" values="25;35;20;30;25" dur="2s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.6;0.9;0.7" dur="1.8s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+    
+    <!-- 수평 광선 -->
+    <rect x="40" y="98" width="25" height="4" fill="url(#holyLight)" ry="2">
+      <animate attributeName="width" values="25;35;20;30;25" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.6;0.9;0.7" dur="1.8s" begin="0.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="135" y="98" width="25" height="4" fill="url(#holyLight)" ry="2">
+      <animate attributeName="width" values="25;35;20;30;25" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.6;0.9;0.7" dur="1.8s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- 대각선 성스러운 광선들 -->
+  <g opacity="0.8" filter="url(#masterGlow)">
+    <line x1="70" y1="70" x2="80" y2="80" stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+      <animate attributeName="opacity" values="0.4;1;0.3;0.8;0.4" dur="2.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="120" y1="120" x2="130" y2="130" stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+      <animate attributeName="opacity" values="0.4;1;0.3;0.8;0.4" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="130" y1="70" x2="120" y2="80" stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+      <animate attributeName="opacity" values="0.4;1;0.3;0.8;0.4" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
+    </line>
+    <line x1="80" y1="120" x2="70" y2="130" stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+      <animate attributeName="opacity" values="0.4;1;0.3;0.8;0.4" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <!-- 영적 승천의 경로 -->
+  <path d="M 20 170 Q 35 155 50 140 Q 65 125 80 115 Q 95 105 100 100 Q 105 95 120 85 Q 135 75 150 60 Q 165 45 180 30 Q 195 15 210 5" 
+        fill="none" stroke="url(#pathFlow)" stroke-width="5" stroke-linecap="round" filter="url(#deepShadow)">
+    <animate attributeName="stroke-dasharray" values="0 400;200 200;400 0;0 400" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="5;7;4;6;5" dur="3s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- 진화하는 경로 지점들 -->
+  <g>
+    <circle cx="30" cy="165" r="4" fill="#1e40af" filter="url(#masterGlow)">
+      <animate attributeName="r" values="4;7;3;6;4" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#1e40af;#3b82f6;#60a5fa;#3b82f6;#1e40af" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="55" cy="135" r="4" fill="#2563eb" filter="url(#masterGlow)">
+      <animate attributeName="r" values="4;7;3;6;4" dur="3s" begin="0.6s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#2563eb;#3b82f6;#60a5fa;#3b82f6;#2563eb" dur="4s" begin="0.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="85" cy="110" r="4" fill="#3b82f6" filter="url(#masterGlow)">
+      <animate attributeName="r" values="4;7;3;6;4" dur="3s" begin="1.2s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#3b82f6;#60a5fa;#93c5fd;#60a5fa;#3b82f6" dur="4s" begin="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="125" cy="80" r="4" fill="#60a5fa" filter="url(#masterGlow)">
+      <animate attributeName="r" values="4;7;3;6;4" dur="3s" begin="1.8s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#60a5fa;#93c5fd;#dbeafe;#93c5fd;#60a5fa" dur="4s" begin="1.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="155" cy="55" r="4" fill="#93c5fd" filter="url(#masterGlow)">
+      <animate attributeName="r" values="4;7;3;6;4" dur="3s" begin="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#93c5fd;#dbeafe;#fff;#dbeafe;#93c5fd" dur="4s" begin="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="185" cy="25" r="4" fill="#dbeafe" filter="url(#masterGlow)">
+      <animate attributeName="r" values="4;7;3;6;4" dur="3s" begin="3s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#dbeafe;#fff;#fbbf24;#fff;#dbeafe" dur="4s" begin="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- 메가 임팩트 타이틀 "True" -->
+  <text x="240" y="75" font-family="'Impact', 'Arial Black', sans-serif" font-size="48" font-weight="900" 
+        fill="url(#textMaster)" filter="url(#deepShadow)" opacity="0.95">
+    TRUE
+    <animate attributeName="opacity" values="0.9;1;0.85;1;0.9" dur="4s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="scale" values="1;1.02;0.98;1.01;1" dur="3s" repeatCount="indefinite"/>
+  </text>
+  
+  <!-- 메가 임팩트 타이틀 "Path" -->
+  <text x="240" y="125" font-family="'Impact', 'Arial Black', sans-serif" font-size="48" font-weight="900" 
+        fill="url(#textMaster)" filter="url(#deepShadow)" opacity="0.95">
+    PATH
+    <animate attributeName="opacity" values="0.85;1;0.9;1;0.85" dur="4s" begin="2s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="scale" values="1;1.02;0.98;1.01;1" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+  </text>
+  
+  <!-- 프리미엄 한글 서브타이틀 -->
+  <text x="240" y="150" font-family="'Malgun Gothic', 'Noto Sans KR', sans-serif" 
+        font-size="16" font-weight="700" fill="#4338ca" opacity="0.9">
+    원리강론 마스터 플랫폼
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="5s" repeatCount="indefinite"/>
+  </text>
+  
+  <!-- 엘리트 영문 서브타이틀 -->
+  <text x="240" y="168" font-family="'Segoe UI', 'Helvetica Neue', sans-serif" 
+        font-size="12" font-weight="500" fill="#6366f1" font-style="italic" opacity="0.8">
+    Ultimate Divine Principle Study Experience
+    <animate attributeName="opacity" values="0.6;0.9;0.6" dur="6s" repeatCount="indefinite"/>
+  </text>
+  
+  <!-- 다이나믹 언더라인 -->
+  <path d="M 235 130 Q 300 132 365 130 Q 400 128 435 130" fill="none" stroke="#fbbf24" stroke-width="3" opacity="0.8" filter="url(#masterGlow)">
+    <animate attributeName="stroke-dasharray" values="0 200;100 100;200 0;0 200" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="3;5;2;4;3" dur="3s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- 고급 장식 요소들 -->
+  <g opacity="0.7">
+    <!-- 왼쪽 장식 -->
+    <path d="M 220 50 Q 225 45 230 50 Q 225 55 220 50" fill="#fbbf24" opacity="0.8">
+      <animateTransform attributeName="transform" type="rotate" values="0 225 50;360 225 50" dur="8s" repeatCount="indefinite"/>
+    </path>
+    <!-- 오른쪽 장식 -->
+    <path d="M 450 100 Q 455 95 460 100 Q 455 105 450 100" fill="#60a5fa" opacity="0.8">
+      <animateTransform attributeName="transform" type="rotate" values="0 455 100;-360 455 100" dur="10s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- 우주적 입자들 -->
+  <g opacity="0.6">
+    <circle cx="380" cy="40" r="2" fill="#fbbf24">
+      <animateTransform attributeName="transform" type="translate" 
+        values="0 0;8 -5;-3 7;5 -2;0 0" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;1;0.2;0.8;0.3" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="420" cy="70" r="1.5" fill="#60a5fa">
+      <animateTransform attributeName="transform" type="translate" 
+        values="0 0;-5 8;7 -3;-2 5;0 0" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.9;0.3;1;0.4" dur="7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="460" cy="50" r="1" fill="#f59e0b">
+      <animateTransform attributeName="transform" type="translate" 
+        values="0 0;3 6;-6 2;4 -4;0 0" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.4;0.9;0.5" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="120" r="1.2" fill="#a855f7">
+      <animateTransform attributeName="transform" type="translate" 
+        values="0 0;-4 -6;6 3;-3 5;0 0" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.8;0.5;1;0.3" dur="8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- 프리미엄 별 컨스텔레이션 -->
+  <g fill="#fbbf24" opacity="0.8">
+    <polygon points="470,30 472,35 477,35 473,38 475,43 470,40 465,43 467,38 463,35 468,35" 
+             transform="scale(0.6)" filter="url(#masterGlow)">
+      <animateTransform attributeName="transform" type="rotate" 
+        values="0 470 30;360 470 30" dur="10s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.3;0.8;0.5" dur="4s" repeatCount="indefinite"/>
+    </polygon>
+    <polygon points="440,160 442,165 447,165 443,168 445,173 440,170 435,173 437,168 433,165 438,165" 
+             transform="scale(0.4)" filter="url(#masterGlow)">
+      <animateTransform attributeName="transform" type="rotate" 
+        values="0 440 160;-360 440 160" dur="12s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.9;0.6;1;0.4" dur="5s" repeatCount="indefinite"/>
+    </polygon>
+  </g>
+</svg>

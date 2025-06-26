@@ -56,6 +56,31 @@ body.dark-mode .no-results {
     background: #7f1d1d;
     color: #f9fafb;
 }
+.logo-container {
+  text-align: center;
+  margin: 2rem auto;
+}
+
+.logo-image {
+  width: 220px;
+  height: auto; /* 비율 유지 */
+  padding: 12px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
+}
+
+.logo-caption {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+}
 
 /* Navigation Bar */
 .nav-bar {
@@ -153,8 +178,8 @@ body.dark-mode .dark-mode-toggle {
 }
 
 .header img {
-    width: 6rem;
-    height: auto;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     margin-bottom: 1rem;
     transition: transform 0.3s ease;
@@ -398,43 +423,43 @@ body.dark-mode .category-container button {
 }
 
 .category-container button[data-category="전체"] {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: linear-gradient(135deg, #7dd3fc, #2563eb);
     color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="천성경"] {
-    background: linear-gradient(135deg, #34d399, #10b981);
+    background: linear-gradient(135deg, #6ee7b7, #059669);
     color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="참부모경"] {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, #fdba74, #ea580c);
     color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="참부모님 말씀"] {
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    background: linear-gradient(135deg, #a5b4fc, #4338ca);
     color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="참어머님 말씀"] {
-    background: linear-gradient(135deg, #f472b6, #ec4899);
+    background: linear-gradient(135deg, #f5d0fe, #db2777);
     color: #ffffff;
     border: none;
 }
 
 .category-container button[data-category="천심원"] {
-    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    background: linear-gradient(135deg, #d8b4fe, #7c3aed);
     color: #ffffff;
     border: none;
 }
 
 .category-container button.active {
-    background: linear-gradient(135deg, #eab308, #ca8a04);
+    background: linear-gradient(135deg, #fde047, #d97706);
     color: #ffffff;
     border: none;
     transform: scale(1.03);
