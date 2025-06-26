@@ -319,7 +319,7 @@
         #options-container {
             flex-grow: 1;
             flex-shrink: 1;
-            overflow-y: hidden;
+            overflow-y: auto; /* Changed from hidden to auto for scroll */
             padding: calc(var(--base-padding) * 0.8);
             max-height: unset;
             -webkit-overflow-scrolling: touch;
@@ -388,8 +388,15 @@
 
         .option.selected {
             border-color: var(--primary-purple);
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(99, 102, 241, 0.1));
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(99, 102, 241, 0.15)); /* More subtle highlight */
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.3); /* Slightly stronger glow */
+            animation: pulseSelection 0.3s ease-out; /* New subtle pulse animation */
+        }
+
+        @keyframes pulseSelection {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
         }
 
         .option.correct {
@@ -489,6 +496,11 @@
             color: white;
         }
 
+        button.amber { /* New style for home button */
+            background: linear-gradient(135deg, var(--primary-amber), #facc15);
+            color: white;
+        }
+
         button:hover:not(:disabled) {
             transform: translateY(-4px) scale(1.05);
             box-shadow: var(--shadow-medium);
@@ -506,6 +518,7 @@
             cursor: not-allowed;
             opacity: 0.6;
             transform: none;
+            box-shadow: none; /* No shadow when disabled */
         }
 
         .loading {
@@ -533,6 +546,7 @@
             background: rgba(239, 68, 68, 0.1);
             border-radius: var(--border-radius);
             border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         /* Responsive Design */
@@ -606,10 +620,50 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
+        /* Confetti effect (simple CSS based) */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-emerald);
+            opacity: 0;
+            border-radius: 50%;
+            animation: confetti-fall 3s ease-out forwards;
+            filter: blur(0.5px);
+            mix-blend-mode: screen; /* For cool blending effect */
+        }
+        .confetti:nth-child(2n) { background-color: var(--primary-purple); }
+        .confetti:nth-child(3n) { background-color: var(--primary-pink); }
+        .confetti:nth-child(4n) { background-color: var(--primary-indigo); }
+        .confetti:nth-child(5n) { background-color: var(--primary-amber); }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotateZ(0deg) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotateZ(720deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+
         /* Focus States */
         button:focus, .option:focus-within, .theme-toggle:focus {
             outline: 3px solid var(--primary-purple);
             outline-offset: 2px;
+            border-radius: var(--border-radius); /* Ensure consistent outline shape */
         }
 
         /* High Contrast Mode */
@@ -620,6 +674,15 @@
                 --text-primary: #000000;
                 --card-bg: #ffffff;
                 --option-bg: #f0f0f0;
+                --correct-bg: #00ff00;
+                --incorrect-bg: #ff0000;
+            }
+            [data-theme="dark"] {
+                --bg-primary: #000000;
+                --bg-secondary: #ffffff;
+                --text-primary: #ffffff;
+                --card-bg: #000000;
+                --option-bg: #333333;
                 --correct-bg: #00ff00;
                 --incorrect-bg: #ff0000;
             }
@@ -651,43 +714,64 @@
     </header>
 
     <div id="progress" role="status" aria-live="polite">
-        <span>문제 <span id="current-question">1</span> / <span id="total-questions">?</span></span>
-        <span id="score">점수: 0</span>
+        <div class="progress-info">
+            <span>문제 <span id="current-question">1</span> / <span id="total-questions">?</span></span>
+            <span id="score">점수: 0</span>
+        </div>
         <div class="progress-bar-container">
             <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
         </div>
+        <div id="highest-score-display" style="font-size: 0.9em; color: var(--text-secondary); margin-top: 5px;">최고 점수: 0</div>
     </div>
 
     <main>
         <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> 로딩 중...</div>
-        <div id="quiz-container" role="region" aria-label="퀴즈 내용">
-            <div class="question-text" id="question-text"></div>
+        <div id="quiz-container" role="region" aria-label="퀴즈 내용" tabindex="-1"> <div class="question-text" id="question-text"></div>
             <div id="options-container"></div>
             <div id="explanation" class="explanation" style="display: none;"></div>
         </div>
     </main>
 
     <div class="button-container">
-        <button id="check-answer" class="blue" aria-label="정답 확인"><i class="fas fa-check"></i> 정답 확인</button>
-        <button id="next-question" class="gold" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
-        <button id="restart-quiz" class="green" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
-    </div>
+        <button id="check-answer" class="purple" aria-label="정답 확인" title="선택한 답을 확인합니다." disabled><i class="fas fa-check"></i> 정답 확인</button>
+        <button id="next-question" class="pink" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
+        <button id="restart-quiz" class="emerald" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
+        <button id="go-home" class="amber" style="display: none;" aria-label="홈으로 가기"><i class="fas fa-home"></i> 홈으로</button> </div>
 
-    <div id="error-message" style="display: none; color: #ef4444; margin-top: calc(var(--base-margin) / 2); font-size: clamp(0.85rem, 3vw, 0.95rem);" role="alert"></div>
-
-    <script>
+    <div id="error-message" style="display: none;" role="alert"></div>
+    <div id="confetti-container" class="confetti-container"></div> <script>
         document.addEventListener("DOMContentLoaded", () => {
             let currentQuestionIndex = 0;
             let questions = [];
             let score = 0;
             let originalQuestionText = "";
             let selectedOptionElementsInOrder = []; // Track selected option DOM elements in order of selection
+            let blanksRequired = 0; // To store the number of blanks for the current question
 
             const themeToggle = document.getElementById("theme-toggle");
             const body = document.body;
             const savedTheme = localStorage.getItem("theme") || "light";
             body.setAttribute("data-theme", savedTheme);
             themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
+
+            const checkAnswerBtn = document.getElementById("check-answer");
+            const nextQuestionBtn = document.getElementById("next-question");
+            const restartQuizBtn = document.getElementById("restart-quiz");
+            const goHomeBtn = document.getElementById("go-home"); // New: Get home button
+            const questionTextElement = document.getElementById("question-text");
+            const optionsContainer = document.getElementById("options-container");
+            const explanationElement = document.getElementById("explanation");
+            const errorMessage = document.getElementById("error-message");
+            const quizContainer = document.getElementById("quiz-container");
+            const highestScoreDisplay = document.getElementById("highest-score-display");
+
+            // Load highest score from localStorage on startup
+            displayHighestScore();
+
+            function displayHighestScore() {
+                const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
+                highestScoreDisplay.textContent = `최고 점수: ${highestScore}`;
+            }
 
             themeToggle.addEventListener("click", () => {
                 const currentTheme = body.getAttribute("data-theme");
@@ -706,6 +790,25 @@
                 }
             }
 
+            // Function to generate confetti
+            function triggerConfetti() {
+                const confettiContainer = document.getElementById('confetti-container');
+                confettiContainer.innerHTML = ''; // Clear previous confetti
+                for (let i = 0; i < 50; i++) { // Generate 50 confetti pieces
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    // Random positions and delays for a scattered effect
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.animationDelay = `${Math.random() * 1.5}s`;
+                    confetti.style.animationDuration = `${2 + Math.random() * 1}s`; // 2 to 3 seconds
+                    confettiContainer.appendChild(confetti);
+                }
+                // Clear confetti after animation
+                setTimeout(() => {
+                    confettiContainer.innerHTML = '';
+                }, 3000);
+            }
+
             fetch("assets/data/divine_pr.json")
                 .then(response => {
                     if (!response.ok) throw new Error("JSON 파일 로드 실패");
@@ -715,35 +818,35 @@
                     questions = data;
                     shuffleArray(questions); // Shuffle questions
                     document.getElementById("total-questions").textContent = questions.length;
-                    document.getElementById("quiz-container").style.display = "flex";
+                    quizContainer.style.display = "flex";
                     document.getElementById("loading").style.display = "none";
                     loadQuestion(currentQuestionIndex);
                     updateProgressBar(currentQuestionIndex + 1, questions.length);
                 })
                 .catch(error => {
                     console.error("JSON 파일 로드 실패:", error);
-                    const errorMessage = document.getElementById("error-message");
                     errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
                     errorMessage.style.display = "block";
                     document.getElementById("loading").style.display = "none";
                 });
 
             function loadQuestion(index) {
-                const quizContainer = document.getElementById("quiz-container");
-                const questionText = document.getElementById("question-text");
-                const optionsContainer = document.getElementById("options-container");
-                const explanation = document.getElementById("explanation");
                 const currentQuestion = questions[index];
 
                 // Scroll to top of quiz container when new question loads for better UX
-                quizContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                // Ensure the scroll happens after the content is potentially rendered
+                setTimeout(() => {
+                    quizContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                    quizContainer.focus(); // Set focus to the quiz container for accessibility
+                }, 100); // Small delay to ensure content is ready
 
                 // Reset selected options for the new question
                 selectedOptionElementsInOrder = [];
 
-                const blanks = currentQuestion.answers.length;
-                originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
-                questionText.innerHTML = originalQuestionText;
+                blanksRequired = currentQuestion.answers.length;
+                // Updated instruction: Clearly state if order matters (assuming it does for "fill-in-the-blank" interpretation)
+                originalQuestionText = `${currentQuestion.question} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`;
+                questionTextElement.innerHTML = originalQuestionText;
 
                 optionsContainer.innerHTML = "";
                 
@@ -754,7 +857,7 @@
                     const optionDiv = document.createElement("div");
                     optionDiv.classList.add("option");
                     optionDiv.innerHTML = `
-                        <input type="checkbox" name="answer" id="option${i}" value="${item.originalIndex}">
+                        <input type="checkbox" name="answer" id="option${i}" value="${item.originalIndex}" aria-label="${item.option}">
                         <label for="option${i}">${item.option}</label>
                     `;
                     optionDiv.addEventListener("click", (e) => {
@@ -780,23 +883,22 @@
                         updateSelectedAnswers(); // Update the displayed blanks based on ordered selections
                         optionDiv.classList.toggle("selected", checkbox.checked); // Update visual style
                         if (navigator.vibrate) navigator.vibrate(50);
+                        updateCheckButtonState(); // Call to update button state
                     });
                     
                     optionsContainer.appendChild(optionDiv);
                 });
 
-                explanation.style.display = "none";
-                document.getElementById("check-answer").style.display = "block";
-                document.getElementById("next-question").style.display = "none";
-                document.getElementById("restart-quiz").style.display = "none";
-                document.getElementById("check-answer").disabled = false;
-                document.getElementById("error-message").style.display = "none";
+                explanationElement.style.display = "none";
+                checkAnswerBtn.style.display = "block";
+                nextQuestionBtn.style.display = "none";
+                restartQuizBtn.style.display = "none";
+                goHomeBtn.style.display = "none"; // New: Hide home button initially
+                errorMessage.style.display = "none";
+                updateCheckButtonState(); // Initial button state check
             }
 
             function updateSelectedAnswers() {
-                const questionTextElement = document.getElementById("question-text");
-                const currentQuestion = questions[currentQuestionIndex];
-
                 // Extract text content from currently selected option elements, maintaining their selection order
                 const actualSelectedTextsInOrder = selectedOptionElementsInOrder
                     .filter(optionDiv => optionDiv.querySelector('input').checked)
@@ -816,6 +918,17 @@
                 questionTextElement.innerHTML = updatedText;
             }
 
+            function updateCheckButtonState() {
+                const selectedCount = document.querySelectorAll('input[name="answer"]:checked').length;
+                if (selectedCount === blanksRequired) {
+                    checkAnswerBtn.disabled = false;
+                    checkAnswerBtn.removeAttribute("title");
+                } else {
+                    checkAnswerBtn.disabled = true;
+                    checkAnswerBtn.setAttribute("title", `${blanksRequired}개의 답을 선택해야 합니다. (현재 ${selectedCount}개 선택)`);
+                }
+            }
+
             function updateProgressBar(current, total) {
                 const progressBar = document.getElementById("progress-bar");
                 const percentage = (current / total) * 100;
@@ -824,30 +937,27 @@
                 document.getElementById("score").textContent = `점수: ${score}`;
             }
 
-            document.getElementById("check-answer").addEventListener("click", () => {
+            checkAnswerBtn.addEventListener("click", () => {
                 const selectedCheckboxes = document.querySelectorAll('input[name="answer"]:checked');
                 const currentQuestion = questions[currentQuestionIndex];
-                const errorMessage = document.getElementById("error-message");
-                const explanation = document.getElementById("explanation");
-                const blanks = currentQuestion.answers.length;
-
-                if (selectedCheckboxes.length !== blanks) {
-                    errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedCheckboxes.length}개 선택)`;
+                
+                // This validation is now also handled by updateCheckButtonState for UX
+                if (selectedCheckboxes.length !== blanksRequired) {
+                    errorMessage.textContent = `${blanksRequired}개의 답을 선택해주세요! (현재 ${selectedCheckboxes.length}개 선택)`;
                     errorMessage.style.display = "block";
+                    if (navigator.vibrate) navigator.vibrate(200); // Longer vibrate for error
                     return;
                 }
 
-                // Get selected original indices and their corresponding texts
                 const selectedOriginalIndices = Array.from(selectedCheckboxes).map(opt => parseInt(opt.value));
                 const selectedAnswerTexts = selectedOriginalIndices.map(idx => currentQuestion.options[idx]);
 
-                const correctAnswers = currentQuestion.answers; // These are the texts of the correct answers
+                const correctAnswers = currentQuestion.answers; 
 
                 // To compare, sort both arrays to ensure order doesn't matter for correctness check
-                const sortedSelectedTexts = [...selectedAnswerTexts].sort();
-                const sortedCorrectTexts = [...correctAnswers].sort();
-
-                const isCorrect = JSON.stringify(sortedSelectedTexts) === JSON.stringify(sortedCorrectTexts);
+                // NOTE: If order DOES matter, this comparison logic needs to change.
+                // Assuming "blanks in order" implies the selection order must match the answer array order.
+                const isCorrect = JSON.stringify(selectedAnswerTexts) === JSON.stringify(correctAnswers);
 
                 const allOptions = document.querySelectorAll(".option");
                 allOptions.forEach((optionDiv) => {
@@ -858,13 +968,27 @@
                         optionDiv.classList.add("incorrect");
                     }
                     optionDiv.style.pointerEvents = "none"; // Disable clicks after checking answer
+                    optionDiv.querySelector('input').disabled = true; // Also disable checkboxes
                 });
 
-                const questionTextElement = document.getElementById("question-text");
                 let blanksFilledText = originalQuestionText;
                 let blankCounter = 0;
 
-                if (!isCorrect) {
+                if (isCorrect) {
+                    score++; // Increment score only if correct
+                    errorMessage.textContent = "정답입니다! 🎉";
+                    errorMessage.style.color = "#10b981";
+                    errorMessage.style.display = "block";
+                    // Confetti for correct answer
+                    triggerConfetti();
+                    if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Correct answer vibrate pattern
+                    updateSelectedAnswers(); // Ensure bold selections are shown
+                } else {
+                    errorMessage.textContent = "오답입니다. 😔";
+                    errorMessage.style.color = "#ef4444";
+                    errorMessage.style.display = "block";
+                    if (navigator.vibrate) navigator.vibrate(200); // Incorrect answer vibrate pattern
+
                     // If incorrect, fill blanks with the correct answers, styled differently
                     blanksFilledText = blanksFilledText.replace(/___/g, () => {
                         if (blankCounter < correctAnswers.length) {
@@ -874,61 +998,88 @@
                         return '___';
                     });
                     questionTextElement.innerHTML = blanksFilledText;
-                } else {
-                    // If correct, updateSelectedAnswers has already populated with bold selections
-                    // Re-call it to ensure consistency if any re-rendering happened before
-                    updateSelectedAnswers(); 
                 }
+                
+                explanationElement.textContent = currentQuestion.explanation;
+                explanationElement.style.display = "block";
 
-                errorMessage.textContent = isCorrect ? "정답입니다!" : "오답입니다.";
-                errorMessage.style.color = isCorrect ? "#10b981" : "#ef4444";
-                errorMessage.style.display = "block";
-                explanation.textContent = currentQuestion.explanation;
-                explanation.style.display = "block";
-
-                document.getElementById("check-answer").style.display = "none";
-                document.getElementById("next-question").style.display = "block";
+                checkAnswerBtn.style.display = "none";
+                nextQuestionBtn.style.display = "block";
+                nextQuestionBtn.focus(); // Focus on next question button for flow
                 updateProgressBar(currentQuestionIndex + 1, questions.length);
+
+                // Update highest score after each question if it's a new high
+                const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
+                if (score > highestScore) {
+                    localStorage.setItem('highestQuizScore', score);
+                    displayHighestScore();
+                }
             });
 
-            document.getElementById("next-question").addEventListener("click", () => {
+            nextQuestionBtn.addEventListener("click", () => {
                 currentQuestionIndex++;
                 if (currentQuestionIndex < questions.length) {
                     loadQuestion(currentQuestionIndex);
                     updateProgressBar(currentQuestionIndex + 1, questions.length);
                 } else {
-                    document.getElementById("quiz-container").innerHTML = `
-                        <div class="question-text">퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}</div>
-                    `;
-                    document.getElementById("next-question").style.display = "none";
-                    document.getElementById("restart-quiz").style.display = "block";
-                    document.getElementById("error-message").style.display = "none";
-                    document.getElementById("explanation").style.display = "none";
+                    // Quiz finished
+                    const finalScoreMessage = `퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}`;
+                    quizContainer.innerHTML = `<div class="question-text">${finalScoreMessage}</div>`;
+                    quizContainer.focus(); // Focus on final score message
+
+                    nextQuestionBtn.style.display = "none";
+                    restartQuizBtn.style.display = "block";
+                    goHomeBtn.style.display = "block"; // New: Show home button when quiz finishes
+                    restartQuizBtn.focus(); // Focus on restart button
+                    errorMessage.style.display = "none";
+                    explanationElement.style.display = "none";
+                    
+                    // Update highest score one last time at the end of the quiz
+                    const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
+                    if (score > highestScore) {
+                        localStorage.setItem('highestQuizScore', score);
+                    }
+                    displayHighestScore();
                 }
             });
 
-            document.getElementById("restart-quiz").addEventListener("click", () => {
+            restartQuizBtn.addEventListener("click", () => {
                 currentQuestionIndex = 0;
                 score = 0;
                 shuffleArray(questions); // Reshuffle questions for a new game
                 selectedOptionElementsInOrder = []; // Reset selected options for a new game
-                document.getElementById("quiz-container").style.display = "flex";
+                quizContainer.style.display = "flex";
                 loadQuestion(currentQuestionIndex);
                 updateProgressBar(currentQuestionIndex + 1, questions.length);
+                displayHighestScore(); // Ensure highest score is up-to-date
             });
 
+            // New: Go Home Button Event Listener
+            goHomeBtn.addEventListener("click", () => {
+                window.location.href = "/"; // Or 'index.html' if that's your home page
+            });
+
+
+            // Universal event listener for tap/click feedback and keyboard accessibility
             document.querySelectorAll('button, .option').forEach(element => {
                 element.addEventListener('touchstart', function() {
                     this.classList.add('active');
-                    if (navigator.vibrate) navigator.vibrate(50);
                 });
                 element.addEventListener('touchend', function() {
                     this.classList.remove('active');
                 });
                 element.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    // Prevent default spacebar scrolling
+                    if (e.key === ' ' && (this.tagName === 'BUTTON' || this.classList.contains('option'))) {
                         e.preventDefault();
-                        this.click();
+                    }
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        // For options, trigger the click on the parent div which has the main logic
+                        if (this.classList.contains('option')) {
+                            this.click();
+                        } else { // For buttons, just click directly
+                            this.click();
+                        }
                     }
                 });
             });

@@ -18,6 +18,8 @@ let state = {
     selectedAnswers: [],
     selectedCounts: {},
     score: 0,
+    totalCorrectAnswers: 0,
+    totalPossiblePoints: 0,
     timeLeft: TIME_LIMIT,
     timer: null,
     answeredCorrectly: false,
@@ -44,6 +46,8 @@ const loadQuestions = async () => {
         }
         state.currentQuestionIndex = 0;
         state.score = 0;
+        state.totalCorrectAnswers = 0;
+        state.totalPossiblePoints = state.questions.reduce((sum, q) => sum + q.answers.length, 0);
         updateProgress();
         showQuestion();
     } catch (error) {
@@ -51,8 +55,10 @@ const loadQuestions = async () => {
         quizContainer.innerHTML = `
             <p class="error-message" role="alert">문제를 불러오지 못했습니다: ${error.message}</p>
             <button id="retry-load" class="action-btn" title="문제를 다시 불러옵니다">재시도</button>
+            <button id="home-button" class="action-btn" title="홈으로 돌아가기">홈으로</button>
         `;
         document.getElementById("retry-load").addEventListener("click", loadQuestions);
+        document.getElementById("home-button").addEventListener("click", () => window.location.href = "index.html");
         errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다.";
         errorMessage.style.display = "block";
     }
@@ -60,7 +66,13 @@ const loadQuestions = async () => {
 
 // Update Progress
 const updateProgress = () => {
-    progress.innerHTML = `문제 <span class="current">${state.currentQuestionIndex + 1}</span> / <span class="total">${state.questions.length}</span> | 점수: ${state.score}`;
+    const percentage = state.totalPossiblePoints > 0 ? (state.score / state.totalPossiblePoints * 100).toFixed(1) : 0;
+    progress.innerHTML = `
+        문제 <span class="current">${state.currentQuestionIndex + 1}</span> / 
+        <span class="total">${state.questions.length}</span> | 
+        점수: ${state.score}/${state.totalPossiblePoints} (${percentage}%) | 
+        정답 수: ${state.totalCorrectAnswers}
+    `;
     progressBar.style.width = `${(state.currentQuestionIndex + 1) / state.questions.length * 100}%`;
 };
 
@@ -90,6 +102,7 @@ const showQuestion = () => {
             <button id="pause-timer" class="pause-btn" title="타이머 일시정지" onclick="togglePause()">타이머 일시정지</button>
             <button id="reset-answers" class="reset-btn" title="선택 초기화" onclick="resetAnswers()">선택 초기화</button>
             <button id="skip-question" class="skip-btn" title="문제 건너뛰기" onclick="skipQuestion()">건너뛰기</button>
+            <button id="home-button" class="action-btn" title="홈으로 돌아가기" onclick="goHome()">홈으로</button>
             <button id="show-explanation" style="display: none;" class="explanation-btn" title="정답 설명 보기" onclick="showExplanation()">설명 보기</button>
         </div>
         <div id="explanation" style="display: none; margin-top: ${10 * GOLDEN_RATIO}px; padding: ${10 * GOLDEN_RATIO}px; background: #f0f4f8; border-radius: 8px; border: 1px solid #ddd;" role="region" aria-live="polite"></div>
@@ -135,6 +148,13 @@ const togglePause = () => {
     timerDisplay.classList.toggle("paused", state.isPaused);
     if (navigator.vibrate) navigator.vibrate(50);
     showTemporaryFeedback(state.isPaused ? "타이머가 일시정지되었습니다." : "타이머가 재개되었습니다.");
+};
+
+// Home Button Handler
+const goHome = () => {
+    if (confirm("홈으로 돌아가시겠습니까? 진행 상황이 저장되지 않습니다.")) {
+        window.location.href = "index.html";
+    }
 };
 
 // Answer Handling
@@ -264,12 +284,14 @@ const checkAutoCorrect = () => {
                          Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
 
         if (isCorrect) {
-            feedback.textContent = "✅ 정답입니다! 다음 문제로 이동할 수 있습니다.";
+            const pointsEarned = q.answers.length;
+            state.score += pointsEarned;
+            state.totalCorrectAnswers += 1;
+            feedback.textContent = `✅ 정답입니다! (+${pointsEarned}점) 다음 문제로 이동할 수 있습니다.`;
             feedback.className = "feedback correct";
             nextButton.style.display = "block";
             checkButton.style.display = "none";
             explanationBtn.style.display = "block";
-            state.score++;
             state.answeredCorrectly = true;
             clearTimer();
             updateProgress();
@@ -300,9 +322,11 @@ const checkAnswer = (isTimeout = false) => {
                          Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
 
         if (isCorrect) {
-            feedback.textContent = "✅ 정답입니다! 계속해서 다음 문제로 이동하세요!";
+            const pointsEarned = q.answers.length;
+            state.score += pointsEarned;
+            state.totalCorrectAnswers += 1;
+            feedback.textContent = `✅ 정답입니다! (+${pointsEarned}점) 계속해서 다음 문제로 이동하세요!`;
             feedback.className = "feedback correct";
-            state.score++;
             state.answeredCorrectly = true;
         } else {
             feedback.textContent = `❌ 오답입니다! 정답: ${q.answers.join(", ")}. 다시 시도하거나 설명을 확인하세요.`;
@@ -336,7 +360,7 @@ const showExplanation = () => {
 
 // Final Result
 const showFinalResult = () => {
-    const percentage = (state.score / state.questions.length) * 100;
+    const percentage = state.totalPossiblePoints > 0 ? (state.score / state.totalPossiblePoints * 100).toFixed(1) : 0;
     let message = "";
     if (percentage >= 80) {
         message = "훌륭합니다! 원리강론을 깊이 이해하셨네요! 🎉";
@@ -348,10 +372,12 @@ const showFinalResult = () => {
 
     quizContainer.innerHTML = `
         <h2 role="alert">🎉 퀴즈 완료!</h2>
-        <p>최종 점수: ${state.score} / ${state.questions.length} (${percentage.toFixed(1)}%)</p>
+        <p>최종 점수: ${state.score} / ${state.totalPossiblePoints} (${percentage}%)</p>
+        <p>맞힌 문제: ${state.totalCorrectAnswers} / ${state.questions.length}</p>
         <p class="result-message">${message}</p>
         <div class="button-group">
             <button id="restart" class="action-btn" title="퀴즈를 처음부터 다시 시작">다시 시작</button>
+            <button id="home-button" class="action-btn" title="홈으로 돌아가기">홈으로</button>
             <button id="back-to-menu" class="action-btn gold" title="메인 메뉴로 돌아가기">메뉴로 돌아가기</button>
         </div>
     `;
@@ -361,7 +387,11 @@ const showFinalResult = () => {
     document.getElementById("restart").addEventListener("click", () => {
         state.currentQuestionIndex = 0;
         state.score = 0;
+        state.totalCorrectAnswers = 0;
         loadQuestions();
+    });
+    document.getElementById("home-button").addEventListener("click", () => {
+        window.location.href = "index.html";
     });
     document.getElementById("back-to-menu").addEventListener("click", () => {
         window.location.href = "index.html";
