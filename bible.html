@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -9,730 +9,1024 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap">
     <style>
-      :root {
-        /* Light Theme - 남색 기반 */
-        --bg-primary: #f9fafb;
-        --bg-secondary: #e5e7eb;
-        --bg-tertiary: #ffffff;
-        --text-primary: #1C2526;
-        --text-secondary: #4b5563;
-        --text-muted: #6b7280;
-
-        /* 브랜드 색상 */
-        --brand-primary: #1C2526;
-        --brand-secondary: #f59e0b;
-        --brand-accent: #38b2ac;
-        --brand-neutral: #6b7280;
-
-        /* 그라디언트 */
-        --gradient-primary: linear-gradient(135deg, #1C2526 0%, #2b6cb0 100%);
-        --gradient-secondary: linear-gradient(135deg, #1C2526 0%, #f59e0b 100%);
-        --gradient-accent: linear-gradient(135deg, #1C2526 0%, #38b2ac 100%);
-        --gradient-warm: linear-gradient(135deg, #1C2526 0%, #f87171 100%);
-        --gradient-navy-cool: linear-gradient(135deg, #1C2526 0%, #a7f3d0 100%);
-
-        /* 기능적 색상 */
-        --success-bg: #d0f4de;
-        --success-border: #38b2ac;
-        --success-text: #064e3b;
-        --error-bg: #fee2e2;
-        --error-border: #ef4444;
-        --error-text: #991b1b;
-        --warning-bg: #fef3c7;
-        --warning-border: #f59e0b;
-        --warning-text: #92400e;
-
-        /* 컴포넌트 */
-        --card-bg: rgba(255, 255, 255, 0.9);
-        --card-border: rgba(229, 231, 235, 0.8);
-        --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        --card-shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.15);
-
-        /* 상호작용 */
-        --option-bg: #f9fafb;
-        --option-hover: #e5e7eb;
-        --option-selected: rgba(28, 37, 38, 0.1);
-        --option-selected-border: #1C2526;
-
-        /* 기타 */
-        --border-radius: 16px;
-        --border-radius-sm: 12px;
-        --border-radius-lg: 24px;
-        --backdrop-blur: blur(10px);
-        --golden-ratio: 1.618;
-        --base-font-size: clamp(16px, 2.5vw, 18px);
-        --base-padding: clamp(12px, 2vw, 16px);
-        --base-margin: calc(var(--base-padding) * var(--golden-ratio));
-      }
-
-      [data-theme="dark"] {
-        /* Dark Theme - 남색 기반 */
-        --bg-primary: #111827;
-        --bg-secondary: #1f2937;
-        --bg-tertiary: #374151;
-        --text-primary: #f3f4f6;
-        --text-secondary: #d1d5db;
-        --text-muted: #9ca3af;
-
-        --brand-primary: #1C2526;
-        --brand-secondary: #fbbf24;
-        --brand-accent: #2dd4bf;
-        --brand-neutral: #9ca3af;
-
-        --gradient-primary: linear-gradient(135deg, #1C2526 0%, #3b82f6 100%);
-        --gradient-secondary: linear-gradient(135deg, #1C2526 0%, #fbbf24 100%);
-        --gradient-accent: linear-gradient(135deg, #1C2526 0%, #2dd4bf 100%);
-        --gradient-warm: linear-gradient(135deg, #1C2526 0%, #f87171 100%);
-        --gradient-navy-cool: linear-gradient(135deg, #1C2526 0%, #a7f3d0 100%);
-
-        --success-bg: rgba(45, 212, 191, 0.1);
-        --success-border: #2dd4bf;
-        --success-text: #5eead4;
-        --error-bg: rgba(239, 68, 68, 0.1);
-        --error-border: #ef4444;
-        --error-text: #fca5a5;
-        --warning-bg: rgba(251, 191, 36, 0.1);
-        --warning-border: #fbbf24;
-        --warning-text: #fde68a;
-
-        --card-bg: rgba(31, 41, 55, 0.8);
-        --card-border: rgba(55, 65, 81, 0.8);
-        --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        --card-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.4);
-
-        --option-bg: #1f2937;
-        --option-hover: #374151;
-        --option-selected: rgba(28, 37, 38, 0.15);
-        --option-selected-border: #1C2526;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        font-family: 'Noto Sans KR', sans-serif;
-        background: var(--bg-primary);
-        background-image: radial-gradient(circle at 30% 70%, rgba(56, 178, 172, 0.2) 0%, transparent 50%);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: var(--text-primary);
-        font-size: var(--base-font-size);
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        transition: background 0.3s ease;
-      }
-
-      .theme-toggle-container {
-        position: fixed;
-        top: var(--base-padding);
-        right: var(--base-padding);
-        z-index: 1000;
-      }
-
-      .theme-toggle {
-        background: var(--card-bg);
-        backdrop-filter: var(--backdrop-blur);
-        border: 1px solid var(--card-border);
-        border-radius: 50%;
-        width: 48px;
-        height: 48px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        color: var(--text-primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        box-shadow: var(--card-shadow);
-      }
-
-      .theme-toggle:hover {
-        transform: scale(1.1);
-        box-shadow: var(--card-shadow-hover);
-      }
-
-      header {
-        margin: calc(var(--base-margin) * 2) 0;
-        text-align: center;
-      }
-
-      h1 {
-        font-size: clamp(1.8rem, 5vw, 2.4rem);
-        font-weight: 700;
-        background: var(--gradient-primary);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      h1 i {
-        margin-right: 0.5rem;
-        background: var(--gradient-accent);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      #progress {
-        width: 90%;
-        max-width: 600px;
-        background: var(--card-bg);
-        backdrop-filter: var(--backdrop-blur);
-        padding: var(--base-padding);
-        border-radius: var(--border-radius);
-        box-shadow: var(--card-shadow);
-        margin-bottom: var(--base-margin);
-        border: 1px solid var(--card-border);
-        display: flex;
-        flex-direction: column;
-        gap: calc(var(--base-padding) * 0.5);
-      }
-
-      .progress-info {
-        display: flex;
-        justify-content: space-between;
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
-        font-weight: 500;
-      }
-
-      .progress-bar-container {
-        width: 100%;
-        height: 6px;
-        background: var(--bg-secondary);
-        border-radius: 3px;
-        overflow: hidden;
-      }
-
-      .progress-bar {
-        height: 100%;
-        background: var(--gradient-primary);
-        transition: width 0.5s ease;
-      }
-
-      #score {
-        background: var(--gradient-accent);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: var(--border-radius-sm);
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
-      }
-
-      #quiz-container {
-        width: 90%;
-        max-width: 700px;
-        background: var(--card-bg);
-        backdrop-filter: var(--backdrop-blur);
-        padding: calc(var(--base-padding) * 1.5);
-        border-radius: var(--border-radius-lg);
-        box-shadow: var(--card-shadow);
-        margin-bottom: var(--base-margin);
-        border: 1px solid var(--card-border);
-        display: none;
-        flex-direction: column;
-      }
-
-      .question-text {
-        font-size: clamp(1.2rem, 3.5vw, 1.5rem);
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: var(--base-padding);
-        background: var(--gradient-navy-cool);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      #options-container {
-        display: flex;
-        flex-direction: column;
-        gap: calc(var(--base-padding) * 0.5);
-      }
-
-      .option {
-        display: flex;
-        align-items: center;
-        padding: var(--base-padding);
-        background: var(--option-bg);
-        border: 2px solid var(--card-border);
-        border-radius: var(--border-radius);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: var(--card-shadow);
-      }
-
-      .option:hover {
-        background: var(--option-hover);
-        transform: translateY(-2px);
-        box-shadow: var(--card-shadow-hover);
-      }
-
-      .option input {
-        margin-right: var(--base-padding);
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        accent-color: var(--brand-primary);
-      }
-
-      .option label {
-        font-size: clamp(1rem, 2.5vw, 1.1rem);
-        color: var(--text-primary);
-        cursor: pointer;
-      }
-
-      .option.selected {
-        border-color: var(--option-selected-border);
-        background: var(--option-selected);
-      }
-
-      .option.correct {
-        background: var(--success-bg);
-        border-color: var(--success-border);
-        color: var(--success-text);
-      }
-
-      .option.incorrect {
-        background: var(--error-bg);
-        border-color: var(--error-border);
-        color: var(--error-text);
-      }
-
-      .explanation {
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
-        color: var(--text-secondary);
-        padding: var(--base-padding);
-        border-radius: var(--border-radius);
-        margin-top: var(--base-padding);
-        border-left: 4px solid var(--brand-primary);
-        background: var(--card-bg);
-      }
-
-      .button-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: var(--base-padding);
-        margin: var(--base-margin) 0;
-      }
-
-      button {
-        padding: calc(var(--base-padding) * 0.8) calc(var(--base-padding) * 1.5);
-        font-size: clamp(1rem, 2.5vw, 1.1rem);
-        font-weight: 500;
-        border-radius: var(--border-radius);
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 140px;
-        justify-content: center;
-        box-shadow: var(--card-shadow);
-      }
-
-      button.primary {
-        background: var(--gradient-primary);
-        color: white;
-      }
-
-      button.secondary {
-        background: var(--gradient-secondary);
-        color: white;
-      }
-
-      button.accent {
-        background: var(--gradient-accent);
-        color: white;
-      }
-
-      button.neutral {
-        background: var(--gradient-navy-cool);
-        color: var(--text-primary);
-      }
-
-      button:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: var(--card-shadow-hover);
-      }
-
-      button:disabled {
-        background: var(--bg-secondary);
-        cursor: not-allowed;
-        opacity: 0.6;
-      }
-
-      .loading {
-        font-size: clamp(1rem, 3vw, 1.2rem);
-        color: var(--text-secondary);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .loading i {
-        color: var(--brand-primary);
-      }
-
-      #error-message {
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
-        padding: var(--base-padding);
-        border-radius: var(--border-radius);
-        text-align: center;
-        margin-top: var(--base-padding);
-      }
-
-      #error-message.success {
-        background: var(--success-bg);
-        border-left: 4px solid var(--success-border);
-        color: var(--success-text);
-      }
-
-      #error-message.error {
-        background: var(--error-bg);
-        border-left: 4px solid var(--error-border);
-        color: var(--error-text);
-      }
-
-      /* 반응형 디자인 */
-      @media (max-width: 768px) {
         :root {
-          --base-font-size: clamp(14px, 2vw, 16px);
-          --base-padding: clamp(10px, 1.5vw, 12px);
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-neutral: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-accent: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: rgba(255, 255, 255, 0.2);
+            --primary-purple: #7c3aed;
+            --primary-indigo: #6366f1;
+            --primary-pink: #ec4899;
+            --primary-emerald: #10b981;
+            --primary-amber: #f59e0b;
+            --option-bg: #f1f5f9;
+            --option-hover: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
+            --correct-bg: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
+            --incorrect-bg: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(248, 113, 113, 0.15));
+            --explanation-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.1), rgba(203, 213, 225, 0.1));
+            --progress-bg: rgba(148, 163, 184, 0.2);
+            --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --shadow-strong: 0 25px 50px rgba(0, 0, 0, 0.25);
+            --border-radius: 16px;
+            --border-radius-lg: 24px;
+            --golden-ratio: 1.618;
+            --base-font-size: clamp(16px, 4vw, 18px);
+            --base-padding: clamp(12px, 3vw, 16px);
+            --base-margin: calc(var(--base-padding) * var(--golden-ratio));
         }
 
-        #quiz-container, #progress {
-          width: 95%;
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            --bg-secondary: linear-gradient(135deg, #581c87 0%, #7c2d12 100%);
+            --bg-neutral: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-accent: #e2e8f0;
+            --card-bg: rgba(30, 41, 59, 0.95);
+            --card-border: rgba(148, 163, 184, 0.1);
+            --primary-purple: #a855f7;
+            --primary-indigo: #8b5cf6;
+            --primary-pink: #f472b6;
+            --primary-emerald: #34d399;
+            --primary-amber: #fbbf24;
+            --option-bg: rgba(51, 65, 85, 0.5);
+            --option-hover: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(139, 92, 246, 0.1));
+            --correct-bg: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.2));
+            --incorrect-bg: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(239, 68, 68, 0.2));
+            --explanation-bg: linear-gradient(135deg, rgba(51, 65, 85, 0.3), rgba(71, 85, 105, 0.3));
+            --progress-bg: rgba(71, 85, 105, 0.4);
+            --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.3);
+            --shadow-medium: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --shadow-strong: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
 
-        .button-container {
-          flex-direction: column;
-          align-items: center;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        button {
-          width: 100%;
-          max-width: 300px;
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-primary);
+            font-size: var(--base-font-size);
+            font-weight: 400;
+            -webkit-overflow-scrolling: touch;
+            overflow-x: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
-      }
 
-      @media (max-width: 480px) {
-        :root {
-          --base-font-size: clamp(12px, 2vw, 14px);
-          --base-padding: clamp(8px, 1.5vw, 10px);
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-secondary);
+            opacity: 0.1;
+            z-index: -1;
+            animation: gradientShift 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { opacity: 0.1; transform: scale(1); }
+            100% { opacity: 0.2; transform: scale(1.05); }
+        }
+
+        .theme-toggle-container {
+            position: fixed;
+            top: var(--base-padding);
+            right: var(--base-padding);
+            z-index: 1000;
         }
 
         .theme-toggle {
-          width: 40px;
-          height: 40px;
-          font-size: 1rem;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--primary-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: var(--shadow-medium);
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
+            color: white;
+        }
+
+        header {
+            margin: calc(var(--base-margin) * 1.5) 0 var(--base-margin) 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         h1 {
-          font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-size: clamp(1.8rem, 7vw, 2.2rem);
+            font-weight: 700;
+            color: var(--text-accent);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: inline-block;
+            letter-spacing: -0.02em;
         }
-      }
 
-      /* 애니메이션 */
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-      }
-
-      #quiz-container, .option, button {
-        animation: fadeIn 0.5s ease;
-      }
-
-      .option.correct, .option.incorrect {
-        animation: pulse 0.5s ease;
-      }
-
-      /* 접근성 */
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          animation: none !important;
-          transition: none !important;
+        h1 i {
+            margin-right: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-      }
 
-      @media (prefers-contrast: high) {
-        :root {
-          --text-primary: #000000;
-          --bg-primary: #ffffff;
-          --card-border: #000000;
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-purple), var(--primary-indigo), var(--primary-pink));
+            border-radius: 2px;
+            animation: underlineGlow 2s ease-in-out infinite alternate;
         }
-      }
 
-      button:focus, .option:focus-within, .theme-toggle:focus {
-        outline: 3px solid var(--brand-primary);
-        outline-offset: 2px;
-      }
+        @keyframes underlineGlow {
+            0% { opacity: 0.7; transform: scaleX(1); }
+            100% { opacity: 1; transform: scaleX(1.05); }
+        }
+
+        #progress {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: calc(var(--base-padding) * 1.2);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: calc(var(--base-padding) * 0.8);
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            margin-bottom: var(--base-margin);
+            border: 1px solid var(--card-border);
+            font-weight: 500;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background: var(--progress-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-purple), var(--primary-indigo), var(--primary-pink));
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        #quiz-container {
+            width: 90%;
+            max-width: 800px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: calc(var(--base-padding) * 1.5);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: var(--base-margin);
+            display: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--card-border);
+            height: auto;
+            min-height: clamp(350px, 60vh, 700px);
+        }
+
+        .question-text {
+            font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+            font-weight: 600;
+            color: var(--text-accent);
+            text-align: left;
+            padding: calc(var(--base-padding) * 1.2);
+            line-height: 1.6;
+            flex-shrink: 0;
+            max-width: 100%;
+            letter-spacing: -0.01em;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
+            border-radius: var(--border-radius);
+            margin-bottom: calc(var(--base-padding) * 0.8);
+        }
+
+        .question-text strong {
+            color: var(--primary-purple);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .question-text span.incorrect-fill {
+            color: var(--primary-emerald);
+            text-decoration: underline;
+            font-weight: 700;
+        }
+
+        #options-container {
+            flex-grow: 1;
+            flex-shrink: 1;
+            overflow-y: auto;
+            padding: calc(var(--base-padding) * 0.8);
+            max-height: unset;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: calc(var(--base-padding) * 1.2);
+            margin: calc(var(--base-margin) / 2) 0;
+            background: var(--option-bg);
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            min-height: 56px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--option-hover);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .option:hover::before {
+            opacity: 1;
+        }
+
+        .option:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-soft);
+            border-color: var(--primary-purple);
+        }
+
+        .option:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(99, 102, 241, 0.2));
+        }
+
+        .option input {
+            margin-right: calc(var(--base-padding) * 1.2);
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--primary-purple);
+            position: relative;
+            z-index: 1;
+        }
+
+        .option label {
+            flex: 1;
+            font-size: clamp(1rem, 3.8vw, 1.2rem);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .option.selected {
+            border-color: var(--primary-purple);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(99, 102, 241, 0.15));
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.3);
+            animation: pulseSelection 0.3s ease-out;
+        }
+
+        @keyframes pulseSelection {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+
+        .option.correct {
+            background: var(--correct-bg);
+            border-color: var(--primary-emerald);
+            animation: correctPulse 0.6s ease;
+        }
+
+        .option.incorrect {
+            background: var(--incorrect-bg);
+            border-color: #ef4444;
+            animation: incorrectPulse 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(16, 185, 129, 0.4); }
+        }
+
+        @keyframes incorrectPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+        }
+
+        .explanation {
+            font-size: clamp(0.95rem, 3.2vw, 1.1rem);
+            color: var(--text-primary);
+            background: var(--explanation-bg);
+            padding: calc(var(--base-padding) * 1.2);
+            border-radius: var(--border-radius);
+            text-align: left;
+            margin-top: calc(var(--base-margin) / 2);
+            box-shadow: var(--shadow-soft);
+            animation: fadeIn 0.6s ease-in;
+            flex-shrink: 0;
+            overflow-y: auto;
+            line-height: 1.6;
+            border: 1px solid var(--card-border);
+            max-height: 20vh;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: calc(var(--base-margin) * 0.8);
+            margin-top: var(--base-margin);
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: calc(var(--base-padding) * 1.2) calc(var(--base-padding) * 2);
+            font-size: clamp(1rem, 3.8vw, 1.2rem);
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            min-width: 160px;
+            justify-content: center;
+            box-shadow: var(--shadow-soft);
+            -webkit-tap-highlight-color: transparent;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent, rgba(255, 255, 255, 0.2));
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        button:hover:not(:disabled)::before {
+            transform: translateX(100%);
+        }
+
+        button.purple {
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
+            color: white;
+        }
+
+        button.pink {
+            background: linear-gradient(135deg, var(--primary-pink), #f97316);
+            color: white;
+        }
+
+        button.emerald {
+            background: linear-gradient(135deg, var(--primary-emerald), #059669);
+            color: white;
+        }
+
+        button.amber { /* New style for home button */
+            background: linear-gradient(135deg, var(--primary-amber), #facc15);
+            color: white;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: var(--shadow-medium);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0) scale(0.95);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
+            opacity: 0.8;
+        }
+
+        button:disabled {
+            background: linear-gradient(135deg, #d1d5db, #9ca3af);
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            font-size: clamp(1.2rem, 4.5vw, 1.4rem);
+            color: var(--text-primary);
+            margin: var(--base-margin) 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 500;
+        }
+
+        .loading i {
+            color: var(--primary-purple);
+        }
+
+        #error-message {
+            font-size: clamp(0.95rem, 3.2vw, 1.1rem);
+            margin-top: calc(var(--base-margin) / 2);
+            color: #ef4444;
+            flex: 0;
+            font-weight: 500;
+            text-align: center;
+            padding: calc(var(--base-padding) * 0.8);
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            :root {
+                --base-font-size: clamp(14px, 3.5vw, 16px);
+                --base-padding: clamp(10px, 2.5vw, 14px);
+                --border-radius: 12px;
+                --border-radius-lg: 16px;
+            }
+            
+            .theme-toggle {
+                width: 48px;
+                height: 48px;
+                font-size: 1.4rem;
+            }
+            
+            #quiz-container {
+                width: 95%;
+                padding: calc(var(--base-padding) * 1.2);
+                min-height: clamp(300px, 55vh, 600px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --base-font-size: clamp(12px, 3vw, 14px);
+                --base-padding: clamp(8px, 2vw, 12px);
+            }
+            
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+            
+            #quiz-container {
+                width: calc(100% - (var(--base-padding) * 2));
+                margin: 0 var(--base-padding);
+                padding: var(--base-padding);
+                min-height: clamp(250px, 50vh, 500px);
+            }
+            
+            button {
+                width: 100%;
+                min-width: 0;
+                padding: calc(var(--base-padding) * 1) calc(var(--base-padding) * 1.5);
+                font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+            }
+
+            .option {
+                padding: var(--base-padding);
+                min-height: 50px;
+            }
+
+            .option input {
+                width: 20px;
+                height: 20px;
+                margin-right: var(--base-padding);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Confetti effect (simple CSS based) */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-emerald);
+            opacity: 0;
+            border-radius: 50%;
+            animation: confetti-fall 3s ease-out forwards;
+            filter: blur(0.5px);
+            mix-blend-mode: screen;
+        }
+        .confetti:nth-child(2n) { background-color: var(--primary-purple); }
+        .confetti:nth-child(3n) { background-color: var(--primary-pink); }
+        .confetti:nth-child(4n) { background-color: var(--primary-indigo); }
+        .confetti:nth-child(5n) { background-color: var(--primary-amber); }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotateZ(0deg) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotateZ(720deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+
+        /* Focus States */
+        button:focus, .option:focus-within, .theme-toggle:focus {
+            outline: 3px solid var(--primary-purple);
+            outline-offset: 2px;
+            border-radius: var(--border-radius);
+        }
+
+        /* High Contrast Mode */
+        @media (prefers-contrast: high) {
+            :root {
+                --bg-primary: #ffffff;
+                --bg-secondary: #000000;
+                --text-primary: #000000;
+                --card-bg: #ffffff;
+                --option-bg: #f0f0f0;
+                --correct-bg: #00ff00;
+                --incorrect-bg: #ff0000;
+            }
+            [data-theme="dark"] {
+                --bg-primary: #000000;
+                --bg-secondary: #ffffff;
+                --text-primary: #ffffff;
+                --card-bg: #000000;
+                --option-bg: #333333;
+                --correct-bg: #00ff00;
+                --incorrect-bg: #ff0000;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="theme-toggle-container">
-      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">
-        <i class="fas fa-sun"></i>
-      </button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">
+            <i class="fas fa-sun"></i>
+        </button>
     </div>
 
     <header>
-      <h1><i class="fas fa-bible"></i> 성경 문제 풀이</h1>
+        <h1><i class="fas fa-bible"></i> 성경 문제 풀이</h1>
     </header>
 
     <div id="progress" role="status" aria-live="polite">
-      <div class="progress-info">
-        <span>문제 <span id="current-question">1</span> / <span id="total-questions">?</span></span>
-        <span id="score">점수: 0</span>
-      </div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
-      </div>
+        <div class="progress-info">
+            <span>문제 <span id="current-question">1</span> / <span id="total-questions">?</span></span>
+            <span id="score">점수: 0</span>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
+        </div>
+        <div id="highest-score-display" style="font-size: 0.9em; color: var(--text-secondary); margin-top: 5px;">최고 점수: 0</div>
     </div>
 
     <main>
-      <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> 로딩 중...</div>
-      <div id="quiz-container" role="region" aria-label="퀴즈 내용">
-        <div class="question-text" id="question-text"></div>
-        <div id="options-container"></div>
-        <div id="explanation" class="explanation" style="display: none;"></div>
-      </div>
+        <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> 로딩 중...</div>
+        <div id="quiz-container" role="region" aria-label="퀴즈 내용" tabindex="-1">
+            <div class="question-text" id="question-text"></div>
+            <div id="options-container"></div>
+            <div id="explanation" class="explanation" style="display: none;"></div>
+        </div>
     </main>
 
     <div class="button-container">
-      <button id="check-answer" class="primary" aria-label="정답 확인"><i class="fas fa-check"></i> 정답 확인</button>
-      <button id="next-question" class="secondary" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
-      <button id="restart-quiz" class="accent" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
-      <button id="home-btn" class="neutral" aria-label="홈으로 돌아가기"><i class="fas fa-home"></i> 홈으로</button>
+        <button id="check-answer" class="purple" aria-label="정답 확인" disabled><i class="fas fa-check"></i> 정답 확인</button>
+        <button id="next-question" class="pink" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
+        <button id="restart-quiz" class="emerald" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
+        <button id="home-btn" class="amber" style="display: none;" aria-label="홈으로 돌아가기"><i class="fas fa-home"></i> 홈으로</button>
     </div>
 
     <div id="error-message" style="display: none;" role="alert"></div>
+    <div id="confetti-container" class="confetti-container"></div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        let currentQuestionIndex = 0;
-        let questions = [];
-        let score = 0;
-        let originalQuestionText = "";
-        let currentOptions = [];
+        document.addEventListener("DOMContentLoaded", () => {
+            let currentQuestionIndex = 0;
+            let questions = [];
+            let score = 0;
+            let originalQuestionText = "";
+            let currentOptions = []; // Storing current options for comparison
 
-        const themeToggle = document.getElementById("theme-toggle");
-        const body = document.body;
-        const savedTheme = localStorage.getItem("theme") || "light";
-        body.setAttribute("data-theme", savedTheme);
-        themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
+            const themeToggle = document.getElementById("theme-toggle");
+            const body = document.body;
+            const savedTheme = localStorage.getItem("theme") || "light";
+            body.setAttribute("data-theme", savedTheme);
+            themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
 
-        themeToggle.addEventListener("click", () => {
-          const currentTheme = body.getAttribute("data-theme");
-          const newTheme = currentTheme === "light" ? "dark" : "light";
-          body.setAttribute("data-theme", newTheme);
-          localStorage.setItem("theme", newTheme);
-          themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
-          if (navigator.vibrate) navigator.vibrate(50);
-        });
-
-        fetch("assets/data/bible_rp.json")
-          .then(response => {
-            if (!response.ok) throw new Error("JSON 파일 로드 실패");
-            return response.json();
-          })
-          .then(data => {
-            questions = data;
-            document.getElementById("total-questions").textContent = questions.length;
-            document.getElementById("quiz-container").style.display = "flex";
-            document.getElementById("loading").style.display = "none";
-            loadQuestion(currentQuestionIndex);
-            updateProgressBar(currentQuestionIndex + 1, questions.length);
-          })
-          .catch(error => {
-            console.error("JSON 파일 로드 실패:", error);
+            const checkAnswerBtn = document.getElementById("check-answer");
+            const nextQuestionBtn = document.getElementById("next-question");
+            const restartQuizBtn = document.getElementById("restart-quiz");
+            const homeBtn = document.getElementById("home-btn");
+            const questionTextElement = document.getElementById("question-text");
+            const optionsContainer = document.getElementById("options-container");
+            const explanationElement = document.getElementById("explanation");
             const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
-            errorMessage.classList.add("error");
-            errorMessage.style.display = "block";
-            document.getElementById("loading").style.display = "none";
-          });
+            const quizContainer = document.getElementById("quiz-container");
+            const highestScoreDisplay = document.getElementById("highest-score-display");
 
-        function shuffleArray(array) {
-          const newArray = [...array];
-          for (let i = newArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-          }
-          return newArray;
-        }
+            displayHighestScore();
 
-        function loadQuestion(index) {
-          const questionText = document.getElementById("question-text");
-          const optionsContainer = document.getElementById("options-container");
-          const explanation = document.getElementById("explanation");
-          const currentQuestion = questions[index];
+            function displayHighestScore() {
+                const highestScore = parseInt(localStorage.getItem('highestBibleQuizScore') || '0');
+                highestScoreDisplay.textContent = `최고 점수: ${highestScore}`;
+            }
 
-          const blanks = currentQuestion.answers.length;
-          originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
-          currentOptions = shuffleArray(currentQuestion.options);
-          questionText.innerHTML = originalQuestionText;
-
-          optionsContainer.innerHTML = "";
-          currentOptions.forEach((option, i) => {
-            const optionDiv = document.createElement("div");
-            optionDiv.classList.add("option");
-            optionDiv.innerHTML = `
-              <input type="checkbox" name="answer" id="option${i}" value="${i}">
-              <label for="option${i}">${option}</label>
-            `;
-            optionDiv.addEventListener("click", (e) => {
-              if (e.target.tagName !== "INPUT") {
-                const checkbox = document.getElementById(`option${i}`);
-                checkbox.checked = !checkbox.checked;
-                updateSelectedAnswers();
-                optionDiv.classList.toggle("selected", checkbox.checked);
+            themeToggle.addEventListener("click", () => {
+                const currentTheme = body.getAttribute("data-theme");
+                const newTheme = currentTheme === "light" ? "dark" : "light";
+                body.setAttribute("data-theme", newTheme);
+                localStorage.setItem("theme", newTheme);
+                themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
                 if (navigator.vibrate) navigator.vibrate(50);
-              }
             });
-            optionDiv.querySelector("input").addEventListener("change", () => {
-              updateSelectedAnswers();
-              optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
+
+            function shuffleArray(array) {
+                const newArray = [...array];
+                for (let i = newArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                }
+                return newArray;
+            }
+
+            function triggerConfetti() {
+                const confettiContainer = document.getElementById('confetti-container');
+                confettiContainer.innerHTML = '';
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.animationDelay = `${Math.random() * 1.5}s`;
+                    confetti.style.animationDuration = `${2 + Math.random() * 1}s`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => {
+                    confettiContainer.innerHTML = '';
+                }, 3000);
+            }
+
+            fetch("assets/data/bible_rp.json")
+                .then(response => {
+                    if (!response.ok) throw new Error("JSON 파일 로드 실패");
+                    return response.json();
+                })
+                .then(data => {
+                    questions = data;
+                    shuffleArray(questions); // Shuffle questions
+                    document.getElementById("total-questions").textContent = questions.length;
+                    quizContainer.style.display = "flex";
+                    document.getElementById("loading").style.display = "none";
+                    loadQuestion(currentQuestionIndex);
+                    updateProgressBar(currentQuestionIndex + 1, questions.length);
+                })
+                .catch(error => {
+                    console.error("JSON 파일 로드 실패:", error);
+                    errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
+                    errorMessage.style.display = "block";
+                    document.getElementById("loading").style.display = "none";
+                });
+
+            function loadQuestion(index) {
+                const currentQuestion = questions[index];
+
+                setTimeout(() => {
+                    quizContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                    quizContainer.focus();
+                }, 100);
+
+                const blanks = currentQuestion.answers.length;
+                originalQuestionText = `${currentQuestion.question} (${blanks}개를 선택하세요)`;
+                questionTextElement.innerHTML = originalQuestionText;
+
+                optionsContainer.innerHTML = "";
+                currentOptions = shuffleArray(currentQuestion.options); // Shuffle options for the current question
+                
+                currentOptions.forEach((optionText, i) => {
+                    const optionDiv = document.createElement("div");
+                    optionDiv.classList.add("option");
+                    optionDiv.innerHTML = `
+                        <input type="checkbox" name="answer" id="option${i}" value="${i}" aria-label="${optionText}">
+                        <label for="option${i}">${optionText}</label>
+                    `;
+                    optionDiv.addEventListener("click", (e) => {
+                        const checkbox = optionDiv.querySelector('input');
+                        if (e.target.tagName !== "INPUT") {
+                            checkbox.checked = !checkbox.checked;
+                        }
+                        optionDiv.classList.toggle("selected", checkbox.checked);
+                        updateSelectedAnswers();
+                        if (navigator.vibrate) navigator.vibrate(50);
+                        updateCheckButtonState();
+                    });
+                    optionDiv.querySelector("input").addEventListener("change", () => {
+                        optionDiv.classList.toggle("selected", optionDiv.querySelector("input").checked);
+                        updateSelectedAnswers();
+                        updateCheckButtonState();
+                    });
+                    optionsContainer.appendChild(optionDiv);
+                });
+
+                explanationElement.style.display = "none";
+                checkAnswerBtn.style.display = "block";
+                nextQuestionBtn.style.display = "none";
+                restartQuizBtn.style.display = "none";
+                homeBtn.style.display = "none"; // Hide home button initially
+                errorMessage.style.display = "none";
+                updateCheckButtonState(); // Initial check for button state
+            }
+
+            function updateSelectedAnswers() {
+                const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
+                let updatedText = originalQuestionText;
+                const selectedTexts = Array.from(selectedOptions).map(opt => {
+                    const label = document.querySelector(`label[for="${opt.id}"]`);
+                    return label.textContent;
+                });
+
+                let blankIndex = 0;
+                updatedText = updatedText.replace(/___/g, () => {
+                    if (blankIndex < selectedTexts.length) {
+                        return `<strong>${selectedTexts[blankIndex++]}</strong>`;
+                    }
+                    return '___';
+                });
+
+                questionTextElement.innerHTML = updatedText;
+            }
+            
+            function updateCheckButtonState() {
+                const selectedCount = document.querySelectorAll('input[name="answer"]:checked').length;
+                const currentQuestion = questions[currentQuestionIndex];
+                if (selectedCount >= 1 && selectedCount <= currentQuestion.answers.length) { // Allow checking with at least one answer selected, up to max expected answers
+                    checkAnswerBtn.disabled = false;
+                    checkAnswerBtn.removeAttribute("title");
+                } else {
+                    checkAnswerBtn.disabled = true;
+                    checkAnswerBtn.setAttribute("title", `${currentQuestion.answers.length}개의 답을 선택해야 합니다. (현재 ${selectedCount}개 선택)`);
+                }
+            }
+
+
+            function updateProgressBar(current, total) {
+                const progressBar = document.getElementById("progress-bar");
+                const percentage = (current / total) * 100;
+                progressBar.style.width = `${percentage}%`;
+                document.getElementById("current-question").textContent = current;
+                document.getElementById("score").textContent = `점수: ${score}`;
+            }
+
+            checkAnswerBtn.addEventListener("click", () => {
+                const selectedCheckboxes = document.querySelectorAll('input[name="answer"]:checked');
+                const currentQuestion = questions[currentQuestionIndex];
+                const blanks = currentQuestion.answers.length;
+
+                if (selectedCheckboxes.length !== blanks) {
+                    errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedCheckboxes.length}개 선택)`;
+                    errorMessage.style.color = "#ef4444";
+                    errorMessage.style.display = "block";
+                    if (navigator.vibrate) navigator.vibrate(200);
+                    return;
+                }
+
+                const selectedTexts = Array.from(selectedCheckboxes).map(opt => {
+                    const label = document.querySelector(`label[for="${opt.id}"]`);
+                    return label.textContent;
+                });
+                
+                const correctAnswers = currentQuestion.answers;
+
+                // Check if all selected answers are in correctAnswers AND correctAnswers has the same elements as selectedAnswers
+                const isCorrect = selectedTexts.length === correctAnswers.length &&
+                                  selectedTexts.every(val => correctAnswers.includes(val)) &&
+                                  correctAnswers.every(val => selectedTexts.includes(val));
+
+                const allOptions = document.querySelectorAll(".option");
+                allOptions.forEach((optionDiv, i) => {
+                    const optionText = optionDiv.querySelector('label').textContent;
+                    if (correctAnswers.includes(optionText)) {
+                        optionDiv.classList.add("correct");
+                    } else if (selectedTexts.includes(optionText)) { // If it was selected but not correct
+                        optionDiv.classList.add("incorrect");
+                    }
+                    optionDiv.style.pointerEvents = "none";
+                    optionDiv.querySelector('input').disabled = true;
+                });
+
+                if (isCorrect) {
+                    score++;
+                    errorMessage.textContent = "정답입니다! 🎉";
+                    errorMessage.style.color = "#10b981";
+                    errorMessage.style.display = "block";
+                    triggerConfetti();
+                    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                } else {
+                    errorMessage.textContent = "오답입니다. 😔";
+                    errorMessage.style.color = "#ef4444";
+                    errorMessage.style.display = "block";
+                    if (navigator.vibrate) navigator.vibrate(200);
+
+                    let blanksFilledText = originalQuestionText;
+                    let blankCounter = 0;
+                    blanksFilledText = blanksFilledText.replace(/___/g, () => {
+                        if (blankCounter < correctAnswers.length) {
+                            return `<span class="incorrect-fill">${correctAnswers[blankCounter++]}</span>`;
+                        }
+                        return '___';
+                    });
+                    questionTextElement.innerHTML = blanksFilledText;
+                }
+                
+                explanationElement.textContent = currentQuestion.explanation;
+                explanationElement.style.display = "block";
+
+                checkAnswerBtn.style.display = "none";
+                nextQuestionBtn.style.display = "block";
+                nextQuestionBtn.focus();
+                updateProgressBar(currentQuestionIndex + 1, questions.length);
+
+                const highestScore = parseInt(localStorage.getItem('highestBibleQuizScore') || '0');
+                if (score > highestScore) {
+                    localStorage.setItem('highestBibleQuizScore', score);
+                    displayHighestScore();
+                }
             });
-            optionsContainer.appendChild(optionDiv);
-          });
 
-          explanation.style.display = "none";
-          document.getElementById("check-answer").style.display = "block";
-          document.getElementById("next-question").style.display = "none";
-          document.getElementById("restart-quiz").style.display = "none";
-          document.getElementById("check-answer").disabled = false;
-          document.getElementById("error-message").style.display = "none";
-        }
+            nextQuestionBtn.addEventListener("click", () => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    loadQuestion(currentQuestionIndex);
+                    updateProgressBar(currentQuestionIndex + 1, questions.length);
+                } else {
+                    const finalScoreMessage = `퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}`;
+                    quizContainer.innerHTML = `<div class="question-text">${finalScoreMessage}</div>`;
+                    quizContainer.focus();
 
-        function updateSelectedAnswers() {
-          const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
-          const questionText = document.getElementById("question-text");
-          let updatedText = originalQuestionText;
-          const selectedTexts = Array.from(selectedOptions).map(opt => {
-            const label = document.querySelector(`label[for="${opt.id}"]`);
-            return label.textContent;
-          });
+                    nextQuestionBtn.style.display = "none";
+                    restartQuizBtn.style.display = "block";
+                    homeBtn.style.display = "block"; // Show home button when quiz finishes
+                    restartQuizBtn.focus();
+                    errorMessage.style.display = "none";
+                    explanationElement.style.display = "none";
+                    
+                    const highestScore = parseInt(localStorage.getItem('highestBibleQuizScore') || '0');
+                    if (score > highestScore) {
+                        localStorage.setItem('highestBibleQuizScore', score);
+                    }
+                    displayHighestScore();
+                }
+            });
 
-          let blankIndex = 0;
-          updatedText = updatedText.replace(/___/g, () => {
-            if (blankIndex < selectedTexts.length) {
-              return `<strong>${selectedTexts[blankIndex++]}</strong>`;
-            }
-            return '___';
-          });
+            restartQuizBtn.addEventListener("click", () => {
+                currentQuestionIndex = 0;
+                score = 0;
+                shuffleArray(questions);
+                quizContainer.style.display = "flex";
+                loadQuestion(currentQuestionIndex);
+                updateProgressBar(currentQuestionIndex + 1, questions.length);
+                displayHighestScore();
+            });
 
-          questionText.innerHTML = updatedText;
-        }
+            homeBtn.addEventListener("click", () => {
+                window.location.href = "/";
+            });
 
-        function updateProgressBar(current, total) {
-          const progressBar = document.getElementById("progress-bar");
-          const percentage = (current / total) * 100;
-          progressBar.style.width = `${percentage}%`;
-          document.getElementById("current-question").textContent = current;
-          document.getElementById("score").textContent = `점수: ${score}`;
-        }
-
-        document.getElementById("check-answer").addEventListener("click", () => {
-          const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
-          const currentQuestion = questions[currentQuestionIndex];
-          const errorMessage = document.getElementById("error-message");
-          const explanation = document.getElementById("explanation");
-          const blanks = currentQuestion.answers.length;
-
-          if (selectedOptions.length !== blanks) {
-            errorMessage.textContent = `${blanks}개의 답을 선택해주세요! (현재 ${selectedOptions.length}개 선택)`;
-            errorMessage.classList.add("error");
-            errorMessage.classList.remove("success");
-            errorMessage.style.display = "block";
-            return;
-          }
-
-          const selectedValues = Array.from(selectedOptions).map(opt => parseInt(opt.value));
-          const correctAnswers = currentQuestion.options
-            .map((option, index) => ({ option, index }))
-            .filter(opt => currentQuestion.answers.includes(opt.option))
-            .map(opt => currentOptions.indexOf(opt.option));
-
-          const isCorrect = selectedValues.length === correctAnswers.length &&
-            selectedValues.every(val => correctAnswers.includes(val)) &&
-            correctAnswers.every(val => selectedValues.includes(val));
-
-          const options = document.querySelectorAll(".option");
-          options.forEach((option, i) => {
-            if (correctAnswers.includes(i)) {
-              option.classList.add("correct");
-            } else if (selectedValues.includes(i)) {
-              option.classList.add("incorrect");
-            }
-            option.style.pointerEvents = "none";
-          });
-
-          if (isCorrect) score++;
-
-          errorMessage.textContent = isCorrect ? "정답입니다!" : "오답입니다.";
-          errorMessage.classList.toggle("success", isCorrect);
-          errorMessage.classList.toggle("error", !isCorrect);
-          errorMessage.style.display = "block";
-          explanation.textContent = currentQuestion.explanation;
-          explanation.style.display = "block";
-
-          document.getElementById("check-answer").style.display = "none";
-          document.getElementById("next-question").style.display = "block";
-          updateProgressBar(currentQuestionIndex + 1, questions.length);
+            document.querySelectorAll('button, .option').forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.classList.add('active');
+                });
+                element.addEventListener('touchend', function() {
+                    this.classList.remove('active');
+                });
+                element.addEventListener('keydown', function(e) {
+                    if (e.key === ' ' && (this.tagName === 'BUTTON' || this.classList.contains('option'))) {
+                        e.preventDefault();
+                    }
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        if (this.classList.contains('option')) {
+                            this.click();
+                        } else {
+                            this.click();
+                        }
+                    }
+                });
+            });
         });
-
-        document.getElementById("next-question").addEventListener("click", () => {
-          currentQuestionIndex++;
-          if (currentQuestionIndex < questions.length) {
-            loadQuestion(currentQuestionIndex);
-            updateProgressBar(currentQuestionIndex + 1, questions.length);
-          } else {
-            document.getElementById("quiz-container").innerHTML = `
-              <div class="question-text">퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}</div>
-            `;
-            document.getElementById("next-question").style.display = "none";
-            document.getElementById("restart-quiz").style.display = "block";
-            document.getElementById("error-message").style.display = "none";
-            document.getElementById("explanation").style.display = "none";
-          }
-        });
-
-        document.getElementById("restart-quiz").addEventListener("click", () => {
-          currentQuestionIndex = 0;
-          score = 0;
-          document.getElementById("quiz-container").style.display = "flex";
-          loadQuestion(currentQuestionIndex);
-          updateProgressBar(currentQuestionIndex + 1, questions.length);
-        });
-
-        document.getElementById("home-btn").addEventListener("click", () => {
-          window.location.href = "index.html";
-        });
-
-        document.querySelectorAll('button, .option').forEach(element => {
-          element.addEventListener('touchstart', function() {
-            this.classList.add('active');
-            if (navigator.vibrate) navigator.vibrate(50);
-          });
-          element.addEventListener('touchend', function() {
-            this.classList.remove('active');
-          });
-          element.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              this.click();
-            }
-          });
-        });
-      });
     </script>
-  </body>
+</body>
 </html>
