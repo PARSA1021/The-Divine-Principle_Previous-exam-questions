@@ -26,39 +26,68 @@
                 <div class="logo-container">
                     <img src="assets/images/1750916993134.png" alt="세계평화통일가정연합 로고" width="100" height="100" loading="lazy">
                 </div>
-                <h1 id="home-heading">TruePath 말씀 퀴즈</h1>
-                <h2>참된 길로의 영적 여정</h2>
-                <p>참부모님의 말씀으로 평화와 가정의 성장을 경험하며, 조화의 길을 열어 보세요.</p>
-                <p>원리강론과 퀴즈로 지혜를 키우고, 영적 완성을 향해 나아가세요.</p>
+                <h1 id="home-heading">TruePath 말씀 퀴즈와 DB</h1>
+                <p class="tagline">참된 길로의 영적 여정, 말씀과 함께 성장하세요</p>
+                <p>참부모님의 소중한 말씀을 통해 평화와 가정의 성장을 경험하며, 조화로운 삶의 길을 발견해보세요.</p>
+                <p>원리강론 퀴즈와 성경 퀴즈로 지혜를 키우고, 말씀 데이터베이스로 깊이 탐구하며 영적 완성을 향해 나아갈 수 있습니다.</p>
             </header>
+
             <div class="divider" aria-hidden="true"></div>
-            <div class="button-container">
-                <button class="quiz-button blue" onclick="startQuiz('원리강론')" aria-label="원리강론 퀴즈 시작" data-tooltip="원리강론을 기반으로 한 퀴즈로 통일원리를 탐구하세요">
-                    <i class="fas fa-school" aria-hidden="true"></i> 원리강론 퀴즈
-                </button>
-                <button class="quiz-button gold" onclick="startQuiz('성경')" aria-label="성경 퀴즈 시작" data-tooltip="성경 말씀을 통해 신앙을 깊이 이해하세요">
-                    <i class="fas fa-cross" aria-hidden="true"></i> 성경 퀴즈
-                </button>
-            </div>
-            <div class="divider" aria-hidden="true"></div>
-            <section class="instructions" role="complementary" aria-labelledby="instructions-heading">
-                <h2 id="instructions-heading"><i class="fas fa-info-circle" aria-hidden="true"></i> 사용 방법</h2>
-                <ul>
-                    <li><i class="fas fa-hand-pointer" aria-hidden="true"></i> <strong>시작:</strong> 원리강론 또는 성경 퀴즈 버튼을 클릭하세요.</li>
-                    <li><i class="fas fa-question-circle" aria-hidden="true"></i> <strong>답변 선택:</strong> 빈칸에 맞는 답을 선택하세요.</li>
-                    <li><i class="fas fa-check-circle" aria-hidden="true"></i> <strong>정답 확인:</strong> 답변 후 "정답 확인"을 클릭하세요.</li>
-                    <li><i class="fas fa-arrow-right" aria-hidden="true"></i> <strong>다음 문제:</strong> 정답 시 다음 문제로 이동합니다.</li>
-                    <li><i class="fas fa-redo" aria-hidden="true"></i> <strong>다시 시작:</strong> 퀴즈 완료 후 "다시 시작"을 클릭하세요.</li>
-                </ul>
+
+            <section class="quiz-selection" aria-labelledby="quiz-selection-heading">
+                <h2 id="quiz-selection-heading" class="section-title"><i class="fas fa-question-circle" aria-hidden="true"></i> 퀴즈 시작하기</h2>
+                <p class="section-description">선택하신 말씀으로 지식을 시험하고 영적 성장을 경험해보세요.</p>
+                <div class="button-container">
+                    <button class="quiz-button blue" onclick="startQuiz('원리강론')" aria-label="원리강론 퀴즈 시작" data-tooltip="원리강론을 기반으로 한 퀴즈로 통일원리를 탐구하세요">
+                        <i class="fas fa-school" aria-hidden="true"></i> 원리강론 퀴즈
+                    </button>
+                    <button class="quiz-button gold" onclick="startQuiz('성경')" aria-label="성경 퀴즈 시작" data-tooltip="성경 말씀을 통해 신앙을 깊이 이해하세요">
+                        <i class="fas fa-cross" aria-hidden="true"></i> 성경 퀴즈
+                    </button>
+                </div>
             </section>
+
             <div class="divider" aria-hidden="true"></div>
-            <div class="donation-section" role="complementary" aria-labelledby="donation-heading">
-                <h2 id="donation-heading"><i class="fas fa-heart" aria-hidden="true"></i> 함께하는 사랑의 후원</h2>
-                <p>세계평화통일가정연합의 말씀 퀴즈와 데이터베이스는 여러분의 소중한 후원으로 운영됩니다.</p>
-                <p><strong>후원 계좌:</strong> <span class="account-info">국민은행 020602-04-230715 (예금주: 문성민)</span></p>
-                <p>작은 후원 하나가 큰 변화를 만듭니다. 함께 평화와 사랑의 메시지를 세상에 전파해 주세요!</p>
+
+            <section class="instructions" role="complementary" aria-labelledby="instructions-heading">
+                <h2 id="instructions-heading" class="section-title"><i class="fas fa-info-circle" aria-hidden="true"></i> TruePath 사용 가이드</h2>
+                <div class="instructions-container">
+                    <div class="instruction-card">
+                        <h3><i class="fas fa-pencil-alt" aria-hidden="true"></i> 퀴즈 사용 방법</h3>
+                        <ul>
+                            <li>✨ <strong>시작:</strong> 원리강론 또는 성경 퀴즈 버튼을 클릭하세요!</li>
+                            <li>❓ <strong>답변:</strong> 제시된 빈칸에 맞는 답을 선택하거나 입력하세요.</li>
+                            <li>✅ <strong>확인:</strong> 답변 후 "정답 확인" 버튼을 클릭하여 결과를 확인하세요.</li>
+                            <li>➡️ <strong>다음:</strong> 정답 시 다음 문제로 쉽게 이동할 수 있습니다.</li>
+                            <li>🔄 <strong>재시작:</strong> 모든 퀴즈를 완료한 후 "다시 시작" 버튼으로 새로운 도전을 해보세요!</li>
+                        </ul>
+                    </div>
+                    <div class="instruction-card">
+                        <h3><i class="fas fa-search" aria-hidden="true"></i> 말씀 DB 사용 방법</h3>
+                        <ul>
+                            <li>🔍 <strong>검색:</strong> 검색창에 찾고 싶은 말씀을 입력하여 즉시 검색하세요.</li>
+                            <li>📚 <strong>카테고리:</strong> 다양한 카테고리 버튼을 선택하여 원하는 말씀만 필터링할 수 있습니다.</li>
+                            <li>✅ <strong>결과 확인:</strong> 검색 버튼을 눌러 정확한 검색 결과를 확인하세요.</li>
+                            <li>🗑️ <strong>초기화:</strong> 검색 초기화 버튼으로 새로운 검색을 시작할 수 있습니다.</li>
+                            <li>💡 <strong>탐구:</strong> 검색된 결과를 탐색하며 말씀을 깊이 공부하고 영적 지혜를 넓히세요!</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider" aria-hidden="true"></div>
+
+            <section class="donation-section" role="complementary" aria-labelledby="donation-heading">
+                <h2 id="donation-heading" class="section-title"><i class="fas fa-heart" aria-hidden="true"></i> 함께하는 사랑의 후원</h2>
+                <p>TruePath 말씀 퀴즈와 데이터베이스는 여러분의 따뜻한 후원으로 운영됩니다.</p>
+                <p>소중한 말씀이 더 많은 사람들에게 전해질 수 있도록 후원에 동참해주세요.</p>
+                <p class="account-info-box">
+                    <strong>후원 계좌:</strong> <span id="account-number">국민은행 020602-04-230715</span> <br>
+                    <span class="account-holder">(예금주: 문성민)</span>
+                </p>
+                <p>여러분의 작은 후원 하나하나가 평화와 사랑의 메시지를 세상에 전파하는 데 큰 힘이 됩니다. 감사합니다!</p>
                 <button class="donation-button" onclick="copyAccountNumber()" aria-label="계좌번호 복사"><i class="fas fa-copy" aria-hidden="true"></i> 계좌번호 복사</button>
-            </div>
+            </section>
         </section>
 
         <section class="page" id="workbook" role="region" aria-labelledby="workbook-heading">
@@ -66,16 +95,19 @@
                 <div class="logo-container">
                     <img src="assets/images/1750916993134.png" alt="세계평화통일가정연합 로고" width="100" height="auto" loading="lazy">
                 </div>
-                <h1 id="workbook-heading"><i class="fas fa-book-open" aria-hidden="true"></i> TruePath 말씀 DB</h1>
-                <h2>참된 가르침의 보물창고</h2>
-                <p>다양한 말씀을 탐구하세요</p>
+                <h1 id="workbook-heading"><i class="fas fa-book-open" aria-hidden="true"></i> TruePath 말씀 데이터베이스</h1>
+                <p class="tagline">참된 가르침의 보물창고, 깊이 있는 말씀 탐구</p>
+                <p>방대한 말씀 자료를 쉽고 빠르게 찾아보고, 영적 지혜를 얻으세요.</p>
             </header>
+
             <div class="divider" aria-hidden="true"></div>
-            <div class="search-container">
-                <h2><i class="fas fa-search" aria-hidden="true"></i> 말씀 검색</h2>
+
+            <div class="search-container" role="search">
+                <h2 class="section-title"><i class="fas fa-search" aria-hidden="true"></i> 말씀 검색</h2>
+                <p class="section-description">원하는 키워드나 구절을 입력하여 말씀을 찾아보세요.</p>
                 <div class="search-box">
                     <label for="search-input" class="sr-only">검색어 입력</label>
-                    <input type="text" id="search-input" placeholder="검색어를 입력하세요" aria-label="검색어 입력 필드" autocomplete="off">
+                    <input type="text" id="search-input" placeholder="예: 평화, 사랑, 천국, 말씀" aria-label="검색어 입력 필드" autocomplete="off">
                     <div class="search-suggestions" id="search-suggestions" role="listbox"></div>
                     <button onclick="searchMessages()" title="검색 실행" aria-label="검색 실행"><i class="fas fa-search" aria-hidden="true"></i></button>
                     <button class="clear-search" onclick="clearSearch()" title="검색 초기화" aria-label="검색 초기화"><i class="fas fa-times" aria-hidden="true"></i></button>
@@ -84,7 +116,7 @@
                     <button class="active" data-category="전체" aria-pressed="true"><i class="fas fa-globe" aria-hidden="true"></i> 전체</button>
                     <button data-category="천성경" aria-pressed="false"><i class="fas fa-book" aria-hidden="true"></i> 천성경</button>
                     <button data-category="참부모경" aria-pressed="false"><i class="fas fa-pray" aria-hidden="true"></i> 참부모경</button>
-                    <button data-category="참부모님 말씀" aria-pressed="false"><i class="fas fa-quote-left" aria-hidden="true"></i> 참부모님 말씀</button>
+                    <button data-category="참부모님 말씀" aria-pressed="false"><i class="fas fa-quote-left" Ourselveshidden="true"></i> 참부모님 말씀</button>
                     <button data-category="참어머님 말씀" aria-pressed="false"><i class="fas fa-female" aria-hidden="true"></i> 참어머님 말씀</button>
                     <button data-category="천심원" aria-pressed="false"><i class="fas fa-heart" aria-hidden="true"></i> 천심원</button>
                 </div>
