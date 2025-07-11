@@ -112,6 +112,15 @@
                     <button onclick="searchMessages()" title="검색 실행" aria-label="검색 실행"><i class="fas fa-search" aria-hidden="true"></i></button>
                     <button class="clear-search" onclick="clearSearch()" title="검색 초기화" aria-label="검색 초기화"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
+                <select id="sort-select" aria-label="말씀 정렬 기준 선택">
+                    <option value="default">관련도순 (기본)</option>
+                    <option value="length_asc">길이 짧은순</option>
+                    <option value="length_desc">길이 긴순</option>
+                </select>
+
+                <button id="random-message-button" class="quiz-button green" aria-label="랜덤 말씀 보기">
+                    <i class="fas fa-random" aria-hidden="true"></i> 랜덤 말씀
+                </button>
                 <div class="category-container" role="group" aria-label="카테고리 필터">
                     <button class="active" data-category="전체" aria-pressed="true"><i class="fas fa-globe" aria-hidden="true"></i> 전체</button>
                     <button data-category="천성경" aria-pressed="false"><i class="fas fa-book" aria-hidden="true"></i> 천성경</button>
@@ -132,7 +141,7 @@
     </main>
 
     <footer class="footer" role="contentinfo">
-        <p>© 2025 세계평화통일가정연합. All rights reserved.</p>
+      <p>© 2025 <span class="brand">TruePath</span>. All rights reserved.</p>
     </footer>
 
     <button class="back-to-top" onclick="scrollToTop()" aria-label="페이지 맨 위로 이동"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
