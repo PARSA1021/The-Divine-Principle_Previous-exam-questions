@@ -2,119 +2,93 @@
  * styles.css - 전반적인 웹사이트 디자인 및 레이아웃을 정의하는 스타일시트
  *
  * 이 파일은 다음 목표를 바탕으로 기존 스타일을 개선합니다:
- * 1. FFWPU 색상 테마 기반 적용: 지정된 FFWPU 색상 팔레트 사용
- * 2. 다크모드 추가: 시스템 prefers-color-scheme 및 수동 토글(.dark-mode 클래스) 지원
- * 3. 토글 버튼 스타일링: 다크모드 전환을 위한 토글 스위치 디자인
- * 4. 디자인 감성 유지: 고급스럽고 평화로운 톤 유지 (다크모드 포함)
- * 5. 접근성과 가독성: 충분한 대비 비율 확보 및 인터랙션 효과 명확화
- * 6. 정리된 구조 및 주석 추가: 유지보수 용이성을 위한 코드 구조화 및 상세 주석
+ * 1. 반응형 디자인 강화: 모바일, 태블릿, PC 등 다양한 화면 크기에서 최적화된 레이아웃 제공
+ * 2. 시각적 일관성 유지: 모든 컴포넌트(버튼, 카드, 입력창 등)에 통일된 디자인 적용
+ * 3. 인터랙션 효과 추가: hover, active, focus 상태에 부드러운 전환 효과 및 시각적 피드백 제공
+ * 4. 접근성 고려: 충분한 대비 색상, 큰 클릭 영역, 명확한 포커스 스타일
+ * 5. 스크롤 관련 UX 개선: 부드러운 스크롤 이동 및 특정 섹션 상단 자동 스크롤
+ * 6. 모던하고 깔끔한 UI: 라운드 처리, 섬세한 그림자, 카드형 UI 활용
+ * 7. 정리된 구조 및 주석 추가: 유지보수 용이성을 위한 코드 구조화 및 상세 주석
+ * 8. CSS 변수 활용: 색상, 폰트 크기 등 핵심 값의 재사용성 및 관리 용이성 증대
  */
 
 /* ==========================================================================
-   CSS 변수 정의 (FFWPU 컬러 팔레트, 그림자, 폰트 등)
+   CSS 변수 정의 (컬러 팔레트, 그림자, 폰트 등)
    ========================================================================== */
 :root {
-    /* FFWPU 기본 색상 (라이트 모드) */
-    --color-primary: #002C5F; /* FFWPU 네이비 블루 */
-    --color-primary-rgb: 0, 44, 95;
-    --color-accent: #FFD700; /* 골드 포인트 */
-    --color-accent-rgb: 255, 215, 0;
-    --color-bg: #FFFFFF; /* 기본 배경 */
-    --color-surface: #F5F5DC; /* 연한 베이지 배경 */
-    --color-text: #000000; /* 텍스트 */
-    --color-text-light: #525252; /* 연한 텍스트 */
-    --color-border: #E0E0E0; /* 테두리 및 구분선 */
-    --color-hover-bg: #E6F0FE; /* 호버 시 배경색 (기존 유지, primary 기반) */
-    --color-highlight-bg: #FFFACD; /* 검색 하이라이트 배경 (골드 기반) */
-    --color-highlight-text: #002C5F; /* 검색 하이라이트 텍스트 (primary 기반) */
-    --color-success: #34A853; /* 성공 상태 초록색 */
-    --color-error: #EA4335; /* 에러 상태 빨간색 */
-    --color-quiz-green: #34A853; /* 퀴즈 성공 초록색 (기존 유지) */
-    --color-quiz-green-rgb: 52, 168, 83;
-
-    /* 토스트 메시지 색상 */
-    --color-toast-bg: rgba(0, 0, 0, 0.8);
-    --color-toast-text: #FFFFFF;
+    /* 기본 색상 (라이트 모드) */
+    --primary-color: #4285f4; /* 구글 파란색 */
+    --primary-rgb: 66, 133, 244;
+    --secondary-color: #ea4335; /* 구글 빨간색 */
+    --accent-color: #fbbc05; /* 구글 노란색 */
+    --text-color: #3c4043; /* 어두운 회색 (기본 텍스트) */
+    --background-color: #f8f9fa; /* 밝은 회색 배경 */
+    --card-background: #ffffff; /* 카드 및 모달 배경 */
+    --card-background-rgb: 255, 255, 255;
+    --border-color: #dadce0; /* 테두리 및 구분선 */
+    --hover-background: #e6f0fe; /* 호버 시 배경색 */
+    --highlight-background: #fffbe6; /* 검색 하이라이트 배경 */
+    --highlight-color: #1a73e8; /* 검색 하이라이트 텍스트 */
+    --toast-background: rgba(0, 0, 0, 0.75); /* 토스트 배경 */
+    --toast-text-color: #ffffff; /* 토스트 텍스트 */
+    --success-color: #34a853; /* 성공 상태 초록색 */
+    --error-color: #ea4335; /* 에러 상태 빨간색 */
 
     /* 그림자 효과 */
     --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.08);
     --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.12);
     --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.18);
 
+    /* 퀴즈 관련 색상 */
+    --quiz-blue: #4285f4;
+    --quiz-gold: #fbbc05;
+    --quiz-green: #34a853;
+    --quiz-green-rgb: 52, 168, 83;
+
     /* 폰트 크기 및 간격 기준 */
     --font-base: 16px; /* 1rem = 16px */
-    --spacing-xs: 0.5rem; /* 8px */
-    --spacing-sm: 0.75rem; /* 12px */
-    --spacing-md: 1rem; /* 16px */
-    --spacing-lg: 1.25rem; /* 20px */
+    --spacing-xs: 0.5rem;   /* 8px */
+    --spacing-sm: 0.75rem;  /* 12px */
+    --spacing-md: 1rem;     /* 16px */
+    --spacing-lg: 1.25rem;  /* 20px */
     --spacing-xl: 1.875rem; /* 30px */
-    --spacing-xxl: 2.5rem; /* 40px */
+    --spacing-xxl: 2.5rem;  /* 40px */
 
     /* 보더-반경 (Border Radius) */
     --border-radius-sm: 0.375rem; /* 6px */
     --border-radius-md: 0.625rem; /* 10px */
-    --border-radius-lg: 0.75rem; /* 12px */
-    --border-radius-xl: 1.25rem; /* 20px */
+    --border-radius-lg: 0.75rem;  /* 12px */
+    --border-radius-xl: 1.25rem;  /* 20px */
 }
 
-/* 다크 모드 설정 (수동 토글) */
+/* 다크 모드 설정 */
 body.dark-mode {
-    --color-primary: #003366; /* 다크모드용 네이비 블루 */
-    --color-primary-rgb: 0, 51, 102;
-    --color-accent: #FFD700; /* 골드는 동일하게 유지 */
-    --color-accent-rgb: 255, 215, 0;
-    --color-bg: #0D1B2A; /* 다크모드 기본 배경 */
-    --color-surface: #1B263B; /* 다크모드 연한 베이지 배경 */
-    --color-text: #FFFFFF; /* 다크모드 텍스트 */
-    --color-text-light: #B0B0B0; /* 다크모드 연한 텍스트 */
-    --color-border: #4A5C70; /* 다크모드 테두리 */
-    --color-hover-bg: #2C3C50; /* 다크모드 호버 배경 (surface 기반) */
-    --color-highlight-bg: #403800; /* 다크모드 검색 하이라이트 배경 */
-    --color-highlight-text: #FFD700; /* 다크모드 검색 하이라이트 텍스트 */
-    --color-success: #6ACC81; /* 다크모드 성공 상태 (밝게) */
-    --color-error: #F28B82; /* 다크모드 에러 상태 (밝게) */
-    --color-quiz-green: #6ACC81; /* 다크모드 퀴즈 초록색 */
-    --color-quiz-green-rgb: 106, 204, 129;
-
-    /* 다크 모드 토스트 색상 */
-    --color-toast-bg: rgba(255, 255, 255, 0.85);
-    --color-toast-text: #000000;
+    --primary-color: #8ab4f8;
+    --primary-rgb: 138, 180, 248;
+    --secondary-color: #f28b82;
+    --accent-color: #fde293;
+    --text-color: #e8eaed;
+    --background-color: #202124;
+    --card-background: #2c2d2f;
+    --card-background-rgb: 44, 45, 47;
+    --border-color: #5f6368;
+    --hover-background: #3e4042;
+    --highlight-background: #3c3c3c;
+    --highlight-color: #8ab4f8;
+    --toast-background: rgba(255, 255, 255, 0.8);
+    --toast-text-color: #202124;
+    --success-color: #81c995;
+    --error-color: #f28b82;
 
     /* 다크 모드 그림자 (밝은 색조) */
     --shadow-light: 0 1px 3px rgba(255, 255, 255, 0.08);
     --shadow-medium: 0 4px 12px rgba(255, 255, 255, 0.12);
     --shadow-strong: 0 8px 24px rgba(255, 255, 255, 0.18);
-}
 
-/* 다크 모드 설정 (CSS prefers-color-scheme 기반) */
-@media (prefers-color-scheme: dark) {
-    body:not(.dark-mode) { /* .dark-mode 클래스가 없을 때만 시스템 설정 적용 */
-        --color-primary: #003366; /* 다크모드용 네이비 블루 */
-        --color-primary-rgb: 0, 51, 102;
-        --color-accent: #FFD700; /* 골드는 동일하게 유지 */
-        --color-accent-rgb: 255, 215, 0;
-        --color-bg: #0D1B2A; /* 다크모드 기본 배경 */
-        --color-surface: #1B263B; /* 다크모드 연한 베이지 배경 */
-        --color-text: #FFFFFF; /* 다크모드 텍스트 */
-        --color-text-light: #B0B0B0; /* 다크모드 연한 텍스트 */
-        --color-border: #4A5C70; /* 다크모드 테두리 */
-        --color-hover-bg: #2C3C50; /* 다크모드 호버 배경 (surface 기반) */
-        --color-highlight-bg: #403800; /* 다크모드 검색 하이라이트 배경 */
-        --color-highlight-text: #FFD700; /* 다크모드 검색 하이라이트 텍스트 */
-        --color-success: #6ACC81; /* 다크모드 성공 상태 (밝게) */
-        --color-error: #F28B82; /* 다크모드 에러 상태 (밝게) */
-        --color-quiz-green: #6ACC81; /* 다크모드 퀴즈 초록색 */
-        --color-quiz-green-rgb: 106, 204, 129;
-
-        /* 다크 모드 토스트 색상 */
-        --color-toast-bg: rgba(255, 255, 255, 0.85);
-        --color-toast-text: #000000;
-
-        /* 다크 모드 그림자 (밝은 색조) */
-        --shadow-light: 0 1px 3px rgba(255, 255, 255, 0.08);
-        --shadow-medium: 0 4px 12px rgba(255, 255, 255, 0.12);
-        --shadow-strong: 0 8px 24px rgba(255, 255, 255, 0.18);
-    }
+    --quiz-blue: #8ab4f8;
+    --quiz-gold: #fde293;
+    --quiz-green: #81c995;
+    --quiz-green-rgb: 129, 201, 149;
 }
 
 /* ==========================================================================
@@ -135,8 +109,8 @@ body {
     line-height: 1.7; /* 줄 간격 증가로 가독성 향상 */
     margin: 0;
     padding: 0;
-    background-color: var(--color-bg);
-    color: var(--color-text);
+    background-color: var(--background-color);
+    color: var(--text-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -173,7 +147,7 @@ body {
 
 .section-title {
     font-size: 2rem; /* 폰트 크기 증가 */
-    color: var(--color-primary);
+    color: var(--primary-color);
     margin-top: var(--spacing-xl); /* 30px */
     margin-bottom: var(--spacing-md); /* 16px */
     text-align: center;
@@ -182,12 +156,12 @@ body {
 
 .section-title i {
     margin-right: var(--spacing-sm); /* 12px */
-    color: var(--color-accent);
+    color: var(--accent-color);
 }
 
 .section-description {
     text-align: center;
-    color: var(--color-text-light); /* 연한 텍스트 색상 */
+    color: var(--text-color);
     margin-bottom: var(--spacing-xl); /* 30px */
     font-size: 1.15rem; /* 폰트 크기 미세 조정 */
     max-width: 55rem; /* 880px, 최대 너비 증가 */
@@ -199,7 +173,7 @@ body {
     width: 100%;
     max-width: 40rem; /* 640px */
     height: 1px;
-    background-color: var(--color-border);
+    background-color: var(--border-color);
     margin: var(--spacing-xxl) auto; /* 40px */
     box-shadow: var(--shadow-light);
     border-radius: 1px; /* 미세한 둥근 처리 */
@@ -224,7 +198,7 @@ body {
     border-radius: 50%;
     box-shadow: var(--shadow-medium);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 3px solid var(--color-primary); /* 로고 주변에 테두리 추가 */
+    border: 3px solid var(--primary-color); /* 로고 주변에 테두리 추가 */
 }
 
 .header img:hover {
@@ -234,7 +208,7 @@ body {
 
 .header h1 {
     font-size: 3rem; /* 폰트 크기 증가 */
-    color: var(--color-primary);
+    color: var(--primary-color);
     margin-bottom: var(--spacing-sm); /* 12px */
     font-weight: 800; /* 더 굵게 */
     letter-spacing: -0.05rem; /* 자간 조정 */
@@ -242,7 +216,7 @@ body {
 
 .tagline {
     font-size: 1.3rem; /* 폰트 크기 증가 */
-    color: var(--color-text-light); /* 연한 텍스트 색상 */
+    color: var(--text-color);
     margin-bottom: var(--spacing-lg); /* 20px */
     font-weight: 500;
     opacity: 0.9;
@@ -252,7 +226,7 @@ body {
     max-width: 55rem; /* 880px */
     margin: var(--spacing-sm) auto; /* 12px */
     font-size: 1.05rem; /* 폰트 크기 미세 조정 */
-    color: var(--color-text-light); /* 연한 텍스트 색상 */
+    color: var(--text-color);
     opacity: 0.85;
 }
 
@@ -266,18 +240,18 @@ body {
     position: sticky;
     top: 0;
     width: 100%;
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
+    background-color: var(--card-background);
     box-shadow: var(--shadow-medium);
     z-index: 1000;
     padding: var(--spacing-sm) 0; /* 12px */
     flex-wrap: wrap; /* 모바일에서 버튼 줄바꿈 */
-    border-bottom: 1px solid var(--color-border); /* 하단 테두리 추가 */
+    border-bottom: 1px solid var(--border-color); /* 하단 테두리 추가 */
 }
 
 .nav-bar button {
     background: none;
     border: none;
-    color: var(--color-text);
+    color: var(--text-color);
     font-size: 1.05rem; /* 폰트 크기 미세 조정 */
     padding: var(--spacing-sm) var(--spacing-md); /* 12px 16px */
     cursor: pointer;
@@ -297,10 +271,10 @@ body {
 }
 
 .nav-bar button:hover {
-    background-color: var(--color-hover-bg);
-    color: var(--color-primary);
+    background-color: var(--hover-background);
+    color: var(--primary-color);
     transform: translateY(-2px); /* 2px 위로 이동 */
-    box-shadow: 0 2px 6px rgba(var(--color-primary-rgb), 0.1);
+    box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.1);
 }
 
 .nav-bar button:active {
@@ -309,15 +283,15 @@ body {
 }
 
 .nav-bar button:focus-visible { /* 키보드 탐색 시 포커스 스타일 */
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--primary-color);
     outline-offset: 2px;
     border-radius: var(--border-radius-sm);
 }
 
 .nav-bar button.active {
-    color: var(--color-primary);
+    color: var(--primary-color);
     font-weight: 700;
-    background-color: var(--color-hover-bg); /* 활성화 상태도 배경색 유지 */
+    background-color: var(--hover-background); /* 활성화 상태도 배경색 유지 */
 }
 
 .nav-bar button.active::after {
@@ -327,7 +301,7 @@ body {
     right: 20%;
     bottom: 0.25rem; /* 4px */
     height: 3px; /* 밑줄 두께 증가 */
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     border-radius: 2px;
     animation: underlineExpand 0.3s forwards;
 }
@@ -339,8 +313,8 @@ body {
     padding: 0.6rem;
     border-radius: 50%;
     background-color: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
     display: flex;
@@ -350,13 +324,13 @@ body {
 }
 
 .dark-mode-toggle:hover {
-    background-color: var(--color-hover-bg);
-    color: var(--color-primary);
+    background-color: var(--hover-background);
+    color: var(--primary-color);
     transform: rotate(15deg);
 }
 
 .dark-mode-toggle:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
 
@@ -374,7 +348,7 @@ body {
 }
 
 .quiz-button {
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: white;
     border: none;
     padding: var(--spacing-md) var(--spacing-xl); /* 16px 30px */
@@ -394,32 +368,30 @@ body {
 }
 
 .quiz-button.blue {
-    background-color: var(--color-primary); /* FFWPU 네이비 블루 */
+    background-color: var(--quiz-blue);
 }
 
 .quiz-button.gold {
-    background-color: var(--color-accent);
-    color: var(--color-text); /* 골드 배경에 어두운 텍스트 */
+    background-color: var(--quiz-gold);
+    color: var(--text-color); /* 골드 배경에 어두운 텍스트 */
 }
 
 .quiz-button.green {
-    background-color: var(--color-quiz-green);
+    background-color: var(--quiz-green);
 }
 
 .quiz-button:hover {
     transform: translateY(-3px); /* 3px */
     box-shadow: var(--shadow-strong);
-    filter: brightness(1.1); /* 약간 밝게 */
 }
 
 .quiz-button:active {
     transform: translateY(0);
     box-shadow: var(--shadow-light);
-    filter: brightness(0.9); /* 약간 어둡게 */
 }
 
 .quiz-button:focus-visible {
-    outline: 3px solid var(--color-primary);
+    outline: 3px solid var(--primary-color);
     outline-offset: 3px;
     border-radius: var(--border-radius-md);
 }
@@ -439,8 +411,8 @@ body {
     bottom: calc(100% + var(--spacing-xs)); /* 버튼 위로 표시, 간격 조정 */
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--color-toast-bg);
-    color: var(--color-toast-text);
+    background-color: var(--toast-background);
+    color: var(--toast-text-color);
     padding: var(--spacing-xs) var(--spacing-sm); /* 8px 12px */
     border-radius: var(--border-radius-sm); /* 6px */
     font-size: 0.9rem;
@@ -469,7 +441,7 @@ body {
 }
 
 .instruction-card {
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
+    background-color: var(--card-background);
     border-radius: var(--border-radius-lg); /* 12px */
     box-shadow: var(--shadow-medium);
     padding: var(--spacing-xl); /* 30px */
@@ -478,17 +450,17 @@ body {
     max-width: 48%; /* 카드 너비 조정 */
     text-align: left;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border-color);
 }
 
 .instruction-card:hover {
     transform: translateY(-5px); /* 5px */
     box-shadow: var(--shadow-strong);
-    border-color: var(--color-primary); /* 호버 시 테두리 색상 변경 */
+    border-color: var(--primary-color); /* 호버 시 테두리 색상 변경 */
 }
 
 .instruction-card h3 {
-    color: var(--color-primary);
+    color: var(--primary-color);
     font-size: 1.6rem; /* 폰트 크기 증가 */
     margin-top: 0;
     margin-bottom: var(--spacing-md); /* 16px */
@@ -499,7 +471,7 @@ body {
 }
 
 .instruction-card h3 i {
-    color: var(--color-accent);
+    color: var(--accent-color);
     font-size: 1.7rem; /* 아이콘 크기 증가 */
 }
 
@@ -511,7 +483,7 @@ body {
 
 .instruction-card ul li {
     margin-bottom: var(--spacing-sm); /* 12px */
-    color: var(--color-text);
+    color: var(--text-color);
     font-size: 1.05rem; /* 폰트 크기 미세 조정 */
     display: flex;
     align-items: flex-start;
@@ -519,14 +491,14 @@ body {
 }
 
 .instruction-card ul li strong {
-    color: var(--color-primary);
+    color: var(--primary-color);
     margin-right: var(--spacing-xs); /* 8px */
     flex-shrink: 0; /* 텍스트 줄바꿈 시 강제 줄바꿈 방지 */
 }
 
 .instruction-card ul li::before {
     content: '•'; /* 사용자 정의 불릿 */
-    color: var(--color-accent);
+    color: var(--accent-color);
     font-weight: bold;
     display: inline-block;
     width: 1.2em; /* 불릿 간격 조정 */
@@ -540,62 +512,62 @@ body {
    ========================================================================== */
 .donation-section {
     text-align: center;
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
+    background-color: var(--card-background);
     border-radius: var(--border-radius-lg); /* 12px */
     box-shadow: var(--shadow-medium);
     padding: var(--spacing-xl); /* 30px */
     max-width: 55rem; /* 880px */
     width: 100%;
     margin-top: var(--spacing-xl); /* 30px */
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border-color);
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .donation-section:hover {
     box-shadow: var(--shadow-strong);
-    border-color: var(--color-primary);
+    border-color: var(--primary-color);
 }
 
 .donation-section p {
     margin-bottom: var(--spacing-md); /* 16px */
     font-size: 1.05rem;
-    color: var(--color-text-light); /* 연한 텍스트 색상 */
+    color: var(--text-color);
     opacity: 0.9;
 }
 
 .account-info-box {
-    background-color: var(--color-hover-bg); /* 호버 배경 색상 사용 */
-    border: 1px dashed var(--color-primary);
+    background-color: var(--hover-background);
+    border: 1px dashed var(--primary-color);
     padding: var(--spacing-md) var(--spacing-lg); /* 16px 20px */
     border-radius: var(--border-radius-md); /* 10px */
     margin: var(--spacing-lg) auto; /* 20px */
     display: inline-block; /* 내용에 맞춰 너비 조정 */
-    color: var(--color-text);
+    color: var(--text-color);
     font-size: 1.1rem;
     font-weight: 500;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .account-info-box:hover {
-    background-color: rgba(var(--color-primary-rgb), 0.08); /* 더 연한 배경색 */
-    border-color: var(--color-primary);
+    background-color: rgba(var(--primary-rgb), 0.08); /* 더 연한 배경색 */
+    border-color: var(--primary-color);
 }
 
 .account-info-box strong {
-    color: var(--color-primary);
+    color: var(--primary-color);
     font-weight: 700;
 }
 
 .account-info-box .account-holder {
     font-size: 0.95rem;
-    color: var(--color-text-light);
+    color: var(--text-color);
     opacity: 0.8;
     display: block; /* 줄바꿈 */
     margin-top: 5px;
 }
 
 .donation-button {
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: white;
     border: none;
     padding: var(--spacing-sm) var(--spacing-xl); /* 12px 30px */
@@ -612,14 +584,13 @@ body {
 }
 
 .donation-button:hover {
-    background-color: var(--color-primary); /* hover 시 변화는 filter로 */
-    filter: brightness(1.1);
+    background-color: #357ae8; /* primary-color의 약간 어두운 버전 */
     transform: translateY(-2px); /* 2px */
     box-shadow: var(--shadow-strong);
 }
 
 .donation-button:focus-visible {
-    outline: 3px solid var(--color-primary);
+    outline: 3px solid var(--primary-color);
     outline-offset: 3px;
     border-radius: var(--border-radius-md);
 }
@@ -628,14 +599,14 @@ body {
    말씀 DB 섹션 (검색 및 결과)
    ========================================================================== */
 .search-container {
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
+    background-color: var(--card-background);
     border-radius: var(--border-radius-lg); /* 12px */
     box-shadow: var(--shadow-medium);
     padding: var(--spacing-xl); /* 30px */
     width: 100%;
     max-width: 60rem; /* 960px */
     margin-bottom: var(--spacing-xl); /* 30px */
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -644,7 +615,7 @@ body {
 
 .search-container:hover {
     box-shadow: var(--shadow-strong);
-    border-color: var(--color-primary);
+    border-color: var(--primary-color);
 }
 
 .search-box {
@@ -656,13 +627,13 @@ body {
     box-shadow: var(--shadow-light);
     border-radius: var(--border-radius-md); /* 10px */
     overflow: hidden;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-box:focus-within { /* 입력창 포커스 시 테두리 및 그림자 강조 */
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2), var(--shadow-medium);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2), var(--shadow-medium);
 }
 
 .search-box input {
@@ -670,19 +641,19 @@ body {
     padding: var(--spacing-sm) var(--spacing-md); /* 12px 16px */
     border: none;
     font-size: 1.1rem;
-    background-color: var(--color-bg); /* 배경색 사용 */
-    color: var(--color-text);
+    background-color: var(--background-color);
+    color: var(--text-color);
     outline: none;
     box-sizing: border-box;
 }
 
 .search-box input::placeholder {
-    color: var(--color-text-light);
-    opacity: 0.8;
+    color: var(--text-color);
+    opacity: 0.6;
 }
 
 .search-box button {
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: white;
     border: none;
     padding: var(--spacing-sm) var(--spacing-md); /* 12px 16px */
@@ -694,22 +665,21 @@ body {
 }
 
 .search-box button:hover {
-    filter: brightness(1.1); /* 약간 밝게 */
+    background-color: #357ae8;
 }
 
 .search-box button:active {
     transform: translateY(1px);
-    filter: brightness(0.9); /* 약간 어둡게 */
 }
 
 .search-box button:focus-visible {
-    outline: 2px solid var(--color-accent); /* 버튼 포커스 아웃라인 색상 다르게 */
+    outline: 2px solid var(--accent-color); /* 버튼 포커스 아웃라인 색상 다르게 */
     outline-offset: -2px;
 }
 
 .search-box .icon-button {
     background: none;
-    color: var(--color-text);
+    color: var(--text-color);
     padding: var(--spacing-sm); /* 12px */
     font-size: 1.1rem;
     transition: color 0.3s ease, transform 0.2s ease;
@@ -718,7 +688,7 @@ body {
 }
 
 .search-box .icon-button:hover {
-    color: var(--color-error); /* error 색상 사용 (기존 secondary-color 역할) */
+    color: var(--secondary-color);
     transform: scale(1.1);
 }
 
@@ -743,8 +713,8 @@ body {
     top: 100%;
     left: 0;
     right: 0;
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
-    border: 1px solid var(--color-border);
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
     border-radius: 0 0 var(--border-radius-md) var(--border-radius-md); /* 하단만 둥글게 */
     box-shadow: var(--shadow-medium);
     max-height: 15rem; /* 240px, 높이 증가 */
@@ -763,8 +733,8 @@ body {
     align-items: center;
     transition: background-color 0.2s ease;
     font-size: 0.95rem;
-    color: var(--color-text);
-    border-bottom: 1px solid var(--color-border); /* 구분선 추가 */
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color); /* 구분선 추가 */
 }
 .search-suggestions .suggestion:last-child {
     border-bottom: none; /* 마지막 항목은 구분선 제거 */
@@ -772,7 +742,7 @@ body {
 
 .search-suggestions .suggestion:hover,
 .search-suggestions .suggestion:focus {
-    background-color: var(--color-hover-bg);
+    background-color: var(--hover-background);
     outline: none;
 }
 
@@ -784,7 +754,7 @@ body {
 .search-suggestions .suggestion .delete-suggestion {
     background: none;
     border: none;
-    color: var(--color-text-light);
+    color: var(--text-color);
     cursor: pointer;
     font-size: 1.1rem; /* 아이콘 크기 조정 */
     padding: 0 5px;
@@ -793,23 +763,23 @@ body {
 }
 
 .search-suggestions .suggestion .delete-suggestion:hover {
-    color: var(--color-error);
+    color: var(--secondary-color);
     opacity: 1;
 }
 
 .search-suggestions .clear-all {
-    background-color: var(--color-bg); /* 배경색 사용 */
-    color: var(--color-error);
+    background-color: var(--background-color);
+    color: var(--secondary-color);
     font-weight: 500;
     text-align: center;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border-color);
     padding: var(--spacing-sm); /* 12px */
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .search-suggestions .clear-all:hover {
-    background-color: var(--color-hover-bg);
+    background-color: var(--hover-background);
 }
 
 /* 카테고리 버튼 */
@@ -824,9 +794,9 @@ body {
 }
 
 .category-container button {
-    background-color: var(--color-bg); /* 배경색 사용 */
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     padding: var(--spacing-xs) var(--spacing-md); /* 8px 16px */
     border-radius: var(--border-radius-xl); /* 20px, 더 둥글게 */
     cursor: pointer;
@@ -842,25 +812,25 @@ body {
 
 .category-container button i {
     font-size: 1rem;
-    color: var(--color-primary);
+    color: var(--primary-color);
 }
 
 .category-container button:hover {
-    background-color: var(--color-hover-bg);
+    background-color: var(--hover-background);
     box-shadow: var(--shadow-light);
-    border-color: var(--color-primary);
+    border-color: var(--primary-color);
 }
 
 .category-container button:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
 
 .category-container button.active {
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: white;
-    border-color: var(--color-primary);
-    box-shadow: 0 3px 8px rgba(var(--color-primary-rgb), 0.3);
+    border-color: var(--primary-color);
+    box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.3);
 }
 
 .category-container button.active i {
@@ -872,7 +842,7 @@ body {
     text-align: center;
     margin-top: var(--spacing-md); /* 16px */
     font-size: 1rem;
-    color: var(--color-text-light); /* 연한 텍스트 색상 */
+    color: var(--text-color);
     font-weight: 500;
     opacity: 0.9;
 }
@@ -880,10 +850,10 @@ body {
 /* 정렬 드롭다운 스타일 */
 #sort-select {
     padding: var(--spacing-xs) var(--spacing-sm); /* 8px 12px */
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius-md); /* 10px */
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
-    color: var(--color-text);
+    background-color: var(--card-background);
+    color: var(--text-color);
     font-size: 1rem;
     cursor: pointer;
     margin-top: var(--spacing-md); /* 16px */
@@ -894,13 +864,13 @@ body {
 }
 
 #sort-select:focus-visible {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
 }
 
 /* 랜덤 말씀 보기 버튼 스타일 */
 #random-message-button {
-    background-color: var(--color-quiz-green);
+    background-color: var(--quiz-green);
     color: white;
     border: none;
     padding: var(--spacing-sm) var(--spacing-md); /* 12px 16px */
@@ -910,18 +880,18 @@ body {
     margin-bottom: var(--spacing-md); /* 16px */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 3px 8px rgba(var(--color-quiz-green-rgb), 0.3);
+    box-shadow: 0 3px 8px rgba(var(--quiz-green-rgb), 0.3);
     outline-offset: 3px;
 }
 
 #random-message-button:hover {
-    filter: brightness(1.1);
+    background-color: #2c9b47;
     transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(var(--color-quiz-green-rgb), 0.4);
+    box-shadow: 0 5px 10px rgba(var(--quiz-green-rgb), 0.4);
 }
 
 #random-message-button:focus-visible {
-    outline: 3px solid var(--color-quiz-green);
+    outline: 3px solid var(--quiz-green);
     outline-offset: 3px;
 }
 
@@ -932,13 +902,13 @@ body {
     align-items: center;
     justify-content: center;
     height: 9.375rem; /* 150px */
-    color: var(--color-primary);
+    color: var(--primary-color);
     font-size: 1.2rem;
 }
 
 .spinner {
-    border: 4px solid var(--color-border);
-    border-top: 4px solid var(--color-primary);
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--primary-color);
     border-radius: 50%;
     width: 2.8rem; /* 45px, 크기 증가 */
     height: 2.8rem; /* 45px */
@@ -954,7 +924,7 @@ body {
 .progress-bar {
     width: 80%;
     max-width: 28rem; /* 450px */
-    background-color: var(--color-border);
+    background-color: var(--border-color);
     height: 0.6rem; /* 10px */
     border-radius: 0.3rem; /* 5px */
     overflow: hidden;
@@ -964,7 +934,7 @@ body {
 .progress-bar div {
     height: 100%;
     width: 0;
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     transition: width 0.5s ease-in-out; /* 전환 시간 증가 */
     border-radius: 0.3rem; /* 5px */
 }
@@ -980,11 +950,11 @@ body {
 }
 
 .result-item {
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
+    background-color: var(--card-background);
     border-radius: var(--border-radius-lg); /* 12px */
     box-shadow: var(--shadow-medium);
     padding: var(--spacing-xl); /* 30px, 내부 여백 증가 */
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border-color);
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     position: relative;
     overflow: hidden;
@@ -993,7 +963,7 @@ body {
 .result-item:hover {
     transform: translateY(-3px); /* 3px */
     box-shadow: var(--shadow-strong);
-    border-color: var(--color-primary); /* 호버 시 테두리 색상 변경 */
+    border-color: var(--primary-color); /* 호버 시 테두리 색상 변경 */
 }
 
 .result-item.copied {
@@ -1001,13 +971,13 @@ body {
 }
 
 @keyframes flashGreen {
-    0% { background-color: var(--color-surface); }
-    50% { background-color: var(--color-success); }
-    100% { background-color: var(--color-surface); }
+    0% { background-color: var(--card-background); }
+    50% { background-color: var(--success-color); }
+    100% { background-color: var(--card-background); }
 }
 
 .result-item h3 {
-    color: var(--color-primary);
+    color: var(--primary-color);
     font-size: 1.4rem; /* 카테고리 제목 글자 크기 증가 */
     margin-top: 0;
     margin-bottom: var(--spacing-sm); /* 12px */
@@ -1018,13 +988,13 @@ body {
 }
 
 .result-item h3 i {
-    color: var(--color-accent);
+    color: var(--accent-color);
     font-size: 1.5rem; /* 아이콘 크기 조정 */
 }
 
 .result-item p {
     margin-bottom: var(--spacing-xs); /* 8px */
-    color: var(--color-text);
+    color: var(--text-color);
     font-size: 1.05rem; /* 본문 글자 크기 미세 조정 */
     line-height: 1.7; /* 줄 간격 증가로 가독성 향상 */
     white-space: pre-wrap; /* 공백 및 줄바꿈 유지 */
@@ -1032,24 +1002,24 @@ body {
 
 .result-item .source {
     font-size: 0.95rem;
-    color: var(--color-text-light); /* 연한 텍스트 색상 */
+    color: var(--text-color);
     opacity: 0.8;
     margin-top: var(--spacing-md); /* 16px */
     padding-top: var(--spacing-xs); /* 8px */
-    border-top: 1px dashed var(--color-border);
+    border-top: 1px dashed var(--border-color);
     display: flex;
     align-items: center;
     gap: var(--spacing-xs); /* 8px */
 }
 
 .result-item .source i {
-    color: var(--color-primary);
+    color: var(--primary-color);
 }
 
 /* 검색어 하이라이트 */
 .highlight {
-    background-color: var(--color-highlight-bg);
-    color: var(--color-highlight-text);
+    background-color: var(--highlight-background);
+    color: var(--highlight-color);
     padding: 2px 4px;
     border-radius: 3px;
     font-weight: 600;
@@ -1057,8 +1027,8 @@ body {
 
 /* 일치 횟수 표시 */
 .match-count {
-    background-color: var(--color-accent);
-    color: white; /* 골드 배경에 흰색 텍스트 (명도 대비 고려) */
+    background-color: var(--accent-color);
+    color: white;
     font-size: 0.85rem;
     padding: 4px 9px;
     border-radius: 14px;
@@ -1086,7 +1056,7 @@ body {
 .toggle-text {
     background: none;
     border: none;
-    color: var(--color-primary);
+    color: var(--primary-color);
     cursor: pointer;
     font-size: 0.95rem; /* 버튼 텍스트 크기 미세 조정 */
     font-weight: 600;
@@ -1099,19 +1069,19 @@ body {
 }
 
 .toggle-text:hover {
-    filter: brightness(1.2); /* 약간 밝게 */
+    color: #357ae8;
     text-decoration: underline;
 }
 
 .toggle-text:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--primary-color);
     outline-offset: 2px;
     border-radius: 3px;
 }
 
 /* 복사하기 버튼 */
 .copy-button {
-    background-color: var(--color-success);
+    background-color: var(--success-color);
     color: white;
     border: none;
     padding: var(--spacing-xs) var(--spacing-md); /* 8px 16px */
@@ -1133,42 +1103,42 @@ body {
 }
 
 .copy-button:hover {
-    filter: brightness(1.1); /* 약간 밝게 */
+    background-color: #2e8b4e; /* success-color의 약간 어두운 버전 */
     transform: translateY(-2px); /* 2px */
     box-shadow: var(--shadow-medium);
 }
 
 .copy-button:focus-visible {
-    outline: 3px solid var(--color-success);
+    outline: 3px solid var(--success-color);
     outline-offset: 3px;
 }
 
 /* 다음 페이지 버튼 */
 .next-page-button {
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: white;
     padding: var(--spacing-md) var(--spacing-xl); /* 16px 30px */
     margin: var(--spacing-lg) auto; /* 20px, 중앙 정렬 */
     display: block;
     width: fit-content;
-    border: none;
-    border-radius: var(--border-radius-md);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: var(--shadow-medium);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    border: none; /* 추가 */
+    border-radius: var(--border-radius-md); /* 추가 */
+    font-size: 1.1rem; /* 추가 */
+    font-weight: 600; /* 추가 */
+    cursor: pointer; /* 추가 */
+    box-shadow: var(--shadow-medium); /* 추가 */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* 추가 */
     outline-offset: 3px;
 }
 
 .next-page-button:hover {
-    filter: brightness(1.1);
+    background-color: #357ae8;
     transform: translateY(-2px);
     box-shadow: var(--shadow-strong);
 }
 
 .next-page-button:focus-visible {
-    outline: 3px solid var(--color-primary);
+    outline: 3px solid var(--primary-color);
     outline-offset: 3px;
 }
 
@@ -1180,9 +1150,9 @@ body {
     opacity: 1; /* 항상 보이도록 */
     display: block;
     width: fit-content;
-    background-color: var(--color-bg); /* 배경색 사용 */
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius-xl); /* 20px, 더 둥글게 */
     padding: var(--spacing-xs) var(--spacing-md); /* 8px 16px */
     font-size: 1rem;
@@ -1191,26 +1161,26 @@ body {
 }
 
 .back-to-top.result-top:hover {
-    background-color: var(--color-hover-bg);
-    color: var(--color-primary);
+    background-color: var(--hover-background);
+    color: var(--primary-color);
     box-shadow: var(--shadow-medium);
 }
 
 /* 랜덤 말씀 결과 아이템 스타일 */
 .result-item.random-message {
-    border: 2px dashed var(--color-quiz-green); /* 2px, 랜덤 말씀은 점선 테두리로 강조 */
-    background-color: var(--color-hover-bg); /* 배경색을 약간 다르게 */
-    box-shadow: 0 6px 20px rgba(var(--color-quiz-green-rgb), 0.25); /* 더 강한 그림자 */
+    border: 2px dashed var(--quiz-green); /* 2px, 랜덤 말씀은 점선 테두리로 강조 */
+    background-color: var(--hover-background); /* 배경색을 약간 다르게 */
+    box-shadow: 0 6px 20px rgba(var(--quiz-green-rgb), 0.25); /* 더 강한 그림자 */
     animation: fadeIn 0.6s ease-out; /* 나타날 때 페이드인 애니메이션 */
 }
 
 .result-item.random-message .source {
     font-weight: 700; /* bold로 변경 */
-    color: var(--color-primary); /* 출처 강조 */
+    color: var(--primary-color); /* 출처 강조 */
 }
 
 .result-item.random-message .quiz-button.blue {
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: white;
     margin-top: var(--spacing-lg); /* 20px */
     padding: var(--spacing-sm) var(--spacing-lg); /* 12px 20px, 크기 조정 */
@@ -1222,12 +1192,12 @@ body {
    ========================================================================== */
 .footer {
     width: 100%;
-    background-color: var(--color-surface); /* 서피스 색상 사용 */
-    color: var(--color-text);
+    background-color: var(--card-background);
+    color: var(--text-color);
     text-align: center;
     padding: var(--spacing-lg) 0; /* 20px */
     margin-top: auto; /* 페이지 하단에 고정 */
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border-color);
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* 상단 그림자 */
     font-size: 0.95rem; /* 폰트 크기 미세 조정 */
     opacity: 0.9;
@@ -1235,7 +1205,7 @@ body {
 
 .footer .brand {
     font-weight: 600;
-    color: var(--color-primary);
+    color: var(--primary-color);
 }
 
 /* 맨 위로 버튼 (하단 고정) */
@@ -1243,7 +1213,7 @@ body {
     position: fixed;
     bottom: var(--spacing-xl); /* 30px */
     right: var(--spacing-xl); /* 30px */
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 50%;
@@ -1269,13 +1239,13 @@ body {
 }
 
 .back-to-top:hover {
-    filter: brightness(1.1);
+    background-color: #357ae8;
     transform: translateY(-3px); /* 3px */
     box-shadow: var(--shadow-strong);
 }
 
 .back-to-top:focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--accent-color);
     outline-offset: 2px;
 }
 
@@ -1287,8 +1257,8 @@ body {
     bottom: var(--spacing-lg); /* 20px */
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--color-toast-bg);
-    color: var(--color-toast-text);
+    background-color: var(--toast-background);
+    color: var(--toast-text-color);
     padding: var(--spacing-sm) var(--spacing-lg); /* 12px 20px */
     border-radius: var(--border-radius-md); /* 10px */
     font-size: 0.95rem;
@@ -1312,7 +1282,7 @@ body {
 .toast .close-toast {
     background: none;
     border: none;
-    color: var(--color-toast-text);
+    color: var(--toast-text-color);
     font-size: 1.1rem; /* 크기 조정 */
     cursor: pointer;
     margin-left: var(--spacing-xs); /* 8px */
@@ -1327,7 +1297,7 @@ body {
 }
 
 .toast .close-toast:focus-visible {
-    outline: 2px solid var(--color-toast-text);
+    outline: 2px solid var(--toast-text-color);
     outline-offset: 2px;
     border-radius: 50%;
 }
@@ -1459,9 +1429,6 @@ body {
     .tagline {
         font-size: 1.1rem;
     }
-    .section-title {
-        font-size: 1.8rem;
-    }
     .quiz-selection .button-container {
         flex-direction: column;
         align-items: center;
@@ -1481,7 +1448,7 @@ body {
     }
     .search-box input {
         width: 100%;
-        border-bottom: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--border-color);
         margin-bottom: var(--spacing-xs); /* 8px */
         padding: var(--spacing-sm) var(--spacing-xs); /* 12px 8px */
     }
@@ -1491,7 +1458,7 @@ body {
         border-radius: 0;
     }
     .search-box .clear-search {
-        border-right: 1px solid var(--color-border);
+        border-right: 1px solid var(--border-color);
     }
     .search-suggestions {
         top: calc(100% + var(--spacing-sm)); /* 12px, input과 간격 */
