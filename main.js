@@ -8,11 +8,11 @@ const CONSTANTS = {
     TOAST_DURATION: 3000, // 알림 메시지 표시 시간 (ms)
     ACCOUNT_NUMBER: '02060204230715', // 계좌 번호
     ACCOUNT_HOLDER: '국민은행 020602-04-230715 (예금주: 문성민)', // 계좌 정보
-    PAGES: { HOME: 'home', WORKBOOK: 'workbook' }, // 페이지 이름 정의
+    PAGES: { HOME: 'home', WORKBOOK: 'workbook', QUIZ_SELECTION: 'quiz-selection' }, // 페이지 이름 정의 추가
     MAX_TEXT_LENGTH: 1000, // 텍스트 최대 길이 (이 길이보다 짧으면 축약하지 않음)
     MAX_SEARCH_HISTORY: 10, // 검색 기록 최대 저장 개수
     SCROLL_DURATION: 600, // 스크롤 애니메이션 시간 (ms)
-    HEADER_OFFSET: 80, // 고정 헤더 높이 조정
+    HEADER_OFFSET: 80, // 고정 헤더 높이 조정 (스크롤 시 상단 여백)
     SORT_ORDER: { // 정렬 순서 상수 정의
         DEFAULT: 'default', // 기본 (검색 일치 횟수)
         LENGTH_ASC: 'length_asc', // 길이 짧은순
@@ -79,7 +79,8 @@ const DOM = {
     backToTop: document.querySelector('.back-to-top'), // 맨 위로 이동 버튼
     clearSearch: document.getElementById('clear-search'), // 검색 초기화 버튼
     sortSelect: document.getElementById('sort-select'), // 정렬 선택 드롭다운
-    randomMessageButton: document.getElementById('random-message-button') // 랜덤 말씀 보기 버튼
+    randomMessageButton: document.getElementById('random-message-button'), // 랜덤 말씀 보기 버튼
+    quizButtons: document.querySelectorAll('.quiz-selection-container button') // 퀴즈 선택 버튼들 추가
 };
 
 /**
@@ -102,9 +103,11 @@ const debounce = (func, delay) => {
  * @param {number} [resetDelay] - 초기화 지연 시간 (ms). 지정된 경우, 해당 시간 후 진행 바를 0으로 초기화합니다.
  */
 const updateProgressBar = (percentage, resetDelay) => {
-    DOM.progressBar.style.width = percentage;
-    if (resetDelay) {
-        setTimeout(() => DOM.progressBar.style.width = '0', resetDelay);
+    if (DOM.progressBar) {
+        DOM.progressBar.style.width = percentage;
+        if (resetDelay) {
+            setTimeout(() => DOM.progressBar.style.width = '0', resetDelay);
+        }
     }
 };
 
@@ -119,6 +122,7 @@ const smoothScroll = (targetY, duration) => {
     const startTime = performance.now();
 
     // Quad easing 함수
+    // t: 현재 시간 (0~1), b: 시작 값, c: 변화량, d: 총 시간
     const easeInOutQuad = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
     const animation = currentTime => {
@@ -144,6 +148,7 @@ const smoothScrollTo = (target, duration) => {
     if (typeof target === 'number') {
         targetY = target;
     } else if (target instanceof HTMLElement) {
+        // 요소의 상단 위치를 계산하고 고정 헤더 높이를 조정
         targetY = target.getBoundingClientRect().top + window.scrollY - CONSTANTS.HEADER_OFFSET;
     } else {
         return; // 유효하지 않은 타겟일 경우 함수 종료
@@ -159,7 +164,11 @@ const scrollToTop = () => smoothScrollTo(0, CONSTANTS.SCROLL_DURATION);
 /**
  * 검색 결과 영역의 상단으로 부드럽게 이동합니다.
  */
-const scrollToResultsTop = () => smoothScrollTo(DOM.searchResults, CONSTANTS.SCROLL_DURATION);
+const scrollToResultsTop = () => {
+    if (DOM.searchResults) {
+        smoothScrollTo(DOM.searchResults, CONSTANTS.SCROLL_DURATION);
+    }
+};
 
 /**
  * 다크 모드를 전환합니다.
@@ -181,7 +190,7 @@ const copyAccountNumber = async () => {
         showToast('계좌번호가 복사되었습니다!');
     } catch (err) {
         console.error('계좌번호 복사 실패:', err);
-        showToast(`계좌번호 복사 실패: ${CONSTANTS.ACCOUNT_HOLDER}`);
+        showToast(`계좌번호 복사 실패: ${CONSTANTS.ACCOUNT_HOLDER}. 직접 복사해 주세요.`);
     }
 };
 
@@ -208,7 +217,7 @@ const copyMessageToClipboard = async (text, source, category, element) => {
 
         // 시각적 피드백
         element.classList.add('copied');
-        setTimeout(() => element.classList.remove('copied'), 1000);
+        setTimeout(() => element.classList.remove('copied'), 1000); // 1초 후 클래스 제거
     } catch (err) {
         console.error('텍스트 복사 실패:', err);
         showToast('복사 실패! 직접 선택하여 복사해 주세요.');
@@ -220,6 +229,12 @@ const copyMessageToClipboard = async (text, source, category, element) => {
  * @param {string} message - 표시할 메시지 텍스트
  */
 const showToast = (message) => {
+    // 이미 토스트가 있으면 기존 토스트를 제거하고 새 토스트를 띄웁니다.
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.innerHTML = `
@@ -232,17 +247,21 @@ const showToast = (message) => {
     const closeButton = toast.querySelector('.close-toast');
     const closeToast = () => {
         toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300); // 애니메이션 후 DOM에서 제거
+        // 애니메이션이 완료될 시간을 기다린 후 DOM에서 제거
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
     };
 
-    // 토스트 클릭 시 닫기
+    // 토스트 클릭 시 닫기 (영역 밖 클릭 포함)
     toast.addEventListener('click', closeToast);
-    closeButton.addEventListener('click', closeToast); // 닫기 버튼 클릭 시 닫기
+    closeButton.addEventListener('click', (e) => {
+        e.stopPropagation(); // 버튼 클릭이 토스트 전체 클릭으로 전파되지 않도록 방지
+        closeToast();
+    });
 
     document.body.appendChild(toast);
 
-    // 애니메이션을 위해 약간의 지연 후 'show' 클래스 추가
-    setTimeout(() => toast.classList.add('show'), 100);
+    // CSS transition을 위한 약간의 지연 후 'show' 클래스 추가
+    setTimeout(() => toast.classList.add('show'), 10);
     // 일정 시간 후 자동으로 토스트 닫기
     setTimeout(() => closeToast(), CONSTANTS.TOAST_DURATION);
 };
@@ -253,7 +272,7 @@ const showToast = (message) => {
  * @returns {Promise<void>}
  */
 const loadMessages = async () => {
-    DOM.searchLoading.style.display = 'flex';
+    if (DOM.searchLoading) DOM.searchLoading.style.display = 'flex';
     updateProgressBar('20%');
 
     try {
@@ -275,19 +294,25 @@ const loadMessages = async () => {
         }));
     } catch (error) {
         console.error('메시지 로드 실패:', error);
-        let errorMessage = '메시지 로드 실패. 네트워크를 확인하세요.';
+        let errorMessage = '메시지 로드 실패. 네트워크를 확인하거나 나중에 다시 시도해주세요.';
         if (error.message.includes('JSON')) {
             errorMessage = '데이터 형식이 잘못되었습니다. 관리자에게 문의하세요.';
         }
-        DOM.searchResults.innerHTML = `
-            <p class="no-results" role="alert">
-                ${errorMessage}
-                <button onclick="loadMessages()" aria-label="다시 시도">다시 시도</button>
-            </p>`;
+        if (DOM.searchResults) {
+            DOM.searchResults.innerHTML = `
+                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
+                    ${errorMessage}
+                    <button onclick="loadMessages()" aria-label="다시 시도" class="quiz-button blue" style="margin-top: 15px;">
+                        <i class="fas fa-sync-alt" aria-hidden="true"></i> 다시 시도
+                    </button>
+                </p>`;
+            DOM.searchResults.style.display = 'block';
+        }
+        showToast(errorMessage); // 사용자에게도 토스트 메시지로 알림
     } finally {
         // 로딩 완료 후 로딩 인디케이터 숨기기
         setTimeout(() => {
-            DOM.searchLoading.style.display = 'none';
+            if (DOM.searchLoading) DOM.searchLoading.style.display = 'none';
             updateProgressBar('0', 300); // 진행 바 초기화
         }, 300);
     }
@@ -344,7 +369,7 @@ const truncateText = (text, query) => {
     }
 
     // 축약된 텍스트와 전체 텍스트를 담는 HTML 구조 반환
-    // truncated-text는 CSS의 line-clamp 속성으로 줄 수를 제한함
+    // truncated-text는 CSS의 line-clamp 속성으로 줄 수를 제한함 (CSS 필요)
     return `
         <span class="truncated-text">${highlightText(text, query)}</span>
         <span class="full-text" style="display: none;">${highlightText(text, query)}</span>
@@ -358,13 +383,15 @@ const truncateText = (text, query) => {
  */
 const toggleText = (button) => {
     const resultItem = button.closest('.result-item');
+    if (!resultItem) return;
+
     const truncatedText = resultItem.querySelector('.truncated-text');
     const fullText = resultItem.querySelector('.full-text');
     const isExpanded = button.getAttribute('aria-expanded') === 'true';
 
     // 텍스트 표시 상태 토글
-    truncatedText.style.display = isExpanded ? 'inline' : 'none';
-    fullText.style.display = isExpanded ? 'none' : 'inline';
+    if (truncatedText) truncatedText.style.display = isExpanded ? 'inline' : 'none';
+    if (fullText) fullText.style.display = isExpanded ? 'none' : 'inline';
 
     // 버튼 텍스트와 ARIA 속성 업데이트
     button.textContent = isExpanded ? '전체 보기' : '접기';
@@ -402,13 +429,17 @@ const renderSearchSuggestions = () => {
     }
 
     // 검색 기록이 있는 경우 "모든 검색 기록 삭제" 버튼 추가
-    if (state.searchHistory.length > 0) {
+    if (state.searchHistory.length > 0 && DOM.searchSuggestions) {
         html += renderClearAllButton();
     }
 
-    DOM.searchSuggestions.innerHTML = html;
-    // 검색 제안 영역 표시 여부 결정
-    DOM.searchSuggestions.style.display = state.searchHistory.length > 0 ? 'block' : 'none';
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.innerHTML = html;
+        // 검색 제안 영역 표시 여부 결정
+        DOM.searchSuggestions.style.display = (state.searchHistory.length > 0 && DOM.searchInput.value.trim() !== '') ? 'block' : 'none';
+        DOM.searchSuggestions.setAttribute('aria-hidden', DOM.searchSuggestions.style.display === 'none');
+        DOM.searchSuggestions.setAttribute('role', 'listbox'); // 검색 제안 목록에 role="listbox" 추가
+    }
 };
 
 /**
@@ -428,7 +459,10 @@ const deleteSearchHistory = (index) => {
 const clearSearchHistory = () => {
     state.searchHistory = []; // 검색 기록 초기화
     localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory)); // localStorage 업데이트
-    DOM.searchSuggestions.style.display = 'none'; // 검색 제안 영역 숨김
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.style.display = 'none'; // 검색 제안 영역 숨김
+        DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+    }
     showToast('모든 검색 기록이 삭제되었습니다.');
 };
 
@@ -437,8 +471,14 @@ const clearSearchHistory = () => {
  * @param {string} query - 선택된 검색어
  */
 const selectSuggestion = (query) => {
-    DOM.searchInput.value = query; // 검색 입력 필드에 값 설정
-    DOM.searchSuggestions.style.display = 'none'; // 검색 제안 숨김
+    if (DOM.searchInput) {
+        DOM.searchInput.value = query; // 검색 입력 필드에 값 설정
+        DOM.searchInput.focus(); // 검색 입력 필드로 포커스 이동
+    }
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.style.display = 'none'; // 검색 제안 숨김
+        DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+    }
     searchMessages(); // 메시지 검색 실행
 };
 
@@ -453,7 +493,7 @@ const generateRandomMessage = () => {
 
     // 현재 필터링된 메시지 중에서 랜덤 선택 (검색어나 카테고리 적용)
     let availableMessages = state.messages;
-    const query = DOM.searchInput.value.trim();
+    const query = DOM.searchInput ? DOM.searchInput.value.trim() : '';
 
     if (state.currentCategory !== CATEGORIES.ALL) {
         availableMessages = availableMessages.filter(msg => msg.category === state.currentCategory);
@@ -464,34 +504,63 @@ const generateRandomMessage = () => {
 
     if (availableMessages.length === 0) {
         showToast('현재 조건에 맞는 랜덤 말씀이 없습니다.');
+        // 검색 필드가 비어있고 카테고리가 전체일 경우 다시 시도 버튼만 보이도록
+        if (query === '' && state.currentCategory === CATEGORIES.ALL) {
+            DOM.searchResults.innerHTML = `
+                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
+                    현재 조건에 맞는 랜덤 말씀이 없습니다.
+                    <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
+                        <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
+                    </button>
+                </p>
+            `;
+        } else {
+            // 다른 조건이 있을 경우, 검색 입력 초기화 및 전체 카테고리로 변경하는 버튼도 제공
+            DOM.searchResults.innerHTML = `
+                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
+                    현재 조건에 맞는 랜덤 말씀이 없습니다.
+                    <button class="quiz-button blue" onclick="clearSearch()" style="margin-top: 10px; margin-right: 10px;">
+                        <i class="fas fa-undo" aria-hidden="true"></i> 검색 초기화
+                    </button>
+                    <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
+                        <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
+                    </button>
+                </p>
+            `;
+        }
+        if (DOM.searchResults) DOM.searchResults.style.display = 'block';
+        if (DOM.searchStats) DOM.searchStats.style.display = 'none';
         return;
     }
 
     const randomIndex = Math.floor(Math.random() * availableMessages.length);
     const randomMessage = availableMessages[randomIndex];
 
-    DOM.searchResults.innerHTML = `
-        <div class="result-item random-message" role="listitem" tabindex="0">
-            <h3><i class="fas fa-book" aria-hidden="true"></i> ${randomMessage.category}</h3>
-            <p>${highlightText(randomMessage.text, query)}</p>
-            <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${randomMessage.source}</p>
-            <button class="copy-button"
-                    onclick="copyMessageToClipboard(
-                        '${randomMessage.text.replace(/'/g, "\\'")}',
-                        '${randomMessage.source.replace(/'/g, "\\'")}',
-                        '${randomMessage.category.replace(/'/g, "\\'")}',
-                        this.closest('.result-item')
-                    )"
-                    aria-label="${randomMessage.category} 말씀과 출처 복사">
-                <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
-            </button>
-            <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
-                <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
-            </button>
-        </div>
-    `;
-    DOM.searchResults.style.display = 'flex';
-    DOM.searchStats.style.display = 'none';
+    if (DOM.searchResults) {
+        DOM.searchResults.innerHTML = `
+            <div class="result-item random-message fade-in" role="listitem" tabindex="0">
+                <h3><i class="fas fa-book" aria-hidden="true"></i> ${randomMessage.category}</h3>
+                <p>${highlightText(randomMessage.text, query)}</p>
+                <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${randomMessage.source}</p>
+                <button class="copy-button"
+                        onclick="copyMessageToClipboard(
+                            '${randomMessage.text.replace(/'/g, "\\'")}',
+                            '${randomMessage.source.replace(/'/g, "\\'")}',
+                            '${randomMessage.category.replace(/'/g, "\\'")}',
+                            this.closest('.result-item')
+                        )"
+                        aria-label="${randomMessage.category} 말씀과 출처 복사">
+                    <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
+                </button>
+                <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
+                    <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
+                </button>
+            </div>
+        `;
+        DOM.searchResults.style.display = 'flex';
+        DOM.searchResults.setAttribute('aria-live', 'polite');
+    }
+    if (DOM.searchStats) DOM.searchStats.style.display = 'none';
     scrollToResultsTop(); // 랜덤 말씀 생성 후 결과 상단으로 스크롤
     showToast('새로운 랜덤 말씀을 불러왔습니다!');
 };
@@ -503,15 +572,17 @@ const generateRandomMessage = () => {
  * @param {number} [page=1] - 현재 페이지 번호 (기본값: 1)
  */
 const searchMessages = debounce((page = 1) => {
-    const query = DOM.searchInput.value.trim();
-    DOM.searchLoading.style.display = 'flex'; // 로딩 표시
+    const query = DOM.searchInput ? DOM.searchInput.value.trim() : '';
+    if (DOM.searchLoading) DOM.searchLoading.style.display = 'flex'; // 로딩 표시
     updateProgressBar('20%'); // 진행 바 업데이트
-    DOM.searchResults.innerHTML = ''; // 이전 결과 초기화
-    DOM.searchResults.style.display = 'none';
-    DOM.searchStats.style.display = 'none';
+    if (DOM.searchResults) {
+        DOM.searchResults.innerHTML = ''; // 이전 결과 초기화
+        DOM.searchResults.style.display = 'none';
+    }
+    if (DOM.searchStats) DOM.searchStats.style.display = 'none';
     state.currentPage = page; // 현재 페이지 상태 업데이트
 
-    let filteredMessages = state.messages;
+    let filteredMessages = [...state.messages]; // 원본 메시지 배열을 수정하지 않도록 복사
 
     // 카테고리 필터링
     if (state.currentCategory !== CATEGORIES.ALL) {
@@ -520,17 +591,29 @@ const searchMessages = debounce((page = 1) => {
 
     // 검색어 필터링 및 일치 횟수 계산
     if (query) {
-        const queryRegex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-        filteredMessages = filteredMessages.map(msg => ({
-            ...msg,
-            matchCount: (msg.text.match(queryRegex) || []).length // 일치 횟수 계산
-        })).filter(msg => msg.text.toLowerCase().includes(query.toLowerCase()));
+        try {
+            const queryRegex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+            filteredMessages = filteredMessages.map(msg => {
+                const matchCount = (msg.text.match(queryRegex) || []).length;
+                return { ...msg, matchCount };
+            }).filter(msg => msg.matchCount > 0); // 검색어 일치하는 메시지만 필터링
 
-        // 검색어 일치 횟수 기준 정렬 (기본값)
-        filteredMessages.sort((a, b) => b.matchCount - a.matchCount);
+            // 검색어 일치 횟수 기준 정렬 (기본값)
+            filteredMessages.sort((a, b) => b.matchCount - a.matchCount);
+        } catch (e) {
+            console.warn('유효하지 않은 검색어 정규식:', e);
+            // 사용자에게 유효하지 않은 검색어임을 알리고 검색을 중단
+            if (DOM.searchResults) {
+                DOM.searchResults.innerHTML = '<p class="no-results" role="alert">유효하지 않은 검색어입니다. 특수문자를 확인해주세요.</p>';
+                DOM.searchResults.style.display = 'block';
+            }
+            if (DOM.searchLoading) DOM.searchLoading.style.display = 'none';
+            updateProgressBar('0');
+            return; // 함수 종료
+        }
 
         // 검색 기록 업데이트
-        if (!state.searchHistory.includes(query)) {
+        if (query && !state.searchHistory.includes(query)) { // 빈 쿼리는 저장하지 않음
             state.searchHistory.unshift(query); // 가장 최근 검색어를 맨 앞에 추가
             if (state.searchHistory.length > CONSTANTS.MAX_SEARCH_HISTORY) {
                 state.searchHistory.pop(); // 최대 개수 초과 시 가장 오래된 것 삭제
@@ -560,61 +643,77 @@ const searchMessages = debounce((page = 1) => {
     const paginatedMessages = filteredMessages.slice(startIndex, endIndex);
 
     // 검색 결과 표시
-    if (filteredMessages.length === 0 && (query || state.currentCategory !== CATEGORIES.ALL)) {
-        DOM.searchResults.innerHTML = '<p class="no-results" role="alert">검색 결과가 없습니다.</p>';
-        DOM.searchResults.style.display = 'block';
-    } else if (paginatedMessages.length > 0) {
-        DOM.searchResults.innerHTML = paginatedMessages.map(msg => {
-            const displayText = truncateText(msg.text, query); // 텍스트 축약 및 하이라이트
-            const matchCount = msg.matchCount || 0; // 일치 횟수
-            return `
-                <div class="result-item" role="listitem" tabindex="0">
-                    <h3><i class="fas fa-book" aria-hidden="true"></i> ${msg.category}</h3>
-                    <p>${displayText} ${matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</p>
-                    <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${msg.source}</p>
-                    <button class="copy-button"
-                            onclick="copyMessageToClipboard(
-                                '${msg.text.replace(/'/g, "\\'")}',
-                                '${msg.source.replace(/'/g, "\\'")}',
-                                '${msg.category.replace(/'/g, "\\'")}',
-                                this.closest('.result-item')
-                            )"
-                            aria-label="${msg.category} 말씀과 출처 복사">
-                        <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
+    if (DOM.searchResults) {
+        if (filteredMessages.length === 0 && (query || state.currentCategory !== CATEGORIES.ALL)) {
+            DOM.searchResults.innerHTML = `
+                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
+                    검색 결과가 없습니다.
+                    <button class="quiz-button blue" onclick="clearSearch()" style="margin-top: 15px;">
+                        <i class="fas fa-undo" aria-hidden="true"></i> 검색 초기화
                     </button>
-                </div>
+                </p>
             `;
-        }).join('');
+            DOM.searchResults.style.display = 'block';
+        } else if (paginatedMessages.length > 0) {
+            DOM.searchResults.innerHTML = paginatedMessages.map(msg => {
+                const displayText = truncateText(msg.text, query); // 텍스트 축약 및 하이라이트
+                const matchCount = msg.matchCount || 0; // 일치 횟수
+                return `
+                    <div class="result-item fade-in" role="listitem" tabindex="0">
+                        <h3><i class="fas fa-book" aria-hidden="true"></i> ${msg.category}</h3>
+                        <p>${displayText} ${matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</p>
+                        <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${msg.source}</p>
+                        <button class="copy-button"
+                                onclick="copyMessageToClipboard(
+                                    '${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                    '${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                    '${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                    this.closest('.result-item')
+                                )"
+                                aria-label="${msg.category} 말씀과 출처 복사">
+                            <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
+                        </button>
+                    </div>
+                `;
+            }).join('');
 
-        // 다음 페이지 버튼 추가
-        if (filteredMessages.length > endIndex) {
+            // 다음 페이지 버튼 추가
+            if (filteredMessages.length > endIndex) {
+                DOM.searchResults.innerHTML += `
+                    <button onclick="searchMessages(${page + 1})" class="quiz-button blue next-page-button" aria-label="다음 페이지">다음 페이지</button>
+                `;
+            }
+            // 검색 결과 맨 위로 이동 버튼 추가
             DOM.searchResults.innerHTML += `
-                <button onclick="searchMessages(${page + 1})" class="quiz-button blue next-page-button" aria-label="다음 페이지">다음 페이지</button>
+                <button class="back-to-top result-top" onclick="scrollToResultsTop()" aria-label="검색 결과 맨 위로 이동" style="position: static; margin: 1rem auto; display: block; opacity: 1; pointer-events: auto;">
+                    <i class="fas fa-arrow-up" aria-hidden="true"></i> 맨 위로
+                </button>
             `;
+            DOM.searchResults.style.display = 'flex';
+            DOM.searchResults.setAttribute('aria-live', 'polite'); // 스크린 리더에게 내용 변경 알림
         }
-        // 검색 결과 맨 위로 이동 버튼 추가
-        DOM.searchResults.innerHTML += `
-            <button class="back-to-top result-top" onclick="scrollToResultsTop()" aria-label="검색 결과 맨 위로 이동" style="position: static; margin: 1rem auto; display: block;">
-                <i class="fas fa-arrow-up" aria-hidden="true"></i> 맨 위로
-            </button>
-        `;
-        DOM.searchResults.style.display = 'flex';
-        DOM.searchResults.setAttribute('aria-live', 'polite'); // 스크린 리더에게 내용 변경 알림
     }
 
     const endTime = performance.now(); // 검색 시간 측정 종료
-    DOM.searchStats.style.display = 'block';
-    DOM.searchStats.innerHTML = `총 ${filteredMessages.length}개의 결과 (검색 시간: ${(endTime - startTime).toFixed(2)}ms)`;
-    DOM.searchLoading.style.display = 'none'; // 로딩 표시 숨기기
+    if (DOM.searchStats) {
+        DOM.searchStats.style.display = 'block';
+        DOM.searchStats.innerHTML = `총 ${filteredMessages.length}개의 결과 (검색 시간: ${(endTime - startTime).toFixed(2)}ms)`;
+    }
+    if (DOM.searchLoading) DOM.searchLoading.style.display = 'none'; // 로딩 표시 숨기기
     updateProgressBar('100%');
     setTimeout(() => updateProgressBar('0'), 300); // 진행 바 초기화
+
+    // 다음 페이지로 넘어갈 때 자동으로 화면 맨 위로 스크롤
+    if (page > 1) {
+        scrollToResultsTop();
+    }
 }, CONSTANTS.DEBOUNCE_DELAY); // 디바운스 적용
 
 /**
  * 검색 입력 필드와 현재 선택된 카테고리를 초기화합니다.
  */
 const clearSearch = () => {
-    DOM.searchInput.value = ''; // 검색 입력 필드 비우기
+    if (DOM.searchInput) DOM.searchInput.value = ''; // 검색 입력 필드 비우기
     state.currentCategory = CATEGORIES.ALL; // 카테고리 '전체'로 초기화
     localStorage.setItem('currentCategory', state.currentCategory); // localStorage 업데이트
 
@@ -631,25 +730,41 @@ const clearSearch = () => {
     }
 
     // 검색 결과 및 통계, 제안 숨기기
-    DOM.searchResults.innerHTML = '';
-    DOM.searchResults.style.display = 'none';
-    DOM.searchStats.style.display = 'none';
-    DOM.searchSuggestions.style.display = 'none';
+    if (DOM.searchResults) {
+        DOM.searchResults.innerHTML = '';
+        DOM.searchResults.style.display = 'none';
+    }
+    if (DOM.searchStats) DOM.searchStats.style.display = 'none';
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.style.display = 'none';
+        DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+    }
 
     // 검색 초기화 버튼에 애니메이션 효과 추가
     DOM.clearSearch?.classList.add('shake');
     setTimeout(() => DOM.clearSearch?.classList.remove('shake'), 300);
 
     searchMessages(); // 메시지 검색 다시 실행 (초기화된 상태로)
+    showToast('검색 조건이 초기화되었습니다.');
 };
 
 /**
  * 지정된 페이지를 활성화하고 다른 페이지는 비활성화합니다.
- * @param {string} pageId - 활성화할 페이지의 ID (예: 'home', 'workbook')
+ * @param {string} pageId - 활성화할 페이지의 ID (예: 'home', 'workbook', 'quiz-selection')
  */
 const showPage = (pageId) => {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.querySelector(`#${pageId}`).classList.add('active');
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+        page.classList.remove('fade-in'); // 기존 fade-in 클래스 제거
+    });
+
+    const activePage = document.querySelector(`#${pageId}`);
+    if (activePage) {
+        activePage.classList.add('active');
+        // 부드러운 전환을 위한 fade-in 클래스 추가
+        setTimeout(() => activePage.classList.add('fade-in'), 10);
+    }
+
 
     // 네비게이션 버튼의 활성 상태 업데이트
     DOM.navButtons.forEach(button => {
@@ -659,8 +774,17 @@ const showPage = (pageId) => {
 
     // 'workbook' 페이지로 이동 시 메시지 로드 및 검색 실행
     if (pageId === CONSTANTS.PAGES.WORKBOOK) {
-        loadMessages().then(() => searchMessages());
+        // 메시지가 아직 로드되지 않았다면 로드 후 검색 실행
+        if (state.messages.length === 0) {
+            loadMessages().then(() => searchMessages());
+        } else {
+            searchMessages(); // 이미 로드되었다면 바로 검색 실행
+        }
+        // 검색 입력 필드로 포커스 이동
+        setTimeout(() => DOM.searchInput?.focus(), CONSTANTS.SCROLL_DURATION);
     }
+    // 페이지 전환 시 맨 위로 스크롤
+    scrollToTop();
 };
 
 /**
@@ -707,77 +831,138 @@ const initializeApp = () => {
             state.currentCategory = this.getAttribute('data-category'); // 현재 카테고리 상태 업데이트
             localStorage.setItem('currentCategory', state.currentCategory); // localStorage 업데이트
             searchMessages(); // 메시지 검색 다시 실행
+            scrollToResultsTop(); // 카테고리 변경 시 검색 결과 상단으로 스크롤
         });
     });
 
+    // 퀴즈 선택 버튼 클릭 이벤트 리스너
+    if (DOM.quizButtons) {
+        DOM.quizButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                startQuiz(this.getAttribute('data-quiz-type'));
+            });
+        });
+    }
+
     // 검색 입력 필드 이벤트 리스너
-    DOM.searchInput.addEventListener('input', renderSearchSuggestions); // 입력 시 제안 렌더링
-    DOM.searchInput.addEventListener('focus', renderSearchSuggestions); // 포커스 시 제안 렌더링
-    // 블러 시 제안 숨기기 (약간의 딜레이를 주어 클릭 이벤트 처리 가능하게 함)
-    DOM.searchInput.addEventListener('blur', () => {
-        setTimeout(() => DOM.searchSuggestions.style.display = 'none', 200);
-    });
-    // Enter 키 입력 시 검색 실행
-    DOM.searchInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-            searchMessages();
-            DOM.searchSuggestions.style.display = 'none'; // Enter 시 제안 숨김
-        }
-    });
+    if (DOM.searchInput) {
+        DOM.searchInput.addEventListener('input', renderSearchSuggestions); // 입력 시 제안 렌더링
+        DOM.searchInput.addEventListener('focus', renderSearchSuggestions); // 포커스 시 제안 렌더링
+        // 블러 시 제안 숨기기 (약간의 딜레이를 주어 클릭 이벤트 처리 가능하게 함)
+        DOM.searchInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                if (DOM.searchSuggestions) {
+                    DOM.searchSuggestions.style.display = 'none';
+                    DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+                }
+            }, 200);
+        });
+        // Enter 키 입력 시 검색 실행
+        DOM.searchInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                searchMessages();
+                if (DOM.searchSuggestions) {
+                    DOM.searchSuggestions.style.display = 'none'; // Enter 시 제안 숨김
+                    DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+                }
+            }
+        });
+    }
 
     // 검색 제안 목록 키보드 내비게이션
-    DOM.searchSuggestions.addEventListener('keydown', e => {
-        const suggestions = DOM.searchSuggestions.querySelectorAll('.suggestion');
-        if (suggestions.length === 0) return;
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.addEventListener('keydown', e => {
+            const suggestions = DOM.searchSuggestions.querySelectorAll('.suggestion');
+            if (suggestions.length === 0) return;
 
-        const currentIndex = Array.from(suggestions).findIndex(s => s === document.activeElement);
-        let nextIndex = currentIndex;
-
-        if (e.key === 'ArrowDown') {
-            nextIndex = (currentIndex + 1) % suggestions.length;
-            e.preventDefault(); // 스크롤 방지
-        } else if (e.key === 'ArrowUp') {
-            nextIndex = (currentIndex - 1 + suggestions.length) % suggestions.length;
-            e.preventDefault(); // 스크롤 방지
-        } else if (e.key === 'Enter' && currentIndex >= 0) {
-            // 선택된 제안 클릭 효과
-            selectSuggestion(suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent);
-            e.preventDefault();
-        } else if (e.key === 'Delete' && currentIndex >= 0) {
-            // 선택된 제안 삭제
-            const textContent = suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent;
-            const index = state.searchHistory.indexOf(textContent);
-            if (index !== -1) {
-                deleteSearchHistory(index);
+            let currentIndex = -1;
+            // 현재 포커스된 요소가 suggestion 내부에 있는지 확인
+            const activeEl = document.activeElement;
+            if (activeEl && activeEl.closest('.suggestion') === activeEl) {
+                 currentIndex = Array.from(suggestions).findIndex(s => s === activeEl);
+            } else if (activeEl && activeEl.closest('.suggestion span') === activeEl) {
+                currentIndex = Array.from(suggestions).findIndex(s => s.querySelector('span') === activeEl);
+            } else if (activeEl && activeEl.closest('.suggestion button') === activeEl) {
+                currentIndex = Array.from(suggestions).findIndex(s => s.querySelector('button') === activeEl);
             }
-            e.preventDefault();
-        }
 
-        if (nextIndex !== currentIndex) {
-            suggestions[nextIndex].focus(); // 다음/이전 제안으로 포커스 이동
-        }
-    });
+
+            let nextIndex = currentIndex;
+
+            if (e.key === 'ArrowDown') {
+                nextIndex = (currentIndex + 1) % suggestions.length;
+                e.preventDefault(); // 스크롤 방지
+            } else if (e.key === 'ArrowUp') {
+                nextIndex = (currentIndex - 1 + suggestions.length) % suggestions.length;
+                e.preventDefault(); // 스크롤 방지
+            } else if (e.key === 'Enter') {
+                if (currentIndex >= 0) {
+                    // Enter 키가 눌린 요소에 따라 동작 분기
+                    if (activeEl.classList.contains('delete-suggestion') || activeEl.closest('.delete-suggestion')) {
+                        const textContent = suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent;
+                        const index = state.searchHistory.indexOf(textContent);
+                        if (index !== -1) {
+                            deleteSearchHistory(index);
+                        }
+                    } else if (activeEl.classList.contains('clear-all') || activeEl.closest('.clear-all')) {
+                        clearSearchHistory();
+                    } else {
+                        // 기본적으로 제안 선택
+                        selectSuggestion(suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent);
+                    }
+                } else if (DOM.searchInput.value.trim() !== '') {
+                    // 제안이 포커스되지 않은 상태에서 Enter 입력 시 검색 실행
+                    searchMessages();
+                    DOM.searchSuggestions.style.display = 'none';
+                    DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+                }
+                e.preventDefault();
+            } else if (e.key === 'Delete' && currentIndex >= 0) {
+                // Delete 키로 검색 제안 삭제 (삭제 버튼이 아닌 제안 자체에서)
+                const textContent = suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent;
+                const index = state.searchHistory.indexOf(textContent);
+                if (index !== -1) {
+                    deleteSearchHistory(index);
+                }
+                e.preventDefault();
+            }
+
+            if (nextIndex !== currentIndex) {
+                suggestions[nextIndex].focus(); // 다음/이전 제안으로 포커스 이동
+            }
+        });
+    }
+
 
     // 검색 결과 항목 키보드 내비게이션 (상하 방향키)
-    DOM.searchResults.addEventListener('keydown', e => {
-        const results = DOM.searchResults.querySelectorAll('.result-item');
-        if (results.length === 0) return;
+    if (DOM.searchResults) {
+        DOM.searchResults.addEventListener('keydown', e => {
+            const results = DOM.searchResults.querySelectorAll('.result-item');
+            if (results.length === 0) return;
 
-        const currentIndex = Array.from(results).findIndex(r => r === document.activeElement);
-        let nextIndex = currentIndex;
+            const currentIndex = Array.from(results).findIndex(r => r === document.activeElement);
+            let nextIndex = currentIndex;
 
-        if (e.key === 'ArrowDown') {
-            nextIndex = (currentIndex + 1) % results.length;
-            e.preventDefault();
-        } else if (e.key === 'ArrowUp') {
-            nextIndex = (currentIndex - 1 + results.length) % results.length;
-            e.preventDefault();
-        }
+            if (e.key === 'ArrowDown') {
+                nextIndex = (currentIndex + 1) % results.length;
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+                nextIndex = (currentIndex - 1 + results.length) % results.length;
+                e.preventDefault();
+            } else if (e.key === 'Enter' && currentIndex >= 0) {
+                // Enter 키로 검색 결과 항목 내의 첫 번째 버튼 (복사하기 버튼) 클릭
+                const copyButton = results[currentIndex].querySelector('.copy-button');
+                if (copyButton) {
+                    copyButton.click();
+                    e.preventDefault();
+                }
+            }
 
-        if (nextIndex !== currentIndex) {
-            results[nextIndex].focus();
-        }
-    });
+            if (nextIndex !== currentIndex) {
+                results[nextIndex].focus();
+            }
+        });
+    }
 
     // 스크롤 이벤트 리스너 (맨 위로 버튼 표시/숨김)
     let scrollTimeout;
@@ -786,13 +971,9 @@ const initializeApp = () => {
         scrollTimeout = setTimeout(() => {
             if (DOM.backToTop) {
                 // 스크롤 위치에 따라 버튼 표시 여부 결정
-                DOM.backToTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
-                // 애니메이션을 위한 클래스 토글
-                if (window.scrollY > 300) {
-                    DOM.backToTop.classList.add('show');
-                } else {
-                    DOM.backToTop.classList.remove('show');
-                }
+                const shouldShow = window.scrollY > 300;
+                DOM.backToTop.classList.toggle('show', shouldShow);
+                DOM.backToTop.setAttribute('aria-hidden', !shouldShow);
             }
         }, 100); // 디바운스 적용
     });
@@ -802,7 +983,7 @@ const initializeApp = () => {
         // Ctrl + /: 검색 입력 필드 포커스
         if (e.ctrlKey && e.key === '/') {
             e.preventDefault();
-            DOM.searchInput.focus();
+            DOM.searchInput?.focus();
         }
         // Ctrl + Enter: 검색 실행
         if (e.ctrlKey && e.key === 'Enter') {
