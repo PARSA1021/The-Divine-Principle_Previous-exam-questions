@@ -112,6 +112,21 @@
                     <button onclick="searchMessages()" title="검색 실행" aria-label="검색 실행"><i class="fas fa-search" aria-hidden="true"></i></button>
                     <button class="clear-search" onclick="clearSearch()" title="검색 초기화" aria-label="검색 초기화"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
+
+                <div class="tts-controls" role="group" aria-labelledby="tts-heading">
+                    <h3 id="tts-heading" class="sr-only">음성 설정</h3>
+                    <div class="tts-control-item">
+                        <label for="voice-select">음성 선택:</label>
+                        <select id="voice-select" aria-label="음성 성별 및 종류 선택">
+                            <option value="">음성을 로드 중...</option>
+                        </select>
+                    </div>
+                    <div class="tts-control-item">
+                        <label for="rate-input">속도:</label>
+                        <input type="range" id="rate-input" min="0.5" max="1.5" value="1.0" step="0.1" aria-label="음성 속도 조절" aria-valuemin="0.5" aria-valuemax="1.5" aria-valuenow="1.0">
+                        <span id="rate-value" aria-live="polite">1.0배</span>
+                    </div>
+                </div>
                 <select id="sort-select" aria-label="말씀 정렬 기준 선택">
                     <option value="default">관련도순 (기본)</option>
                     <option value="length_asc">길이 짧은순</option>
@@ -128,6 +143,7 @@
                     <button data-category="참부모님 말씀" aria-pressed="false"><i class="fas fa-quote-left" Ourselveshidden="true"></i> 참부모님 말씀</button>
                     <button data-category="참어머님 말씀" aria-pressed="false"><i class="fas fa-female" aria-hidden="true"></i> 참어머님 말씀</button>
                     <button data-category="천심원" aria-pressed="false"><i class="fas fa-heart" aria-hidden="true"></i> 천심원</button>
+                    <button data-category="참아버님 기도문" aria-pressed="false"><i class="fas fa-hands" aria-hidden="true"></i> 참아버님 기도문</button>
                 </div>
                 <div id="search-stats" class="search-stats" style="display: none;" role="status" aria-live="polite"></div>
             </div>

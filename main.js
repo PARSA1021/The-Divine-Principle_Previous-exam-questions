@@ -17,7 +17,13 @@ const CONSTANTS = {
         DEFAULT: 'default', // 기본 (검색 일치 횟수)
         LENGTH_ASC: 'length_asc', // 길이 짧은순
         LENGTH_DESC: 'length_desc' // 길이 긴순
-    }
+    },
+    // TTS 관련 상수 추가
+    VOICE_LANG: 'ko-KR', // 음성 합성 언어 설정 (한국어)
+    DEFAULT_VOICE_GENDER: 'male',// 기본 음성 성별
+    DEFAULT_SPEECH_RATE: 1.0, // 기본 음성 속도
+    MIN_SPEECH_RATE: 0.5, // 최소 음성 속도
+    MAX_SPEECH_RATE: 1.5 // 최대 음성 속도
 };
 
 /**
@@ -30,7 +36,8 @@ const CATEGORIES = {
     CHAM_BUMO_GYEONG: '참부모경',
     CHAM_BUMO_NIM: '참부모님 말씀',
     CHAM_EOMEONIM: '참어머님 말씀',
-    CHEON_SHIM_WON: '천심원'
+    CHEON_SHIM_WON: '천심원',
+    TRUE_FATHER_PRAYER: '참아버님 기도문'
 };
 
 /**
@@ -60,7 +67,13 @@ const state = {
     currentCategory: localStorage.getItem('currentCategory') || CATEGORIES.ALL, // 현재 선택된 카테고리
     searchHistory: JSON.parse(localStorage.getItem('searchHistory')) || [], // 검색 기록 배열
     currentPage: 1, // 현재 페이지 번호
-    currentSortOrder: CONSTANTS.SORT_ORDER.DEFAULT // 현재 정렬 순서
+    currentSortOrder: CONSTANTS.SORT_ORDER.DEFAULT, // 현재 정렬 순서
+    // TTS 관련 상태 추가
+    selectedVoiceURI: localStorage.getItem('selectedVoiceURI') || '', // 현재 선택된 음성 URI
+    speechSynthesisVoices: [], // 사용 가능한 음성 목록
+    isSpeaking: false, // 음성 재생 중인지 여부
+    lastSpokenText: '', // 마지막으로 재생된 텍스트 (재생 중단 토글 로직용)
+    currentSpeechRate: parseFloat(localStorage.getItem('currentSpeechRate')) || CONSTANTS.DEFAULT_SPEECH_RATE // 현재 음성 속도
 };
 
 /**
@@ -80,7 +93,11 @@ const DOM = {
     clearSearch: document.getElementById('clear-search'), // 검색 초기화 버튼
     sortSelect: document.getElementById('sort-select'), // 정렬 선택 드롭다운
     randomMessageButton: document.getElementById('random-message-button'), // 랜덤 말씀 보기 버튼
-    quizButtons: document.querySelectorAll('.quiz-selection-container button') // 퀴즈 선택 버튼들 추가
+    quizButtons: document.querySelectorAll('.quiz-selection-container button'), // 퀴즈 선택 버튼들 추가
+    // TTS 관련 DOM 요소 추가 (HTML에 #voice-select 요소를 추가해야 함)
+    voiceSelect: document.getElementById('voice-select'), // 음성 선택 드롭다운
+    rateInput: document.getElementById('rate-input'), // 음성 속도 조절 슬라이더
+    rateValueDisplay: document.getElementById('rate-value') // 음성 속도 표시
 };
 
 /**
@@ -329,7 +346,8 @@ const categorizeMessage = (source) => {
         { key: '참부모경', value: CATEGORIES.CHAM_BUMO_GYEONG },
         { key: '참부모님 말씀', value: CATEGORIES.CHAM_BUMO_NIM },
         { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
-        { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON }
+        { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
+        { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER }
     ];
     // 출처에 포함된 키워드를 찾아 해당하는 카테고리 반환, 없으면 '전체' 반환
     return categories.find(cat => source.includes(cat.key))?.value || CATEGORIES.ALL;
@@ -483,6 +501,166 @@ const selectSuggestion = (query) => {
 };
 
 /**
+ * 사용 가능한 음성 목록을 로드하고 기본 음성을 설정합니다.
+ */
+const loadVoicesAndSetDefault = () => {
+    const setVoices = () => {
+        state.speechSynthesisVoices = window.speechSynthesis.getVoices();
+        const koreanVoices = state.speechSynthesisVoices.filter(voice => voice.lang === CONSTANTS.VOICE_LANG);
+
+        if (DOM.voiceSelect) {
+            DOM.voiceSelect.innerHTML = ''; // 기존 옵션 초기화
+
+            let currentSelectedVoice = null;
+
+            // 특정 성별의 목소리만 필터링하여 먼저 추가
+            const addGenderVoice = (gender, label) => {
+                const voices = koreanVoices.filter(voice => {
+                    const nameLower = voice.name.toLowerCase();
+                    if (gender === 'female') {
+                        return nameLower.includes('여자') || nameLower.includes('female');
+                    } else if (gender === 'male') {
+                        return nameLower.includes('남자') || nameLower.includes('male');
+                    }
+                    return false;
+                });
+                if (voices.length > 0) {
+                    const option = document.createElement('option');
+                    option.value = voices[0].voiceURI;
+                    option.textContent = voices[0].name + ` (${label})`;
+                    DOM.voiceSelect.appendChild(option);
+                    // 기본 성별이 이 성별이고 아직 선택된 음성이 없으면 현재 음성으로 설정
+                    if (CONSTANTS.DEFAULT_VOICE_GENDER === gender && !currentSelectedVoice) {
+                        currentSelectedVoice = voices[0];
+                    }
+                }
+            };
+
+            addGenderVoice('female', '여자');
+            addGenderVoice('male', '남자');
+            
+            // 기타 한국어 음성 추가 (혹시 성별 구분이 안된 음성 등)
+            koreanVoices.forEach(voice => {
+                const isAlreadyAdded = DOM.voiceSelect.querySelector(`option[value="${voice.voiceURI}"]`);
+                if (!isAlreadyAdded) {
+                    const option = document.createElement('option');
+                    option.value = voice.voiceURI;
+                    option.textContent = voice.name;
+                    DOM.voiceSelect.appendChild(option);
+                }
+            });
+
+
+            // localStorage에 저장된 음성 URI가 있다면 해당 음성을 선택
+            if (state.selectedVoiceURI) {
+                const storedVoiceOption = DOM.voiceSelect.querySelector(`option[value="${state.selectedVoiceURI}"]`);
+                if (storedVoiceOption) {
+                    DOM.voiceSelect.value = state.selectedVoiceURI;
+                    const foundVoice = state.speechSynthesisVoices.find(v => v.voiceURI === state.selectedVoiceURI);
+                    if (foundVoice) state.selectedVoiceURI = foundVoice.voiceURI; // Ensure state is updated with full URI
+                } else {
+                    // 저장된 음성이 없거나 현재 사용할 수 없는 경우, 기본 음성으로 설정
+                    if (currentSelectedVoice) {
+                        state.selectedVoiceURI = currentSelectedVoice.voiceURI;
+                        DOM.voiceSelect.value = currentSelectedVoice.voiceURI;
+                    } else if (koreanVoices.length > 0) {
+                        // 기본값이 설정되지 않았거나 찾지 못하면 첫 번째 한국어 음성 사용
+                        state.selectedVoiceURI = koreanVoices[0].voiceURI;
+                        DOM.voiceSelect.value = koreanVoices[0].voiceURI;
+                    } else {
+                        state.selectedVoiceURI = ''; // 사용 가능한 음성 없음
+                    }
+                }
+            } else if (currentSelectedVoice) {
+                 // localStorage에 저장된 음성 URI가 없는 경우, 기본 음성으로 설정
+                state.selectedVoiceURI = currentSelectedVoice.voiceURI;
+                DOM.voiceSelect.value = currentSelectedVoice.voiceURI;
+            } else if (koreanVoices.length > 0) {
+                // 기본값이 설정되지 않았거나 찾지 못하면 첫 번째 한국어 음성 사용
+                state.selectedVoiceURI = koreanVoices[0].voiceURI;
+                DOM.voiceSelect.value = koreanVoices[0].voiceURI;
+            }
+
+            localStorage.setItem('selectedVoiceURI', state.selectedVoiceURI);
+        }
+    };
+
+    if ('speechSynthesis' in window) {
+        // 음성 목록이 로드될 때까지 기다림
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = setVoices;
+        }
+        setVoices(); // 초기 로드 시 한 번 실행
+    } else {
+        console.warn('SpeechSynthesis API is not supported in this browser.');
+        if (DOM.voiceSelect) {
+            DOM.voiceSelect.innerHTML = '<option value="">음성 지원 안 됨</option>';
+            DOM.voiceSelect.disabled = true;
+        }
+    }
+};
+
+/**
+ * 주어진 텍스트를 음성으로 재생합니다.
+ * @param {string} text - 재생할 텍스트
+ */
+const speakMessage = (text) => {
+    if ('speechSynthesis' in window) {
+        // 현재 재생 중인 음성이 있으면 중단하고 다시 시작
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            state.isSpeaking = false;
+            // 만약 동일한 텍스트를 다시 누른 경우 토글처럼 작동하도록
+            if (state.lastSpokenText === text) {
+                state.lastSpokenText = ''; // 재생 중단되었음을 표시
+                showToast('음성 재생이 중단되었습니다.');
+                return;
+            }
+        }
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = CONSTANTS.VOICE_LANG; // 한국어 설정
+        utterance.rate = state.currentSpeechRate; // 현재 설정된 속도 적용
+
+        const selectedVoice = state.speechSynthesisVoices.find(
+            voice => voice.voiceURI === state.selectedVoiceURI
+        );
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        } else {
+            // 선택된 목소리가 없으면 기본 한국어 목소리 탐색 (fallback)
+            const defaultKoreanVoice = state.speechSynthesisVoices.find(
+                voice => voice.lang === CONSTANTS.VOICE_LANG &&
+                         ((CONSTANTS.DEFAULT_VOICE_GENDER === 'female' && (voice.name.includes('여자') || voice.name.toLowerCase().includes('female'))) ||
+                          (CONSTANTS.DEFAULT_VOICE_GENDER === 'male' && (voice.name.includes('남자') || voice.name.toLowerCase().includes('male'))))
+            );
+            utterance.voice = defaultKoreanVoice || state.speechSynthesisVoices.find(voice => voice.lang === CONSTANTS.VOICE_LANG);
+        }
+
+        utterance.onstart = () => {
+            state.isSpeaking = true;
+            state.lastSpokenText = text;
+            showToast('음성 재생을 시작합니다...');
+        };
+        utterance.onend = () => {
+            state.isSpeaking = false;
+            state.lastSpokenText = '';
+            showToast('음성 재생이 완료되었습니다.');
+        };
+        utterance.onerror = (event) => {
+            state.isSpeaking = false;
+            console.error('Speech synthesis error:', event);
+            showToast('음성 재생에 실패했습니다. 브라우저 설정을 확인해주세요.');
+        };
+
+        window.speechSynthesis.speak(utterance);
+    } else {
+        showToast('죄송합니다. 이 브라우저에서는 음성 재생을 지원하지 않습니다.');
+    }
+};
+
+/**
  * 랜덤 말씀을 생성하여 표시합니다.
  */
 const generateRandomMessage = () => {
@@ -542,16 +720,25 @@ const generateRandomMessage = () => {
                 <h3><i class="fas fa-book" aria-hidden="true"></i> ${randomMessage.category}</h3>
                 <p>${highlightText(randomMessage.text, query)}</p>
                 <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${randomMessage.source}</p>
-                <button class="copy-button"
-                        onclick="copyMessageToClipboard(
-                            '${randomMessage.text.replace(/'/g, "\\'")}',
-                            '${randomMessage.source.replace(/'/g, "\\'")}',
-                            '${randomMessage.category.replace(/'/g, "\\'")}',
-                            this.closest('.result-item')
-                        )"
-                        aria-label="${randomMessage.category} 말씀과 출처 복사">
-                    <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
-                </button>
+                <div class="action-buttons">
+                    <button class="copy-button"
+                            onclick="copyMessageToClipboard(
+                                '${randomMessage.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                '${randomMessage.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                '${randomMessage.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                this.closest('.result-item')
+                            )"
+                            aria-label="${randomMessage.category} 말씀과 출처 복사">
+                        <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
+                    </button>
+                    <button class="listen-button"
+                            onclick="speakMessage(
+                                '${randomMessage.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}'
+                            )"
+                            aria-label="${randomMessage.category} 말씀 듣기">
+                        <i class="fas fa-volume-up" aria-hidden="true"></i> 듣기
+                    </button>
+                </div>
                 <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
                     <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
                 </button>
@@ -663,16 +850,25 @@ const searchMessages = debounce((page = 1) => {
                         <h3><i class="fas fa-book" aria-hidden="true"></i> ${msg.category}</h3>
                         <p>${displayText} ${matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</p>
                         <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${msg.source}</p>
-                        <button class="copy-button"
-                                onclick="copyMessageToClipboard(
-                                    '${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                    '${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                    '${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                    this.closest('.result-item')
-                                )"
-                                aria-label="${msg.category} 말씀과 출처 복사">
-                            <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
-                        </button>
+                        <div class="action-buttons">
+                            <button class="copy-button"
+                                    onclick="copyMessageToClipboard(
+                                        '${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                        '${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                        '${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                        this.closest('.result-item')
+                                    )"
+                                    aria-label="${msg.category} 말씀과 출처 복사">
+                                <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
+                            </button>
+                            <button class="listen-button"
+                                    onclick="speakMessage(
+                                        '${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}'
+                                    )"
+                                    aria-label="${msg.category} 말씀 듣기">
+                                <i class="fas fa-volume-up" aria-hidden="true"></i> 듣기
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -753,6 +949,13 @@ const clearSearch = () => {
  * @param {string} pageId - 활성화할 페이지의 ID (예: 'home', 'workbook', 'quiz-selection')
  */
 const showPage = (pageId) => {
+    // 페이지 전환 시 재생 중인 음성 중단
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        state.isSpeaking = false;
+        state.lastSpokenText = ''; // 마지막 재생 텍스트 초기화
+    }
+
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
         page.classList.remove('fade-in'); // 기존 fade-in 클래스 제거
@@ -1023,6 +1226,39 @@ const initializeApp = () => {
     // **랜덤 말씀 보기 버튼 클릭 이벤트**
     if (DOM.randomMessageButton) {
         DOM.randomMessageButton.addEventListener('click', generateRandomMessage);
+    }
+
+    // TTS 음성 목록 로드 및 기본 설정
+    loadVoicesAndSetDefault();
+    // 음성 선택 드롭다운 변경 이벤트
+    if (DOM.voiceSelect) {
+        DOM.voiceSelect.addEventListener('change', (event) => {
+            state.selectedVoiceURI = event.target.value;
+            localStorage.setItem('selectedVoiceURI', state.selectedVoiceURI);
+            showToast('음성이 변경되었습니다.');
+        });
+    }
+
+    // TTS 속도 조절 슬라이더 이벤트
+    if (DOM.rateInput && DOM.rateValueDisplay) {
+        // 초기 값 설정
+        DOM.rateInput.value = state.currentSpeechRate;
+        DOM.rateValueDisplay.textContent = `${state.currentSpeechRate.toFixed(1)}배`;
+
+        DOM.rateInput.addEventListener('input', (event) => {
+            state.currentSpeechRate = parseFloat(event.target.value);
+            localStorage.setItem('currentSpeechRate', state.currentSpeechRate.toString());
+            DOM.rateValueDisplay.textContent = `${state.currentSpeechRate.toFixed(1)}배`;
+            // 현재 재생 중인 음성이 있다면 속도 변경 적용 (새 음성 생성 필요 없이 utterance.rate 변경만으로 가능)
+            if (window.speechSynthesis.speaking && window.speechSynthesis.getVoices().length > 0) {
+                 const utterance = new SpeechSynthesisUtterance(); // 더미 utterance 생성
+                 utterance.rate = state.currentSpeechRate;
+                 // 실제로 재생 중인 utterance의 rate를 직접 변경하는 방법은 없으므로,
+                 // 속도 변경 시에는 현재 재생 중인 음성을 중지하고 새로운 속도로 다시 재생해야 함.
+                 // 여기서는 사용자가 속도를 조절하는 즉시 적용보다는, 다음 재생 시 적용되도록 합니다.
+                 // (실시간 변경을 원하면 복잡해짐. 현재는 다음 '듣기' 클릭 시 적용됨)
+            }
+        });
     }
 
     // localStorage에서 다크 모드 설정 로드

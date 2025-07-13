@@ -1186,6 +1186,37 @@ body {
     padding: var(--spacing-sm) var(--spacing-lg); /* 12px 20px, 크기 조정 */
     font-size: 1rem; /* 크기 조정 */
 }
+.button-group {
+    display: flex;
+    gap: 10px; /* 버튼 사이 간격 */
+    margin-top: 15px; /* 상단 여백 */
+    justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 (필요시) */
+}
+
+.button-group button {
+    flex-grow: 1; /* 버튼들이 사용 가능한 공간을 채우도록 */
+    max-width: 150px; /* 최대 너비 설정 (필요시) */
+}
+
+/* 듣기 버튼을 복사 버튼과 동일하게 스타일링 */
+.listen-button {
+    background-color: var(--button-color-blue); /* 예시 색상 */
+    color: var(--button-text-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.listen-button:hover {
+    background-color: var(--button-hover-blue);
+}
 
 /* ==========================================================================
    푸터 스타일
