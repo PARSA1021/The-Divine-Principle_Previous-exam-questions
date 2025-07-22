@@ -15,7 +15,7 @@
 /* ==========================================================================
    CSS 변수 정의 (컬러 팔레트, 그림자, 폰트 등)
    ========================================================================== */
-:root {
+   :root {
     /* 기본 색상 (라이트 모드) */
     --primary-color: #4285f4; /* 구글 파란색 */
     --primary-rgb: 66, 133, 244;
@@ -1218,6 +1218,103 @@ body {
     background-color: var(--button-hover-blue);
 }
 
+/* Q&A 카드 디자인 */
+.qna-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    width: 100%;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.qna-card {
+    background: var(--card-background);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-medium);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-md);
+    transition: box-shadow 0.3s, border-color 0.3s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.6s;
+}
+.qna-card:hover {
+    box-shadow: var(--shadow-strong);
+    border-color: var(--primary-color);
+    transform: translateY(-3px) scale(1.01);
+}
+.qna-card .question {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+.qna-card .question i {
+    color: var(--accent-color);
+    font-size: 1.3rem;
+}
+.qna-card .answer {
+    font-size: 1.08rem;
+    color: var(--text-color);
+    background: var(--highlight-background);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    margin-left: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+}
+.qna-card .answer i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+}
+.qna-card .category-label {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 500;
+    padding: 0.3em 0.9em;
+    border-radius: 1em;
+    box-shadow: 0 1px 4px rgba(var(--primary-rgb),0.08);
+    opacity: 0.92;
+    letter-spacing: 0.01em;
+}
+@media (max-width: 768px) {
+  .qna-list {
+    max-width: 98vw;
+    gap: var(--spacing-md);
+  }
+  .qna-card {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  .qna-card .question {
+    font-size: 1.05rem;
+  }
+  .qna-card .answer {
+    font-size: 0.98rem;
+    margin-left: 1rem;
+    padding: var(--spacing-sm);
+  }
+  .qna-card .category-label {
+    font-size: 0.85rem;
+    padding: 0.2em 0.7em;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+  }
+}
+
 /* ==========================================================================
    푸터 스타일
    ========================================================================== */
@@ -1359,6 +1456,120 @@ body {
 @keyframes underlineExpand {
     from { transform: scaleX(0); }
     to { transform: scaleX(1); }
+}
+
+/* Hero Section Styles */
+.hero {
+    width: 100%;
+    max-width: 52rem;
+    margin: 0 auto var(--spacing-xl) auto;
+    background: linear-gradient(120deg, #e0f2fe 0%, #f8fafc 100%);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-medium);
+    padding: var(--spacing-xxl) var(--spacing-xl) var(--spacing-xl) var(--spacing-xl);
+    text-align: center;
+    position: relative;
+    animation: fadeIn 1s;
+    border: 1.5px solid var(--border-color);
+}
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -0.03em;
+    text-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.08);
+}
+.hero-subtitle {
+    font-size: 1.35rem;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-xl);
+    font-weight: 500;
+    opacity: 0.95;
+    line-height: 1.6;
+}
+.hero-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--spacing-xl) 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-lg);
+}
+.hero-features li {
+    background: var(--card-background);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-light);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1.13rem;
+    color: var(--text-color);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: 0;
+    min-width: 13rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.hero-features li:hover {
+    box-shadow: var(--shadow-strong);
+    transform: translateY(-2px) scale(1.03);
+}
+.hero-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    display: inline-block;
+}
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+.hero-buttons .quiz-button {
+    font-size: 1.18rem;
+    padding: var(--spacing-md) var(--spacing-xl);
+    min-width: 11rem;
+    border-radius: var(--border-radius-xl);
+    font-weight: 700;
+    box-shadow: var(--shadow-medium);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.hero-buttons .quiz-button:hover {
+    box-shadow: var(--shadow-strong);
+    transform: translateY(-2px) scale(1.04);
+}
+@media (max-width: 768px) {
+  .hero {
+    padding: var(--spacing-xl) var(--spacing-md);
+    max-width: 98vw;
+  }
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 1.05rem;
+  }
+  .hero-features {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  .hero-features li {
+    font-size: 1rem;
+    padding: var(--spacing-md);
+    min-width: 0;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  .hero-buttons .quiz-button {
+    font-size: 1rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+    min-width: 0;
+  }
 }
 
 /* ==========================================================================

@@ -50,28 +50,64 @@ function loadQuestion() {
     const q = questions[currentQuestionIndex];
     const questionWithBlanks = q.question.replace(/___/g, (_, i) => `<span class="blank" id="blank${i}" onclick="toggleBlank(${i})">[선택]</span>`);
     const shuffledOptions = shuffleArray([...q.options]);
-    
     selectedAnswers = new Array(q.answers.length).fill(null);
     selectedCounts = {};
 
-    document.getElementById('quiz-container').innerHTML = `
-        <div class="question">${questionWithBlanks}</div>
-        <div class="options">
-            ${shuffledOptions.map(a => `
-                <button class="option-btn" onclick="selectAnswer('${a.replace(/'/g, "\\'")}')" title="이 선택지를 빈칸에 추가">${a}</button>
-            `).join('')}
-        </div>
-        <div class="button-group">
-            <button id="reset-answers" class="reset-btn" onclick="resetAnswers()" title="현재 문제의 선택을 초기화">선택 초기화</button>
-        </div>
-        <div id="result" class="result"></div>
-        <div id="explanation" class="explanation" style="display: none;"></div>
-    `;
-    document.getElementById('result').innerHTML = '';
-    document.getElementById('explanation').style.display = 'none';
-    document.getElementById('next-btn').disabled = true;
-    updateProgress();
-    updateOptionButtons();
+    // Fade out animation before changing content
+    const quizContainer = document.getElementById('quiz-container');
+    quizContainer.style.opacity = 1;
+    quizContainer.style.transition = 'opacity 0.35s';
+    quizContainer.style.opacity = 0;
+    setTimeout(() => {
+        quizContainer.innerHTML = `
+            <div class="question-text">${questionWithBlanks}</div>
+            <div class="options-container">
+                ${shuffledOptions.map((a, i) => `
+                    <div class="option-btn">
+                        <input type="checkbox" name="answer" id="option${i}" value="${a.replace(/'/g, "\\'")}" style="display:none;">
+                        <label for="option${i}" style="width:100%;height:100%;display:block;cursor:pointer;">${a}</label>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="button-group">
+                <button id="reset-answers" class="reset-btn" onclick="resetAnswers()" title="현재 문제의 선택을 초기화">선택 초기화</button>
+            </div>
+            <div id="result" class="feedback"></div>
+            <div id="explanation" class="explanation" style="display: none;"></div>
+        `;
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('explanation').style.display = 'none';
+        document.getElementById('next-btn').disabled = true;
+        updateProgress();
+        updateOptionButtons();
+
+        // 옵션 클릭 이벤트 (체크박스 숨기고 라벨 전체 클릭)
+        document.querySelectorAll('.option-btn').forEach((optionDiv, i) => {
+            const checkbox = optionDiv.querySelector('input');
+            const label = optionDiv.querySelector('label');
+            optionDiv.addEventListener('click', (e) => {
+                if (e.target.tagName !== "INPUT") {
+                    checkbox.checked = !checkbox.checked;
+                }
+                optionDiv.classList.toggle("selected", checkbox.checked);
+                selectAnswer(label.textContent);
+            });
+            checkbox.addEventListener('change', () => {
+                optionDiv.classList.toggle("selected", checkbox.checked);
+                selectAnswer(label.textContent);
+            });
+        });
+
+        // Fade in after content change
+        setTimeout(() => {
+            quizContainer.style.opacity = 1;
+        }, 30);
+        // Scroll quiz container into view for all devices
+        setTimeout(() => {
+            quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            quizContainer.focus && quizContainer.focus();
+        }, 100);
+    }, 350);
 }
 
 function displayQuestionList() {
@@ -113,13 +149,26 @@ function selectAnswer(answer) {
     if (document.getElementById('next-btn').disabled === false) return;
     const blanks = document.querySelectorAll('.blank');
 
-    // Deselect if already selected
+    // If already selected, remove it and shift left all answers after it
     const existingIndex = selectedAnswers.indexOf(answer);
     if (existingIndex !== -1) {
-        const blank = document.getElementById(`blank${existingIndex}`);
-        blank.textContent = "[선택]";
-        blank.classList.remove("selected");
-        selectedAnswers[existingIndex] = null;
+        // Remove the answer and shift left
+        for (let i = existingIndex; i < selectedAnswers.length - 1; i++) {
+            selectedAnswers[i] = selectedAnswers[i + 1];
+            const nextBlank = document.getElementById(`blank${i}`);
+            if (selectedAnswers[i]) {
+                nextBlank.textContent = selectedAnswers[i];
+                nextBlank.classList.add("selected");
+            } else {
+                nextBlank.textContent = "[선택]";
+                nextBlank.classList.remove("selected");
+            }
+        }
+        // Clear the last blank
+        selectedAnswers[selectedAnswers.length - 1] = null;
+        const lastBlank = document.getElementById(`blank${selectedAnswers.length - 1}`);
+        lastBlank.textContent = "[선택]";
+        lastBlank.classList.remove("selected");
         selectedCounts[answer] = (selectedCounts[answer] || 1) - 1;
         if (selectedCounts[answer] <= 0) delete selectedCounts[answer];
         checkAnswers();
@@ -127,18 +176,17 @@ function selectAnswer(answer) {
         return;
     }
 
-    // Add new answer to first empty blank
-    let filled = false;
-    blanks.forEach((blank, i) => {
-        if (!selectedAnswers[i] && !filled) {
+    // Add new answer to first empty blank (left to right)
+    for (let i = 0; i < selectedAnswers.length; i++) {
+        if (!selectedAnswers[i]) {
+            selectedAnswers[i] = answer;
+            const blank = document.getElementById(`blank${i}`);
             blank.textContent = answer;
             blank.classList.add("selected");
-            selectedAnswers[i] = answer;
             selectedCounts[answer] = (selectedCounts[answer] || 0) + 1;
-            filled = true;
+            break;
         }
-    });
-
+    }
     checkAnswers();
     updateOptionButtons();
 }
@@ -182,27 +230,20 @@ function checkAnswers() {
     const explanationDiv = document.getElementById('explanation');
 
     if (selectedAnswers.every(answer => answer !== null)) {
-        const answerCounts = {};
-        selectedAnswers.forEach(ans => {
-            answerCounts[ans] = (answerCounts[ans] || 0) + 1;
-        });
-        const correctCounts = {};
-        q.answers.forEach(ans => {
-            correctCounts[ans] = (correctCounts[ans] || 0) + 1;
-        });
-        const isCorrect = Object.keys(answerCounts).every(ans => answerCounts[ans] === correctCounts[ans]) &&
-                         Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
+        // 순서까지 완전히 일치해야 정답
+        const isCorrect = selectedAnswers.length === q.answers.length &&
+            selectedAnswers.every((ans, idx) => ans === q.answers[idx]);
 
         if (isCorrect) {
             resultDiv.textContent = "✅ 정답입니다! 다음 문제로 이동할 수 있습니다.";
-            resultDiv.className = "result correct";
+            resultDiv.className = "feedback correct";
             explanationDiv.innerHTML = q.explanation;
             explanationDiv.style.display = "block";
             score += 10;
             document.getElementById('next-btn').disabled = false;
         } else {
-            resultDiv.textContent = `❌ 오답입니다! 정답: ${q.answers.join(", ")}`;
-            resultDiv.className = "result incorrect";
+            resultDiv.textContent = `❌ 오답입니다! (정답 순서: ${q.answers.join(", ")})`;
+            resultDiv.className = "feedback incorrect";
             explanationDiv.innerHTML = q.explanation;
             explanationDiv.style.display = "block";
             document.getElementById('next-btn').disabled = false;

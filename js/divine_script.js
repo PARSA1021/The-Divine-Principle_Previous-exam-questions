@@ -84,36 +84,61 @@ const showQuestion = () => {
         return;
     }
 
-    const q = state.questions[state.currentQuestionIndex];
-    state.selectedAnswers = new Array(q.answers.length).fill(null);
-    state.selectedCounts = {};
-    state.answeredCorrectly = false;
-    state.timeLeft = TIME_LIMIT;
-    state.isPaused = false;
+    // Fade out animation before changing content
+    quizContainer.style.opacity = 1;
+    quizContainer.style.transition = 'opacity 0.35s';
+    quizContainer.style.opacity = 0;
+    setTimeout(() => {
+        const q = state.questions[state.currentQuestionIndex];
+        state.selectedAnswers = new Array(q.answers.length).fill(null);
+        state.selectedCounts = {};
+        state.answeredCorrectly = false;
+        state.timeLeft = TIME_LIMIT;
+        state.isPaused = false;
 
-    const shuffledOptions = shuffleArray([...q.options]);
-    quizContainer.innerHTML = `
-        <p class="question-text" role="region" aria-live="polite">${q.question.replace(/___/g, (_, i) => `<span class="blank" id="blank${i}" role="button" tabindex="0" onclick="toggleBlank(${i})" onkeydown="handleBlankKeydown(event, ${i})">[선택]</span>`)}</p>
-        <div class="options-container" role="listbox">
-            ${shuffledOptions.map(option => `<button class="option-btn" role="option" onclick="selectAnswer('${option.replace(/'/g, "\\'")}')" onkeydown="handleOptionKeydown(event, '${option.replace(/'/g, "\\'")}')" title="${option} 선택">${option}</button>`).join('')}
-        </div>
-        <p class="feedback" id="feedback" role="alert"></p>
-        <div class="button-group">
-            <button id="pause-timer" class="pause-btn" title="타이머 일시정지" onclick="togglePause()">타이머 일시정지</button>
-            <button id="reset-answers" class="reset-btn" title="선택 초기화" onclick="resetAnswers()">선택 초기화</button>
-            <button id="skip-question" class="skip-btn" title="문제 건너뛰기" onclick="skipQuestion()">건너뛰기</button>
-            <button id="home-button" class="action-btn" title="홈으로 돌아가기" onclick="goHome()">홈으로</button>
-            <button id="show-explanation" style="display: none;" class="explanation-btn" title="정답 설명 보기" onclick="showExplanation()">설명 보기</button>
-        </div>
-        <div id="explanation" style="display: none; margin-top: ${10 * GOLDEN_RATIO}px; padding: ${10 * GOLDEN_RATIO}px; background: #f0f4f8; border-radius: 8px; border: 1px solid #ddd;" role="region" aria-live="polite"></div>
-        <div id="timer" class="timer" role="timer">남은 시간: ${state.timeLeft}초</div>
-    `;
+        const shuffledOptions = shuffleArray([...q.options]);
+        quizContainer.innerHTML = `
+            <p class="question-text" role="region" aria-live="polite">${q.question.replace(/___/g, (_, i) => `<span class="blank" id="blank${i}" role="button" tabindex="0" onclick="toggleBlank(${i})" onkeydown="handleBlankKeydown(event, ${i})">[선택]</span>`)}</p>
+            <div class="options-container" role="listbox">
+                ${shuffledOptions.map(option => {
+                    const optionDiv = document.createElement("div");
+                    optionDiv.className = "option-btn";
+                    optionDiv.innerHTML = `
+                        <input type="checkbox" name="answer" id="option${i}" value="${option.originalIndex}" aria-label="${option.option}" style="display:none;">
+                        <label for="option${i}" style="width:100%;height:100%;display:block;cursor:pointer;">${option.option}</label>
+                    `;
+                    return optionDiv.outerHTML;
+                }).join('')}
+            </div>
+            <p class="feedback" id="feedback" role="alert"></p>
+            <div class="button-group">
+                <button id="pause-timer" class="pause-btn" title="타이머 일시정지" onclick="togglePause()">타이머 일시정지</button>
+                <button id="reset-answers" class="reset-btn" title="선택 초기화" onclick="resetAnswers()">선택 초기화</button>
+                <button id="skip-question" class="skip-btn" title="문제 건너뛰기" onclick="skipQuestion()">건너뛰기</button>
+                <button id="home-button" class="action-btn" title="홈으로 돌아가기" onclick="goHome()">홈으로</button>
+                <button id="show-explanation" style="display: none;" class="explanation-btn" title="정답 설명 보기" onclick="showExplanation()">설명 보기</button>
+            </div>
+            <div id="explanation" style="display: none; margin-top: ${10 * GOLDEN_RATIO}px; padding: ${10 * GOLDEN_RATIO}px; background: #f0f4f8; border-radius: 8px; border: 1px solid #ddd;" role="region" aria-live="polite"></div>
+            <div id="timer" class="timer" role="timer">남은 시간: ${state.timeLeft}초</div>
+        `;
 
-    nextButton.style.display = "none";
-    checkButton.style.display = "block";
-    checkButton.disabled = false;
-    startTimer();
-    updateOptionButtons();
+        nextButton.style.display = "none";
+        checkButton.style.display = "block";
+        checkButton.disabled = false;
+        startTimer();
+        updateOptionButtons();
+
+        // Fade in after content change
+        setTimeout(() => {
+            quizContainer.style.opacity = 1;
+        }, 30);
+
+        // Scroll quiz container into view for all devices
+        setTimeout(() => {
+            quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            quizContainer.focus && quizContainer.focus();
+        }, 100);
+    }, 350);
 };
 
 // Timer Functions
@@ -190,7 +215,7 @@ const selectAnswer = selectedAnswer => {
         blank.textContent = "[선택]";
         blank.classList.remove("selected");
         state.selectedAnswers[existingIndex] = null;
-        state.selectedCounts[selectedAnswer] = (state.selectedCounts[selectedAnswer] || 1) - 1;
+        state.selectedCounts[selectedAnswer] = (state.selectedCounts[selectedAnswer] || 0) + 1;
         if (state.selectedCounts[selectedAnswer] <= 0) delete state.selectedCounts[selectedAnswer];
         checkAutoCorrect();
         updateOptionButtons();
@@ -272,16 +297,9 @@ const checkAutoCorrect = () => {
     const explanationBtn = document.getElementById("show-explanation");
 
     if (state.selectedAnswers.every(answer => answer !== null)) {
-        const answerCounts = {};
-        state.selectedAnswers.forEach(ans => {
-            answerCounts[ans] = (answerCounts[ans] || 0) + 1;
-        });
-        const correctCounts = {};
-        q.answers.forEach(ans => {
-            correctCounts[ans] = (correctCounts[ans] || 0) + 1;
-        });
-        const isCorrect = Object.keys(answerCounts).every(ans => answerCounts[ans] === correctCounts[ans]) &&
-                         Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
+        // 순서까지 완전히 일치해야 정답
+        const isCorrect = state.selectedAnswers.length === q.answers.length &&
+            state.selectedAnswers.every((ans, idx) => ans === q.answers[idx]);
 
         if (isCorrect) {
             const pointsEarned = q.answers.length;
@@ -296,7 +314,7 @@ const checkAutoCorrect = () => {
             clearTimer();
             updateProgress();
         } else {
-            feedback.textContent = "❌ 일부 답이 틀렸습니다. 다시 시도하거나 확인 버튼을 누르세요.";
+            feedback.textContent = "❌ 답의 순서가 다릅니다. 다시 시도하거나 확인 버튼을 누르세요.";
             feedback.className = "feedback incorrect";
         }
     } else {
@@ -310,16 +328,9 @@ const checkAnswer = (isTimeout = false) => {
     const explanationBtn = document.getElementById("show-explanation");
 
     if (state.selectedAnswers.every(answer => answer !== null)) {
-        const answerCounts = {};
-        state.selectedAnswers.forEach(ans => {
-            answerCounts[ans] = (answerCounts[ans] || 0) + 1;
-        });
-        const correctCounts = {};
-        q.answers.forEach(ans => {
-            correctCounts[ans] = (correctCounts[ans] || 0) + 1;
-        });
-        const isCorrect = Object.keys(answerCounts).every(ans => answerCounts[ans] === correctCounts[ans]) &&
-                         Object.keys(correctCounts).every(ans => answerCounts[ans] === correctCounts[ans]);
+        // 순서까지 완전히 일치해야 정답
+        const isCorrect = state.selectedAnswers.length === q.answers.length &&
+            state.selectedAnswers.every((ans, idx) => ans === q.answers[idx]);
 
         if (isCorrect) {
             const pointsEarned = q.answers.length;
@@ -329,7 +340,7 @@ const checkAnswer = (isTimeout = false) => {
             feedback.className = "feedback correct";
             state.answeredCorrectly = true;
         } else {
-            feedback.textContent = `❌ 오답입니다! 정답: ${q.answers.join(", ")}. 다시 시도하거나 설명을 확인하세요.`;
+            feedback.textContent = `❌ 오답입니다! (정답 순서: ${q.answers.join(", ")}) 다시 시도하거나 설명을 확인하세요.`;
             feedback.className = "feedback incorrect";
         }
         nextButton.style.display = "block";
