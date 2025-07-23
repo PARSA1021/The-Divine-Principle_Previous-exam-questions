@@ -349,7 +349,7 @@ body {
 
 .quiz-button {
     background-color: var(--primary-color);
-    color: white;
+    color: black;
     border: none;
     padding: var(--spacing-md) var(--spacing-xl); /* 16px 30px */
     font-size: 1.2rem;
@@ -373,7 +373,7 @@ body {
 
 .quiz-button.gold {
     background-color: var(--quiz-gold);
-    color: var(--text-color); /* 골드 배경에 어두운 텍스트 */
+    color: black; /* 골드 배경에 어두운 텍스트 */
 }
 
 .quiz-button.green {
@@ -1313,6 +1313,92 @@ body {
     top: var(--spacing-sm);
     right: var(--spacing-sm);
   }
+}
+.qna-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    margin: var(--spacing-lg) auto;
+    max-width: 48rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--card-background);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-medium);
+}
+
+.qna-filter button {
+    background: var(--background-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.6em 1.2em;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+.qna-filter button:hover {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.qna-filter button.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.2);
+    transform: scale(1.05);
+}
+
+.qna-filter button:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.qna-filter button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-light);
+}
+
+@media (max-width: 768px) {
+    .qna-filter {
+        gap: var(--spacing-xs);
+        padding: var(--spacing-sm);
+        max-width: 98vw;
+    }
+
+    .qna-filter button {
+        font-size: 0.9rem;
+        padding: 0.5em 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .qna-filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .qna-filter button {
+        font-size: 0.85rem;
+        padding: 0.5em 0.8em;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .qna-filter button,
+    .qna-filter button:hover,
+    .qna-filter button.active,
+    .qna-filter button:active {
+        transition: none;
+        transform: none;
+    }
 }
 
 /* ==========================================================================

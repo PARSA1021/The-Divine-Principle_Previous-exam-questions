@@ -1,23 +1,47 @@
 let qnaData = [];
 
 async function fetchQnA() {
-  const response = await fetch('qna_data.json');
-  qnaData = await response.json();
-  renderQnA(); // 초기 전체 렌더링
+  try {
+    const response = await fetch('qna_data.json');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    qnaData = await response.json();
+    renderQnA();
+  } catch (error) {
+    console.error('Failed to fetch Q&A data:', error);
+    document.getElementById('qna-list').innerHTML = '<p class="error">질문 데이터를 불러오지 못했습니다. 나중에 다시 시도해주세요.</p>';
+  }
 }
 
 function renderQnA(filter = "전체") {
   const list = document.getElementById("qna-list");
   const filtered = filter === "전체" ? qnaData : qnaData.filter(q => q.category === filter);
 
-  list.innerHTML = filtered.map((q, idx) => `
-    <div class="qna-card" data-answer="${q.answer.replace(/"/g, '&quot;')}">
-      <div class="question"><i class="fas fa-question-circle"></i> ${q.question}</div>
+  list.innerHTML = filtered.map((q) => `
+    <div class="qna-card" aria-expanded="false" data-answer="${q.answer.replace(/"/g, '"')}">
+      <div class="question" role="button" tabindex="0" aria-label="질문 펼치기: ${q.question}">
+        <i class="fas fa-question-circle"></i> ${q.question}
+      </div>
       <div class="answer"><i class="fas fa-comment-dots"></i> ${q.answer}</div>
       <div class="category-label">${q.category}</div>
-      <button class="copy-answer-btn" aria-label="답변 복사" title="답변 복사" data-idx="${idx}"><i class="fas fa-copy"></i></button>
     </div>
   `).join('');
+
+  // Add click and keypress event listeners for collapsing/expanding
+  list.querySelectorAll('.qna-card .question').forEach(question => {
+    question.addEventListener('click', toggleAnswer);
+    question.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleAnswer(e);
+      }
+    });
+  });
+}
+
+function toggleAnswer(event) {
+  const card = event.target.closest('.qna-card');
+  const isExpanded = card.getAttribute('aria-expanded') === 'true';
+  card.setAttribute('aria-expanded', !isExpanded);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,28 +53,5 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       renderQnA(btn.dataset.category);
     });
-  });
-
-  // Event delegation for copy answer button
-  document.getElementById('qna-list').addEventListener('click', function(e) {
-    if (e.target.closest('.copy-answer-btn')) {
-      const card = e.target.closest('.qna-card');
-      const answer = card.getAttribute('data-answer');
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(answer);
-      } else {
-        // fallback
-        const temp = document.createElement('textarea');
-        temp.value = answer;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand('copy');
-        document.body.removeChild(temp);
-      }
-      e.target.closest('.copy-answer-btn').classList.add('copied');
-      setTimeout(() => {
-        e.target.closest('.copy-answer-btn').classList.remove('copied');
-      }, 700);
-    }
   });
 });
