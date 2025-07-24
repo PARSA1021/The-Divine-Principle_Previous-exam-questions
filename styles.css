@@ -508,48 +508,58 @@ body {
 }
 
 /* ==========================================================================
-   후원 섹션
-   ========================================================================== */
+   후원 섹션 (축소 버전)
+   ========================================================================== */
 .donation-section {
     text-align: center;
-    background-color: var(--card-background);
-    border-radius: var(--border-radius-lg); /* 12px */
-    box-shadow: var(--shadow-medium);
-    padding: var(--spacing-xl); /* 30px */
-    max-width: 55rem; /* 880px */
+    background-color: var(--card-background); /* 또는 bg-gradient-to-br from-blue-50 to-indigo-100에 맞춰 조정 */
+    border-radius: var(--border-radius-md); /* 기존 12px -> 10px 정도로 조정 */
+    box-shadow: var(--shadow-small); /* 그림자를 더 작게 */
+    padding: var(--spacing-lg); /* 기존 30px -> 20px 정도로 조정 */
+    max-width: 320px; /* 기존 880px -> max-w-xs (320px)에 맞춰 조정 */
     width: 100%;
-    margin-top: var(--spacing-xl); /* 30px */
-    border: 1px solid var(--border-color);
+    margin-top: var(--spacing-xl);
+    border: 1px solid var(--border-color); /* 또는 border-blue-200에 맞춰 조정 */
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .donation-section:hover {
-    box-shadow: var(--shadow-strong);
+    box-shadow: var(--shadow-medium); /* 호버 시 그림자를 보통 크기로 */
     border-color: var(--primary-color);
 }
 
+.donation-section h2 {
+    font-size: 1.35rem; /* 제목 크기 조정 (원래 text-2xl/1.5rem 였으나, 더 작게) */
+    margin-bottom: var(--spacing-sm); /* 12px */
+}
+
+.donation-section h2 i {
+    font-size: 1.5rem; /* 아이콘 크기 조정 */
+}
+
 .donation-section p {
-    margin-bottom: var(--spacing-md); /* 16px */
-    font-size: 1.05rem;
+    margin-bottom: var(--spacing-sm); /* 기존 16px -> 12px 정도로 조정 */
+    font-size: 0.9rem; /* 기존 1.05rem -> 더 작게 */
     color: var(--text-color);
     opacity: 0.9;
 }
 
-.account-info-box {
-    background-color: var(--hover-background);
-    border: 1px dashed var(--primary-color);
-    padding: var(--spacing-md) var(--spacing-lg); /* 16px 20px */
-    border-radius: var(--border-radius-md); /* 10px */
-    margin: var(--spacing-lg) auto; /* 20px */
-    display: inline-block; /* 내용에 맞춰 너비 조정 */
+/* 계좌 정보 박스 */
+.account-info-box { /* HTML에서 account-info로 사용됨 */
+    background-color: var(--hover-background); /* 또는 bg-white에 맞춰 조정 */
+    border: 1px dashed var(--primary-color); /* 또는 border-gray-200에 맞춰 조정 */
+    padding: var(--spacing-sm) var(--spacing-md); /* 기존 16px 20px -> 12px 16px 정도로 조정 */
+    border-radius: var(--border-radius-sm); /* 기존 10px -> 8px 정도로 조정 */
+    margin: var(--spacing-md) auto; /* 기존 20px -> 16px 정도로 조정 */
+    display: inline-block;
     color: var(--text-color);
-    font-size: 1.1rem;
+    font-size: 1rem; /* 기존 1.1rem -> 1rem으로 조정 */
     font-weight: 500;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .account-info-box:hover {
-    background-color: rgba(var(--primary-rgb), 0.08); /* 더 연한 배경색 */
+    background-color: rgba(var(--primary-rgb), 0.08);
     border-color: var(--primary-color);
 }
 
@@ -558,41 +568,42 @@ body {
     font-weight: 700;
 }
 
-.account-info-box .account-holder {
-    font-size: 0.95rem;
+.account-info-box .account-holder { /* HTML에서 직접적인 클래스 없음, <p class="text-gray-600 text-xs">예금주: 문성민</p> 에 해당 */
+    font-size: 0.75rem; /* 기존 0.95rem -> 0.75rem (12px)으로 조정 */
     color: var(--text-color);
     opacity: 0.8;
-    display: block; /* 줄바꿈 */
-    margin-top: 5px;
+    display: block;
+    margin-top: 3px; /* 기존 5px -> 3px로 조정 */
 }
 
+/* 후원 버튼 */
 .donation-button {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* 또는 bg-blue-600에 맞춰 조정 */
     color: white;
     border: none;
-    padding: var(--spacing-sm) var(--spacing-xl); /* 12px 30px */
-    font-size: 1.1rem;
+    padding: var(--spacing-xs) var(--spacing-md); /* 기존 12px 30px -> 8px 24px 정도로 조정 */
+    font-size: 0.95rem; /* 기존 1.1rem -> 0.95rem으로 조정 */
     font-weight: 600;
-    border-radius: var(--border-radius-md); /* 10px */
+    border-radius: var(--border-radius-full); /* HTML에서 rounded-full이므로, CSS 변수도 이에 맞춰 조정 */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-xs); /* 8px */
-    box-shadow: var(--shadow-medium);
+    gap: var(--spacing-xs);
+    box-shadow: var(--shadow-small); /* 그림자를 더 작게 */
     outline-offset: 3px;
 }
 
 .donation-button:hover {
-    background-color: #357ae8; /* primary-color의 약간 어두운 버전 */
-    transform: translateY(-2px); /* 2px */
-    box-shadow: var(--shadow-strong);
+    background-color: #357ae8;
+    transform: translateY(-1px); /* 기존 2px -> 1px로 조정 */
+    box-shadow: var(--shadow-medium);
 }
 
 .donation-button:focus-visible {
     outline: 3px solid var(--primary-color);
     outline-offset: 3px;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-full);
 }
 
 /* ==========================================================================
