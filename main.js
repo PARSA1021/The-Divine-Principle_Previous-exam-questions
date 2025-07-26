@@ -27,11 +27,11 @@ const CONSTANTS = {
 const CATEGORIES = {
     ALL: '전체',
     CHEON_SEONG_GYEONG: '천성경',
-    CHAM_BUMO_GYEONG: '참부모경',
     CHAM_BUMO_NIM: '참부모님 말씀',
     CHAM_EOMEONIM: '참어머님 말씀',
     CHEON_SHIM_WON: '천심원',
-    TRUE_FATHER_PRAYER: '참아버님 기도문'
+    TRUE_FATHER_PRAYER: '참아버님 기도문',
+    THE_WILL_ROAD : '뜻 길'
 };
 
 /**
@@ -327,11 +327,11 @@ const loadMessages = async () => {
 const categorizeMessage = (source) => {
     const categories = [
         { key: '천성경', value: CATEGORIES.CHEON_SEONG_GYEONG },
-        { key: '참부모경', value: CATEGORIES.CHAM_BUMO_GYEONG },
         { key: '참부모님 말씀', value: CATEGORIES.CHAM_BUMO_NIM },
         { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
         { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
-        { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER }
+        { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER },
+        { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD}
     ];
     // 출처에 포함된 키워드를 찾아 해당하는 카테고리 반환, 없으면 '전체' 반환
     return categories.find(cat => source.includes(cat.key))?.value || CATEGORIES.ALL;
