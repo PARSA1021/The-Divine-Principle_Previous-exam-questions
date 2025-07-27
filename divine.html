@@ -310,11 +310,23 @@
             background-clip: text;
         }
 
-        .question-text span.incorrect-fill {
-            color: var(--primary-emerald);
+        /* Styles for fill-in-the-blank feedback */
+        .question-text span.incorrect-fill { /* Existing: For showing correct answer when user's answer is wrong */
+            color: var(--primary-emerald); /* Green as a hint */
             text-decoration: underline;
             font-weight: 700;
         }
+        .question-text span.correct-fill-in-place { /* New: Correct word in correct position (when order was wrong overall) */
+            color: var(--primary-emerald);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .question-text span.incorrect-order-fill { /* New: Correct word but wrong order */
+            color: var(--primary-amber);
+            font-weight: 700;
+            text-decoration: underline wavy 2px var(--primary-amber); /* Wavy underline for order error */
+        }
+
 
         #options-container {
             flex-grow: 1;
@@ -410,6 +422,14 @@
             border-color: #ef4444;
             animation: incorrectPulse 0.6s ease;
         }
+
+        /* New class for correct content but wrong order on the option itself */
+        .option.correct-content-wrong-order {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 214, 0, 0.15)); /* Amber/yellowish */
+            border-color: var(--primary-amber);
+            animation: incorrectPulse 0.6s ease; /* Use similar pulse for consistency */
+        }
+
 
         @keyframes correctPulse {
             0% { transform: scale(1); box-shadow: 0 0 0 rgba(16, 185, 129, 0.4); }
@@ -744,7 +764,7 @@
         let currentQuestionIndex = 0;
         let questions = [];
         let score = 0;
-        let originalQuestionText = "";
+        let originalQuestionText = ""; // Stores the base question text without instructions
         let selectedOptionElementsInOrder = []; // Track selected option DOM elements in order of selection
         let blanksRequired = 0; // To store the number of blanks for the current question
 
@@ -757,7 +777,7 @@
         const checkAnswerBtn = document.getElementById("check-answer");
         const nextQuestionBtn = document.getElementById("next-question");
         const restartQuizBtn = document.getElementById("restart-quiz");
-        const goHomeBtn = document.getElementById("go-home"); // New: Get home button
+        const goHomeBtn = document.getElementById("go-home");
         const questionTextElement = document.getElementById("question-text");
         const optionsContainer = document.getElementById("options-container");
         const explanationElement = document.getElementById("explanation");
@@ -765,7 +785,6 @@
         const quizContainer = document.getElementById("quiz-container");
         const highestScoreDisplay = document.getElementById("highest-score-display");
 
-        // Load highest score from localStorage on startup
         displayHighestScore();
 
         function displayHighestScore() {
@@ -782,7 +801,6 @@
             if (navigator.vibrate) navigator.vibrate(50);
         });
 
-        // Fisher-Yates (Knuth) shuffle algorithm
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -791,20 +809,17 @@
             return array;
         }
 
-        // Function to generate confetti
         function triggerConfetti() {
             const confettiContainer = document.getElementById('confetti-container');
-            confettiContainer.innerHTML = ''; // Clear previous confetti
-            for (let i = 0; i < 50; i++) { // Generate 50 confetti pieces
+            confettiContainer.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
-                // Random positions and delays for a scattered effect
                 confetti.style.left = `${Math.random() * 100}vw`;
                 confetti.style.animationDelay = `${Math.random() * 1.5}s`;
-                confetti.style.animationDuration = `${2 + Math.random() * 1}s`; // 2 to 3 seconds
+                confetti.style.animationDuration = `${2 + Math.random() * 1}s`;
                 confettiContainer.appendChild(confetti);
             }
-            // Clear confetti after animation
             setTimeout(() => {
                 confettiContainer.innerHTML = '';
             }, 3000);
@@ -817,7 +832,7 @@
             })
             .then(data => {
                 questions = data;
-                shuffleArray(questions); // Shuffle questions
+                shuffleArray(questions);
                 document.getElementById("total-questions").textContent = questions.length;
                 quizContainer.style.display = "flex";
                 document.getElementById("loading").style.display = "none";
@@ -834,25 +849,21 @@
         function loadQuestion(index) {
             const currentQuestion = questions[index];
 
-            // Scroll to top of quiz container when new question loads for better UX
-            // Ensure the scroll happens after the content is potentially rendered
             setTimeout(() => {
                 quizContainer.scrollTo({ top: 0, behavior: 'smooth' });
-                quizContainer.focus(); // Set focus to the quiz container for accessibility
-            }, 100); // Small delay to ensure content is ready
+                quizContainer.focus();
+            }, 100);
 
-            // Reset selected options for the new question
-            selectedOptionElementsInOrder = [];
+            selectedOptionElementsInOrder = []; // Reset selected options for the new question
 
             blanksRequired = currentQuestion.answers.length;
-            // Updated instruction: Clearly state if order matters (assuming it does for "fill-in-the-blank" interpretation)
-            originalQuestionText = `${currentQuestion.question} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`;
-            questionTextElement.innerHTML = originalQuestionText;
+            originalQuestionText = currentQuestion.question; // Store just the question
+            questionTextElement.innerHTML = `${originalQuestionText} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`; // Add instruction
 
             optionsContainer.innerHTML = "";
             
             let shuffledOptions = currentQuestion.options.map((option, idx) => ({ option, originalIndex: idx }));
-            shuffleArray(shuffledOptions); // Shuffle the options
+            shuffleArray(shuffledOptions);
 
             shuffledOptions.forEach((item, i) => {
                 const optionDiv = document.createElement("div");
@@ -864,27 +875,22 @@
                 optionDiv.addEventListener("click", (e) => {
                     const checkbox = optionDiv.querySelector('input');
 
-                    // If the click was not directly on the input, toggle the input's checked state.
                     if (e.target.tagName !== "INPUT") {
                         checkbox.checked = !checkbox.checked;
                     }
 
-                    // Now, regardless of where the click originated (div or input),
-                    // the checkbox.checked property reflects the *new* state.
                     if (checkbox.checked) {
-                        // Add to order only if not already present
                         if (!selectedOptionElementsInOrder.includes(optionDiv)) {
                             selectedOptionElementsInOrder.push(optionDiv);
                         }
                     } else {
-                        // Remove from order
                         selectedOptionElementsInOrder = selectedOptionElementsInOrder.filter(el => el !== optionDiv);
                     }
 
-                    updateSelectedAnswers(); // Update the displayed blanks based on ordered selections
-                    optionDiv.classList.toggle("selected", checkbox.checked); // Update visual style
+                    updateLiveBlanksDisplay(); // Update the displayed blanks based on ordered selections
+                    optionDiv.classList.toggle("selected", checkbox.checked);
                     if (navigator.vibrate) navigator.vibrate(50);
-                    updateCheckButtonState(); // Call to update button state
+                    updateCheckButtonState();
                 });
                 
                 optionsContainer.appendChild(optionDiv);
@@ -894,29 +900,28 @@
             checkAnswerBtn.style.display = "block";
             nextQuestionBtn.style.display = "none";
             restartQuizBtn.style.display = "none";
-            goHomeBtn.style.display = "inline-block"; // Changed: Make home button visible during quiz
+            goHomeBtn.style.display = "inline-block";
             errorMessage.style.display = "none";
-            updateCheckButtonState(); // Initial button state check
+            updateCheckButtonState();
         }
 
-        function updateSelectedAnswers() {
-            // Extract text content from currently selected option elements, maintaining their selection order
+        // Function called during user selection to display their current choices
+        function updateLiveBlanksDisplay() {
             const actualSelectedTextsInOrder = selectedOptionElementsInOrder
                 .filter(optionDiv => optionDiv.querySelector('input').checked)
                 .map(optionDiv => optionDiv.querySelector('label').textContent);
             
-            let updatedText = originalQuestionText;
+            let currentBlanksHtml = originalQuestionText; // Start with the clean question text
             let blankIndex = 0;
 
-            // Replace blanks with selected answers from the ordered list
-            updatedText = updatedText.replace(/___/g, () => {
+            currentBlanksHtml = currentBlanksHtml.replace(/___/g, () => {
                 if (blankIndex < actualSelectedTextsInOrder.length) {
                     return `<strong>${actualSelectedTextsInOrder[blankIndex++]}</strong>`;
                 }
                 return '___';
             });
 
-            questionTextElement.innerHTML = updatedText;
+            questionTextElement.innerHTML = `${currentBlanksHtml} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`;
         }
 
         function updateCheckButtonState() {
@@ -942,72 +947,94 @@
             const selectedCheckboxes = document.querySelectorAll('input[name="answer"]:checked');
             const currentQuestion = questions[currentQuestionIndex];
             
-            // This validation is now also handled by updateCheckButtonState for UX
             if (selectedCheckboxes.length !== blanksRequired) {
                 errorMessage.textContent = `${blanksRequired}개의 답을 선택해주세요! (현재 ${selectedCheckboxes.length}개 선택)`;
                 errorMessage.style.display = "block";
-                if (navigator.vibrate) navigator.vibrate(200); // Longer vibrate for error
+                if (navigator.vibrate) navigator.vibrate(200);
                 return;
             }
 
-            const selectedOriginalIndices = Array.from(selectedCheckboxes).map(opt => parseInt(opt.value));
-            const selectedAnswerTexts = selectedOriginalIndices.map(idx => currentQuestion.options[idx]);
+            const userSelectedAnswersInOrder = selectedOptionElementsInOrder
+                .filter(optionDiv => optionDiv.querySelector('input').checked)
+                .map(optionDiv => optionDiv.querySelector('label').textContent);
 
             const correctAnswers = currentQuestion.answers; 
 
-            // Assuming "blanks in order" implies the selection order must match the answer array order.
-            const isCorrect = JSON.stringify(selectedAnswerTexts) === JSON.stringify(correctAnswers);
+            // Check for exact match (content and order)
+            const isExactMatch = JSON.stringify(userSelectedAnswersInOrder) === JSON.stringify(correctAnswers);
 
-            const allOptions = document.querySelectorAll(".option");
-            allOptions.forEach((optionDiv) => {
-                const optionText = optionDiv.querySelector('label').textContent;
-                if (correctAnswers.includes(optionText)) {
-                    optionDiv.classList.add("correct");
-                } else if (selectedAnswerTexts.includes(optionText)) { // If it was selected but not correct
-                    optionDiv.classList.add("incorrect");
-                }
-                optionDiv.style.pointerEvents = "none"; // Disable clicks after checking answer
-                optionDiv.querySelector('input').disabled = true; // Also disable checkboxes
+            // Check if content matches regardless of order
+            const userSelectedAnswersSorted = [...userSelectedAnswersInOrder].sort();
+            const correctAnswersSorted = [...correctAnswers].sort();
+            const isContentMatch = JSON.stringify(userSelectedAnswersSorted) === JSON.stringify(correctAnswersSorted);
+
+            // Disable options and checkboxes
+            document.querySelectorAll(".option").forEach((optionDiv) => {
+                optionDiv.style.pointerEvents = "none";
+                optionDiv.querySelector('input').disabled = true;
             });
 
-            let blanksFilledText = originalQuestionText;
-            let blankCounter = 0;
+            let feedbackType = "content_wrong"; // Default feedback type
 
-            if (isCorrect) {
-                score++; // Increment score only if correct
+            if (isExactMatch) {
+                score++;
                 errorMessage.textContent = "정답입니다! 🎉";
                 errorMessage.style.color = "#10b981";
-                errorMessage.style.display = "block";
-                // Confetti for correct answer
                 triggerConfetti();
-                if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Correct answer vibrate pattern
-                updateSelectedAnswers(); // Ensure bold selections are shown
-            } else {
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                feedbackType = "exact";
+            } else if (isContentMatch) { // Content is correct, but order is wrong
+                errorMessage.textContent = "아쉽지만 순서가 틀렸습니다. 😔 다시 확인해보세요.";
+                errorMessage.style.color = "#f59e0b"; // Amber color for "order wrong"
+                if (navigator.vibrate) navigator.vibrate(200);
+                feedbackType = "order_wrong";
+            } else { // Content is incorrect
                 errorMessage.textContent = "오답입니다. 😔";
                 errorMessage.style.color = "#ef4444";
-                errorMessage.style.display = "block";
-                if (navigator.vibrate) navigator.vibrate(200); // Incorrect answer vibrate pattern
-
-                // If incorrect, fill blanks with the correct answers, styled differently
-                blanksFilledText = blanksFilledText.replace(/___/g, () => {
-                    if (blankCounter < correctAnswers.length) {
-                        // Display correct answers in the blank, e.g., underlined
-                        return `<span class="incorrect-fill">${correctAnswers[blankCounter++]}</span>`;
-                    }
-                    return '___';
-                });
-                questionTextElement.innerHTML = blanksFilledText;
+                if (navigator.vibrate) navigator.vibrate(200);
+                feedbackType = "content_wrong";
             }
+
+            errorMessage.style.display = "block";
+
+            // Update question text to show detailed feedback in blanks
+            displayAnswerFeedbackInBlanks(userSelectedAnswersInOrder, correctAnswers, feedbackType);
+
+            // Apply visual feedback to options themselves
+            document.querySelectorAll(".option").forEach((optionDiv) => {
+                const optionText = optionDiv.querySelector('label').textContent;
+                const isOptionChecked = optionDiv.querySelector('input').checked;
+                
+                // Clear any previous selection highlight (e.g., .selected)
+                optionDiv.classList.remove("selected");
+
+                if (feedbackType === "exact") {
+                    if (isOptionChecked && correctAnswers.includes(optionText)) {
+                        optionDiv.classList.add("correct");
+                    }
+                } else if (feedbackType === "order_wrong") {
+                    if (isOptionChecked) { // All selected options contain correct words
+                        optionDiv.classList.add("correct-content-wrong-order");
+                    }
+                } else { // content_wrong (some words are wrong, or too many/few)
+                    if (isOptionChecked) {
+                        if (!correctAnswers.includes(optionText)) {
+                             optionDiv.classList.add("incorrect");
+                        } else {
+                            optionDiv.classList.add("correct-content-wrong-order");
+                        }
+                    }
+                }
+            });
             
             explanationElement.textContent = currentQuestion.explanation;
             explanationElement.style.display = "block";
 
             checkAnswerBtn.style.display = "none";
             nextQuestionBtn.style.display = "block";
-            nextQuestionBtn.focus(); // Focus on next question button for flow
+            nextQuestionBtn.focus();
             updateProgressBar(currentQuestionIndex + 1, questions.length);
 
-            // Update highest score after each question if it's a new high
             const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
             if (score > highestScore) {
                 localStorage.setItem('highestQuizScore', score);
@@ -1015,25 +1042,60 @@
             }
         });
 
+        // New function to display feedback in the blanks based on the answer result
+        function displayAnswerFeedbackInBlanks(userSelectedAnswers, correctAnswers, feedbackType) {
+            let finalBlanksHtml = originalQuestionText; // Start with the clean question text
+            let blankIdx = 0;
+
+            finalBlanksHtml = finalBlanksHtml.replace(/___/g, () => {
+                // Ensure we don't go out of bounds for userSelectedAnswers if fewer were picked
+                const currentUserWord = userSelectedAnswers[blankIdx] !== undefined ? userSelectedAnswers[blankIdx] : null; 
+                const currentCorrectWord = correctAnswers[blankIdx];
+                let displayHtml = '';
+
+                if (feedbackType === "exact") {
+                    displayHtml = `<strong>${currentUserWord}</strong>`;
+                } else if (feedbackType === "order_wrong") {
+                    // Check if the word at this blank position is correct
+                    if (currentUserWord === currentCorrectWord) {
+                        displayHtml = `<span class="correct-fill-in-place">${currentUserWord}</span>`; // Correct word in correct position
+                    } else {
+                        // Word is correct but in wrong position. Display user's word if available, else blank.
+                        displayHtml = `<span class="incorrect-order-fill">${currentUserWord || '___'}</span>`;
+                    }
+                } else { // content_wrong
+                    // If the user's current word for this blank matches the correct one, show user's word (strong).
+                    // Otherwise, show the correct word with 'incorrect-fill' style as a hint.
+                    if (currentUserWord === currentCorrectWord) {
+                         displayHtml = `<strong>${currentUserWord}</strong>`;
+                    } else {
+                         displayHtml = `<span class="incorrect-fill">${currentCorrectWord}</span>`; // Show correct answer as hint
+                    }
+                }
+                blankIdx++;
+                return displayHtml;
+            });
+
+            questionTextElement.innerHTML = `${finalBlanksHtml} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`;
+        }
+
         nextQuestionBtn.addEventListener("click", () => {
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 loadQuestion(currentQuestionIndex);
                 updateProgressBar(currentQuestionIndex + 1, questions.length);
             } else {
-                // Quiz finished
                 const finalScoreMessage = `퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}`;
                 quizContainer.innerHTML = `<div class="question-text">${finalScoreMessage}</div>`;
-                quizContainer.focus(); // Focus on final score message
+                quizContainer.focus();
 
                 nextQuestionBtn.style.display = "none";
                 restartQuizBtn.style.display = "block";
-                goHomeBtn.style.display = "block"; // Show home button when quiz finishes
-                restartQuizBtn.focus(); // Focus on restart button
+                goHomeBtn.style.display = "block";
+                restartQuizBtn.focus();
                 errorMessage.style.display = "none";
                 explanationElement.style.display = "none";
                 
-                // Update highest score one last time at the end of the quiz
                 const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
                 if (score > highestScore) {
                     localStorage.setItem('highestQuizScore', score);
@@ -1045,21 +1107,19 @@
         restartQuizBtn.addEventListener("click", () => {
             currentQuestionIndex = 0;
             score = 0;
-            shuffleArray(questions); // Reshuffle questions for a new game
-            selectedOptionElementsInOrder = []; // Reset selected options for a new game
+            shuffleArray(questions);
+            selectedOptionElementsInOrder = [];
             quizContainer.style.display = "flex";
             loadQuestion(currentQuestionIndex);
             updateProgressBar(currentQuestionIndex + 1, questions.length);
-            displayHighestScore(); // Ensure highest score is up-to-date
+            displayHighestScore();
         });
 
-        // New: Go Home Button Event Listener
         goHomeBtn.addEventListener("click", () => {
-            window.location.href = "/"; // Or 'index.html' if that's your home page
+            window.location.href = "/";
         });
 
 
-        // Universal event listener for tap/click feedback and keyboard accessibility
         document.querySelectorAll('button, .option').forEach(element => {
             element.addEventListener('touchstart', function() {
                 this.classList.add('active');
@@ -1068,15 +1128,13 @@
                 this.classList.remove('active');
             });
             element.addEventListener('keydown', function(e) {
-                // Prevent default spacebar scrolling
                 if (e.key === ' ' && (this.tagName === 'BUTTON' || this.classList.contains('option'))) {
                     e.preventDefault();
                 }
                 if (e.key === 'Enter' || e.key === ' ') {
-                    // For options, trigger the click on the parent div which has the main logic
                     if (this.classList.contains('option')) {
                         this.click();
-                    } else { // For buttons, just click directly
+                    } else {
                         this.click();
                     }
                 }
