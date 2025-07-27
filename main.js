@@ -27,6 +27,7 @@ const CONSTANTS = {
 const CATEGORIES = {
     ALL: '전체',
     CHEON_SEONG_GYEONG: '천성경',
+    CHAM_BUMO_GYEONG : '참부모경',
     CHAM_BUMO_NIM: '참부모님 말씀',
     CHAM_EOMEONIM: '참어머님 말씀',
     CHEON_SHIM_WON: '천심원',
@@ -327,6 +328,7 @@ const loadMessages = async () => {
 const categorizeMessage = (source) => {
     const categories = [
         { key: '천성경', value: CATEGORIES.CHEON_SEONG_GYEONG },
+        { key: '참부모경', value: CATEGORIES.CHAM_BUMO_GYEONG },
         { key: '참부모님 말씀', value: CATEGORIES.CHAM_BUMO_NIM },
         { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
         { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
