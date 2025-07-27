@@ -17,22 +17,22 @@
    ========================================================================== */
    :root {
     /* 기본 색상 (라이트 모드) */
-    --primary-color: #4285f4; /* 구글 파란색 */
+    --primary-color: #4285f4; /* Google Blue */
     --primary-rgb: 66, 133, 244;
-    --secondary-color: #ea4335; /* 구글 빨간색 */
-    --accent-color: #fbbc05; /* 구글 노란색 */
-    --text-color: #3c4043; /* 어두운 회색 (기본 텍스트) */
-    --background-color: #f8f9fa; /* 밝은 회색 배경 */
-    --card-background: #ffffff; /* 카드 및 모달 배경 */
+    --secondary-color: #ea4335; /* Google Red */
+    --accent-color: #fbbc05; /* Google Yellow */
+    --text-color: #3c4043; /* Dark Grey (Default Text) */
+    --background-color: #f8f9fa; /* Light Grey Background */
+    --card-background: #ffffff; /* Card and Modal Background */
     --card-background-rgb: 255, 255, 255;
-    --border-color: #dadce0; /* 테두리 및 구분선 */
-    --hover-background: #e6f0fe; /* 호버 시 배경색 */
-    --highlight-background: #fffbe6; /* 검색 하이라이트 배경 */
-    --highlight-color: #1a73e8; /* 검색 하이라이트 텍스트 */
-    --toast-background: rgba(0, 0, 0, 0.75); /* 토스트 배경 */
-    --toast-text-color: #ffffff; /* 토스트 텍스트 */
-    --success-color: #34a853; /* 성공 상태 초록색 */
-    --error-color: #ea4335; /* 에러 상태 빨간색 */
+    --border-color: #dadce0; /* Borders and Dividers */
+    --hover-background: #e6f0fe; /* Background on hover */
+    --highlight-background: #fffbe6; /* Search Highlight Background */
+    --highlight-color: #1a73e8; /* Search Highlight Text */
+    --toast-background: rgba(0, 0, 0, 0.75); /* Toast Background */
+    --toast-text-color: #ffffff; /* Toast Text */
+    --success-color: #34a853; /* Success Green */
+    --error-color: #ea4335; /* Error Red */
 
     /* 그림자 효과 */
     --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -59,6 +59,7 @@
     --border-radius-md: 0.625rem; /* 10px */
     --border-radius-lg: 0.75rem;  /* 12px */
     --border-radius-xl: 1.25rem;  /* 20px */
+    --border-radius-full: 9999px; /* For pill shapes */
 }
 
 /* 다크 모드 설정 */
@@ -81,9 +82,9 @@ body.dark-mode {
     --error-color: #f28b82;
 
     /* 다크 모드 그림자 (밝은 색조) */
-    --shadow-light: 0 1px 3px rgba(255, 255, 255, 0.08);
-    --shadow-medium: 0 4px 12px rgba(255, 255, 255, 0.12);
-    --shadow-strong: 0 8px 24px rgba(255, 255, 255, 0.18);
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.4);
 
     --quiz-blue: #8ab4f8;
     --quiz-gold: #fde293;
@@ -349,7 +350,7 @@ body {
 
 .quiz-button {
     background-color: var(--primary-color);
-    color: black;
+    color: white; /* Changed to white for better contrast with primary blue */
     border: none;
     padding: var(--spacing-md) var(--spacing-xl); /* 16px 30px */
     font-size: 1.2rem;
@@ -514,7 +515,7 @@ body {
     text-align: center;
     background-color: var(--card-background); /* 또는 bg-gradient-to-br from-blue-50 to-indigo-100에 맞춰 조정 */
     border-radius: var(--border-radius-md); /* 기존 12px -> 10px 정도로 조정 */
-    box-shadow: var(--shadow-small); /* 그림자를 더 작게 */
+    box-shadow: var(--shadow-light); /* 그림자를 더 작게 */
     padding: var(--spacing-lg); /* 기존 30px -> 20px 정도로 조정 */
     max-width: 320px; /* 기존 880px -> max-w-xs (320px)에 맞춰 조정 */
     width: 100%;
@@ -590,7 +591,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xs);
-    box-shadow: var(--shadow-small); /* 그림자를 더 작게 */
+    box-shadow: var(--shadow-light); /* 그림자를 더 작게 */
     outline-offset: 3px;
 }
 
@@ -1211,23 +1212,37 @@ body {
 
 /* 듣기 버튼을 복사 버튼과 동일하게 스타일링 */
 .listen-button {
-    background-color: var(--button-color-blue); /* 예시 색상 */
-    color: var(--button-text-color);
+    background-color: var(--primary-color); /* Using primary color for consistency */
+    color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: var(--border-radius);
+    padding: var(--spacing-xs) var(--spacing-md); /* 8px 16px */
+    border-radius: var(--border-radius-md); /* 10px */
     cursor: pointer;
     font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background-color 0.2s ease;
+    gap: var(--spacing-xs);
+    box-shadow: var(--shadow-light);
+    outline-offset: 3px;
+}
+
+.listen-button i {
+    font-size: 1rem;
 }
 
 .listen-button:hover {
-    background-color: var(--button-hover-blue);
+    background-color: #357ae8;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
 }
+
+.listen-button:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 3px;
+}
+
 
 /* Q&A 카드 디자인 */
 .qna-list {
@@ -1630,6 +1645,12 @@ body {
     animation: fadeIn 1s;
     border: 1.5px solid var(--border-color);
 }
+
+body.dark-mode .hero {
+    background: linear-gradient(120deg, #2c2d2f 0%, #3e4042 100%);
+    border-color: var(--border-color);
+}
+
 .hero-title {
     font-size: 2.8rem;
     font-weight: 900;
