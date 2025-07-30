@@ -208,24 +208,55 @@ const copyAccountNumber = async () => {
 const copyMessageToClipboard = async (text, source, category, element) => {
     try {
         const today = new Date().toISOString().split('T')[0];
-        const useHundokFormat = confirm(`📅 ${today} 훈독 말씀 형식으로 복사할까요?\n\n✅ 확인: 훈독 형식\n❌ 취소: 기본 형식`);
+
+        // 텍스트가 너무 길 경우를 대비해 미리보기는 일부만 보여줍니다.
+        const previewText = text.length > 50 ? text.substring(0, 50) + '...' : text;
+
+        // 훈독 말씀 형식 미리보기
+        const hundokPreview =
+            `🌟${today} 훈독 말씀 🌟\n` +
+            `${previewText}\n\n` +
+            `📜 카테고리: ${category}\n` +
+            `📖 출처: ${source}`;
+
+        // 기본 형식 미리보기
+        const defaultPreview =
+            `🌟 말씀 🌟\n` +
+            `${previewText}\n\n` +
+            `📜 카테고리: ${category}\n` +
+            `📖 출처: ${source}`;
+
+        const confirmationMessage =
+            `✨ 어떤 형식으로 복사할까요? ✨\n\n` +
+            `------------------------------------\n` +
+            `✅ '확인' 버튼 선택 시 (훈독 말씀 형식)\n` +
+            `------------------------------------\n` +
+            `   ${hundokPreview}\n` +
+            `   (날짜와 '훈독 말씀' 문구가 포함됩니다.)\n\n` +
+            `------------------------------------\n` +
+            `❌ '취소' 버튼 선택 시 (기본 형식)\n` +
+            `------------------------------------\n` +
+            `   ${defaultPreview}\n` +
+            `   (간결한 말씀 내용만 복사됩니다.)\n\n` +
+            `두 형식 중 원하는 것을 선택해주세요!`;
+
+        const useHundokFormat = confirm(confirmationMessage);
 
         const formattedText = useHundokFormat
             ? `🌟${today} 훈독 말씀 🌟\n${text}\n\n📜 카테고리: ${category}\n📖 출처: ${source}\n——————————————————`
             : `🌟 말씀 🌟\n${text}\n\n📜 카테고리: ${category}\n📖 출처: ${source}\n——————————————————`;
 
         await navigator.clipboard.writeText(formattedText);
-        showToast('말씀과 출처가 복사되었습니다!');
+        showToast('말씀과 출처가 클립보드에 복사되었어요! 😊');
 
         // 시각적 피드백
         element.classList.add('copied');
         setTimeout(() => element.classList.remove('copied'), 1000); // 1초 후 클래스 제거
     } catch (err) {
         console.error('텍스트 복사 실패:', err);
-        showToast('복사 실패! 직접 선택하여 복사해 주세요.');
+        showToast('복사에 실패했어요. 직접 선택해서 복사해 주세요. 😥');
     }
 };
-
 /**
  * 사용자에게 알림 메시지를 표시합니다.
  * @param {string} message - 표시할 메시지 텍스트
