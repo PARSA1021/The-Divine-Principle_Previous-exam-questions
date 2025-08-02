@@ -32,7 +32,8 @@ const CATEGORIES = {
     CHAM_EOMEONIM: '참어머님 말씀',
     CHEON_SHIM_WON: '천심원',
     TRUE_FATHER_PRAYER: '참아버님 기도문',
-    THE_WILL_ROAD : '뜻 길'
+    THE_WILL_ROAD : '뜻 길',
+    COLLECTED_SERMONS : "말씀선집"
 };
 
 /**
@@ -364,7 +365,8 @@ const categorizeMessage = (source) => {
         { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
         { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
         { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER },
-        { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD}
+        { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD},
+        { key: '말씀선집', value: COLLECTED_SERMONS},
     ];
     // 출처에 포함된 키워드를 찾아 해당하는 카테고리 반환, 없으면 '전체' 반환
     return categories.find(cat => source.includes(cat.key))?.value || CATEGORIES.ALL;
