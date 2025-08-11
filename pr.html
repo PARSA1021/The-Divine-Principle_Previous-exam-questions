@@ -34,45 +34,49 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 90vw;
+            width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 5vw;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
+            align-items: center;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 5vw;
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 30px;
+            padding: 5vw;
             border: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
+            max-width: 800px;
         }
 
         .title {
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
             font-weight: 700;
             color: white;
-            margin-bottom: 10px;
+            margin-bottom: 2vw;
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             color: rgba(255,255,255,0.9);
-            margin-bottom: 20px;
+            margin-bottom: 4vw;
         }
 
         .progress-container {
             background: rgba(255,255,255,0.2);
             border-radius: 50px;
-            height: 12px;
+            height: clamp(8px, 2vw, 12px);
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 4vw;
         }
 
         .progress-fill {
@@ -104,18 +108,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 400px;
+            min-height: 50vh;
+            width: 100%;
             transition: var(--transition);
         }
 
         .question-card {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
-            padding: 40px;
+            padding: clamp(20px, 5vw, 40px);
             box-shadow: var(--card-shadow);
             width: 100%;
             max-width: 600px;
-            margin: 20px auto;
+            margin: 4vw auto;
             border: 1px solid rgba(255,255,255,0.3);
             backdrop-filter: blur(10px);
             transform: translateY(20px);
@@ -129,10 +134,10 @@
         }
 
         .question-text {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 4vw, 1.3rem);
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 30px;
+            margin-bottom: clamp(15px, 4vw, 30px);
             line-height: 1.6;
             text-align: center;
         }
@@ -140,13 +145,13 @@
         .options-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: clamp(10px, 3vw, 15px);
         }
 
         .option-label {
             display: flex;
             align-items: center;
-            padding: 20px;
+            padding: clamp(12px, 3vw, 20px);
             background: rgba(255,255,255,0.7);
             border-radius: 15px;
             cursor: pointer;
@@ -154,6 +159,8 @@
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .option-label::before {
@@ -178,15 +185,16 @@
         }
 
         .option-label input[type="radio"] {
-            margin-right: 15px;
-            transform: scale(1.2);
+            margin-right: clamp(8px, 2vw, 15px);
+            transform: scale(clamp(1, 0.3vw + 1, 1.2));
             accent-color: var(--primary-color);
         }
 
         .option-label span {
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 3vw, 1rem);
             color: var(--text-primary);
             line-height: 1.5;
+            flex: 1;
         }
 
         .option-label.selected {
@@ -204,24 +212,22 @@
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease;
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--card-shadow);
-            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 800px;
+            padding: clamp(20px, 5vw, 40px);
         }
 
         .result-card {
             background: white;
             border-radius: 15px;
-            padding: 30px;
-            margin: 20px 0;
+            padding: clamp(20px, 5vw, 30px);
+            margin: clamp(10px, 3vw, 20px) 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border-left: 5px solid var(--primary-color);
         }
 
         .mbti-type {
-            font-size: 3rem;
+            font-size: clamp(2rem, 8vw, 3rem);
             font-weight: 800;
             color: var(--primary-color);
             text-align: center;
@@ -230,37 +236,37 @@
         }
 
         .mbti-title {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             font-weight: 600;
             color: var(--text-primary);
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: clamp(10px, 3vw, 20px);
         }
 
         .mbti-description {
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             color: var(--text-secondary);
             line-height: 1.7;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: clamp(15px, 4vw, 30px);
         }
 
         .mbti-dichotomy {
-            margin-bottom: 25px;
+            margin-bottom: clamp(15px, 4vw, 25px);
         }
 
         .mbti-dichotomy-title {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: clamp(4px, 1.5vw, 8px);
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
             color: var(--text-secondary);
         }
 
         .mbti-bar-wrapper {
             display: flex;
-            height: 25px;
+            height: clamp(15px, 4vw, 25px);
             border-radius: 15px;
             overflow: hidden;
             background: #f7fafc;
@@ -287,28 +293,28 @@
         .mbti-bar-text {
             color: white;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
         .strengths-weaknesses {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: clamp(10px, 3vw, 20px);
+            margin: clamp(15px, 4vw, 30px) 0;
         }
 
         .trait-list {
             background: rgba(255,255,255,0.8);
-            padding: 20px;
+            padding: clamp(15px, 4vw, 20px);
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .trait-list h3 {
-            margin-bottom: 15px;
+            margin-bottom: clamp(10px, 3vw, 15px);
             color: var(--primary-color);
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
         }
 
         .trait-list ul {
@@ -316,9 +322,10 @@
         }
 
         .trait-list li {
-            padding: 8px 0;
+            padding: clamp(5px, 2vw, 8px) 0;
             color: var(--text-secondary);
             border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
         }
 
         .trait-list li:last-child {
@@ -327,25 +334,25 @@
 
         .heaven-score {
             text-align: center;
-            margin: 30px 0;
+            margin: clamp(15px, 4vw, 30px) 0;
         }
 
         .score-circle {
-            width: 120px;
-            height: 120px;
+            width: clamp(80px, 20vw, 120px);
+            height: clamp(80px, 20vw, 120px);
             border-radius: 50%;
             background: conic-gradient(var(--primary-color) 0deg, var(--accent-color) 180deg, #e2e8f0 360deg);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto clamp(10px, 3vw, 20px);
             position: relative;
         }
 
         .score-circle::before {
             content: '';
-            width: 80px;
-            height: 80px;
+            width: clamp(50px, 15vw, 80px);
+            height: clamp(50px, 15vw, 80px);
             background: white;
             border-radius: 50%;
             position: absolute;
@@ -354,21 +361,21 @@
         .score-text {
             position: relative;
             z-index: 1;
-            font-size: 1.5rem;
+            font-size: clamp(1rem, 4vw, 1.5rem);
             font-weight: 700;
             color: var(--primary-color);
         }
 
         .growth-tips-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: clamp(10px, 3vw, 20px);
+            margin: clamp(15px, 4vw, 30px) 0;
         }
 
         .growth-tip-card {
             background: white;
-            padding: 25px;
+            padding: clamp(15px, 4vw, 25px);
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: var(--transition);
@@ -381,32 +388,33 @@
         }
 
         .growth-tip-card i {
-            font-size: 2rem;
-            margin-bottom: 15px;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin-bottom: clamp(10px, 3vw, 15px);
             color: var(--primary-color);
         }
 
         .growth-tip-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            margin-bottom: clamp(5px, 2vw, 10px);
             color: var(--text-primary);
         }
 
         .growth-tip-card p {
             color: var(--text-secondary);
             line-height: 1.6;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
         }
 
         .daily-practice-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: clamp(10px, 3vw, 20px);
+            margin: clamp(15px, 4vw, 30px) 0;
         }
 
         .daily-practice-card {
             background: white;
-            padding: 25px;
+            padding: clamp(15px, 4vw, 25px);
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
@@ -434,13 +442,13 @@
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 30px);
             border-radius: 25px;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 3vw, 1.1rem);
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            margin: 30px auto;
+            margin: clamp(15px, 4vw, 30px) auto;
             display: block;
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
@@ -451,10 +459,10 @@
         }
 
         .section-title {
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
             font-weight: 700;
             color: var(--primary-color);
-            margin: 40px 0 20px;
+            margin: clamp(20px, 6vw, 40px) 0 clamp(10px, 3vw, 20px);
             text-align: center;
             position: relative;
         }
@@ -473,53 +481,37 @@
 
         .question-counter {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: clamp(10px, 3vw, 20px);
+            right: clamp(10px, 3vw, 20px);
             background: rgba(255,255,255,0.9);
-            padding: 10px 15px;
+            padding: clamp(5px, 2vw, 10px) clamp(8px, 2.5vw, 15px);
             border-radius: 20px;
             font-weight: 600;
             color: var(--primary-color);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
         }
 
         .loading-animation {
             display: none;
             text-align: center;
-            margin: 40px 0;
+            margin: clamp(20px, 6vw, 40px) 0;
+            transition: opacity 0.5s ease;
         }
 
         .loading-spinner {
-            width: 50px;
-            height: 50px;
+            width: clamp(30px, 10vw, 50px);
+            height: clamp(30px, 10vw, 50px);
             border: 4px solid rgba(255,255,255,0.3);
             border-top: 4px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto clamp(10px, 3vw, 20px);
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .title {
-                font-size: 2rem;
-            }
-            
-            .question-card {
-                padding: 25px;
-            }
-            
-            .strengths-weaknesses {
-                grid-template-columns: 1fr;
-            }
         }
 
         .fade-in {
@@ -543,8 +535,8 @@
 
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: clamp(5px, 2vw, 10px);
+            height: clamp(5px, 2vw, 10px);
             background: var(--accent-color);
             animation: confetti-fall 3s linear infinite;
         }
@@ -557,6 +549,123 @@
             100% {
                 transform: translateY(100vh) rotate(360deg);
                 opacity: 0;
+            }
+        }
+
+        /* Enhanced Media Queries */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 3vw;
+            }
+            .header {
+                padding: 3vw;
+            }
+            .title {
+                font-size: clamp(1.6rem, 5vw, 2rem);
+            }
+            .question-card {
+                padding: clamp(15px, 4vw, 20px);
+            }
+            .section-title {
+                font-size: clamp(1.2rem, 4vw, 1.5rem);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2vw;
+                justify-content: flex-start;
+            }
+            .header {
+                padding: 4vw;
+                margin-bottom: 3vw;
+            }
+            .title {
+                font-size: clamp(1.4rem, 6vw, 1.8rem);
+                line-height: 1.3;
+            }
+            .subtitle {
+                font-size: clamp(0.8rem, 4vw, 1rem);
+            }
+            .question-text {
+                font-size: clamp(0.9rem, 5vw, 1.1rem);
+            }
+            .options-group {
+                gap: clamp(8px, 3vw, 10px);
+            }
+            .option-label {
+                padding: clamp(10px, 4vw, 15px);
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+            .option-label span {
+                font-size: clamp(0.8rem, 4vw, 0.9rem);
+            }
+            .strengths-weaknesses {
+                grid-template-columns: 1fr;
+            }
+            .growth-tips-grid,
+            .daily-practice-grid {
+                grid-template-columns: 1fr;
+            }
+            .result-section {
+                padding: 3vw;
+            }
+            .result-card {
+                padding: clamp(15px, 4vw, 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+            .container {
+                padding: 1vw;
+            }
+            .title {
+                font-size: clamp(1.2rem, 7vw, 1.5rem);
+            }
+            .question-text {
+                font-size: clamp(0.8rem, 5vw, 1rem);
+            }
+            .option-label {
+                font-size: clamp(0.7rem, 4.5vw, 0.9rem);
+                padding: clamp(8px, 4vw, 12px);
+                flex-wrap: wrap;
+            }
+            .option-label input[type="radio"] {
+                margin-right: 8px;
+            }
+            .score-circle {
+                width: clamp(60px, 20vw, 90px);
+                height: clamp(60px, 20vw, 90px);
+            }
+            .score-text {
+                font-size: clamp(0.8rem, 5vw, 1.2rem);
+            }
+            .section-title {
+                font-size: clamp(1rem, 6vw, 1.3rem);
+            }
+            .mbti-bar-wrapper {
+                height: clamp(12px, 5vw, 15px);
+            }
+            .mbti-bar-text {
+                font-size: clamp(0.6rem, 3vw, 0.7rem);
+            }
+            .question-counter {
+                font-size: clamp(0.7rem, 4vw, 0.8rem);
+            }
+        }
+
+        @media (max-width: 320px) {
+            .option-label {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .option-label input[type="radio"] {
+                margin-bottom: 5px;
             }
         }
     </style>
@@ -581,7 +690,7 @@
 
         <div class="loading-animation" id="loading-animation">
             <div class="loading-spinner"></div>
-            <p style="color: white; font-size: 1.1rem;">결과를 분석하고 있습니다...</p>
+            <p style="color: white; font-size: clamp(0.9rem, 3vw, 1.1rem);">결과를 분석하고 있습니다...</p>
         </div>
 
         <div id="result-section" class="result-section">
@@ -591,7 +700,7 @@
                     영적 성향 분석 결과
                 </div>
                 
-                <div style="text-align: center; margin: 30px 0;">
+                <div style="text-align: center; margin: clamp(15px, 4vw, 30px) 0;">
                     <div class="mbti-type" id="spiritual-mbti-type">MBTI</div>
                     <h2 class="mbti-title" id="spiritual-mbti-title">성향 제목</h2>
                     <p class="mbti-description" id="spiritual-mbti-description">성향 설명</p>
@@ -937,16 +1046,23 @@
             }
 
             showResults() {
+                this.quizContainer.style.transition = 'opacity 0.5s ease';
                 this.quizContainer.style.opacity = '0';
                 this.loadingAnimation.style.display = 'block';
+                this.loadingAnimation.style.opacity = '1';
                 
                 setTimeout(() => {
                     this.quizContainer.style.display = 'none';
-                    this.loadingAnimation.style.display = 'none';
-                    this.resultSection.style.display = 'block';
-                    this.resultSection.style.opacity = '1';
-                    this.calculateAndDisplayResults();
-                    this.createCelebration();
+                    this.loadingAnimation.style.opacity = '0';
+                    setTimeout(() => {
+                        this.loadingAnimation.style.display = 'none';
+                        this.resultSection.style.display = 'block';
+                        setTimeout(() => {
+                            this.resultSection.style.opacity = '1';
+                            this.calculateAndDisplayResults();
+                            this.createCelebration();
+                        }, 100);
+                    }, 500);
                 }, 2000);
             }
 
@@ -1149,7 +1265,7 @@
                                 <span class="mbti-bar-text">${percent2}%</span>
                             </div>
                         </div>
-                        <p style="text-align: center; margin-top: 8px; color: var(--text-secondary); font-size: 0.9rem;">
+                        <p style="text-align: center; margin-top: 8px; color: var(--text-secondary); font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
                             ${d.desc}
                         </p>
                     `;
@@ -1223,7 +1339,7 @@
                 if (practicesContainer) {
                     practicesContainer.innerHTML = dailyPractices.map(practice => `
                         <div class="daily-practice-card fade-in">
-                            <i class="fas fa-${practice.icon}" style="color: ${practice.color}; font-size: 2rem; margin-bottom: 15px;"></i>
+                            <i class="fas fa-${practice.icon}" style="color: ${practice.color}; font-size: clamp(1.5rem, 5vw, 2rem); margin-bottom: clamp(10px, 3vw, 15px);"></i>
                             <h3>${practice.title}</h3>
                             <p>${practice.description}</p>
                         </div>
@@ -1650,29 +1766,30 @@
             }
 
             .mobile .question-card {
-                padding: 25px 20px;
+                padding: clamp(10px, 5vw, 25px);
             }
 
             .mobile .title {
-                font-size: 1.8rem;
+                font-size: clamp(1.2rem, 6vw, 1.8rem);
             }
 
             .mobile .option-label {
-                padding: 15px;
+                padding: clamp(8px, 4vw, 15px);
             }
 
             .share-buttons {
                 display: flex;
-                gap: 15px;
+                gap: clamp(10px, 3vw, 15px);
                 justify-content: center;
-                margin: 30px 0;
+                margin: clamp(15px, 4vw, 30px) 0;
+                flex-wrap: wrap;
             }
 
             .share-btn {
                 background: white;
                 border: 2px solid var(--primary-color);
                 color: var(--primary-color);
-                padding: 12px 20px;
+                padding: clamp(8px, 3vw, 12px) clamp(15px, 4vw, 20px);
                 border-radius: 25px;
                 cursor: pointer;
                 transition: var(--transition);
@@ -1681,6 +1798,7 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
+                font-size: clamp(0.9rem, 3vw, 1rem);
             }
 
             .share-btn:hover {
