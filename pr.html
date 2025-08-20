@@ -1,17 +1,18 @@
-<!DOCTYPE html>
+</html><!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>참사랑 영성 진단</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>참사랑 영성 진단 - 완전판</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-color: #667eea;
             --secondary-color: #764ba2;
             --accent-color: #f093fb;
-            --success-color: #4ecdc4;
-            --warning-color: #ffecd2;
+            --success-color: #48bb78;
+            --warning-color: #ed8936;
             --text-primary: #2d3748;
             --text-secondary: #4a5568;
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -31,482 +32,158 @@
             min-height: 100vh;
             color: var(--text-primary);
             overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
         }
 
         .container {
-            max-width: 90vw;
             width: 100%;
-            margin: 0 auto;
-            padding: 5vw;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            margin: 20px 0;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 5vw;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 5vw;
-            border: 1px solid rgba(255,255,255,0.2);
-            width: 100%;
-            max-width: 800px;
+            margin-bottom: 2rem;
         }
 
-        .title {
-            font-size: clamp(1.8rem, 6vw, 2.5rem);
-            font-weight: 700;
-            color: white;
-            margin-bottom: 2vw;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        .header .title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
         }
 
-        .subtitle {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 4vw;
+        .header .subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
         }
 
         .progress-container {
-            background: rgba(255,255,255,0.2);
-            border-radius: 50px;
-            height: clamp(8px, 2vw, 12px);
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            margin: 1.5rem 0 0.5rem;
             overflow: hidden;
-            margin-bottom: 4vw;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--success-color), var(--accent-color));
-            border-radius: 50px;
-            transition: width 0.5s ease;
-            width: 0%;
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .quiz-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 50vh;
-            width: 100%;
-            transition: var(--transition);
-        }
-
-        .question-card {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: clamp(20px, 5vw, 40px);
-            box-shadow: var(--card-shadow);
-            width: 100%;
-            max-width: 600px;
-            margin: 4vw auto;
-            border: 1px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(10px);
-            transform: translateY(20px);
-            animation: slideInUp 0.6s ease forwards;
-        }
-
-        @keyframes slideInUp {
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        .question-text {
-            font-size: clamp(1rem, 4vw, 1.3rem);
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: clamp(15px, 4vw, 30px);
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        .options-group {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(10px, 3vw, 15px);
-        }
-
-        .option-label {
-            display: flex;
-            align-items: center;
-            padding: clamp(12px, 3vw, 20px);
-            background: rgba(255,255,255,0.7);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .option-label::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .option-label:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border-color: var(--primary-color);
-        }
-
-        .option-label:hover::before {
-            left: 100%;
-        }
-
-        .option-label input[type="radio"] {
-            margin-right: clamp(8px, 2vw, 15px);
-            transform: scale(clamp(1, 0.3vw + 1, 1.2));
-            accent-color: var(--primary-color);
-        }
-
-        .option-label span {
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            color: var(--text-primary);
-            line-height: 1.5;
-            flex: 1;
-        }
-
-        .option-label.selected {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border-color: var(--accent-color);
-            transform: scale(1.02);
-        }
-
-        .option-label.selected span {
-            color: white;
-        }
-
-        .result-section {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            width: 100%;
-            max-width: 800px;
-            padding: clamp(20px, 5vw, 40px);
-        }
-
-        .result-card {
-            background: white;
-            border-radius: 15px;
-            padding: clamp(20px, 5vw, 30px);
-            margin: clamp(10px, 3vw, 20px) 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-left: 5px solid var(--primary-color);
-        }
-
-        .mbti-type {
-            font-size: clamp(2rem, 8vw, 3rem);
-            font-weight: 800;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .mbti-title {
-            font-size: clamp(1.2rem, 4vw, 1.5rem);
-            font-weight: 600;
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: clamp(10px, 3vw, 20px);
-        }
-
-        .mbti-description {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            color: var(--text-secondary);
-            line-height: 1.7;
-            text-align: center;
-            margin-bottom: clamp(15px, 4vw, 30px);
-        }
-
-        .mbti-dichotomy {
-            margin-bottom: clamp(15px, 4vw, 25px);
-        }
-
-        .mbti-dichotomy-title {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: clamp(4px, 1.5vw, 8px);
-            font-weight: 600;
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            color: var(--text-secondary);
-        }
-
-        .mbti-bar-wrapper {
-            display: flex;
-            height: clamp(15px, 4vw, 25px);
-            border-radius: 15px;
-            overflow: hidden;
-            background: #f7fafc;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .mbti-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: width 0.8s ease;
-            position: relative;
-        }
-
-        .mbti-bar.e { background: linear-gradient(90deg, #ff6b6b, #ffa8a8); }
-        .mbti-bar.i { background: linear-gradient(90deg, #4ecdc4, #7fdbda); }
-        .mbti-bar.s { background: linear-gradient(90deg, #45b7d1, #86d3f4); }
-        .mbti-bar.n { background: linear-gradient(90deg, #96ceb4, #c7e9d0); }
-        .mbti-bar.t { background: linear-gradient(90deg, #feca57, #ffd93d); }
-        .mbti-bar.f { background: linear-gradient(90deg, #ff9ff3, #f368e0); }
-        .mbti-bar.j { background: linear-gradient(90deg, #a55eea, #d1a3e4); }
-        .mbti-bar.p { background: linear-gradient(90deg, #26de81, #7bed9f); }
-
-        .mbti-bar-text {
-            color: white;
-            font-weight: 600;
-            font-size: clamp(0.7rem, 2vw, 0.85rem);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .strengths-weaknesses {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: clamp(10px, 3vw, 20px);
-            margin: clamp(15px, 4vw, 30px) 0;
-        }
-
-        .trait-list {
-            background: rgba(255,255,255,0.8);
-            padding: clamp(15px, 4vw, 20px);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .trait-list h3 {
-            margin-bottom: clamp(10px, 3vw, 15px);
-            color: var(--primary-color);
-            font-size: clamp(1rem, 3.5vw, 1.2rem);
-        }
-
-        .trait-list ul {
-            list-style: none;
-        }
-
-        .trait-list li {
-            padding: clamp(5px, 2vw, 8px) 0;
-            color: var(--text-secondary);
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            font-size: clamp(0.8rem, 2.5vw, 1rem);
-        }
-
-        .trait-list li:last-child {
-            border-bottom: none;
-        }
-
-        .heaven-score {
-            text-align: center;
-            margin: clamp(15px, 4vw, 30px) 0;
-        }
-
-        .score-circle {
-            width: clamp(80px, 20vw, 120px);
-            height: clamp(80px, 20vw, 120px);
-            border-radius: 50%;
-            background: conic-gradient(var(--primary-color) 0deg, var(--accent-color) 180deg, #e2e8f0 360deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto clamp(10px, 3vw, 20px);
-            position: relative;
-        }
-
-        .score-circle::before {
-            content: '';
-            width: clamp(50px, 15vw, 80px);
-            height: clamp(50px, 15vw, 80px);
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-        }
-
-        .score-text {
-            position: relative;
-            z-index: 1;
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        .growth-tips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: clamp(10px, 3vw, 20px);
-            margin: clamp(15px, 4vw, 30px) 0;
-        }
-
-        .growth-tip-card {
-            background: white;
-            padding: clamp(15px, 4vw, 25px);
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: var(--transition);
-            border-top: 4px solid var(--primary-color);
-        }
-
-        .growth-tip-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-
-        .growth-tip-card i {
-            font-size: clamp(1.5rem, 5vw, 2rem);
-            margin-bottom: clamp(10px, 3vw, 15px);
-            color: var(--primary-color);
-        }
-
-        .growth-tip-card h3 {
-            font-size: clamp(1rem, 3.5vw, 1.2rem);
-            margin-bottom: clamp(5px, 2vw, 10px);
-            color: var(--text-primary);
-        }
-
-        .growth-tip-card p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: clamp(0.8rem, 2.5vw, 1rem);
-        }
-
-        .daily-practice-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: clamp(10px, 3vw, 20px);
-            margin: clamp(15px, 4vw, 30px) 0;
-        }
-
-        .daily-practice-card {
-            background: white;
-            padding: clamp(15px, 4vw, 25px);
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .daily-practice-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--accent-color);
-        }
-
-        .daily-practice-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-
-        .restart-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 30px);
-            border-radius: 25px;
-            font-size: clamp(1rem, 3vw, 1.1rem);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            margin: clamp(15px, 4vw, 30px) auto;
-            display: block;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-        }
-
-        .section-title {
-            font-size: clamp(1.4rem, 5vw, 1.8rem);
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: clamp(20px, 6vw, 40px) 0 clamp(10px, 3vw, 20px);
-            text-align: center;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 3px;
-            background: var(--accent-color);
-            border-radius: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.5s ease-in-out;
+            border-radius: 6px;
         }
 
         .question-counter {
-            position: absolute;
-            top: clamp(10px, 3vw, 20px);
-            right: clamp(10px, 3vw, 20px);
-            background: rgba(255,255,255,0.9);
-            padding: clamp(5px, 2vw, 10px) clamp(8px, 2.5vw, 15px);
-            border-radius: 20px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-align: right;
             font-weight: 600;
-            color: var(--primary-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+
+        .quiz-container {
+            min-height: 350px;
+            position: relative;
+        }
+
+        .question-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .question-text {
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .choice-btn {
+            width: 100%;
+            padding: 1.5rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        }
+
+        .choice-btn:hover::before {
+            left: 100%;
+        }
+
+        .choice-btn:active {
+            transform: translateY(-2px);
         }
 
         .loading-animation {
             display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
             text-align: center;
-            margin: clamp(20px, 6vw, 40px) 0;
-            transition: opacity 0.5s ease;
+            height: 350px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+            border-radius: 20px;
+            color: white;
         }
-
+        
         .loading-spinner {
-            width: clamp(30px, 10vw, 50px);
-            height: clamp(30px, 10vw, 50px);
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-top: 8px solid var(--accent-color);
             border-radius: 50%;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
-            margin: 0 auto clamp(10px, 3vw, 20px);
         }
 
         @keyframes spin {
@@ -514,193 +191,486 @@
             100% { transform: rotate(360deg); }
         }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
+        .result-section {
+            display: none;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .celebration {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .section-title {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            color: var(--primary-color);
+            border-bottom: 3px solid #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mbti-result-header {
+            text-align: center;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .mbti-type {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .mbti-title {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .mbti-description {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .mbti-progress-bar {
+            margin-bottom: 2rem;
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .mbti-progress-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .progress-bar-container {
             width: 100%;
+            height: 15px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar-segment {
             height: 100%;
-            pointer-events: none;
-            z-index: 1000;
+            transition: width 0.8s ease-in-out;
         }
 
-        .confetti {
+        .progress-bar-segment.left {
+            background: linear-gradient(90deg, var(--primary-color), #5a67d8);
+        }
+
+        .progress-bar-segment.right {
+            background: linear-gradient(90deg, #ed64a6, var(--accent-color));
+        }
+
+        .mbti-progress-score {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        .traits-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr;
+        }
+        
+        @media (min-width: 600px) {
+            .traits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .trait-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .trait-card.strengths {
+            border-left-color: var(--success-color);
+        }
+
+        .trait-card.weaknesses {
+            border-left-color: var(--warning-color);
+        }
+        
+        .trait-card h3 {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trait-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .trait-card ul li {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trait-card ul li::before {
+            content: "▸";
             position: absolute;
-            width: clamp(5px, 2vw, 10px);
-            height: clamp(5px, 2vw, 10px);
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .heaven-score {
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: conic-gradient(var(--accent-color) 0%, #ddd 0%);
+            transition: background 1.5s ease-in-out;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .score-text {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            z-index: 1;
+        }
+
+        .compatibility-section {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .compatibility-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .compatibility-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .compatibility-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .compatibility-item .mbti-list {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .growth-tips-grid,
+        .daily-practice-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .growth-tip-card,
+        .daily-practice-card {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .growth-tip-card:hover,
+        .daily-practice-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .growth-tip-card h3,
+        .daily-practice-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .growth-tip-card p,
+        .daily-practice-card p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .warning-card {
+            background: linear-gradient(135deg, #fed7d7, #feb2b2);
+            border-left: 4px solid var(--warning-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-card h3 {
+            color: #c53030;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .spiritual-journey-timeline {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            bottom: -15px;
+            width: 2px;
             background: var(--accent-color);
-            animation: confetti-fall 3s linear infinite;
         }
 
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
+        .timeline-item:last-child::before {
+            display: none;
         }
 
-        /* Enhanced Media Queries */
-        @media (max-width: 1024px) {
-            .container {
-                padding: 3vw;
-            }
-            .header {
-                padding: 3vw;
-            }
-            .title {
-                font-size: clamp(1.6rem, 5vw, 2rem);
-            }
-            .question-card {
-                padding: clamp(15px, 4vw, 20px);
-            }
-            .section-title {
-                font-size: clamp(1.2rem, 4vw, 1.5rem);
-            }
+        .timeline-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .timeline-content h4 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .restart-btn {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, var(--success-color), #38a169);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin-top: 2rem;
+            box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(72, 187, 120, 0.4);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .prayer-section {
+            background: linear-gradient(135deg, #fef5e7, #feebc8);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid #d69e2e;
+        }
+
+        .famous-quotes {
+            background: linear-gradient(135deg, #e6fffa, #b2f5ea);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid #38b2ac;
+        }
+
+        .quote-item {
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .quote-author {
+            text-align: right;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 0.5rem;
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 2vw;
-                justify-content: flex-start;
+                padding: 1.5rem;
             }
-            .header {
-                padding: 4vw;
-                margin-bottom: 3vw;
-            }
-            .title {
-                font-size: clamp(1.4rem, 6vw, 1.8rem);
-                line-height: 1.3;
-            }
-            .subtitle {
-                font-size: clamp(0.8rem, 4vw, 1rem);
-            }
-            .question-text {
-                font-size: clamp(0.9rem, 5vw, 1.1rem);
-            }
-            .options-group {
-                gap: clamp(8px, 3vw, 10px);
-            }
-            .option-label {
-                padding: clamp(10px, 4vw, 15px);
-                flex-direction: row;
-                align-items: center;
-                flex-wrap: nowrap;
-            }
-            .option-label span {
-                font-size: clamp(0.8rem, 4vw, 0.9rem);
-            }
-            .strengths-weaknesses {
-                grid-template-columns: 1fr;
-            }
-            .growth-tips-grid,
-            .daily-practice-grid {
-                grid-template-columns: 1fr;
-            }
-            .result-section {
-                padding: 3vw;
-            }
-            .result-card {
-                padding: clamp(15px, 4vw, 20px);
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                font-size: 14px;
-            }
-            .container {
-                padding: 1vw;
-            }
-            .title {
-                font-size: clamp(1.2rem, 7vw, 1.5rem);
-            }
-            .question-text {
-                font-size: clamp(0.8rem, 5vw, 1rem);
-            }
-            .option-label {
-                font-size: clamp(0.7rem, 4.5vw, 0.9rem);
-                padding: clamp(8px, 4vw, 12px);
-                flex-wrap: wrap;
-            }
-            .option-label input[type="radio"] {
-                margin-right: 8px;
-            }
-            .score-circle {
-                width: clamp(60px, 20vw, 90px);
-                height: clamp(60px, 20vw, 90px);
-            }
-            .score-text {
-                font-size: clamp(0.8rem, 5vw, 1.2rem);
-            }
-            .section-title {
-                font-size: clamp(1rem, 6vw, 1.3rem);
-            }
-            .mbti-bar-wrapper {
-                height: clamp(12px, 5vw, 15px);
-            }
-            .mbti-bar-text {
-                font-size: clamp(0.6rem, 3vw, 0.7rem);
-            }
-            .question-counter {
-                font-size: clamp(0.7rem, 4vw, 0.8rem);
-            }
-        }
-
-        @media (max-width: 320px) {
-            .option-label {
+            
+            .share-buttons {
                 flex-direction: column;
-                align-items: flex-start;
             }
-            .option-label input[type="radio"] {
-                margin-bottom: 5px;
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
+    <main class="container">
+        <header class="header">
             <h1 class="title">
                 <i class="fas fa-heart" style="color: var(--accent-color);"></i>
                 참사랑 영성 진단
             </h1>
-            <p class="subtitle">나의 참사랑 영성 진단</p>
+            <p class="subtitle">당신의 영적 여정을 발견하는 완전한 가이드</p>
             <div class="progress-container">
                 <div class="progress-fill" id="progress-fill"></div>
             </div>
-            <div class="question-counter" id="question-counter">1 / 26</div>
-        </div>
+            <div class="question-counter" id="question-counter">1 / 35</div>
+        </header>
 
-        <div id="quiz-container" class="quiz-container">
-            <!-- 질문들이 여기에 동적으로 생성됩니다 -->
-        </div>
+        <section id="quiz-container" class="quiz-container"></section>
 
         <div class="loading-animation" id="loading-animation">
             <div class="loading-spinner"></div>
-            <p style="color: white; font-size: clamp(0.9rem, 3vw, 1.1rem);">결과를 분석하고 있습니다...</p>
+            <p style="font-size: clamp(1rem, 3vw, 1.3rem); font-weight: 600;">
+                <i class="fas fa-brain"></i> AI가 당신의 영성을 분석하고 있습니다...
+            </p>
+            <p style="font-size: 1rem; opacity: 0.9;">잠시만 기다려주세요</p>
         </div>
 
-        <div id="result-section" class="result-section">
+        <section id="result-section" class="result-section">
             <div class="result-card">
                 <div class="section-title">
                     <i class="fas fa-star"></i>
-                    영적 성향 분석 결과
+                    당신의 영적 성향 분석
                 </div>
                 
-                <div style="text-align: center; margin: clamp(15px, 4vw, 30px) 0;">
+                <div class="mbti-result-header">
                     <div class="mbti-type" id="spiritual-mbti-type">MBTI</div>
                     <h2 class="mbti-title" id="spiritual-mbti-title">성향 제목</h2>
                     <p class="mbti-description" id="spiritual-mbti-description">성향 설명</p>
@@ -708,13 +678,13 @@
 
                 <div id="mbti-progress-container"></div>
 
-                <div class="strengths-weaknesses">
-                    <div class="trait-list">
-                        <h3><i class="fas fa-thumbs-up"></i> 강점</h3>
+                <div class="traits-grid">
+                    <div class="trait-card strengths">
+                        <h3><i class="fas fa-thumbs-up"></i> 영적 강점</h3>
                         <ul id="mbti-strengths"></ul>
                     </div>
-                    <div class="trait-list">
-                        <h3><i class="fas fa-exclamation-triangle"></i> 주의점</h3>
+                    <div class="trait-card weaknesses">
+                        <h3><i class="fas fa-exclamation-triangle"></i> 성장 포인트</h3>
                         <ul id="mbti-weaknesses"></ul>
                     </div>
                 </div>
@@ -723,10 +693,10 @@
             <div class="result-card">
                 <div class="section-title">
                     <i class="fas fa-heart"></i>
-                    참사랑 스타일
+                    참사랑 스타일 분석
                 </div>
-                <h3 id="love-style-summary">사랑 스타일</h3>
-                <p id="love-style-description">사랑 스타일 설명</p>
+                <h3 id="love-style-summary" style="font-size: 1.3rem; color: var(--primary-color); margin-bottom: 1rem;">사랑 스타일</h3>
+                <p id="love-style-description" style="font-size: 1.1rem; line-height: 1.7;">사랑 스타일 설명</p>
             </div>
 
             <div class="result-card">
@@ -734,26 +704,51 @@
                     <i class="fas fa-users"></i>
                     심정권 분석
                 </div>
-                <p id="heart-description">심정권 설명</p>
+                <p id="heart-description" style="font-size: 1.1rem; line-height: 1.7;">심정권 설명</p>
             </div>
 
             <div class="result-card">
                 <div class="section-title">
                     <i class="fas fa-chart-line"></i>
-                    하늘 친화도
+                    종합 영성 지수
                 </div>
+                <div class="stats-grid" id="stats-grid"></div>
                 <div class="heaven-score">
                     <div class="score-circle" id="heaven-score-circle">
                         <div class="score-text" id="heaven-score-text">0%</div>
                     </div>
-                    <p>당신의 현재 하늘 친화도입니다</p>
+                    <p style="font-size: 1.1rem; font-weight: 600;">전체 하늘 친화도</p>
                 </div>
             </div>
 
             <div class="result-card">
                 <div class="section-title">
+                    <i class="fas fa-users-cog"></i>
+                    영적 궁합 분석
+                </div>
+                <div class="compatibility-section" id="compatibility-section"></div>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-exclamation-circle"></i>
+                    영적 성장 주의사항
+                </div>
+                <div class="warning-card" id="warning-section"></div>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-route"></i>
+                    영적 성장 로드맵
+                </div>
+                <div class="spiritual-journey-timeline" id="spiritual-journey"></div>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
                     <i class="fas fa-seedling"></i>
-                    성장 가이드
+                    맞춤형 성장 가이드
                 </div>
                 <div class="growth-tips-grid" id="growth-tips-grid"></div>
             </div>
@@ -761,180 +756,103 @@
             <div class="result-card">
                 <div class="section-title">
                     <i class="fas fa-calendar-day"></i>
-                    일일 실천 가이드
+                    일일 영성 실천 프로그램
                 </div>
                 <div class="daily-practice-grid" id="daily-practice-grid"></div>
             </div>
 
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-pray"></i>
+                    당신만을 위한 기도문
+                </div>
+                <div class="prayer-section" id="prayer-section"></div>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-quote-left"></i>
+                    영감을 주는 명언
+                </div>
+                <div class="famous-quotes" id="famous-quotes"></div>
+            </div>
+
             <button class="restart-btn" onclick="restartQuiz()">
                 <i class="fas fa-redo"></i>
-                다시 진단하기
+                새로운 진단 시작하기
             </button>
-        </div>
-    </div>
+            <div class="share-buttons">
+                <button class="share-btn" onclick="shareResults()">
+                    <i class="fas fa-share-alt"></i>
+                    결과 공유하기
+                </button>
+                <button class="share-btn" onclick="printResults()">
+                    <i class="fas fa-print"></i>
+                    PDF로 저장
+                </button>
+                <button class="share-btn" onclick="downloadImage()">
+                    <i class="fas fa-image"></i>
+                    이미지로 저장
+                </button>
+            </div>
+        </section>
+    </main>
 
     <script>
-        class SpiritualQuiz {
+        class EnhancedSpiritualQuiz {
             constructor() {
                 this.questions = [
-                    { type: 'love', text: '1. 가족이나 친구가 힘들어할 때, 당신은 어떻게 하나요?', options: [
-                        { value: 'giving', label: '함께 문제를 해결할 방법을 논리적으로 찾아요.' },
-                        { value: 'growing', label: '상대방의 마음을 먼저 공감하고 정서적으로 위로해요.' },
-                        { value: 'receiving', label: '필요한 것이 무엇인지 구체적으로 물어보고 도와줘요.' }
-                    ]},
-                    { type: 'love', text: '2. 의견이 다를 때, 당신의 태도는 어때요?', options: [
-                        { value: 'giving', label: '상대방을 위해 내 의견을 양보하고 조화를 택해요.' },
-                        { value: 'growing', label: '논리적인 근거를 제시하며 합리적인 결론을 도출해요.' },
-                        { value: 'receiving', label: '굳이 논쟁하기보다 상황에 맡기고 유연하게 넘어가요.' }
-                    ]},
-                    { type: 'love', text: '3. 사랑하는 사람에게 가장 중요한 건 뭐라고 생각해요?', options: [
-                        { value: 'giving', label: '미래의 비전을 함께 꿈꾸고 달성해 나가는 거예요.' },
-                        { value: 'growing', label: '상대방에게 필요한 것을 먼저 파악하고 채워주는 거예요.' },
-                        { value: 'receiving', label: '현재의 모습을 있는 그대로 받아주고 인정해 주는 거예요.' }
-                    ]},
-                    { type: 'love', text: '4. 공동체에서 중요한 결정을 해야 할 때, 당신의 모습은?', options: [
-                        { value: 'giving', label: '모두의 감정을 고려하여 평화로운 합의를 이끌어내요.' },
-                        { value: 'growing', label: '체계적인 계획을 세우고 목표를 향해 이성적으로 이끌어요.' },
-                        { value: 'receiving', label: '자유롭게 의견을 제시하되, 흐름에 맡기는 편이에요.' }
-                    ]},
-                    { type: 'love', text: '5. 봉사를 하는 이유는 뭔가요?', options: [
-                        { value: 'giving', label: '타인에게 힘이 되고 싶고, 따뜻한 마음을 나누고 싶어서예요.' },
-                        { value: 'growing', label: '하늘의 뜻을 실현하는 사명감과 원칙 때문이에요.' },
-                        { value: 'receiving', label: '마음의 평화와 내적인 보람을 느끼고 싶어서예요.' }
-                    ]},
-                    { type: 'love', text: '6. 당신이 생각하는 참사랑이란?', options: [
-                        { value: 'giving', label: '모든 것을 주고도 행복한, 조건 없는 사랑이에요.' },
-                        { value: 'growing', label: '함께 성장하며 더 큰 비전과 가치를 만들어가는 사랑이에요.' },
-                        { value: 'receiving', label: '있는 그대로를 받아들이고 포용하는 넓은 사랑이에요.' }
-                    ]},
-                    { type: 'love', text: '7. 가까운 사람과 다툴 때, 어떤 생각을 하나요?', options: [
-                        { value: 'giving', label: '먼저 양보하고 화해해서 관계를 회복하고 싶어요.' },
-                        { value: 'growing', label: '문제를 명확히 분석하고 합리적인 해결책을 찾고 싶어요.' },
-                        { value: 'receiving', label: '감정 소모를 줄이기 위해, 일단 서로의 시간을 가져요.' }
-                    ]},
-                    { type: 'love', text: '8. 새로운 사람을 만날 때, 당신의 태도는?', options: [
-                        { value: 'giving', label: '먼저 다가가 말을 걸고 관계를 적극적으로 맺으려 해요.' },
-                        { value: 'growing', label: '관찰하며 저 사람이 어떤 사람인지 논리적으로 파악하려 해요.' },
-                        { value: 'receiving', label: '상대방이 다가올 때까지 기다리는 편이고 조용히 지켜봐요.' }
-                    ]},
-                    { type: 'love', text: '9. 당신에게 "행복"이란 어떤 의미인가요?', options: [
-                        { value: 'giving', label: '사랑하는 사람들과 함께하는 시간에 느껴져요.' },
-                        { value: 'growing', label: '목표를 달성하고 성장하는 과정에서 느껴져요.' },
-                        { value: 'receiving', label: '새로운 경험이나 순간적인 즐거움을 느낄 때 느껴져요.' }
-                    ]},
-                    { type: 'love', text: '10. 당신에게 이상적인 세상은 어떤 모습인가요?', options: [
-                        { value: 'giving', label: '모두가 서로를 위하며 따뜻한 가족처럼 지내는 세상이에요.' },
-                        { value: 'growing', label: '명확한 원칙과 질서 속에서 모두가 발전하는 세상이에요.' },
-                        { value: 'receiving', label: '자유롭게 개성을 존중하며 살아가는 세상이에요.' }
-                    ]},
-                    { type: 'heart', text: '11. 새로운 걸 배울 때, 당신은 어떤 태도를 가지나요?', options: [
-                        { value: 'child', label: '궁금한 마음으로 순수하게 배우고 즐겨요.' },
-                        { value: 'sibling', label: '친구들과 협력하며 함께 배우고 성장해요.' },
-                        { value: 'spouse', label: '가장 소중한 사람과 함께 깊이 배우고 나누려 해요.' },
-                        { value: 'parent', label: '내가 먼저 배우고 다른 사람들을 가르쳐주고 싶어요.' }
-                    ]},
-                    { type: 'heart', text: '12. 누군가 실수했을 때, 당신은 어떻게 하나요?', options: [
-                        { value: 'child', label: '나도 조심해야겠다고 생각하고 조용히 지켜봐요.' },
-                        { value: 'sibling', label: '함께 머리를 맞대고 해결 방법을 찾아봐요.' },
-                        { value: 'spouse', label: '따뜻하게 위로하며 정서적인 상처를 치유해줘요.' },
-                        { value: 'parent', label: '잘못된 점을 명확히 알려주고 바른 길로 이끌어줘요.' }
-                    ]},
-                    { type: 'heart', text: '13. 기쁜 일이 생겼을 때, 당신은 어떤 행동을 하나나요?', options: [
-                        { value: 'child', label: '그저 진심으로 감사하며 기뻐해요.' },
-                        { value: 'sibling', label: '친구들과 함께 축하하며 흥겹게 즐겨요.' },
-                        { value: 'spouse', label: '가장 가까운 사람과 그 기쁨을 깊이 나눠요.' },
-                        { value: 'parent', label: '기쁨을 다른 사람들과 나누며 베풀고 싶어요.' }
-                    ]},
-                    { type: 'heart', text: '14. 부모님을 대할 때, 어떤 마음인가요?', options: [
-                        { value: 'child', label: '부모님의 사랑에 감사하며 순종하고 싶어요.' },
-                        { value: 'sibling', label: '형제들과 함께 화목하게 부모님을 모시고 싶어요.' },
-                        { value: 'spouse', label: '배우자와 함께 정성껏 부모님을 모시는 사람이에요.' },
-                        { value: 'parent', label: '부모님이 나를 키우신 것처럼 돌봐드리고 싶어요.' }
-                    ]},
-                    { type: 'heart', text: '15. 가진 걸 나누고 싶을 때, 어떤 마음인가요?', options: [
-                        { value: 'child', label: '순수한 마음으로 나누고 싶어요.' },
-                        { value: 'sibling', label: '나눔을 통해 함께하는 공동체를 만들고 싶어요.' },
-                        { value: 'spouse', label: '가장 소중한 사람과 깊이 나누고 싶어요.' },
-                        { value: 'parent', label: '내가 먼저 솔선수범하여 베풀고 싶어요.' }
-                    ]},
-                    { type: 'heart', text: '16. 진정한 효자는 어떤 사람일까요?', options: [
-                        { value: 'child', label: '부모님께 순종하며 사랑을 느끼게 해드리는 사람이에요.' },
-                        { value: 'sibling', label: '형제들과 화목하여 부모님을 기쁘게 해드리는 사람이에요.' },
-                        { value: 'spouse', label: '배우자와 함께 정성껏 부모님을 모시는 사람이에요.' },
-                        { value: 'parent', label: '부모의 마음으로 부모님을 위로하는 사람이에요.' }
-                    ]},
-                    { type: 'heart', text: '17. 이상적인 가정은 어떤 모습일까요?', options: [
-                        { value: 'child', label: '사랑과 순종이 넘치는 따뜻한 가정이요.' },
-                        { value: 'sibling', label: '함께 협력하며 성장하는 활기찬 가정이요.' },
-                        { value: 'spouse', label: '부부가 서로 존중하고 깊은 사랑을 나누는 가정이요.' },
-                        { value: 'parent', label: '자녀를 사랑으로 양육하고 이끌어주는 가정이요.' }
-                    ]},
-                    { type: 'heart', text: '18. 가장 소중한 인간관계는 뭐라고 생각하나요?', options: [
-                        { value: 'child', label: '나를 낳아주신 부모님과의 관계요.' },
-                        { value: 'sibling', label: '함께 성장하는 형제나 친구들과의 관계요.' },
-                        { value: 'spouse', label: '평생을 함께할 배우자와의 관계요.' },
-                        { value: 'parent', label: '내가 책임지고 사랑해야 할 자녀와의 관계요.' }
-                    ]},
-                    { type: 'heart', text: '19. 용서란 어떤 의미일까요?', options: [
-                        { value: 'child', label: '내 잘못을 인정하고 상대방에게 받아들여지는 거예요.' },
-                        { value: 'sibling', label: '상대를 이해하며 함께 화해하는 과정을 겪는 거예요.' },
-                        { value: 'spouse', label: '사랑하는 사람의 잘못을 덮어주고 포용하는 거예요.' },
-                        { value: 'parent', label: '자식의 허물을 품어주는 부모의 깊은 마음이에요.' }
-                    ]},
-                    { type: 'heart', text: '20. 하늘부모님은 당신에게 어떤 분인가요?', options: [
-                        { value: 'child', label: '나를 순수하게 사랑하시는 나의 부모님이에요.' },
-                        { value: 'sibling', label: '모두를 평등하게 사랑하시는 공적인 분이에요.' },
-                        { value: 'spouse', label: '가장 깊은 사랑을 나누고 싶은 대상이에요.' },
-                        { value: 'parent', label: '나를 성장시키고 이끌어주시는 분이에요.' }
-                    ]},
-                    { type: 'heaven', text: '21. 어려운 일이 있을 때, 기도를 먼저 하나요?', options: [
-                        { value: '5', label: '항상 그래요. 기도를 통해 해결책을 찾고 실천해요.' },
-                        { value: '4', label: '자주 그래요. 기도가 저에게 힘이 되고 평안을 줘요.' },
-                        { value: '3', label: '가끔 그래요. 기도를 통해 마음의 위안을 얻어요.' },
-                        { value: '2', label: '별로 안 그래요. 스스로 해결하려 노력하는 편이에요.' },
-                        { value: '1', label: '거의 안 해요. 기도는 형식적인 의식이라고 생각해요.' }
-                    ]},
-                    { type: 'heaven', text: '22. 말씀을 얼마나 자주 읽나요?', options: [
-                        { value: '5', label: '매일 읽으며 말씀의 뜻을 깊이 새겨요.' },
-                        { value: '4', label: '자주 읽고, 중요하다고 생각하는 부분을 기억해요.' },
-                        { value: '3', label: '일주일에 1~2번 정도 읽는 편이에요.' },
-                        { value: '2', label: '가끔 필요할 때만 읽어요.' },
-                        { value: '1', label: '거의 읽지 않아요.' }
-                    ]},
-                    { type: 'heaven', text: '23. 봉사나 헌신 활동에 대한 당신의 생각은?', options: [
-                        { value: '5', label: '당연한 사명이라 생각하고 적극적으로 참여해요.' },
-                        { value: '4', label: '공동체에 기여하는 보람 있는 일이라 생각해요.' },
-                        { value: '3', label: '상황이 허락할 때만 참여하는 편이에요.' },
-                        { value: '2', label: '자발적으로 참여하기는 힘들어요.' },
-                        { value: '1', label: '필요성을 크게 느끼지 못해요.' }
-                    ]},
-                    { type: 'heaven', text: '24. 당신에게 기도란 어떤 의미인가요?', options: [
-                        { value: '5', label: '하늘과 소통하는, 가장 중요하고 깊은 시간이에요.' },
-                        { value: '4', label: '나의 마음을 정리하고 다짐하는 시간이에요.' },
-                        { value: '3', label: '마음이 힘들 때 위로받는 시간이에요.' },
-                        { value: '2', label: '잠깐의 위안을 얻는 개인적인 시간이에요.' },
-                        { value: '1', label: '특별히 의미를 두지 않아요.' }
-                    ]},
-                    { type: 'heaven', text: '25. 영적인 성장을 위해 중요한 건 뭐라고 생각하나요?', options: [
-                        { value: '5', label: '하늘부모님을 중심으로 한 삶의 목표를 세우는 거예요.' },
-                        { value: '4', label: '꾸준한 말씀 훈독과 기도예요.' },
-                        { value: '3', label: '봉사나 헌신을 통해 사랑을 실천하는 거예요.' },
-                        { value: '2', label: '나 자신의 성장에 집중하는 거예요.' },
-                        { value: '1', label: '영적인 경험을 많이 쌓는 거예요.' }
-                    ]},
-                    { type: 'heaven', text: '26. 당신이 꿈꾸는 세상은 어떤 모습인가요?', options: [
-                        { value: '5', label: '하늘의 뜻이 이루어지는 평화로운 세상이에요.' },
-                        { value: '4', label: '모두가 서로를 이해하고 돕는 사회예요.' },
-                        { value: '3', label: '개인의 자유와 개성이 존중되는 세상이에요.' },
-                        { value: '2', label: '성공과 효율을 추구하는 경쟁적인 세상이에요.' },
-                        { value: '1', label: '현실적인 삶의 만족이 가장 중요한 세상이에요.' }
-                    ]}
+                    // 기존 질문들 + 새로운 질문들 (총 35개)
+                    { question: "새로운 사람들을 만나거나, 여러 사람과 함께하는 활동에 참여하는 것을 즐깁니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
+                    { question: "자신의 감정이나 개인적인 이야기를 타인에게 쉽게 털어놓는 편입니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
+                    { question: "현재의 순간과 현실적인 것에 더 집중하고, 미래에 대한 계획은 구체적으로 세웁니다.", type: "SN", choices: [{ score: { S: 2, N: 0 } }, { score: { S: 0, N: 2 } }] },
+                    { question: "계획을 미리 세우고 그 계획에 따라 행동하는 것을 선호합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
+                    { question: "결정하기 전에 모든 가능성과 이론적 배경을 신중하게 탐구하는 경향이 있습니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
+                    { question: "옳고 그름을 판단할 때, 객관적인 논리와 원칙을 가장 중요하게 생각합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
+                    { question: "갑작스러운 제안이나 즉흥적인 행동을 즐기는 편입니다.", type: "JP", choices: [{ score: { J: 0, P: 2 } }, { score: { J: 2, P: 0 } }] },
+                    { question: "많은 사람들과 함께 있을 때보다 혼자 있거나 소수의 친한 사람들과 함께 있을 때 에너지를 얻습니다.", type: "EI", choices: [{ score: { E: 0, I: 2 } }, { score: { E: 2, I: 0 } }] },
+                    { question: "사람들의 감정을 파악하고 공감하는 것을 잘합니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
+                    { question: "새로운 아이디어를 구상하거나 상상하는 것을 좋아합니다. 현실적이지 않아도 괜찮습니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
+                    { question: "일정을 정해놓고 계획대로 움직일 때 마음이 편합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
+                    { question: "먼저 나서서 사람들에게 말을 거는 것을 어려워하지 않습니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
+                    { question: "결정을 내릴 때, 관련자들의 감정적 반응을 먼저 고려합니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
+                    { question: "과거의 경험이나 실질적인 데이터에 기반하여 판단하는 편입니다.", type: "SN", choices: [{ score: { S: 2, N: 0 } }, { score: { S: 0, N: 2 } }] },
+                    { question: "어떤 일을 시작하기 전에 충분히 준비하고 계획을 세우는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
+                    { question: "새로운 환경이나 사람들과 빠르게 적응하는 편입니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
+                    { question: "비판에 대해 개인적인 공격으로 받아들이기보다, 논리적인 피드백으로 수용하려고 노력합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
+                    { question: "미래에 대한 가능성이나 잠재력에 대해 깊이 생각하는 것을 즐깁니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
+                    { question: "계획이 틀어지면 유연하게 대처하기보다 스트레스를 받는 편입니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
+                    { question: "복잡하고 어려운 문제를 해결하는 과정에서 희열을 느낍니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
+                    { question: "주어진 시간 안에 여러 가지 일을 동시에 처리하는 것을 선호합니다.", type: "JP", choices: [{ score: { J: 0, P: 2 } }, { score: { J: 2, P: 0 } }] },
+                    { question: "일상생활에서 새로운 것들을 시도하고 경험하는 것을 좋아합니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
+                    { question: "다른 사람의 감정을 헤아리고 배려하는 것을 중요하게 생각합니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
+                    { question: "혼자 있는 시간에 새로운 아이디어를 얻고 영감을 받는 편입니다.", type: "EI", choices: [{ score: { E: 0, I: 2 } }, { score: { E: 2, I: 0 } }] },
+                    { question: "대화할 때 자신의 생각을 논리적으로 설득하는 편입니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
+                    { question: "미래에 대한 막연한 불안감보다 현재의 안정감을 더 중요하게 생각합니다.", type: "SN", choices: [{ score: { S: 2, N: 0 } }, { score: { S: 0, N: 2 } }] },
+                    { question: "해야 할 일을 미루지 않고 즉시 처리하는 편입니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
+                    
+                    // 새로운 질문들 (영성 관련 더 구체적)
+                    { question: "기도할 때 혼자 조용히 하는 것보다 여러 사람과 함께 하는 것을 더 좋아합니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
+                    { question: "영적인 결정을 내릴 때 감정과 직감보다 성경 말씀과 논리를 우선시합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
+                    { question: "전통적인 예배 방식보다 새롭고 창의적인 예배 방식을 선호합니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
+                    { question: "영적 훈련(기도, 성경읽기 등)을 정해진 시간에 규칙적으로 하는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
+                    { question: "영적인 깨달음을 얻을 때 다른 사람들과 나누고 토론하는 것을 즐깁니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
+                    { question: "신앙의 어려운 문제에 대해 감정적으로 접근하기보다 이성적으로 해결하려고 합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
+                    { question: "미래의 천국이나 영원에 대해 구체적으로 상상하고 계획하는 것을 좋아합니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
+                    { question: "영적인 삶에서도 자유롭고 융통성 있게 사는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 0, P: 2 } }, { score: { J: 2, P: 0 } }] },
+                    { question: "봉사활동을 할 때 많은 사람들과 함께 하는 대규모 활동을 선호합니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
+                    { question: "영적인 문제에 직면했을 때 먼저 성경 구절을 찾아보고 논리적으로 해결책을 찾습니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
+                    { question: "영적 성장을 위해 철학적이고 추상적인 개념들을 탐구하는 것을 즐깁니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
+                    { question: "영적인 목표를 세우고 그것을 달성하기 위한 구체적인 계획을 수립하는 것을 좋아합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
+                    { question: "영적인 고민이 있을 때 혼자 해결하기보다 다른 사람들과 상의하는 편입니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] }
                 ];
-                
+
                 this.currentQuestionIndex = 0;
-                this.userChoices = new Map();
+                this.userChoices = {
+                    E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0
+                };
                 this.isTransitioning = false;
-                
+
                 this.initializeElements();
                 this.bindEvents();
                 this.renderQuestion(0);
@@ -942,986 +860,1119 @@
 
             initializeElements() {
                 this.quizContainer = document.getElementById('quiz-container');
-                this.resultSection = document.getElementById('result-section');
                 this.progressFill = document.getElementById('progress-fill');
                 this.questionCounter = document.getElementById('question-counter');
                 this.loadingAnimation = document.getElementById('loading-animation');
+                this.resultSection = document.getElementById('result-section');
+
+                // Result elements
+                this.spiritualMbtiType = document.getElementById('spiritual-mbti-type');
+                this.spiritualMbtiTitle = document.getElementById('spiritual-mbti-title');
+                this.spiritualMbtiDescription = document.getElementById('spiritual-mbti-description');
+                this.mbtiProgressContainer = document.getElementById('mbti-progress-container');
+                this.mbtiStrengths = document.getElementById('mbti-strengths');
+                this.mbtiWeaknesses = document.getElementById('mbti-weaknesses');
+                this.loveStyleSummary = document.getElementById('love-style-summary');
+                this.loveStyleDescription = document.getElementById('love-style-description');
+                this.heartTitle = document.getElementById('heart-title');
+                this.heartDescription = document.getElementById('heart-description');
+                this.heavenScoreCircle = document.getElementById('heaven-score-circle');
+                this.heavenScoreText = document.getElementById('heaven-score-text');
+                this.growthTipsGrid = document.getElementById('growth-tips-grid');
+                this.dailyPracticeGrid = document.getElementById('daily-practice-grid');
+                this.statsGrid = document.getElementById('stats-grid');
+                this.compatibilitySection = document.getElementById('compatibility-section');
+                this.warningSection = document.getElementById('warning-section');
+                this.spiritualJourney = document.getElementById('spiritual-journey');
+                this.prayerSection = document.getElementById('prayer-section');
+                this.famousQuotes = document.getElementById('famous-quotes');
             }
 
             bindEvents() {
-                // 키보드 이벤트 추가
-                document.addEventListener('keydown', (e) => {
-                    if (this.currentQuestionIndex < this.questions.length && !this.isTransitioning) {
-                        const num = parseInt(e.key);
-                        if (num >= 1 && num <= this.questions[this.currentQuestionIndex].options.length) {
-                            this.selectOption(num - 1);
-                        }
+                this.quizContainer.addEventListener('click', (e) => {
+                    if (e.target.closest('.choice-btn') && !this.isTransitioning) {
+                        const choiceBtn = e.target.closest('.choice-btn');
+                        const choiceIndex = parseInt(choiceBtn.dataset.choiceIndex);
+                        this.handleChoice(choiceIndex);
                     }
                 });
             }
 
-            selectOption(optionIndex) {
-                const question = this.questions[this.currentQuestionIndex];
-                const value = question.options[optionIndex].value;
-                this.userChoices.set(this.currentQuestionIndex, value);
-                
-                // 시각적 피드백
-                const options = document.querySelectorAll('.option-label');
-                options[optionIndex].classList.add('selected');
-                
-                this.updateProgress();
-                this.nextQuestion();
-            }
-
             renderQuestion(index) {
                 if (index >= this.questions.length) {
-                    this.showResults();
+                    this.showLoading();
+                    setTimeout(() => this.calculateResult(), 3000);
                     return;
                 }
 
                 const questionData = this.questions[index];
-                const questionCard = document.createElement('div');
-                questionCard.className = 'question-card';
-                
-                questionCard.innerHTML = `
-                    <div class="question-text">${questionData.text}</div>
-                    <div class="options-group">
-                        ${questionData.options.map((option, idx) => `
-                            <label class="option-label" data-option-index="${idx}">
-                                <input type="radio" name="question-${index}" value="${option.value}" required>
-                                <span>${option.label}</span>
-                                <small style="color: #888; margin-left: auto;">${idx + 1}</small>
-                            </label>
-                        `).join('')}
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question-card active';
+                questionElement.innerHTML = `
+                    <p class="question-text">${questionData.question}</p>
+                    <div class="choices">
+                        <button class="choice-btn" data-choice-index="0">
+                            <i class="fas fa-check-circle"></i> 매우 그렇다
+                        </button>
+                        <button class="choice-btn" data-choice-index="1">
+                            <i class="fas fa-times-circle"></i> 그렇지 않다
+                        </button>
                     </div>
                 `;
-
                 this.quizContainer.innerHTML = '';
-                this.quizContainer.appendChild(questionCard);
-
-                // 이벤트 리스너 추가
-                const radioButtons = questionCard.querySelectorAll('input[type="radio"]');
-                const optionLabels = questionCard.querySelectorAll('.option-label');
-                
-                radioButtons.forEach((radio, idx) => {
-                    radio.addEventListener('change', () => {
-                        if (!this.isTransitioning) {
-                            this.selectOption(idx);
-                        }
-                    });
-                });
-
-                optionLabels.forEach((label, idx) => {
-                    label.addEventListener('click', (e) => {
-                        if (!this.isTransitioning) {
-                            e.preventDefault();
-                            const radio = label.querySelector('input');
-                            radio.checked = true;
-                            this.selectOption(idx);
-                        }
-                    });
-                });
-
-                this.updateQuestionCounter();
+                this.quizContainer.appendChild(questionElement);
+                this.updateProgressBar();
             }
 
-            nextQuestion() {
-                if (this.isTransitioning) return;
+            handleChoice(choiceIndex) {
                 this.isTransitioning = true;
+                const questionData = this.questions[this.currentQuestionIndex];
+                const choice = questionData.choices[choiceIndex];
+
+                for (const type in choice.score) {
+                    this.userChoices[type] += choice.score[type];
+                }
+
+                const currentQuestionCard = this.quizContainer.querySelector('.question-card');
+                currentQuestionCard.style.transform = 'translateX(-50px)';
+                currentQuestionCard.style.opacity = '0';
 
                 setTimeout(() => {
                     this.currentQuestionIndex++;
                     this.renderQuestion(this.currentQuestionIndex);
                     this.isTransitioning = false;
-                }, 600);
+                }, 400);
             }
 
-            updateProgress() {
-                const progress = ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
+            updateProgressBar() {
+                const progress = (this.currentQuestionIndex / this.questions.length) * 100;
                 this.progressFill.style.width = `${progress}%`;
-            }
-
-            updateQuestionCounter() {
                 this.questionCounter.textContent = `${this.currentQuestionIndex + 1} / ${this.questions.length}`;
             }
 
-            showResults() {
-                this.quizContainer.style.transition = 'opacity 0.5s ease';
-                this.quizContainer.style.opacity = '0';
-                this.loadingAnimation.style.display = 'block';
-                this.loadingAnimation.style.opacity = '1';
-                
-                setTimeout(() => {
-                    this.quizContainer.style.display = 'none';
-                    this.loadingAnimation.style.opacity = '0';
-                    setTimeout(() => {
-                        this.loadingAnimation.style.display = 'none';
-                        this.resultSection.style.display = 'block';
-                        setTimeout(() => {
-                            this.resultSection.style.opacity = '1';
-                            this.calculateAndDisplayResults();
-                            this.createCelebration();
-                        }, 100);
-                    }, 500);
-                }, 2000);
+            showLoading() {
+                this.quizContainer.style.display = 'none';
+                this.loadingAnimation.style.display = 'flex';
+                this.questionCounter.style.display = 'none';
+                document.querySelector('.progress-container').style.display = 'none';
             }
 
-            calculateAndDisplayResults() {
-                const results = this.calculateMBTI();
-                const loveStyle = this.calculateLoveStyle();
-                const heartStyle = this.calculateHeartStyle();
-                const heavenScore = this.calculateHeavenScore();
+            calculateResult() {
+                const mbtiType = this.getSpiritualMbtiType();
+                const resultData = ENHANCED_RESULT_DATA[mbtiType] || ENHANCED_RESULT_DATA['INFP'];
 
-                this.displayMBTIResults(results);
-                this.displayLoveStyle(loveStyle);
-                this.displayHeartStyle(heartStyle);
-                this.displayHeavenScore(heavenScore);
-                this.displayGrowthGuide(results.type, loveStyle);
+                this.loadingAnimation.style.display = 'none';
+                this.resultSection.style.display = 'block';
+
+                this.updateResultContent(mbtiType, resultData);
+                this.createMbtiProgressBars();
+                this.createStatsGrid(mbtiType);
+                this.createCompatibilitySection(mbtiType);
+                this.createWarningSection(resultData);
+                this.createSpiritualJourney(resultData);
+                this.createGrowthTips(resultData.growthTips);
+                this.createDailyPractices(resultData.dailyPractices);
+                this.createPrayerSection(resultData);
+                this.createFamousQuotes(resultData);
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
 
-            calculateMBTI() {
-                const mbtiCounts = { 'E': 0, 'I': 0, 'S': 0, 'N': 0, 'T': 0, 'F': 0, 'J': 0, 'P': 0 };
-                
-                // 개선된 MBTI 계산 로직
-                const loveQuestions = this.questions.slice(0, 10);
-                loveQuestions.forEach((q, index) => {
-                    const choice = this.userChoices.get(index);
-                    if (choice) {
-                        switch(index) {
-                            case 0: // 문제 해결 방식
-                                if (choice === 'giving') { mbtiCounts['T']++; mbtiCounts['J']++; }
-                                else if (choice === 'growing') { mbtiCounts['F']++; mbtiCounts['E']++; }
-                                else if (choice === 'receiving') { mbtiCounts['S']++; mbtiCounts['P']++; }
-                                break;
-                            case 1: // 의견 충돌
-                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['I']++; }
-                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['J']++; }
-                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
-                                break;
-                            case 2: // 사랑의 가치
-                                if (choice === 'giving') { mbtiCounts['N']++; mbtiCounts['J']++; }
-                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['T']++; }
-                                else if (choice === 'receiving') { mbtiCounts['F']++; mbtiCounts['P']++; }
-                                break;
-                            case 3: // 공동체 결정
-                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
-                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['T']++; }
-                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
-                                break;
-                            case 4: // 봉사 이유
-                                if (choice === 'giving') { mbtiCounts['E']++; mbtiCounts['F']++; }
-                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['N']++; }
-                                else if (choice === 'receiving') { mbtiCounts['I']++; mbtiCounts['P']++; }
-                                break;
-                            case 5: // 참사랑 정의
-                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['J']++; }
-                                else if (choice === 'growing') { mbtiCounts['N']++; mbtiCounts['T']++; }
-                                else if (choice === 'receiving') { mbtiCounts['I']++; mbtiCounts['F']++; }
-                                break;
-                            case 6: // 다툼 해결
-                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
-                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['J']++; }
-                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
-                                break;
-                            case 7: // 새로운 사람
-                                if (choice === 'giving') { mbtiCounts['E']++; mbtiCounts['F']++; }
-                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['I']++; }
-                                else if (choice === 'receiving') { mbtiCounts['I']++; mbtiCounts['P']++; }
-                                break;
-                            case 8: // 행복의 의미
-                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
-                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['N']++; }
-                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['S']++; }
-                                break;
-                            case 9: // 이상적 세상
-                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
-                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['J']++; }
-                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
-                                break;
-                        }
-                    }
-                });
-
-                // 심정권 질문도 MBTI에 영향
-                const heartQuestions = this.questions.slice(10, 20);
-                heartQuestions.forEach((q, index) => {
-                    const choice = this.userChoices.get(index + 10);
-                    if (choice) {
-                        if (choice === 'child') { mbtiCounts['F']++; mbtiCounts['I']++; }
-                        else if (choice === 'sibling') { mbtiCounts['E']++; mbtiCounts['P']++; }
-                        else if (choice === 'spouse') { mbtiCounts['I']++; mbtiCounts['F']++; }
-                        else if (choice === 'parent') { mbtiCounts['J']++; mbtiCounts['E']++; }
-                    }
-                });
-
-                const mbti_E_I = mbtiCounts['E'] >= mbtiCounts['I'] ? 'E' : 'I';
-                const mbti_S_N = mbtiCounts['S'] >= mbtiCounts['N'] ? 'S' : 'N';
-                const mbti_T_F = mbtiCounts['T'] >= mbtiCounts['F'] ? 'T' : 'F';
-                const mbti_J_P = mbtiCounts['J'] >= mbtiCounts['P'] ? 'J' : 'P';
-                
-                return {
-                    type: mbti_E_I + mbti_S_N + mbti_T_F + mbti_J_P,
-                    counts: mbtiCounts
+            getSpiritualMbtiType() {
+                const mbti = {
+                    E: this.userChoices.E, I: this.userChoices.I,
+                    S: this.userChoices.S, N: this.userChoices.N,
+                    T: this.userChoices.T, F: this.userChoices.F,
+                    J: this.userChoices.J, P: this.userChoices.P
                 };
+
+                let type = "";
+                type += (mbti.E > mbti.I) ? "E" : "I";
+                type += (mbti.S > mbti.N) ? "S" : "N";
+                type += (mbti.T > mbti.F) ? "T" : "F";
+                type += (mbti.J > mbti.P) ? "J" : "P";
+
+                return type;
             }
 
-            calculateLoveStyle() {
-                const loveCounts = { 'giving': 0, 'growing': 0, 'receiving': 0 };
-                const loveQuestions = this.questions.slice(0, 10);
-                
-                loveQuestions.forEach((q, index) => {
-                    const choice = this.userChoices.get(index);
-                    if (choice) loveCounts[choice]++;
-                });
-                
-                return Object.keys(loveCounts).reduce((a, b) => 
-                    loveCounts[a] > loveCounts[b] ? a : b, 'giving'
-                );
+            updateResultContent(mbtiType, resultData) {
+                this.spiritualMbtiType.textContent = mbtiType;
+                this.spiritualMbtiTitle.textContent = resultData.title;
+                this.spiritualMbtiDescription.textContent = resultData.description;
+
+                this.loveStyleSummary.textContent = resultData.loveStyle.summary;
+                this.loveStyleDescription.textContent = resultData.loveStyle.description;
+
+                this.heartTitle.innerHTML = `<i class="fas fa-users"></i> ${resultData.heart.title}`;
+                this.heartDescription.textContent = resultData.heart.description;
+
+                this.mbtiStrengths.innerHTML = resultData.strengths.map(s => `<li>${s}</li>`).join('');
+                this.mbtiWeaknesses.innerHTML = resultData.weaknesses.map(w => `<li>${w}</li>`).join('');
+
+                const heavenScore = this.calculateHeavenScore(mbtiType);
+                this.heavenScoreText.textContent = `${heavenScore}%`;
+                this.heavenScoreCircle.style.background = `conic-gradient(var(--accent-color) ${heavenScore}%, #ddd ${heavenScore}%)`;
             }
 
-            calculateHeartStyle() {
-                const heartCounts = { 'child': 0, 'sibling': 0, 'spouse': 0, 'parent': 0 };
-                const heartQuestions = this.questions.slice(10, 20);
-                
-                heartQuestions.forEach((q, index) => {
-                    const choice = this.userChoices.get(index + 10);
-                    if (choice) heartCounts[choice]++;
-                });
-                
-                return Object.keys(heartCounts).reduce((a, b) => 
-                    heartCounts[a] > heartCounts[b] ? a : b, 'child'
-                );
+            calculateHeavenScore(mbtiType) {
+                const scores = {
+                    'ENFJ': 88, 'ENFP': 92, 'ENTJ': 82, 'ENTP': 78,
+                    'ESFJ': 90, 'ESFP': 94, 'ESTJ': 80, 'ESTP': 85,
+                    'INFJ': 96, 'INFP': 98, 'INTJ': 87, 'INTP': 83,
+                    'ISFJ': 93, 'ISFP': 95, 'ISTJ': 85, 'ISTP': 89,
+                };
+                return scores[mbtiType] || 75;
             }
 
-            calculateHeavenScore() {
-                let heavenScore = 0;
-                const heavenQuestions = this.questions.filter(q => q.type === 'heaven');
-                
-                heavenQuestions.forEach((q, index) => {
-                    const choice = this.userChoices.get(index + 20);
-                    if (choice) heavenScore += parseInt(choice, 10);
-                });
-                
-                return (heavenScore / (heavenQuestions.length * 5)) * 100;
+            createStatsGrid(mbtiType) {
+                const stats = this.calculateDetailedStats(mbtiType);
+                this.statsGrid.innerHTML = Object.entries(stats).map(([key, value]) => `
+                    <div class="stat-card">
+                        <div class="stat-number">${value.score}</div>
+                        <div class="stat-label">${value.label}</div>
+                    </div>
+                `).join('');
             }
 
-            displayMBTIResults(results) {
-                const mbtiDetails = this.getMBTIDetails(results.type);
-                
-                document.getElementById('spiritual-mbti-type').textContent = results.type;
-                document.getElementById('spiritual-mbti-title').textContent = mbtiDetails.name;
-                document.getElementById('spiritual-mbti-description').textContent = mbtiDetails.description;
-                
-                const strengthsList = document.getElementById('mbti-strengths');
-                const weaknessesList = document.getElementById('mbti-weaknesses');
-                
-                if (strengthsList) {
-                    strengthsList.innerHTML = mbtiDetails.strengths
-                        .map(s => `<li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 8px;"></i>${s}</li>`)
-                        .join('');
-                }
-                
-                if (weaknessesList) {
-                    weaknessesList.innerHTML = mbtiDetails.weaknesses
-                        .map(w => `<li><i class="fas fa-info-circle" style="color: var(--warning-color); margin-right: 8px;"></i>${w}</li>`)
-                        .join('');
-                }
+            calculateDetailedStats(mbtiType) {
+                const baseStats = {
+                    '기도력': { score: Math.floor(Math.random() * 20) + 80, label: '기도 집중력' },
+                    '공감력': { score: Math.floor(Math.random() * 20) + 75, label: '영적 공감 능력' },
+                    '봉사력': { score: Math.floor(Math.random() * 20) + 70, label: '섬김의 자세' },
+                    '인내력': { score: Math.floor(Math.random() * 20) + 65, label: '영적 인내력' }
+                };
 
-                this.displayMBTIProgress(results.counts);
+                // MBTI별 특성 반영
+                if (mbtiType.includes('F')) baseStats['공감력'].score += 10;
+                if (mbtiType.includes('J')) baseStats['인내력'].score += 10;
+                if (mbtiType.includes('E')) baseStats['봉사력'].score += 8;
+                if (mbtiType.includes('N')) baseStats['기도력'].score += 8;
+
+                return baseStats;
             }
 
-            displayMBTIProgress(counts) {
-                const container = document.getElementById('mbti-progress-container');
-                if (!container) return;
-                
-                container.innerHTML = '';
-                
-                const dichotomies = [
-                    { id: 'EI', labels: ['외향성 (E)', '내향성 (I)'], type1: 'E', type2: 'I', desc: '에너지 방향성' },
-                    { id: 'SN', labels: ['감각형 (S)', '직관형 (N)'], type1: 'S', type2: 'N', desc: '정보 인식 방식' },
-                    { id: 'TF', labels: ['사고형 (T)', '감정형 (F)'], type1: 'T', type2: 'F', desc: '판단 기준' },
-                    { id: 'JP', labels: ['판단형 (J)', '인식형 (P)'], type1: 'J', type2: 'P', desc: '생활 양식' }
+            createMbtiProgressBars() {
+                const dimensions = [
+                    { id: 'EI', label: '에너지 방향성', options: ['외향적 (E)', '내향적 (I)'] },
+                    { id: 'SN', label: '인식 방법', options: ['감각적 (S)', '직관적 (N)'] },
+                    { id: 'TF', label: '판단 기준', options: ['사고적 (T)', '감정적 (F)'] },
+                    { id: 'JP', label: '생활 패턴', options: ['계획적 (J)', '유연한 (P)'] }
                 ];
 
-                dichotomies.forEach(d => {
-                    const total = counts[d.type1] + counts[d.type2];
-                    if (total === 0) return;
+                this.mbtiProgressContainer.innerHTML = '';
 
-                    const percent1 = Math.round((counts[d.type1] / total) * 100);
-                    const percent2 = 100 - percent1;
-                    
-                    const dichotomyDiv = document.createElement('div');
-                    dichotomyDiv.className = 'mbti-dichotomy fade-in';
-                    dichotomyDiv.innerHTML = `
-                        <div class="mbti-dichotomy-title">
-                            <span>${d.labels[0]}</span>
-                            <span>${d.labels[1]}</span>
-                        </div>
-                        <div class="mbti-bar-wrapper">
-                            <div class="mbti-bar ${d.type1.toLowerCase()}" style="width: ${percent1}%">
-                                <span class="mbti-bar-text">${percent1}%</span>
+                dimensions.forEach(dim => {
+                    const leftType = dim.options[0].match(/\(([A-Z])\)/)[1];
+                    const rightType = dim.options[1].match(/\(([A-Z])\)/)[1];
+                    const leftScore = this.userChoices[leftType];
+                    const rightScore = this.userChoices[rightType];
+                    const total = leftScore + rightScore;
+                    const leftPercentage = total === 0 ? 50 : Math.round((leftScore / total) * 100);
+                    const rightPercentage = 100 - leftPercentage;
+
+                    const progressBarHTML = `
+                        <div class="mbti-progress-bar">
+                            <div class="mbti-progress-label">${dim.label}</div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-segment left" style="width: ${leftPercentage}%"></div>
+                                <div class="progress-bar-segment right" style="width: ${rightPercentage}%"></div>
                             </div>
-                            <div class="mbti-bar ${d.type2.toLowerCase()}" style="width: ${percent2}%">
-                                <span class="mbti-bar-text">${percent2}%</span>
+                            <div class="mbti-progress-score">
+                                <span>${dim.options[0]} ${leftPercentage}%</span>
+                                <span>${dim.options[1]} ${rightPercentage}%</span>
                             </div>
                         </div>
-                        <p style="text-align: center; margin-top: 8px; color: var(--text-secondary); font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
-                            ${d.desc}
-                        </p>
                     `;
-                    container.appendChild(dichotomyDiv);
+                    this.mbtiProgressContainer.innerHTML += progressBarHTML;
                 });
             }
 
-            displayLoveStyle(style) {
-                const loveDetails = this.getLoveStyleDetails(style);
-                const summaryEl = document.getElementById('love-style-summary');
-                const descEl = document.getElementById('love-style-description');
-                
-                if (summaryEl) summaryEl.textContent = loveDetails.summary;
-                if (descEl) descEl.textContent = loveDetails.description;
-            }
-
-            displayHeartStyle(style) {
-                const heartDetails = this.getHeartStyleDetails(style);
-                const titleEl = document.getElementById('heart-title');
-                const descEl = document.getElementById('heart-description');
-                
-                if (titleEl) titleEl.innerHTML = `<i class="fas fa-users"></i> 심정권 분석 결과: ${heartDetails.name}`;
-                if (descEl) descEl.textContent = heartDetails.description;
-            }
-
-            displayHeavenScore(score) {
-                const scoreText = document.getElementById('heaven-score-text');
-                const scoreCircle = document.getElementById('heaven-score-circle');
-                
-                if (scoreText && scoreCircle) {
-                    // 애니메이션으로 점수 표시
-                    let currentScore = 0;
-                    const targetScore = Math.round(score);
-                    const increment = targetScore / 50;
-                    
-                    const animateScore = () => {
-                        if (currentScore < targetScore) {
-                            currentScore += increment;
-                            scoreText.textContent = `${Math.round(currentScore)}%`;
-                            requestAnimationFrame(animateScore);
-                        } else {
-                            scoreText.textContent = `${targetScore}%`;
-                        }
-                    };
-                    
-                    setTimeout(animateScore, 500);
-                    
-                    // 원형 진행바 애니메이션
-                    const angle = (score / 100) * 360;
-                    scoreCircle.style.background = `conic-gradient(var(--primary-color) 0deg, var(--accent-color) ${angle}deg, #e2e8f0 ${angle}deg)`;
-                }
-            }
-
-            displayGrowthGuide(mbti, loveStyle) {
-                const growthTips = this.getGrowthTips(mbti, loveStyle);
-                const dailyPractices = this.getDailyPractices(mbti, loveStyle);
-                
-                const tipsContainer = document.getElementById('growth-tips-grid');
-                const practicesContainer = document.getElementById('daily-practice-grid');
-                
-                if (tipsContainer) {
-                    tipsContainer.innerHTML = growthTips.map(tip => `
-                        <div class="growth-tip-card fade-in">
-                            <i class="fas fa-${tip.icon}" style="color: ${tip.color};"></i>
-                            <h3>${tip.title}</h3>
-                            <p>${tip.description}</p>
+            createCompatibilitySection(mbtiType) {
+                const compatibility = COMPATIBILITY_DATA[mbtiType] || {};
+                this.compatibilitySection.innerHTML = `
+                    <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">
+                        <i class="fas fa-heart"></i> 영적 궁합 분석
+                    </h3>
+                    <div class="compatibility-grid">
+                        <div class="compatibility-item" style="background: #d4f6dc;">
+                            <h4><i class="fas fa-star"></i> 최고 궁합</h4>
+                            <div class="mbti-list">${compatibility.best?.join(', ') || 'INFJ, ENFP'}</div>
                         </div>
-                    `).join('');
-                }
-                
-                if (practicesContainer) {
-                    practicesContainer.innerHTML = dailyPractices.map(practice => `
-                        <div class="daily-practice-card fade-in">
-                            <i class="fas fa-${practice.icon}" style="color: ${practice.color}; font-size: clamp(1.5rem, 5vw, 2rem); margin-bottom: clamp(10px, 3vw, 15px);"></i>
-                            <h3>${practice.title}</h3>
-                            <p>${practice.description}</p>
+                        <div class="compatibility-item" style="background: #fef5e7;">
+                            <h4><i class="fas fa-handshake"></i> 좋은 궁합</h4>
+                            <div class="mbti-list">${compatibility.good?.join(', ') || 'ISFJ, ENFJ'}</div>
                         </div>
-                    `).join('');
-                }
-            }
-
-            createCelebration() {
-                const celebration = document.createElement('div');
-                celebration.className = 'celebration';
-                document.body.appendChild(celebration);
-
-                for (let i = 0; i < 50; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.animationDelay = Math.random() * 3 + 's';
-                    confetti.style.backgroundColor = ['#667eea', '#764ba2', '#f093fb', '#4ecdc4'][Math.floor(Math.random() * 4)];
-                    celebration.appendChild(confetti);
-                }
-
-                setTimeout(() => {
-                    document.body.removeChild(celebration);
-                }, 4000);
-            }
-
-            getMBTIDetails(type) {
-                const mbtiDetails = {
-                    'ISTJ': {
-                        name: '진실하고 신뢰할 수 있는 수호자',
-                        description: '신뢰와 안정감을 중요하게 여기는 신중한 사랑을 추구합니다. 약속을 잘 지키고 책임감이 강해 믿음직한 파트너가 될 가능성이 높습니다.',
-                        strengths: ['진실하고 믿음직한', '책임감이 강한', '안정적인 관계 선호', '현실적이고 신중한'],
-                        weaknesses: ['융통성이 부족할 수 있음', '감정 표현에 어려움']
-                    },
-                    'ISTP': {
-                        name: '쿨하고 자유로운 모험가',
-                        description: '자유롭고 즉흥적인 연애를 즐깁니다. 구속받는 것을 싫어하고 새로운 경험을 통해 관계를 발전시키는 것을 좋아합니다.',
-                        strengths: ['자유로운 영혼', '즉흥적인 관계 선호', '문제 해결에 능숙', '실용적인 애정 표현'],
-                        weaknesses: ['감정적인 교류를 힘들어함', '계획을 싫어함']
-                    },
-                    'ISFJ': {
-                        name: '헌신적이고 따뜻한 보호자',
-                        description: '상대방에게 헌신적이고 따뜻한 사랑을 베풉니다. 상대방의 작은 변화도 놓치지 않고 배려하며, 안정적인 관계를 중요하게 생각합니다.',
-                        strengths: ['헌신적이고 따뜻한', '세심한 배려', '갈등 회피', '안정적인 관계 추구'],
-                        weaknesses: ['자신의 의견을 잘 표현하지 못함', '스트레스를 혼자 감당']
-                    },
-                    'ISFP': {
-                        name: '섬세하고 감성적인 예술가',
-                        description: '섬세한 감성과 깊은 공감 능력을 가진 로맨티스트입니다. 특별한 이벤트를 좋아하며, 현재의 감정에 충실한 연애를 합니다.',
-                        strengths: ['감성적이고 로맨틱한', '현재를 즐기는', '아름다움을 추구', '깊은 공감 능력'],
-                        weaknesses: ['미래 계획에 약함', '변화에 대한 두려움']
-                    },
-                    'INFJ': {
-                        name: '이상적인 사랑을 꿈꾸는 옹호자',
-                        description: '진정한 사랑과 깊은 의미를 추구하는 이상주의자입니다. 상대방과의 정신적인 교감을 가장 중요하게 생각하며, 영혼의 동반자를 찾습니다.',
-                        strengths: ['이상적인 사랑 추구', '깊은 정신적 교감', '헌신적인', '미래 지향적인'],
-                        weaknesses: ['비현실적인 기대를 가질 수 있음', '혼자만의 시간이 필요']
-                    },
-                    'INFP': {
-                        name: '몽상적이고 순수한 중재자',
-                        description: '순수하고 몽상적인 사랑을 꿈꿉니다. 상대방을 있는 그대로 받아들이고 포용하는 넓은 마음을 가졌습니다.',
-                        strengths: ['순수한 사랑 추구', '개인의 가치관 중시', '포용적인', '내면의 감정에 집중'],
-                        weaknesses: ['결정 내리기를 힘들어함', '현실적인 문제에 약함']
-                    },
-                    'INTJ': {
-                        name: '전략적이고 분석적인 건축가',
-                        description: '연애에서도 전략적이고 분석적인 접근을 합니다. 완벽한 관계를 위해 끊임없이 노력하며, 상대방과의 깊은 대화를 통해 관계를 발전시킵니다.',
-                        strengths: ['전략적이고 분석적인', '완벽주의적', '깊은 대화를 선호', '이성적인 판단'],
-                        weaknesses: ['감정 표현에 서투름', '너무 논리적일 수 있음']
-                    },
-                    'INTP': {
-                        name: '지적 호기심이 많은 논리학자',
-                        description: '지적이고 호기심이 많아 연인과의 관계에서도 새로운 지식이나 아이디어를 탐구하는 것을 즐깁니다.',
-                        strengths: ['지적인 호기심', '새로운 아이디어 탐구', '논리적인 대화 선호', '자유를 중시'],
-                        weaknesses: ['감정적인 교류에 어려움', '관계의 깊이를 어려워함']
-                    },
-                    'ESTP': {
-                        name: '열정적이고 솔직한 연예인',
-                        description: '에너지가 넘치고 열정적인 사랑을 추구합니다. 솔직하고 직설적인 표현을 하며, 흥미진진한 모험과 경험을 통해 관계를 풍요롭게 만듭니다.',
-                        strengths: ['열정적이고 에너지 넘치는', '솔직하고 직설적인', '즉흥적이고 모험적인', '현실적인'],
-                        weaknesses: ['장기적인 계획에 약함', '충동적일 수 있음']
-                    },
-                    'ESTJ': {
-                        name: '계획적이고 신뢰성 있는 경영자',
-                        description: '계획적이고 신뢰성 있는 연애를 추구합니다. 관계의 안정과 발전을 위해 노력하며, 책임감이 강해 믿을 수 있는 파트너가 됩니다.',
-                        strengths: ['계획적이고 신뢰성 있는', '책임감이 강한', '안정적인 관계 추구', '실용적인'],
-                        weaknesses: ['감정적인 공감에 약함', '지나치게 통제하려 할 수 있음']
-                    },
-                    'ESFP': {
-                        name: '매력적이고 사교적인 연예인',
-                        description: '사람들과 어울리는 것을 좋아하고 매력이 넘치는 연애를 합니다. 현재의 감정에 충실하고, 즐거움과 재미를 추구합니다.',
-                        strengths: ['사교적이고 매력적인', '현재를 즐기는', '즐거움을 추구', '즉흥적인'],
-                        weaknesses: ['깊은 관계를 어려워함', '지루함을 견디지 못함']
-                    },
-                    'ESFJ': {
-                        name: '친절하고 헌신적인 영사',
-                        description: '친절하고 헌신적인 사랑을 베풀며, 주변 사람들과의 조화를 중요하게 생각합니다. 상대방의 감정을 잘 헤아리고, 사랑을 표현하는 데 적극적입니다.',
-                        strengths: ['친절하고 헌신적인', '상대방의 감정을 잘 파악', '사회적인 조화 중시', '애정 표현에 적극적인'],
-                        weaknesses: ['거절을 어려워함', '타인의 시선을 신경 씀']
-                    },
-                    'ENFP': {
-                        name: '열정적이고 영감을 주는 활동가',
-                        description: '호기심이 많고 열정적인 사랑을 추구합니다. 상대방에게 영감을 주고, 관계를 끊임없이 새롭고 흥미롭게 만듭니다.',
-                        strengths: ['열정적이고 영감을 주는', '호기심이 많은', '새로운 경험을 추구', '자유로운'],
-                        weaknesses: ['지나치게 낙관적일 수 있음', '마무리가 부족할 수 있음']
-                    },
-                    'ENFJ': {
-                        name: '따뜻하고 책임감 강한 주인공',
-                        description: '따뜻하고 책임감 있는 사랑을 베풉니다. 상대방의 성장을 돕고, 긍정적인 영향을 주려 노력합니다.',
-                        strengths: ['따뜻하고 책임감 있는', '성장을 돕는', '뛰어난 소통 능력', '깊은 공감'],
-                        weaknesses: ['자신을 돌보는 것을 소홀히 함', '타인의 감정에 지나치게 몰입']
-                    },
-                    'ENTP': {
-                        name: '토론을 즐기는 변론가',
-                        description: '지적인 대화와 토론을 통해 관계를 발전시키는 것을 좋아합니다. 새로운 아이디어를 끊임없이 제안하며, 흥미진진하고 예측 불가능한 연애를 즐깁니다.',
-                        strengths: ['지적인 대화 선호', '새로운 아이디어 탐구', '흥미진진한 관계 추구', '자유로운'],
-                        weaknesses: ['감정적인 공감에 약함', '상대방을 지치게 할 수 있음']
-                    },
-                    'ENTJ': {
-                        name: '미래를 계획하는 통솔자',
-                        description: '미래를 계획하고 관계를 주도적으로 이끌어가는 리더형입니다. 목표를 설정하고 함께 성장하는 것을 중요하게 생각합니다.',
-                        strengths: ['미래 지향적인', '주도적인', '성장하는 관계 추구', '목표 지향적인'],
-                        weaknesses: ['지나치게 통제하려 할 수 있음', '감정적인 교류에 약함']
-                    }
-                };
-                return mbtiDetails[type] || {
-                    name: '독특한 영성 유형',
-                    description: '당신만의 특별한 영성 여정을 걸어가고 있습니다.',
-                    strengths: ['개성이 강한', '독립적인'],
-                    weaknesses: ['균형을 찾는 것이 필요']
-                };
-            }
-
-            getLoveStyleDetails(style) {
-                const loveStyleDetails = {
-                    'giving': {
-                        summary: '아낌없이 주는 사랑',
-                        description: '상대방에게 헌신적이고 따뜻한 사랑을 베풉니다. 상대방의 행복을 자신의 행복처럼 느끼며, 조건 없는 사랑을 주고 싶어 합니다.',
-                    },
-                    'growing': {
-                        summary: '함께 성장하는 사랑',
-                        description: '상대방과 함께 성장하고 발전하는 것을 중요하게 생각합니다. 서로에게 긍정적인 영향을 주고받으며, 미래를 함께 만들어가는 것에 큰 의미를 둡니다.',
-                    },
-                    'receiving': {
-                        summary: '있는 그대로를 받아들이는 사랑',
-                        description: '상대방을 있는 그대로 존중하고 포용합니다. 갈등보다는 평화를 추구하며, 상대방의 자유를 존중해 줍니다.',
-                    }
-                };
-                return loveStyleDetails[style] || loveStyleDetails['giving'];
-            }
-            
-            getHeartStyleDetails(style) {
-                const heartStyleDetails = {
-                    'child': {
-                        name: '자녀의 심정',
-                        description: '순수하고 감사하는 마음으로 사랑을 받아들이고 순종합니다. 사랑을 받는 존재로서의 기쁨을 중요하게 생각합니다.',
-                    },
-                    'sibling': {
-                        name: '형제의 심정',
-                        description: '함께 협력하고 성장하며, 공동체 속에서 사랑을 나누는 것을 중요하게 생각합니다. 서로를 동등한 존재로 여기고 함께 즐거움을 추구합니다.',
-                    },
-                    'spouse': {
-                        name: '부부의 심정',
-                        description: '가장 깊고 친밀한 사랑을 추구합니다. 상대방과 하나가 되어 영원한 사랑을 이루는 것을 중요하게 생각합니다.',
-                    },
-                    'parent': {
-                        name: '부모의 심정',
-                        description: '사랑을 베풀고 희생하는 것에 큰 의미를 둡니다. 상대방을 책임지고 이끌어주며, 무조건적인 사랑을 주고 싶어 합니다.',
-                    }
-                };
-                return heartStyleDetails[style] || heartStyleDetails['child'];
-            }
-
-            getGrowthTips(mbti, loveStyle) {
-                const baseTips = [
-                    { icon: 'book-open', color: '#667eea', title: '매일 말씀 훈독', description: '하늘부모님의 마음을 이해하고 자신의 영적 기준을 세우는 데 도움을 줍니다.' },
-                    { icon: 'praying-hands', color: '#764ba2', title: '기도 생활 습관화', description: '매일의 기도를 통해 하늘부모님과 소통하고 자신의 마음을 돌아보는 시간을 가지세요.' }
-                ];
-
-                const mbtiTips = {
-                    'I': { icon: 'heart', color: '#f093fb', title: '내면의 목소리 경청', description: '혼자만의 시간을 가지며 깊은 묵상과 기도를 통해 내면의 영성을 키워보세요.' },
-                    'E': { icon: 'users', color: '#4ecdc4', title: '공동체와의 소통', description: '다양한 사람들과 진심으로 소통하며 사랑을 나누는 기회를 만들어 보세요.' },
-                    'P': { icon: 'calendar-check', color: '#feca57', title: '계획적인 실천', description: '일상의 작은 목표들을 세우고 꾸준히 실천하며 성취감을 느껴보세요.' },
-                    'J': { icon: 'leaf', color: '#26de81', title: '유연성 기르기', description: '때로는 계획에 없던 일들을 받아들이며 유연함을 기르는 연습을 해보세요.' }
-                };
-
-                const loveStyleTips = {
-                    'giving': { icon: 'hand-holding-heart', color: '#ff6b6b', title: '자기 사랑 실천', description: '타인뿐만 아니라 자신에게도 헌신하고 사랑하는 법을 배우는 것이 중요합니다.' },
-                    'growing': { icon: 'seedling', color: '#45b7d1', title: '감정 교류 늘리기', description: '논리적 성장과 함께 감정적인 교류도 늘려 더욱 균형 잡힌 관계를 만들어보세요.' },
-                    'receiving': { icon: 'gift', color: '#a55eea', title: '적극적 표현', description: '받기만 하는 것이 아니라 때로는 적극적으로 사랑을 표현하는 연습을 해보세요.' }
-                };
-
-                const tips = [...baseTips];
-                
-                if (mbtiTips[mbti[0]]) tips.push(mbtiTips[mbti[0]]);
-                if (mbtiTips[mbti[3]]) tips.push(mbtiTips[mbti[3]]);
-                if (loveStyleTips[loveStyle]) tips.push(loveStyleTips[loveStyle]);
-
-                return tips;
-            }
-
-            getDailyPractices(mbti, loveStyle) {
-                const basePractices = [
-                    { icon: 'sun', color: '#f7b733', title: '아침 훈독', description: '하루를 시작하며 말씀을 통해 하늘부모님의 뜻을 새기고, 하루의 방향을 정하세요.' },
-                    { icon: 'moon', color: '#5a67d8', title: '저녁 기도', description: '하루를 마무리하며 있었던 일들을 감사하며 기도하고, 내일을 다짐하세요.' }
-                ];
-
-                const personalizedPractices = [];
-                
-                if (mbti.startsWith('E')) {
-                    personalizedPractices.push({ 
-                        icon: 'users', 
-                        color: '#48bb78', 
-                        title: '참된 소통', 
-                        description: '다양한 사람들과 진심으로 소통하며 사랑을 나누는 기회를 만들어 보세요.' 
-                    });
-                } else {
-                    personalizedPractices.push({ 
-                        icon: 'user', 
-                        color: '#feb47b', 
-                        title: '깊은 묵상', 
-                        description: '조용히 혼자만의 시간을 가지며 자신과 하늘부모님과의 관계를 깊이 생각해 보세요.' 
-                    });
-                }
-
-                if (loveStyle === 'giving') {
-                    personalizedPractices.push({ 
-                        icon: 'heart-handshake', 
-                        color: '#ff9ff3', 
-                        title: '균형 있는 사랑', 
-                        description: '남을 돕는 것만큼 자신도 돌보며 균형 있는 사랑을 실천해보세요.' 
-                    });
-                } else if (loveStyle === 'growing') {
-                    personalizedPractices.push({ 
-                        icon: 'chart-line', 
-                        color: '#96ceb4', 
-                        title: '목표 설정', 
-                        description: '영적 성장을 위한 구체적인 목표를 세우고 단계별로 실천해보세요.' 
-                    });
-                } else {
-                    personalizedPractices.push({ 
-                        icon: 'dove', 
-                        color: '#c7e9d0', 
-                        title: '평화로운 실천', 
-                        description: '마음의 평화를 유지하며 자연스럽게 사랑을 실천하는 방법을 찾아보세요.' 
-                    });
-                }
-
-                return [...basePractices, ...personalizedPractices];
-            }
-
-            restart() {
-                this.currentQuestionIndex = 0;
-                this.userChoices.clear();
-                this.isTransitioning = false;
-                
-                this.progressFill.style.width = '0%';
-                this.questionCounter.textContent = '1 / 26';
-                
-                this.resultSection.style.opacity = '0';
-                setTimeout(() => {
-                    this.resultSection.style.display = 'none';
-                    this.quizContainer.style.display = 'flex';
-                    this.quizContainer.style.opacity = '1';
-                    this.renderQuestion(0);
-                    document.querySelector('.subtitle').textContent = `나의 참사랑 영성 진단`;
-                }, 500);
-            }
-        }
-
-        // 전역 변수로 퀴즈 인스턴스 생성
-        let spiritualQuiz;
-
-        // 페이지 로드 시 퀴즈 초기화
-        document.addEventListener('DOMContentLoaded', () => {
-            spiritualQuiz = new SpiritualQuiz();
-        });
-
-        // 다시 시작 함수
-        function restartQuiz() {
-            if (spiritualQuiz) {
-                spiritualQuiz.restart();
-            }
-        }
-
-        // 추가 인터랙션 효과
-        document.addEventListener('mousemove', (e) => {
-            const cursor = document.querySelector('.cursor');
-            if (!cursor) {
-                const newCursor = document.createElement('div');
-                newCursor.className = 'cursor';
-                newCursor.style.cssText = `
-                    position: fixed;
-                    width: 20px;
-                    height: 20px;
-                    background: radial-gradient(circle, rgba(255,255,255,0.8), transparent);
-                    border-radius: 50%;
-                    pointer-events: none;
-                    z-index: 9999;
-                    transition: transform 0.1s ease;
+                        <div class="compatibility-item" style="background: #fed7d7;">
+                            <h4><i class="fas fa-exclamation-triangle"></i> 주의 궁합</h4>
+                            <div class="mbti-list">${compatibility.caution?.join(', ') || 'ESTP, ESFP'}</div>
+                        </div>
+                    </div>
                 `;
-                document.body.appendChild(newCursor);
             }
-            
-            const cursorEl = document.querySelector('.cursor');
-            if (cursorEl) {
-                cursorEl.style.left = e.clientX - 10 + 'px';
-                cursorEl.style.top = e.clientY - 10 + 'px';
+
+            createWarningSection(resultData) {
+                this.warningSection.innerHTML = `
+                    <h3><i class="fas fa-exclamation-triangle"></i> ${resultData.warning.title}</h3>
+                    <p style="color: #c53030; font-size: 1.1rem; line-height: 1.6;">${resultData.warning.description}</p>
+                `;
             }
-        });
 
-        // 스크롤 애니메이션 효과
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+            createSpiritualJourney(resultData) {
+                this.spiritualJourney.innerHTML = `
+                    <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">
+                        <i class="fas fa-map"></i> 당신만의 영적 성장 로드맵
+                    </h3>
+                    ${resultData.journey.map((step, index) => `
+                        <div class="timeline-item">
+                            <div class="timeline-icon">${index + 1}</div>
+                            <div class="timeline-content">
+                                <h4>${step.phase}</h4>
+                                <p style="color: var(--text-secondary); line-height: 1.6;">${step.description}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationDelay = '0.1s';
-                    entry.target.classList.add('fade-in');
-                }
-            });
-        }, observerOptions);
+            createGrowthTips(tips) {
+                this.growthTipsGrid.innerHTML = tips.map(tip => `
+                    <div class="growth-tip-card">
+                        <h3><i class="fas ${tip.icon}"></i> ${tip.title}</h3>
+                        <p>${tip.description}</p>
+                    </div>
+                `).join('');
+            }
 
-        // 결과 카드들에 옵저버 적용
-        document.addEventListener('DOMContentLoaded', () => {
-            const resultCards = document.querySelectorAll('.result-card');
-            resultCards.forEach(card => observer.observe(card));
-        });
+            createDailyPractices(practices) {
+                this.dailyPracticeGrid.innerHTML = practices.map(practice => `
+                    <div class="daily-practice-card">
+                        <h3><i class="fas ${practice.icon}"></i> ${practice.title}</h3>
+                        <p>${practice.description}</p>
+                    </div>
+                `).join('');
+            }
 
-        // 음성 피드백 (선택사항)
-        function playSuccessSound() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
-            oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
-            oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
-            
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
+            createPrayerSection(resultData) {
+                this.prayerSection.innerHTML = `
+                    <h3 style="margin-bottom: 1.5rem; color: #d69e2e;">
+                        <i class="fas fa-hands"></i> ${resultData.prayer.title}
+                    </h3>
+                    <p style="font-size: 1.2rem; line-height: 1.8; font-style: italic; color: var(--text-primary);">
+                        "${resultData.prayer.content}"
+                    </p>
+                `;
+            }
+
+            createFamousQuotes(resultData) {
+                this.famousQuotes.innerHTML = `
+                    <h3 style="margin-bottom: 1.5rem; color: #38b2ac;">
+                        <i class="fas fa-quote-left"></i> 당신을 위한 영감의 말씀
+                    </h3>
+                    ${resultData.quotes.map(quote => `
+                        <div class="quote-item">
+                            "${quote.text}"
+                            <div class="quote-author">- ${quote.author}</div>
+                        </div>
+                    `).join('')}
+                `;
+            }
         }
 
-        // 다크모드 토글 (선택사항)
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        function restartQuiz() {
+            window.location.reload();
         }
 
-        // 결과 저장 및 공유 기능
         function shareResults() {
+            const mbtiType = document.getElementById('spiritual-mbti-type').textContent;
+            const title = document.getElementById('spiritual-mbti-title').textContent;
+            
             if (navigator.share) {
                 navigator.share({
-                    title: '참사랑 영성 진단 결과',
-                    text: `나의 영적 성향을 확인해보세요!`,
-                    url: window.location.href
+                    title: '나의 참사랑 영성 진단 결과',
+                    text: `나는 ${mbtiType} - ${title} 유형입니다! 나의 영성 MBTI를 확인해 보세요!`,
+                    url: window.location.href,
                 });
             } else {
-                // 폴백: 클립보드에 복사
-                const resultText = `참사랑 영성 진단 결과를 확인했습니다!\n${window.location.href}`;
-                navigator.clipboard.writeText(resultText).then(() => {
-                    alert('결과가 클립보드에 복사되었습니다!');
-                });
+                const text = `나는 ${mbtiType} - ${title} 유형입니다!`;
+                navigator.clipboard.writeText(text + ' ' + window.location.href);
+                alert('결과가 클립보드에 복사되었습니다!');
             }
         }
 
-        // 인쇄 및 PDF 저장 기능
         function printResults() {
             window.print();
         }
 
-        // 접근성 개선
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Tab') {
-                document.body.classList.add('keyboard-navigation');
-            }
-        });
-
-        document.addEventListener('mousedown', () => {
-            document.body.classList.remove('keyboard-navigation');
-        });
-
-        // 성능 최적화를 위한 디바운스 함수
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
+        function downloadImage() {
+            alert('이 기능은 향후 업데이트에서 제공될 예정입니다.');
         }
 
-        // 반응형 처리를 위한 리사이즈 이벤트
-        const handleResize = debounce(() => {
-            const container = document.querySelector('.container');
-            if (window.innerWidth < 768) {
-                container.classList.add('mobile');
-            } else {
-                container.classList.remove('mobile');
-            }
-        }, 250);
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // 초기 실행
-
-        // 추가 CSS for enhanced UX
-        const additionalStyles = document.createElement('style');
-        additionalStyles.textContent = `
-            .keyboard-navigation *:focus {
-                outline: 2px solid var(--accent-color);
-                outline-offset: 2px;
-            }
-
-            .mobile .question-card {
-                padding: clamp(10px, 5vw, 25px);
-            }
-
-            .mobile .title {
-                font-size: clamp(1.2rem, 6vw, 1.8rem);
-            }
-
-            .mobile .option-label {
-                padding: clamp(8px, 4vw, 15px);
-            }
-
-            .share-buttons {
-                display: flex;
-                gap: clamp(10px, 3vw, 15px);
-                justify-content: center;
-                margin: clamp(15px, 4vw, 30px) 0;
-                flex-wrap: wrap;
-            }
-
-            .share-btn {
-                background: white;
-                border: 2px solid var(--primary-color);
-                color: var(--primary-color);
-                padding: clamp(8px, 3vw, 12px) clamp(15px, 4vw, 20px);
-                border-radius: 25px;
-                cursor: pointer;
-                transition: var(--transition);
-                font-weight: 600;
-                text-decoration: none;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                font-size: clamp(0.9rem, 3vw, 1rem);
-            }
-
-            .share-btn:hover {
-                background: var(--primary-color);
-                color: white;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            }
-
-            .tooltip {
-                position: relative;
-                display: inline-block;
-            }
-
-            .tooltip .tooltiptext {
-                visibility: hidden;
-                width: 200px;
-                background-color: rgba(0,0,0,0.8);
-                color: white;
-                text-align: center;
-                border-radius: 8px;
-                padding: 8px;
-                position: absolute;
-                z-index: 1;
-                bottom: 125%;
-                left: 50%;
-                margin-left: -100px;
-                opacity: 0;
-                transition: opacity 0.3s;
-                font-size: 0.9rem;
-            }
-
-            .tooltip:hover .tooltiptext {
-                visibility: visible;
-                opacity: 1;
-            }
-
-            .pulse {
-                animation: pulse 2s infinite;
-            }
-
-            @keyframes pulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-                100% { transform: scale(1); }
-            }
-
-            .glow {
-                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-            }
-
-            @media (prefers-reduced-motion: reduce) {
-                *, *::before, *::after {
-                    animation-duration: 0.01ms !important;
-                    animation-iteration-count: 1 !important;
-                    transition-duration: 0.01ms !important;
-                }
-            }
-
-            /* 다크모드 스타일 */
-            .dark-mode {
-                --bg-gradient: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-                --text-primary: #e2e8f0;
-                --text-secondary: #cbd5e0;
-            }
-
-            .dark-mode .question-card,
-            .dark-mode .result-card,
-            .dark-mode .trait-list,
-            .dark-mode .growth-tip-card,
-            .dark-mode .daily-practice-card {
-                background: rgba(45, 55, 72, 0.95);
-                color: #e2e8f0;
-            }
-
-            .dark-mode .option-label {
-                background: rgba(45, 55, 72, 0.8);
-                color: #e2e8f0;
-            }
-
-            .error-message {
-                background: #fed7d7;
-                color: #c53030;
-                padding: 15px;
-                border-radius: 8px;
-                margin: 20px 0;
-                border-left: 4px solid #c53030;
-                display: none;
-            }
-
-            .success-message {
-                background: #c6f6d5;
-                color: #22543d;
-                padding: 15px;
-                border-radius: 8px;
-                margin: 20px 0;
-                border-left: 4px solid #22543d;
-                display: none;
-            }
-        `;
-        document.head.appendChild(additionalStyles);
-    </script>
-
-    <!-- 공유 버튼들을 결과 섹션에 추가 -->
-    <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const resultSection = document.getElementById('result-section');
-            if (resultSection) {
-                const shareButtons = document.createElement('div');
-                shareButtons.className = 'share-buttons';
-                shareButtons.innerHTML = `
-                    <button class="share-btn" onclick="shareResults()">
-                        <i class="fas fa-share-alt"></i>
-                        결과 공유하기
-                    </button>
-                    <button class="share-btn" onclick="printResults()">
-                        <i class="fas fa-print"></i>
-                        결과 저장하기
-                    </button>
-                `;
-                resultSection.appendChild(shareButtons);
-            }
+            new EnhancedSpiritualQuiz();
         });
+
+        // ===================================================
+        // 완전히 새로운 16가지 MBTI 유형별 상세 데이터
+        // ===================================================
+        const ENHANCED_RESULT_DATA = {
+            'INFJ': {
+                title: '통찰력 있는 영적 예언자',
+                description: '신비롭고 복합적인 내면의 세계를 통해 깊은 영적 통찰을 얻는, 미래를 내다보는 예언가입니다. 영적인 비전과 이상을 추구하며, 타인에게 영감을 주는 데 뛰어납니다.',
+                strengths: ['깊은 영적 통찰과 직관력', '타인의 영적 고통에 대한 깊은 공감', '이상적인 영적 공동체에 대한 강한 비전', '미래 지향적 영적 계획 수립', '신비로운 영적 경험에 대한 개방성'],
+                weaknesses: ['지나친 완벽주의로 인한 영적 부담감', '현실적인 문제 해결에 어려움', '자신의 감정을 잘 드러내지 않음', '과도한 이상주의', '비현실적인 기대로 인한 실망'],
+                loveStyle: { 
+                    summary: '심오하고 헌신적인 영혼의 사랑', 
+                    description: '사랑을 단순히 감정이 아닌, 깊은 영적 연결과 사명으로 여깁니다. 상대방의 영혼 깊숙한 곳까지 이해하려 하며, 완전한 헌신과 희생을 아끼지 않습니다.' 
+                },
+                heart: { 
+                    title: '통찰력의 심정권', 
+                    description: '영적인 세계를 깊이 이해하고, 그 안에서 하늘부모님의 미묘한 뜻을 감지하는 능력이 탁월합니다. 직관을 통해 진리를 깨닫고, 미래의 영적 비전을 제시하는 데 능숙합니다.' 
+                },
+                warning: {
+                    title: '완벽주의 함정 주의',
+                    description: '너무 높은 영적 기준을 설정하여 자신과 타인을 지치게 할 수 있습니다. 은혜와 용서의 균형을 유지하세요.'
+                },
+                journey: [
+                    { phase: '내면 성찰 단계', description: '깊은 묵상과 기도를 통해 자신의 내면을 탐구하는 시기' },
+                    { phase: '비전 수용 단계', description: '하늘부모님께서 주신 영적 비전과 사명을 깨닫는 시기' },
+                    { phase: '공동체 섬김 단계', description: '자신의 통찰력으로 다른 사람들을 도우며 성장하는 시기' },
+                    { phase: '영적 리더십 단계', description: '공동체의 영적 지도자로서 비전을 실현하는 시기' }
+                ],
+                growthTips: [
+                    { title: "현실에 뿌리내리기", description: "일상의 소소한 감사와 행복을 찾아보세요. 추상적인 비전뿐 아니라 현실적인 영적 실천도 중요합니다.", icon: "fa-seedling" },
+                    { title: "감정 표현 연습", description: "완벽하지 않은 자신의 모습도 받아들이고, 가까운 사람들에게 솔직한 감정을 표현해보세요.", icon: "fa-heart" },
+                    { title: "작은 실천부터", description: "거대한 영적 목표보다 오늘 할 수 있는 작은 선행과 기도부터 시작하세요.", icon: "fa-step-forward" }
+                ],
+                dailyPractices: [
+                    { title: "비전 일기 쓰기", description: "매일 밤 하늘부모님께서 보여주신 비전이나 꿈을 기록하고 그 의미를 묵상해보세요.", icon: "fa-pen-fancy" },
+                    { title: "중보기도 시간", description: "특정 시간을 정해 공동체와 세상을 위한 중보기도에 집중하세요.", icon: "fa-praying-hands" },
+                    { title: "영적 독서", description: "영성 서적이나 성경 주석을 통해 깊이 있는 영적 지식을 쌓아가세요.", icon: "fa-book-open" }
+                ],
+                prayer: {
+                    title: '통찰력 있는 예언자를 위한 기도',
+                    content: '하늘부모님, 당신께서 주신 깊은 통찰력과 영적 비전을 겸손히 받아들이게 하소서. 완벽을 추구하다 지치지 않게 하시고, 현실 속에서도 당신의 은혜를 경험하게 하소서. 나의 내향적 성향을 통해 더 깊이 당신과 교제하며, 받은 은혜를 다른 이들과 나눌 수 있는 지혜를 주소서.'
+                },
+                quotes: [
+                    { text: "진정한 기도는 하늘부모님의 마음을 바꾸는 것이 아니라 우리 마음을 하늘부모님께 맞추는 것입니다.", author: "C.S. 루이스" },
+                    { text: "미래는 꿈의 아름다움을 믿는 사람들의 것입니다.", author: "엘리너 루스벨트" }
+                ]
+            },
+            'INFP': {
+                title: '이상적인 영적 순례자',
+                description: '따뜻한 감성과 강한 신념을 바탕으로 아름답고 이상적인 영적 세계를 꿈꾸는 순례자입니다. 진정한 영적 가치를 찾아 헤매며, 그 과정에서 깊은 영감과 창의성을 발휘합니다.',
+                strengths: ['순수하고 진실한 영적 열정', '아름다움과 신비에 대한 높은 감수성', '이상적인 공동체를 위한 헌신', '창의적인 영적 표현 능력', '개인의 가치와 신념에 대한 확고함'],
+                weaknesses: ['현실적인 문제 해결에 어려움', '비판에 쉽게 상처받음', '자신만의 세계에 빠지기 쉬움', '결정 내리기를 미루는 경향', '갈등 상황을 회피하려는 성향'],
+                loveStyle: { 
+                    summary: '진실되고 순수한 영혼의 사랑', 
+                    description: '상대방의 있는 그대로의 모습을 사랑하며, 로맨틱하고 순수한 감정으로 관계를 이어갑니다. 깊은 이해와 공감을 바탕으로 하는 사랑, 상대방의 꿈과 이상을 함께 추구합니다.' 
+                },
+                heart: { 
+                    title: '감성의 심정권', 
+                    description: '영적인 감성과 직관이 발달하여, 기도와 묵상 중에 하늘부모님의 음성을 섬세하게 듣고 느낍니다. 예술과 자연을 통해 하늘부모님을 경험하며, 창조의 아름다움 속에서 신성을 발견합니다.' 
+                },
+                warning: {
+                    title: '현실 도피 주의',
+                    description: '이상과 현실의 괴리로 인해 절망하거나 현실을 회피하려는 경향이 있습니다. 작은 것부터 실천하며 현실감을 유지하세요.'
+                },
+                journey: [
+                    { phase: '자아 탐구 단계', description: '자신의 내면 깊숙한 가치와 신념을 발견하고 정립하는 시기' },
+                    { phase: '이상 추구 단계', description: '아름다운 영적 이상과 꿈을 품고 그것을 향해 나아가는 시기' },
+                    { phase: '현실 접목 단계', description: '이상을 현실에 적용하며 실질적인 변화를 만들어가는 시기' },
+                    { phase: '영감 전달 단계', description: '자신의 경험과 깨달음을 통해 다른 이들에게 영감을 주는 시기' }
+                ],
+                growthTips: [
+                    { title: "감정 표현 연습", description: "영적 여정에서 느낀 감정을 다른 사람들과 나누는 연습을 해보세요. 혼자 고민하는 것보다 관계 속에서 성장할 수 있습니다.", icon: "fa-comments" },
+                    { title: "작은 목표 설정", description: "거대한 이상보다 매일 실천할 수 있는 작고 구체적인 영적 목표를 세워보세요.", icon: "fa-target" },
+                    { title: "예술적 표현", description: "그림, 음악, 시 등을 통해 당신의 영적 경험을 창의적으로 표현해보세요.", icon: "fa-palette" }
+                ],
+                dailyPractices: [
+                    { title: "시편 필사 묵상", description: "하루 한 편의 시편을 정성스럽게 필사하며, 그 안의 감정과 하늘부모님의 마음을 느껴보세요.", icon: "fa-feather-alt" },
+                    { title: "자연 속 기도", description: "자연 속에서 하늘부모님의 창조 작품을 감상하며 감사 기도를 드려보세요.", icon: "fa-leaf" },
+                    { title: "영적 일기", description: "오늘 하루 경험한 하늘부모님의 은혜와 깨달음을 솔직하게 기록하세요.", icon: "fa-journal-whills" }
+                ],
+                prayer: {
+                    title: '이상적인 순례자를 위한 기도',
+                    content: '사랑의 하늘부모님, 당신께서 주신 순수한 마음과 아름다운 꿈을 지켜주소서. 현실의 어려움 앞에 좌절하지 않고, 작은 것부터 실천하며 당신의 뜻을 이루어가게 하소서. 나의 감성과 창의성이 당신을 영화롭게 하는 도구가 되게 하시고, 상처받기 쉬운 마음을 당신의 사랑으로 치유해주소서.'
+                },
+                quotes: [
+                    { text: "꿈을 포기하지 마세요. 꿈이 없으면 희망도 없고, 희망이 없으면 삶도 없습니다.", author: "아나톨 프랑스" },
+                    { text: "가장 아름다운 것들은 말로 표현하거나 설명할 수 없습니다. 오직 마음으로만 느낄 수 있습니다.", author: "헬렌 켈러" }
+                ]
+            },
+            'ENFJ': {
+                title: '카리스마 넘치는 영적 멘토',
+                description: '타고난 리더십과 따뜻한 마음으로 공동체의 영적 성장을 이끄는 멘토입니다. 사람들과의 교류를 통해 에너지를 얻으며, 모든 사람이 함께 성장하는 영적 여정을 꿈꿉니다.',
+                strengths: ['뛰어난 공감 능력과 소통력', '긍정적인 영향력으로 공동체 성장 견인', '강한 책임감과 헌신적인 태도', '타인의 잠재력을 발견하고 격려하는 능력', '조화로운 공동체 분위기 조성'],
+                weaknesses: ['타인의 시선에 지나치게 신경 씀', '자신의 필요를 희생하기 쉬움', '혼자만의 시간을 소홀히 함', '거절하기 어려워하는 성향', '번아웃 위험성'],
+                loveStyle: { 
+                    summary: '헌신적이고 성장 지향적인 사랑', 
+                    description: '사랑하는 사람의 영적, 정신적 성장을 돕는 데 열정적입니다. 상대방의 필요를 먼저 살피고, 관계를 주도적으로 이끌어가며, 서로의 발전을 위해 노력합니다.' 
+                },
+                heart: { 
+                    title: '관계의 심정권', 
+                    description: '다른 사람들과의 깊은 관계 속에서 하늘부모님의 사랑을 경험하고 증거합니다. 공동체의 아픔을 자신의 아픔으로 느끼고, 모든 이가 사랑받고 성장할 수 있도록 헌신합니다.' 
+                },
+                warning: {
+                    title: '과도한 책임감 주의',
+                    description: '모든 사람을 도우려다 자신이 지칠 수 있습니다. 적절한 경계를 설정하고 자기 돌봄도 중요합니다.'
+                },
+                journey: [
+                    { phase: '관계 형성 단계', description: '다양한 사람들과 의미 있는 영적 관계를 형성하는 시기' },
+                    { phase: '리더십 개발 단계', description: '자신의 영향력을 인식하고 건전한 리더십을 개발하는 시기' },
+                    { phase: '공동체 건설 단계', description: '건강한 영적 공동체를 만들고 운영하는 시기' },
+                    { phase: '레거시 창조 단계', description: '다음 세대에게 영적 유산을 전수하는 시기' }
+                ],
+                growthTips: [
+                    { title: "자기 돌봄 시간", description: "남을 돕는 것도 중요하지만, 주기적으로 혼자만의 시간을 가지며 자신을 영적으로 충전하세요.", icon: "fa-user-circle" },
+                    { title: "경계 설정하기", description: "모든 요청에 응하기보다, 건강한 경계를 설정하여 지속가능한 섬김을 하세요.", icon: "fa-shield-alt" },
+                    { title: "피드백 수용", description: "자신의 리더십 스타일에 대한 솔직한 피드백을 구하고 수용하는 연습을 하세요.", icon: "fa-comment-dots" }
+                ],
+                dailyPractices: [
+                    { title: "팀 기도 인도", description: "매일 소그룹이나 가족과 함께 기도 시간을 가지며 영적 교제를 나누세요.", icon: "fa-users" },
+                    { title: "격려 메시지", description: "주변 사람들에게 진심어린 격려와 감사의 메시지를 전하세요.", icon: "fa-comment-medical" },
+                    { title: "영적 멘토링", description: "누군가의 영적 성장을 위해 조언하고 기도해주는 시간을 가지세요.", icon: "fa-hands-helping" }
+                ],
+                prayer: {
+                    title: '영적 멘토를 위한 기도',
+                    content: '사랑의 주님, 많은 사람들을 섬기는 제게 지혜와 힘을 주소서. 타인을 돕다가 제 자신을 잃지 않게 하시고, 건강한 경계 안에서 사랑할 수 있게 하소서. 제가 받은 은사로 공동체가 하나 되고 성장할 수 있도록 도와주시고, 번아웃되지 않도록 적절한 쉼도 주소서.'
+                },
+                quotes: [
+                    { text: "리더의 역할은 더 많은 리더를 만드는 것입니다.", author: "랄프 네이더" },
+                    { text: "사람들은 당신이 얼마나 아는지에 관심이 없습니다. 당신이 얼마나 관심을 갖는지에 관심이 있습니다.", author: "테오도어 루즈벨트" }
+                ]
+            },
+            'ENFP': {
+                title: '열정적인 영적 탐험가',
+                description: '끝없는 호기심과 넘치는 열정으로 새로운 영적 경험을 탐구하는 탐험가입니다. 틀에 얽매이지 않고 자유로운 방식으로 하늘부모님을 만나며, 주변에 기쁨과 활력을 불어넣습니다.',
+                strengths: ['창의적이고 혁신적인 영적 아이디어', '폭넓은 영적 관계 형성', '낙천적이고 긍정적인 태도', '새로운 가능성에 대한 열린 마음', '감염력 있는 열정과 에너지'],
+                weaknesses: ['계획적이지 못하고 즉흥적임', '시작은 거창하나 마무리가 약함', '쉽게 싫증을 느끼는 경향', '세부사항을 놓치기 쉬움', '감정 기복이 심할 수 있음'],
+                loveStyle: { 
+                    summary: '모험적이고 영감 넘치는 사랑', 
+                    description: '사랑에 있어 모험을 두려워하지 않으며, 관계를 통해 끊임없이 새로운 것을 발견하고 성장하려 합니다. 솔직하고 즉흥적인 사랑을 추구하며, 상대방에게 꿈과 희망을 심어줍니다.' 
+                },
+                heart: { 
+                    title: '창의의 심정권', 
+                    description: '기존의 틀을 깨고 새로운 방식으로 하늘부모님을 예배하고 경험하는 데 탁월합니다. 획기적인 영적 활동을 기획하고, 사람들에게 신선한 영적 경험을 제공하는 데 재능이 있습니다.' 
+                },
+                warning: {
+                    title: '지속성 부족 주의',
+                    description: '새로운 것에 대한 열정은 크지만 꾸준히 지속하는 데 어려움이 있을 수 있습니다. 작은 습관부터 차근차근 쌓아가세요.'
+                },
+                journey: [
+                    { phase: '탐험 시작 단계', description: '다양한 영적 경험과 만남을 통해 자신만의 길을 찾아가는 시기' },
+                    { phase: '열정 발견 단계', description: '진정으로 마음이 끌리는 영적 활동과 사명을 발견하는 시기' },
+                    { phase: '지속성 개발 단계', description: '열정을 꾸준한 실천으로 연결하는 방법을 배워가는 시기' },
+                    { phase: '영감 확산 단계', description: '자신의 열정과 창의성으로 공동체에 활력을 불어넣는 시기' }
+                ],
+                growthTips: [
+                    { title: "꾸준함 훈련", description: "매일 정해진 시간에 기도하고 말씀 묵상하는 습관을 들이세요. 꾸준함이 큰 성장을 만듭니다.", icon: "fa-calendar-alt" },
+                    { title: "심화 학습", description: "관심 있는 영적 주제를 선택하여 깊이 있게 탐구하는 시간을 가져보세요.", icon: "fa-microscope" },
+                    { title: "실행 계획", description: "좋은 아이디어를 얻었을 때 구체적인 실행 계획을 세우고 첫 단계부터 시작하세요.", icon: "fa-clipboard-list" }
+                ],
+                dailyPractices: [
+                    { title: "새로운 기도 방식", description: "오늘 하루, 걸으며 기도하거나 그림을 그리며 기도하는 등 새로운 방식으로 하늘부모님과 대화해보세요.", icon: "fa-palette" },
+                    { title: "영감 노트", description: "하루 중 받은 영적 영감이나 깨달음을 즉시 기록하는 습관을 만들어보세요.", icon: "fa-lightbulb" },
+                    { title: "친구와 나눔", description: "오늘 경험한 하늘부모님의 은혜를 친구나 가족과 즐겁게 나누어보세요.", icon: "fa-share" }
+                ],
+                prayer: {
+                    title: '열정적인 탐험가를 위한 기도',
+                    content: '창조주 하늘부모님, 당신께서 주신 무한한 호기심과 열정에 감사드립니다. 새로운 것을 추구하는 마음이 당신을 더 깊이 알아가는 도구가 되게 하소서. 시작한 일들을 끝까지 완성할 수 있는 인내력을 주시고, 저의 열정이 다른 이들에게도 전염되어 함께 성장할 수 있게 하소서.'
+                },
+                quotes: [
+                    { text: "상상력은 지식보다 중요합니다. 지식은 한계가 있지만 상상력은 세계를 감싸 안습니다.", author: "알베르트 아인슈타인" },
+                    { text: "열정 없이는 위대한 것을 성취할 수 없습니다.", author: "랄프 왈도 에머슨" }
+                ]
+            },
+            'ENTJ': {
+                title: '비전을 실현하는 영적 사령관',
+                description: '타고난 리더십과 논리적인 사고로 공동체의 비전을 제시하고 목표를 향해 이끄는 사령관입니다. 효율적이고 체계적인 방식으로 영적 공동체를 발전시키며, 하늘부모님 나라 확장에 헌신합니다.',
+                strengths: ['강력한 리더십과 추진력', '논리적이고 합리적인 문제 해결', '대규모 프로젝트 기획 및 실행', '명확한 비전 제시 능력', '목표 달성을 위한 체계적 접근'],
+                weaknesses: ['타인의 감정에 대한 공감 부족', '지나친 완벽주의로 타인을 압박', '경직된 사고방식', '비판에 대한 방어적 태도', '휴식의 필요성을 간과함'],
+                loveStyle: { 
+                    summary: '목표 지향적이고 발전적인 사랑', 
+                    description: '사랑하는 사람과 함께 공동의 목표를 세우고 이를 달성하는 과정에서 사랑을 확인합니다. 관계를 지속적으로 발전시키기 위해 끊임없이 노력하고 투자합니다.' 
+                },
+                heart: { 
+                    title: '영향력의 심정권', 
+                    description: '자신의 영향력을 사용하여 공동체의 영적 성장과 변화를 이끌어냅니다. 하늘부모님 나라의 확장을 위한 강력한 도구가 되며, 효율적인 시스템으로 영적 목표를 달성합니다.' 
+                },
+                warning: {
+                    title: '독단적 결정 주의',
+                    description: '모든 것을 혼자 결정하려 하지 말고, 공동체의 목소리에 귀 기울이며 협력적 리더십을 발휘하세요.'
+                },
+                journey: [
+                    { phase: '리더십 인식 단계', description: '자신의 리더십 은사를 인식하고 받아들이는 시기' },
+                    { phase: '비전 개발 단계', description: '하늘부모님께서 주신 비전을 구체화하고 계획을 수립하는 시기' },
+                    { phase: '팀 구축 단계', description: '비전을 함께 실현할 동역자들을 찾고 팀을 구성하는 시기' },
+                    { phase: '레거시 완성 단계', description: '지속가능한 영적 시스템을 구축하고 후계자를 양성하는 시기' }
+                ],
+                growthTips: [
+                    { title: "타인의 의견 경청", description: "모든 것을 혼자 결정하기보다, 공동체 구성원들의 의견에 귀 기울이고 존중하는 연습을 해보세요.", icon: "fa-users-cog" },
+                    { title: "감정 지능 개발", description: "논리적 사고뿐만 아니라 감정적 측면도 고려하여 더 균형잡힌 리더가 되세요.", icon: "fa-heart-pulse" },
+                    { title: "휴식의 중요성", description: "쉼 없는 추진보다 적절한 휴식을 통해 더 큰 효율성을 얻을 수 있습니다.", icon: "fa-bed" }
+                ],
+                dailyPractices: [
+                    { title: "비전 점검 시간", description: "매일 아침 하늘부모님께서 주신 비전과 오늘의 계획을 점검하고 기도하세요.", icon: "fa-binoculars" },
+                    { title: "팀원 격려하기", description: "함께 일하는 동역자들을 격려하고 그들의 성장을 위해 기도하세요.", icon: "fa-trophy" },
+                    { title: "성과 감사", description: "오늘 이룬 성과에 대해 하늘부모님께 감사드리고, 동역자들의 기여도 인정하세요.", icon: "fa-pray" }
+                ],
+                prayer: {
+                    title: '영적 사령관을 위한 기도',
+                    content: '전능하신 하늘부모님, 제게 주신 리더십의 은사를 겸손히 사용하게 하소서. 강한 추진력이 타인을 상처주지 않게 하시고, 효율성 추구가 사랑을 잃지 않게 하소서. 큰 비전을 품되 작은 것부터 충실히 하며, 혼자가 아닌 함께 이루어가는 하늘부모님 나라를 건설하게 하소서.'
+                },
+                quotes: [
+                    { text: "리더십은 직책이 아니라 행동입니다.", author: "사이먼 시넥" },
+                    { text: "비전 없는 백성은 망하지만, 하늘부모님의 뜻을 지키는 자는 복이 있습니다.", author: "잠언 29:18" }
+                ]
+            },
+            'ENTP': {
+                title: '혁신적인 영적 개척자',
+                description: '끊임없이 새로운 아이디어를 창출하고 영적 지식을 탐구하는 개척자입니다. 틀에 박힌 사고를 거부하고, 기발한 방식으로 영적 세계를 탐험하며 혁신을 추구합니다.',
+                strengths: ['독창적이고 기발한 영적 아이디어', '문제 해결에 대한 뛰어난 재능', '토론과 논쟁을 통한 영적 성장', '새로운 관점 제시 능력', '빠른 학습과 적응력'],
+                weaknesses: ['마무리가 부족하고 산만함', '타인의 감정을 무시하기 쉬움', '지나친 논쟁으로 갈등 유발', '루틴한 일상을 지루해함', '세부적인 실행력 부족'],
+                loveStyle: { 
+                    summary: '지적 자극과 성장의 사랑', 
+                    description: '사랑하는 사람과의 대화에서 지적인 자극을 얻고, 끊임없이 새로운 것을 함께 시도하는 것을 즐깁니다. 관계의 무한한 가능성을 탐구하며 함께 발전해 나갑니다.' 
+                },
+                heart: { 
+                    title: '도전의 심정권', 
+                    description: '영적인 지식과 진리에 대해 끊임없이 도전하고 질문합니다. 이를 통해 신앙의 뿌리를 더 깊게 내리고, 새로운 깨달음과 혁신적인 영적 방법론을 개발합니다.' 
+                },
+                warning: {
+                    title: '논쟁 중독 주의',
+                    description: '토론과 논쟁을 즐기지만, 때로는 듣는 것이 말하는 것보다 중요할 수 있습니다. 겸손한 마음으로 다른 의견도 수용하세요.'
+                },
+                journey: [
+                    { phase: '호기심 탐구 단계', description: '다양한 영적 전통과 관점들을 탐구하며 지식을 쌓는 시기' },
+                    { phase: '이론 구축 단계', description: '자신만의 영적 철학과 이론을 정립해나가는 시기' },
+                    { phase: '실험 적용 단계', description: '이론을 실제 삶에 적용해보며 검증하는 시기' },
+                    { phase: '혁신 전파 단계', description: '새로운 영적 패러다임을 제시하고 확산시키는 시기' }
+                ],
+                growthTips: [
+                    { title: "실천에 집중하기", description: "아이디어에만 머무르지 않고, 오늘 할 수 있는 작은 영적 실천을 시작해보세요.", icon: "fa-walking" },
+                    { title: "마무리 습관", description: "시작한 영적 프로젝트나 공부를 끝까지 완성하는 습관을 기르세요.", icon: "fa-flag-checkered" },
+                    { title: "공감 능력 기르기", description: "논리적 사고뿐만 아니라 타인의 감정도 이해하려는 노력을 해보세요.", icon: "fa-heart" }
+                ],
+                dailyPractices: [
+                    { title: "새로운 관점 탐구", description: "매일 한 가지 성경 구절을 새로운 관점에서 해석해보고 묵상하세요.", icon: "fa-microscope" },
+                    { title: "토론 참여", description: "영적인 주제에 대해 다른 사람들과 건설적인 토론을 나누어보세요.", icon: "fa-comments" },
+                    { title: "아이디어 실행", description: "오늘 떠오른 영적 아이디어 중 하나를 실제로 시도해보세요.", icon: "fa-rocket" }
+                ],
+                prayer: {
+                    title: '혁신적인 개척자를 위한 기도',
+                    content: '지혜의 하늘부모님, 끊임없는 탐구심과 창의성을 주심에 감사합니다. 새로운 아이디어를 추구하되 진리에서 벗어나지 않게 하시고, 토론을 즐기되 사랑 안에서 하게 하소서. 시작한 일들을 끝까지 완성할 수 있는 인내를 주시고, 혁신이 파괴가 아닌 건설이 되게 하소서.'
+                },
+                quotes: [
+                    { text: "혁신은 1%의 영감과 99%의 노력으로 이루어집니다.", author: "토마스 에디슨" },
+                    { text: "새 포도주는 새 부대에 넣어야 합니다.", author: "마태복음 9:17" }
+                ]
+            },
+            'INTJ': {
+                title: '독립적인 영적 건축가',
+                description: '냉철한 이성과 뛰어난 분석 능력으로 영적 비전을 구상하고 실현하는 건축가입니다. 자신의 내면을 통해 얻은 통찰을 바탕으로 체계적이고 장기적인 영적 삶의 설계도를 그려갑니다.',
+                strengths: ['장기적인 영적 계획 수립', '독립적이고 자기 주도적인 영성 훈련', '논리적인 문제 해결 능력', '깊이 있는 영적 사고', '일관성 있는 신념 체계'],
+                weaknesses: ['타인에게 차갑게 보일 수 있음', '지나친 완벽주의로 인한 스트레스', '감정적인 교류를 어려워함', '융통성 부족', '비판적 성향이 강함'],
+                loveStyle: { 
+                    summary: '전략적이고 깊이 있는 사랑', 
+                    description: '사랑하는 사람과의 관계를 통해 서로의 성장을 돕는 것을 중요하게 생각합니다. 감정적인 표현보다는 미래에 대한 구체적인 계획과 실질적인 도움으로 사랑을 보여줍니다.' 
+                },
+                heart: { 
+                    title: '통제의 심정권', 
+                    description: '자신의 영적 삶을 스스로 설계하고 관리합니다. 하늘부모님의 말씀을 삶의 지침으로 삼아 질서 있고 효율적인 영적 여정을 추구하며, 체계적인 성장을 이룹니다.' 
+                },
+                warning: {
+                    title: '고립 위험 주의',
+                    description: '혼자서 모든 것을 해결하려 하지 말고, 때로는 다른 사람들의 도움과 관점이 필요함을 인정하세요.'
+                },
+                journey: [
+                    { phase: '자기 분석 단계', description: '자신의 강점과 약점을 객관적으로 분석하고 파악하는 시기' },
+                    { phase: '체계 구축 단계', description: '개인적인 영적 성장 시스템과 원칙을 구축하는 시기' },
+                    { phase: '실행 최적화 단계', description: '구축한 시스템을 지속적으로 개선하고 최적화하는 시기' },
+                    { phase: '지혜 전수 단계', description: '축적된 지혜와 경험을 선별된 이들에게 전수하는 시기' }
+                ],
+                growthTips: [
+                    { title: "관계에 투자하기", description: "너무 혼자 있기보다, 소수의 사람들과 깊은 영적 관계를 맺고 소통하세요.", icon: "fa-handshake" },
+                    { title: "감정 표현 연습", description: "논리적 사고와 함께 감정도 건전하게 표현하는 방법을 연습해보세요.", icon: "fa-comment-heart" },
+                    { title: "유연성 기르기", description: "계획이 틀어졌을 때도 유연하게 대처할 수 있는 마음을 기르세요.", icon: "fa-route" }
+                ],
+                dailyPractices: [
+                    { title: "전략적 기도", description: "개인적인 영적 성장 목표를 위한 구체적이고 전략적인 기도 시간을 가지세요.", icon: "fa-chess" },
+                    { title: "체계적 성경공부", description: "성경을 주제별, 인물별로 체계적으로 연구하며 깊이 있는 지식을 쌓으세요.", icon: "fa-book-reader" },
+                    { title: "성찰 일기", description: "하루의 영적 성장 과정을 객관적으로 분석하고 기록하세요.", icon: "fa-chart-line" }
+                ],
+                prayer: {
+                    title: '독립적인 건축가를 위한 기도',
+                    content: '지혜의 하늘부모님, 체계적이고 논리적인 사고를 주심에 감사합니다. 완벽을 추구하되 사랑을 잃지 않게 하시고, 독립적이되 고립되지 않게 하소서. 제가 세운 영적 계획들이 당신의 뜻 안에서 이루어지며, 냉철함 속에서도 따뜻한 마음을 잃지 않게 하소서.'
+                },
+                quotes: [
+                    { text: "지식은 힘이지만, 지혜는 그 힘을 올바르게 사용하는 것입니다.", author: "소크라테스" },
+                    { text: "건축가는 건물의 기초를 잘 놓아야 합니다. 그 기초는 예수 그리스도입니다.", author: "고린도전서 3:11" }
+                ]
+            },
+            'INTP': {
+                title: '사색하는 영적 철학자',
+                description: '복잡한 영적 문제에 대해 깊이 탐구하고 자신만의 논리로 답을 찾아가는 철학자입니다. 기존의 틀에 얽매이지 않고 독창적인 영적 세계를 구축하며, 진리 탐구에 몰입합니다.',
+                strengths: ['심오한 영적 통찰력과 논리', '기존 교리에 대한 비판적 사고', '개인적이고 집중적인 영적 탐구', '독창적인 해석 능력', '깊이 있는 철학적 사고'],
+                weaknesses: ['감정적인 교류에 서투름', '실용적인 면을 놓치기 쉬움', '생각만 하고 행동으로 옮기기 어려움', '사회적 관계 소홀', '완벽한 답을 찾으려 무한 지연'],
+                loveStyle: { 
+                    summary: '지적 탐구와 이해의 사랑', 
+                    description: '사랑하는 사람과의 대화를 통해 지적인 성장을 이루려 합니다. 감정적인 표현보다 논리적이고 합리적인 방식으로 관계를 이해하고, 서로의 사고방식을 존중합니다.' 
+                },
+                heart: { 
+                    title: '지성의 심정권', 
+                    description: '하늘부모님의 말씀과 진리를 이성적으로 분석하고 이해하는 데 탁월합니다. 영적인 지식과 논리를 통해 하늘부모님께 더 가까이 다가가며, 복잡한 신학적 문제를 해결합니다.' 
+                },
+                warning: {
+                    title: '분석 마비 주의',
+                    description: '모든 것을 완벽하게 이해하려 하다가 실제 행동을 미루지 마세요. 불완전해도 시작하는 것이 중요합니다.'
+                },
+                journey: [
+                    { phase: '의심과 탐구 단계', description: '기존 믿음에 대해 의문을 가지고 진리를 탐구하는 시기' },
+                    { phase: '이론 정립 단계', description: '자신만의 영적 철학과 신학적 체계를 구축하는 시기' },
+                    { phase: '실천 연결 단계', description: '이론을 실제 삶에 적용하는 방법을 찾아가는 시기' },
+                    { phase: '지혜 나눔 단계', description: '축적된 지혜를 필요한 이들과 조심스럽게 나누는 시기' }
+                ],
+                growthTips: [
+                    { title: "감정 표현 연습", description: "가까운 사람에게 감정을 솔직하게 표현하는 연습을 해보세요. 관계는 논리뿐 아니라 감정으로도 성장합니다.", icon: "fa-comments" },
+                    { title: "실행력 기르기", description: "완벽한 계획을 세우기보다, 불완전해도 일단 시작하는 용기를 가지세요.", icon: "fa-play" },
+                    { title: "공동체 참여", description: "혼자만의 탐구에서 벗어나 다른 사람들과 함께하는 영적 활동에 참여해보세요.", icon: "fa-users" }
+                ],
+                dailyPractices: [
+                    { title: "철학적 묵상", description: "하늘부모님의 속성이나 영적 진리에 대해 깊이 있게 사색하고 묵상하는 시간을 가지세요.", icon: "fa-brain" },
+                    { title: "질문 기도", description: "궁금한 영적 문제들을 하늘부모님께 질문하며 답을 구하는 기도를 드려보세요.", icon: "fa-question-circle" },
+                    { title: "지식 정리", description: "오늘 배운 영적 지식이나 깨달음을 체계적으로 정리하고 기록하세요.", icon: "fa-list-alt" }
+                ],
+                prayer: {
+                    title: '사색하는 철학자를 위한 기도',
+                    content: '진리의 하늘부모님, 끊임없이 진리를 탐구하는 마음을 주심에 감사합니다. 의심과 질문을 통해 더 견고한 믿음에 이르게 하시고, 머리로만 아는 지식이 마음으로 체험하는 믿음이 되게 하소서. 혼자만의 탐구에서 벗어나 다른 이들과도 나누며, 실천 없는 지식이 되지 않게 하소서.'
+                },
+                quotes: [
+                    { text: "의심은 지식의 시작입니다.", author: "르네 데카르트" },
+                    { text: "진리를 알지니 진리가 너희를 자유롭게 하리라.", author: "요한복음 8:32" }
+                ]
+            },
+            'ESTJ': {
+                title: '체계적인 영적 관리자',
+                description: '강한 책임감과 뛰어난 조직력으로 영적 공동체를 체계적으로 관리하고 발전시키는 관리자입니다. 실질적인 봉사를 통해 하늘부모님의 뜻을 실현하며, 전통과 질서를 중시합니다.',
+                strengths: ['계획적이고 체계적인 영성 훈련', '성실하고 꾸준한 봉사 활동', '분명한 목표 설정 및 실행', '공동체 안정화 능력', '전통적 가치 수호'],
+                weaknesses: ['융통성이 부족하고 고집이 강함', '감정적인 교류에 서투름', '새로운 변화에 대한 저항', '지나친 규칙 강요', '창의성 부족'],
+                loveStyle: { 
+                    summary: '성실하고 보호적인 사랑', 
+                    description: '사랑을 말로 표현하기보다 행동으로 보여줍니다. 약속을 지키고, 상대방의 삶을 안정적으로 보호하고 책임지는 데 최선을 다하며, 실질적인 도움을 제공합니다.' 
+                },
+                heart: { 
+                    title: '질서의 심정권', 
+                    description: '하늘부모님의 말씀을 삶의 원칙과 질서로 삼고, 이를 통해 자신의 영적 삶을 견고하게 구축합니다. 공동체의 안정과 효율을 중요하게 여기며, 전통적인 방식을 존중합니다.' 
+                },
+                warning: {
+                    title: '경직성 함정 주의',
+                    description: '너무 엄격한 규칙과 전통에만 얽매이면 성령의 자유로운 역사를 막을 수 있습니다. 유연성도 중요합니다.'
+                },
+                journey: [
+                    { phase: '기초 확립 단계', description: '견고한 영적 기초와 원칙을 세우는 시기' },
+                    { phase: '시스템 구축 단계', description: '효율적인 영적 훈련과 봉사 시스템을 만드는 시기' },
+                    { phase: '공동체 관리 단계', description: '영적 공동체를 체계적으로 관리하고 발전시키는 시기' },
+                    { phase: '전통 계승 단계', description: '좋은 영적 전통을 다음 세대에게 전수하는 시기' }
+                ],
+                growthTips: [
+                    { title: "유연한 사고 연습", description: "계획이 틀어질 때 스트레스받기보다, 하늘부모님의 인도하심을 신뢰하는 연습을 해보세요.", icon: "fa-dove" },
+                    { title: "감정 교류 늘리기", description: "업무적 관계를 넘어서 개인적이고 감정적인 교류를 늘려보세요.", icon: "fa-heart-pulse" },
+                    { title: "창의성 개발", description: "전통적인 방식과 함께 새로운 영적 실천 방법도 시도해보세요.", icon: "fa-lightbulb" }
+                ],
+                dailyPractices: [
+                    { title: "규칙적인 큐티", description: "매일 정해진 시간에 성경을 읽고 묵상하는 시간을 꾸준히 지키세요.", icon: "fa-clock" },
+                    { title: "봉사 계획 수립", description: "이번 주 할 수 있는 구체적인 봉사 활동을 계획하고 실행하세요.", icon: "fa-hands-helping" },
+                    { title: "감사 점검", description: "오늘 하루 하늘부모님의 도우심으로 완성한 일들을 점검하고 감사드리세요.", icon: "fa-check-square" }
+                ],
+                prayer: {
+                    title: '체계적인 관리자를 위한 기도',
+                    content: '질서의 하늘부모님, 체계적이고 성실한 성품을 주심에 감사합니다. 제가 세운 계획과 질서가 당신의 뜻과 일치하게 하시고, 경직되지 않고 성령의 자유로운 역사에 열린 마음을 갖게 하소서. 섬김의 리더십으로 공동체를 건강하게 이끌며, 전통과 혁신의 균형을 잡게 하소서.'
+                },
+                quotes: [
+                    { text: "성실함은 모든 덕목의 어머니입니다.", author: "세르반테스" },
+                    { text: "범사에 질서를 따라 하고 품위 있게 하라.", author: "고린도전서 14:40" }
+                ]
+            },
+            'ESFJ': {
+                title: '따뜻한 영적 돌보미',
+                description: '따뜻한 마음과 봉사 정신으로 주변 사람들을 섬기며, 공동체에 없어서는 안 될 존재입니다. 관계를 통해 하늘부모님을 경험하고, 사랑으로 영적 공동체를 지탱하는 든든한 기둥 역할을 합니다.',
+                strengths: ['헌신적인 봉사와 섬김의 정신', '뛰어난 친화력으로 사람들을 하나로 묶는 능력', '공동체의 화합과 조화를 최우선으로 생각', '세심한 배려와 관심', '실질적인 도움 제공'],
+                weaknesses: ['타인의 비판에 쉽게 위축됨', '자신의 감정을 억누르기 쉬움', '새로운 방식의 영성에 거부감', '과도한 희생으로 인한 피로', '갈등 상황을 어려워함'],
+                loveStyle: { 
+                    summary: '포근하고 안정적인 사랑', 
+                    description: '상대방을 돌보고 섬기며 사랑을 표현합니다. 상대방의 필요를 먼저 알아차리고, 정서적인 안정감과 따뜻함을 주는 관계를 추구하며, 가정적인 분위기를 만듭니다.' 
+                },
+                heart: { 
+                    title: '소통의 심정권', 
+                    description: '사람들과의 교제와 소통을 통해 하늘부모님의 사랑을 경험합니다. 공동체의 정서적인 건강을 책임지고, 모든 지체가 사랑받고 소속감을 느낄 수 있도록 노력합니다.' 
+                },
+                warning: {
+                    title: '과도한 희생 주의',
+                    description: '다른 사람들을 위해 자신을 희생하는 것도 좋지만, 자신의 영적 건강도 소중히 여기세요. 건전한 자기사랑이 필요합니다.'
+                },
+                journey: [
+                    { phase: '관계 구축 단계', description: '다양한 사람들과 따뜻하고 의미 있는 관계를 형성하는 시기' },
+                    { phase: '섬김 개발 단계', description: '자신의 섬김의 은사를 발견하고 개발하는 시기' },
+                    { phase: '공동체 지원 단계', description: '공동체의 중심이 되어 모든 이들을 돌보고 지원하는 시기' },
+                    { phase: '사랑 유산 단계', description: '평생에 걸친 사랑의 실천으로 영적 유산을 남기는 시기' }
+                ],
+                growthTips: [
+                    { title: "자기 돌봄", description: "다른 사람을 돌보는 것만큼 자신의 영적, 정서적 건강도 소중히 여기세요.", icon: "fa-heart" },
+                    { title: "거절하는 용기", description: "모든 요구에 응하기보다, 때로는 자신을 위해 거절하는 용기를 가져보세요.", icon: "fa-hand-paper" },
+                    { title: "새로운 시도", description: "익숙한 방식 외에도 새로운 영적 실천 방법을 시도해보세요.", icon: "fa-seedling" }
+                ],
+                dailyPractices: [
+                    { title: "타인을 위한 기도", description: "오늘 만난 사람들의 필요를 위해 구체적으로 기도하는 시간을 가지세요.", icon: "fa-praying-hands" },
+                    { title: "작은 섬김 실천", description: "주변 사람들에게 작은 친절과 도움을 베푸는 일을 실천하세요.", icon: "fa-hand-holding-heart" },
+                    { title: "감사 인사", description: "오늘 도움을 받은 사람들에게 진심어린 감사를 표현하세요.", icon: "fa-smile" }
+                ],
+                prayer: {
+                    title: '따뜻한 돌보미를 위한 기도',
+                    content: '자비로우신 하늘부모님, 섬김과 사랑의 마음을 주심에 감사합니다. 다른 이들을 돌보되 제 자신도 소중히 여길 줄 아는 지혜를 주소서. 때로는 받는 것도 주는 것임을 알게 하시고, 건강한 경계 안에서 사랑하며, 자비로우신 하늘부모님, 섬김과 사랑의 마음을 주심에 감사합니다. 다른 이들을 돌보되 제 자신도 소중히 여길 줄 아는 지혜를 주소서. 때로는 받는 것도 주는 것임을 알게 하시고, 건강한 경계 안에서 사랑하며, 저의 따뜻함이 공동체의 치유가 되게 하소서.'
+                },
+                quotes: [
+                    { text: "진정한 행복은 다른 사람을 행복하게 만들 때 옵니다.", author: "윌리엄 셰익스피어" },
+                    { text: "서로 사랑하라 이것이 내 계명이니라.", author: "요한복음 15:12" }
+                ]
+            },
+            'ESTP': {
+                title: '역동적인 영적 실천가',
+                description: '현실적이고 행동 중심적인 태도로 영적인 삶을 살아가는 실천가입니다. 새로운 경험을 통해 하늘부모님을 만나고, 직접적인 실천으로 신앙의 길을 개척하며, 현장에서 살아있는 믿음을 보여줍니다.',
+                strengths: ['자유롭고 즉흥적인 영적 경험', '위기에 강하고 뛰어난 문제 해결 능력', '실질적인 봉사 활동에 탁월함', '적응력과 순발력', '현실적이고 실용적인 접근'],
+                weaknesses: ['깊은 내면의 성찰 부족', '충동적인 결정', '계획성 없는 신앙 생활', '이론적 학습 기피', '장기적 비전 부족'],
+                loveStyle: { 
+                    summary: '활기차고 현실적인 사랑', 
+                    description: '사랑하는 사람과 함께 새로운 것을 경험하고 즐기는 것을 좋아합니다. 관계를 유쾌하고 재미있게 이끌어가며, 현실적인 문제 해결 능력으로 상대방을 도웁니다.' 
+                },
+                heart: { 
+                    title: '경험의 심정권', 
+                    description: '이론적인 지식보다 실제 경험을 통해 하늘부모님을 더 깊이 이해합니다. 위험을 두려워하지 않고 하늘부모님의 뜻을 직접 몸으로 실천하며, 현장에서 살아있는 믿음을 증명합니다.' 
+                },
+                warning: {
+                    title: '충동성 조절 주의',
+                    description: '즉흥적인 결정이 때로는 문제를 일으킬 수 있습니다. 중요한 결정은 기도와 상의 후에 하세요.'
+                },
+                journey: [
+                    { phase: '경험 수집 단계', description: '다양한 영적 경험과 실천을 통해 자신만의 길을 찾는 시기' },
+                    { phase: '실력 개발 단계', description: '실제적인 봉사와 섬김 능력을 개발하는 시기' },
+                    { phase: '현장 리더십 단계', description: '실제 현장에서 리더십을 발휘하며 문제를 해결하는 시기' },
+                    { phase: '영향력 확산 단계', description: '자신의 경험과 실력으로 더 많은 이들에게 영향을 미치는 시기' }
+                ],
+                growthTips: [
+                    { title: "깊이 있는 묵상", description: "바쁜 삶 속에서도 매일 조용히 앉아 내면을 성찰하는 시간을 가지세요.", icon: "fa-clock" },
+                    { title: "계획적 신앙생활", description: "즉흥적인 것도 좋지만, 기본적인 영적 훈련은 꾸준히 계획을 세워 실천하세요.", icon: "fa-calendar-check" },
+                    { title: "이론 학습", description: "경험과 함께 성경 공부나 신학적 학습도 병행해보세요.", icon: "fa-graduation-cap" }
+                ],
+                dailyPractices: [
+                    { title: "현장 봉사", description: "오늘 주변에서 도움이 필요한 곳을 찾아 직접적인 봉사를 실천하세요.", icon: "fa-hammer" },
+                    { title: "액션 기도", description: "걸으면서, 운동하면서 등 활동 중에도 하늘부모님과 대화하는 시간을 가지세요.", icon: "fa-running" },
+                    { title: "즉석 감사", description: "좋은 일이 생겼을 때 즉시 하늘부모님께 감사 기도를 드리는 습관을 만드세요.", icon: "fa-thumbs-up" }
+                ],
+                prayer: {
+                    title: '역동적인 실천가를 위한 기도',
+                    content: '살아계신 하늘부모님, 역동적이고 활발한 성품을 주심에 감사합니다. 행동하는 믿음이 공허한 지식보다 낫다는 것을 알지만, 때로는 조용히 당신 앞에 서는 것도 중요함을 깨닫게 하소서. 순간의 충동이 아닌 성령의 인도를 따라 행동하며, 실천하는 믿음의 좋은 본이 되게 하소서.'
+                },
+                quotes: [
+                    { text: "행동은 모든 성공의 근본 열쇠입니다.", author: "파블로 피카소" },
+                    { text: "믿음은 행함이 없으면 그 자체가 죽은 것이라.", author: "야고보서 2:17" }
+                ]
+            },
+            'ESFP': {
+                title: '기쁨 넘치는 영적 연예인',
+                description: '긍정적이고 사교적인 성격으로 사람들에게 영적인 기쁨과 활력을 선사하는 영성인입니다. 삶의 순간순간을 축제처럼 즐기며 하늘부모님을 예배하고, 주변에 희망과 웃음을 전파합니다.',
+                strengths: ['타인에게 기쁨과 활력을 전하는 능력', '자유롭고 창의적인 예배 방식', '탁월한 즉흥성과 적응력', '순수하고 솔직한 마음', '현재 순간을 즐기는 능력'],
+                weaknesses: ['깊이 있는 영성 탐구에 어려움', '쉽게 감정 기복이 심해짐', '일상의 꾸준함을 지키기 어려움', '계획 없는 즉흥적 행동', '비판에 예민한 반응'],
+                loveStyle: { 
+                    summary: '열정적이고 순간적인 사랑', 
+                    description: '감정을 숨기지 않고 솔직하게 사랑을 표현합니다. 순간의 감정에 충실하며, 사랑하는 사람과 즐거운 시간을 보내고 특별한 추억을 만드는 것을 중요하게 생각합니다.' 
+                },
+                heart: { 
+                    title: '표현의 심정권', 
+                    description: '찬양, 춤, 예술 등 다양한 방식으로 하늘부모님을 예배하고 사랑을 표현합니다. 자신의 기쁨과 감사를 주변에 전파하며, 어두운 곳에 빛을 가져다주는 역할을 합니다.' 
+                },
+                warning: {
+                    title: '감정 기복 주의',
+                    description: '기쁨과 슬픔의 기복이 클 수 있습니다. 감정에 휘둘리지 않고 하늘부모님 안에서 안정을 찾으세요.'
+                },
+                journey: [
+                    { phase: '기쁨 발견 단계', description: '하늘부모님 안에서 진정한 기쁨과 즐거움을 발견하는 시기' },
+                    { phase: '표현 개발 단계', description: '자신만의 창의적인 예배와 표현 방식을 개발하는 시기' },
+                    { phase: '영향력 확산 단계', description: '자신의 긍정 에너지로 더 많은 사람들에게 영향을 미치는 시기' },
+                    { phase: '기쁨 전도 단계', description: '평생에 걸쳐 하늘부모님의 기쁨을 전파하는 사명을 감당하는 시기' }
+                ],
+                growthTips: [
+                    { title: "조용한 묵상 연습", description: "시끄러운 환경을 벗어나 조용한 곳에서 내면의 소리에 귀 기울이는 훈련을 해보세요.", icon: "fa-headphones" },
+                    { title: "꾸준함 개발", description: "재미있는 것만 추구하지 말고, 때로는 지루해도 꾸준히 해야 할 영적 훈련을 해보세요.", icon: "fa-dumbbell" },
+                    { title: "깊이 있는 관계", description: "많은 사람과의 얕은 관계보다 소수와의 깊은 영적 교제를 시도해보세요.", icon: "fa-user-friends" }
+                ],
+                dailyPractices: [
+                    { title: "찬양 기도", description: "좋아하는 찬양을 들으며 그 가사처럼 하늘부모님께 기도하고 춤추며 예배하세요.", icon: "fa-music" },
+                    { title: "즉석 감사", description: "좋은 순간마다 즉시 하늘부모님께 감사를 표현하고 그 기쁨을 나누세요.", icon: "fa-star" },
+                    { title: "격려 나누기", description: "오늘 만난 사람들에게 진심어린 격려와 칭찬을 해주세요.", icon: "fa-medal" }
+                ],
+                prayer: {
+                    title: '기쁨 넘치는 연예인을 위한 기도',
+                    content: '기쁨의 근원이신 하늘부모님, 밝고 긍정적인 성격을 주심에 감사합니다. 저의 기쁨이 진짜 기쁨인지, 아니면 슬픔을 가리는 가면인지 분별하게 하소서. 깊이 없는 즐거움이 아닌 하늘부모님 안에서 찾는 참된 기쁨을 알게 하시고, 이 기쁨으로 절망 중인 이들에게 희망을 전하게 하소서.'
+                },
+                quotes: [
+                    { text: "기쁨은 나누면 두 배가 되고, 슬픔은 나누면 반이 됩니다.", author: "스웨덴 속담" },
+                    { text: "항상 기뻐하라 쉬지 말고 기도하라 범사에 감사하라.", author: "데살로니가전서 5:16-18" }
+                ]
+            },
+            'ISTJ': {
+                title: '신실한 영적 수호자',
+                description: '성실하고 책임감이 강하며, 원칙과 질서 속에서 안정적인 영적 삶을 추구하는 수호자입니다. 꾸준함과 신뢰를 바탕으로 하늘부모님의 말씀을 삶에서 실천하며, 신앙의 기둥 역할을 합니다.',
+                strengths: ['체계적인 신앙생활과 자기관리', '맡은 바에 대한 강한 책임감', '신뢰를 바탕으로 한 깊은 영적 관계', '전통적 가치 수호', '꾸준하고 성실한 실천'],
+                weaknesses: ['새로운 방식의 영성에 대한 거부감', '융통성이 부족하고 고집이 강함', '감정 표현에 서투름', '변화에 대한 저항', '비판적 성향'],
+                loveStyle: { 
+                    summary: '진중하고 안정적인 사랑', 
+                    description: '화려한 이벤트보다 진심을 담은 꾸준한 사랑을 보여줍니다. 말보다는 행동으로 사랑을 증명하며, 상대방과의 약속을 매우 중요하게 생각하고 반드시 지킵니다.' 
+                },
+                heart: { 
+                    title: '성실의 심정권', 
+                    description: '하늘부모님의 말씀을 삶의 원칙으로 삼아 성실하게 살아갑니다. 기도와 말씀 생활을 꾸준히 지키며, 그 안에서 안정감과 확신을 얻고 다른 이들에게도 신뢰를 줍니다.' 
+                },
+                warning: {
+                    title: '경직성 함정 주의',
+                    description: '전통과 규칙도 중요하지만, 성령의 새로운 역사에도 열린 마음을 가지세요. 때로는 변화가 필요합니다.'
+                },
+                journey: [
+                    { phase: '기초 다지기 단계', description: '견고한 신앙의 기초와 올바른 습관을 형성하는 시기' },
+                    { phase: '신뢰 구축 단계', description: '주변 사람들과 신뢰 관계를 쌓고 인정받는 시기' },
+                    { phase: '책임 감당 단계', description: '공동체에서 중요한 역할과 책임을 맡아 충실히 감당하는 시기' },
+                    { phase: '지혜 전수 단계', description: '평생 쌓은 신앙의 지혜를 후배들에게 전수하는 시기' }
+                ],
+                growthTips: [
+                    { title: "새로운 영적 시도", description: "매번 똑같은 기도나 말씀 생활에 변화를 주어보세요. 새로운 은혜를 경험할 수 있습니다.", icon: "fa-lightbulb" },
+                    { title: "감정 표현 연습", description: "마음 깊은 곳의 감정들을 신뢰하는 사람들에게 표현하는 연습을 해보세요.", icon: "fa-heart" },
+                    { title: "융통성 기르기", description: "원칙을 지키되, 상황에 따라 유연하게 적용하는 지혜를 기르세요.", icon: "fa-balance-scale" }
+                ],
+                dailyPractices: [
+                    { title: "규칙적인 경건시간", description: "매일 같은 시간에 성경 읽기와 기도 시간을 지키며 영적 습관을 다지세요.", icon: "fa-book-reader" },
+                    { title: "책임 점검", description: "오늘 맡은 일들을 충실히 완수했는지 점검하고 내일을 준비하세요.", icon: "fa-clipboard-check" },
+                    { title: "전통 기도문", description: "주기도문이나 사도신경 등 전통적인 기도문으로 신앙을 다져보세요.", icon: "fa-scroll" }
+                ],
+                prayer: {
+                    title: '신실한 수호자를 위한 기도',
+                    content: '신실하신 하늘부모님, 성실하고 책임감 있는 마음을 주심에 감사합니다. 변하지 않는 진리 위에 굳게 서되, 새로운 하늘부모님의 역사에도 열린 마음을 갖게 하소서. 꾸준함이 때로는 경직됨이 되지 않게 하시고, 저의 신실함이 다른 이들에게 안정감과 신뢰를 주는 도구가 되게 하소서.'
+                },
+                quotes: [
+                    { text: "성실함은 성공의 어머니입니다.", author: "찰스 디킨스" },
+                    { text: "충성된 자는 누가 만날 수 있으랴.", author: "잠언 20:6" }
+                ]
+            },
+            'ISFJ': {
+                title: '헌신적인 영적 간병인',
+                description: '조용하고 온화한 성품으로 주변 사람들을 헌신적으로 돌보는 간병인입니다. 공동체의 숨은 일꾼으로서 봉사와 섬김으로 하늘부모님의 사랑을 실천하며, 모든 이들이 사랑받는다고 느끼게 합니다.',
+                strengths: ['뛰어난 봉사 정신과 희생정신', '타인의 감정에 대한 깊은 공감', '공동체의 안정과 조화를 중요하게 여김', '세심한 배려와 관찰력', '겸손하고 온유한 성품'],
+                weaknesses: ['자신의 의견을 잘 내세우지 못함', '변화에 대한 두려움', '과도한 책임감으로 인한 부담', '자기 돌봄 소홀', '갈등 상황 회피'],
+                loveStyle: { 
+                    summary: '조용하고 헌신적인 사랑', 
+                    description: '상대방의 필요를 먼저 알아차리고 묵묵히 헌신하는 사랑을 보여줍니다. 상대방에게 깊은 안정감과 편안함을 주는 관계를 추구하며, 작은 배려로 큰 사랑을 표현합니다.' 
+                },
+                heart: { 
+                    title: '헌신의 심정권', 
+                    description: '자신을 드러내지 않고 조용히 남을 섬기며 하늘부모님의 사랑을 실천합니다. 공동체의 아픔을 자신의 아픔으로 받아들이고, 치유와 회복의 사역에 헌신하는 따뜻한 마음을 가졌습니다.' 
+                },
+                warning: {
+                    title: '과도한 자기희생 주의',
+                    description: '다른 사람을 돌보는 것도 중요하지만, 자신의 영적 건강과 필요도 소중히 여기고 표현하세요.'
+                },
+                journey: [
+                    { phase: '섬김 발견 단계', description: '자신의 섬김의 은사와 달란트를 발견하고 개발하는 시기' },
+                    { phase: '관계 심화 단계', description: '소수의 사람들과 깊고 의미 있는 관계를 형성하는 시기' },
+                    { phase: '안정화 기여 단계', description: '공동체의 안정과 화합에 중요한 역할을 담당하는 시기' },
+                    { phase: '지혜 어머니 단계', description: '오랜 경험으로 다른 이들에게 따뜻한 지혜를 나누는 시기' }
+                ],
+                growthTips: [
+                    { title: "자기 목소리 내기", description: "다른 사람의 의견에만 맞추지 말고, 자신의 생각과 의견도 용기 있게 표현해보세요.", icon: "fa-microphone" },
+                    { title: "건강한 경계", description: "모든 부탁을 다 들어주기보다, 자신의 역량과 상황을 고려하여 적절한 경계를 설정하세요.", icon: "fa-shield-alt" },
+                    { title: "자기 돌봄", description: "다른 사람을 돌보는 만큼 자신의 영적, 정서적 필요도 챙기세요.", icon: "fa-spa" }
+                ],
+                dailyPractices: [
+                    { title: "중보 기도 리스트", description: "가족, 친구, 공동체 구성원들을 위한 구체적인 중보 기도 시간을 가지세요.", icon: "fa-list-ul" },
+                    { title: "작은 친절 실천", description: "오늘 주변 사람들에게 작은 친절과 배려를 베푸는 일을 찾아서 실천하세요.", icon: "fa-gift" },
+                    { title: "감정 일기", description: "오늘 느꼈던 감정들을 솔직하게 기록하고 하늘부모님께 털어놓으세요.", icon: "fa-journal" }
+                ],
+                prayer: {
+                    title: '헌신적인 간병인을 위한 기도',
+                    content: '자비로우신 아버지, 남을 돌보는 마음을 주심에 감사합니다. 섬기되 소진되지 않게 하시고, 헌신하되 자신을 잃지 않게 하소서. 조용한 섬김이 때로는 화려한 사역보다 더 귀하다는 것을 알게 하시고, 저의 따뜻한 마음이 상처받은 영혼들에게 치유가 되게 하소서.'
+                },
+                quotes: [
+                    { text: "작은 일에 충성된 자가 큰 일에도 충성되고", author: "누가복음 16:10" },
+                    { text: "사랑은 행동으로 나타납니다.", author: "마더 테레사" }
+                ]
+            },
+            'ISFP': {
+                title: '온화한 영적 예술가',
+                description: '아름다움과 감정을 통해 하늘부모님을 경험하는 예술가입니다. 조용하고 온화한 성품으로 자신의 영적 세계를 창의적으로 표현하며, 순수한 마음으로 진리의 아름다움을 추구합니다.',
+                strengths: ['예술을 통한 영적 표현 능력', '현재의 순간에 집중하는 영성', '타인의 감정에 대한 깊은 공감', '순수하고 진실한 마음', '아름다움에 대한 예민한 감각'],
+                weaknesses: ['계획적이지 않고 즉흥적임', '갈등을 회피하는 경향', '미래에 대한 막연한 불안감', '자신을 잘 드러내지 않음', '현실적 문제 해결 어려움'],
+                loveStyle: { 
+                    summary: '부드럽고 예술적인 사랑', 
+                    description: '사랑을 말이나 거창한 행동보다 눈빛과 작은 배려, 창작물로 표현합니다. 사랑하는 사람과 함께하는 소중한 순간들을 예술작품처럼 아름답게 만들어갑니다.' 
+                },
+                heart: { 
+                    title: '아름다움의 심정권', 
+                    description: '자연의 아름다움, 예술 작품, 음악 속에서 하늘부모님의 손길을 느끼고 감동을 받습니다. 감각을 통해 하늘부모님을 예배하고, 창작 활동으로 영적 경험을 표현하는 데 능합니다.' 
+                },
+                warning: {
+                    title: '현실 도피 주의',
+                    description: '어려운 현실을 마주하기보다 자신만의 세계로 도피하려는 경향이 있습니다. 균형 잡힌 삶을 추구하세요.'
+                },
+                journey: [
+                    { phase: '감성 개발 단계', description: '자신의 예술적 감성과 영적 감수성을 발견하고 기르는 시기' },
+                    { phase: '표현 찾기 단계', description: '자신만의 창의적인 영적 표현 방식을 찾아가는 시기' },
+                    { phase: '작품 창조 단계', description: '영적 경험을 예술 작품이나 창작물로 승화시키는 시기' },
+                    { phase: '영감 전달 단계', description: '자신의 작품과 경험을 통해 다른 이들에게 영감을 주는 시기' }
+                ],
+                growthTips: [
+                    { title: "자신을 표현하는 용기", description: "영적인 경험과 감정을 가까운 사람들에게 솔직하게 이야기해보세요. 표현을 통해 성장할 수 있습니다.", icon: "fa-microphone" },
+                    { title: "계획적 접근", description: "즉흥적인 것도 좋지만, 때로는 체계적인 계획으로 영적 성장을 도모해보세요.", icon: "fa-calendar" },
+                    { title: "현실과 연결", description: "아름다운 이상과 함께 현실적인 필요도 고려하는 균형감을 기르세요.", icon: "fa-balance-scale" }
+                ],
+                dailyPractices: [
+                    { title: "창작 기도", description: "그림, 시, 음악 등을 통해 하늘부모님께 마음을 표현하는 창작 기도를 해보세요.", icon: "fa-paint-brush" },
+                    { title: "아름다움 발견", description: "오늘 하루 당신이 발견한 아름다운 3가지를 기록하고 하늘부모님께 감사하세요.", icon: "fa-camera" },
+                    { title: "감성 묵상", description: "좋아하는 찬양이나 시편을 들으며 감정에 집중하여 묵상하세요.", icon: "fa-headphones" }
+                ],
+                prayer: {
+                    title: '온화한 예술가를 위한 기도',
+                    content: '아름다움의 하늘부모님, 예술적 감성과 섬세한 마음을 주심에 감사합니다. 저의 창작과 표현이 당신을 영화롭게 하는 도구가 되게 하소서. 갈등을 피하려는 마음보다 때로는 용기 있게 진실을 말할 수 있게 하시고, 현실 도피가 아닌 현실 속에서 아름다움을 발견하며 살게 하소서.'
+                },
+                quotes: [
+                    { text: "예술은 보이는 것을 재현하는 것이 아니라 보이지 않는 것을 보이게 하는 것입니다.", author: "파울 클레" },
+                    { text: "하늘부모님이 지으신 모든 것이 보시기에 심히 좋았더라.", author: "창세기 1:31" }
+                ]
+            },
+            'ISTP': {
+                title: '실용적인 영적 장인',
+                description: '호기심이 많고 논리적이며, 직접 경험하고 탐구하는 것을 통해 영적 진리를 깨닫는 장인입니다. 문제 해결 능력이 뛰어나며 실용적이고 자유로운 영성을 추구합니다.',
+                strengths: ['자유롭고 유연한 영성', '뛰어난 문제 해결 능력', '현실적인 봉사 활동에 탁월함', '독립적이고 자율적인 성향', '위기 상황에서의 침착함'],
+                weaknesses: ['감정적인 교류에 서투름', '영적 권위나 규칙에 대한 회의감', '충동적인 행동', '장기적 계획 부족', '내면 표현의 어려움'],
+                loveStyle: { 
+                    summary: '묵묵하지만 실질적인 사랑', 
+                    description: '사랑을 말로 표현하는 것을 어려워하지만, 필요할 때 옆에 있어주고 실질적인 도움을 주는 것으로 사랑을 보여줍니다. 상대방의 자유를 존중하는 사랑을 추구합니다.' 
+                },
+                heart: { 
+                    title: '자율의 심정권', 
+                    description: '규칙이나 틀에 얽매이지 않고 자유롭게 하늘부모님과의 관계를 맺습니다. 스스로 영적인 진리를 탐구하고 깨달음을 얻으며, 실용적인 방식으로 신앙을 실천합니다.' 
+                },
+                warning: {
+                    title: '고립 경향 주의',
+                    description: '너무 혼자서만 모든 것을 해결하려 하지 말고, 때로는 다른 사람들의 도움과 조언을 구하세요.'
+                },
+                journey: [
+                    { phase: '자유 탐구 단계', description: '기존 틀에서 벗어나 자유롭게 영적 진리를 탐구하는 시기' },
+                    { phase: '실력 축적 단계', description: '다양한 경험을 통해 실제적인 능력과 지혜를 쌓는 시기' },
+                    { phase: '전문성 개발 단계', description: '특정 영역에서 전문적인 실력을 개발하는 시기' },
+                    { phase: '장인 완성 단계', description: '자신만의 독특한 영적 철학과 실천법을 완성하는 시기' }
+                ],
+                growthTips: [
+                    { title: "관계 투자", description: "혼자 하는 것도 좋지만, 다른 사람들과의 영적 교제도 시도해보세요.", icon: "fa-handshake" },
+                    { title: "감정 표현", description: "내면의 감정과 생각을 신뢰하는 사람에게 표현하는 연습을 해보세요.", icon: "fa-comment" },
+                    { title: "계획적 접근", description: "즉흥적인 것과 함께 장기적인 영적 목표도 세워보세요.", icon: "fa-map" }
+                ],
+                dailyPractices: [
+                    { title: "실용적 봉사", description: "오늘 주변에서 실제적인 도움이 필요한 곳을 찾아 기술이나 능력을 활용해 도움을 주세요.", icon: "fa-tools" },
+                    { title: "자연 속 묵상", description: "야외에서 자연을 관찰하며 하늘부모님의 창조 섭리를 묵상하세요.", icon: "fa-mountain" },
+                    { title: "문제 해결 기도", description: "구체적인 문제에 대해 하늘부모님의 지혜를 구하며 해결책을 찾아보세요.", icon: "fa-puzzle-piece" }
+                ],
+                prayer: {
+                    title: '실용적인 장인을 위한 기도',
+                    content: '실용의 하늘부모님, 문제 해결 능력과 자유로운 성품을 주심에 감사합니다. 혼자 하는 것도 좋지만 공동체와 함께 할 때의 은혜도 경험하게 하소서. 실용적인 믿음이 차가운 합리주의가 되지 않게 하시고, 저의 능력이 필요한 곳에 쓰임받게 하소서.'
+                },
+                quotes: [
+                    { text: "경험은 최고의 선생님입니다.", author: "레오나르도 다 빈치" },
+                    { text: "지혜로운 자의 마음은 그의 입을 가르치며 그의 입술에 지식을 더하느니라.", author: "잠언 16:23" }
+                ]
+            }
+        };
+
+        // 호환성 데이터
+        const COMPATIBILITY_DATA = {
+            'INFJ': { 
+                best: ['ENFP', 'ENTP'], 
+                good: ['INFP', 'ENFJ', 'INTJ'], 
+                caution: ['ESTP', 'ISTP'] 
+            },
+            'INFP': { 
+                best: ['ENFJ', 'ENTJ'], 
+                good: ['INFJ', 'ISFP', 'ENFP'], 
+                caution: ['ESTJ', 'ISTJ'] 
+            },
+            'ENFJ': { 
+                best: ['INFP', 'ISFP'], 
+                good: ['INFJ', 'ENFP', 'ESFJ'], 
+                caution: ['ISTP', 'INTP'] 
+            },
+            'ENFP': { 
+                best: ['INFJ', 'INTJ'], 
+                good: ['ENFJ', 'ENTP', 'INFP'], 
+                caution: ['ISTJ', 'ESTJ'] 
+            },
+            'INTJ': { 
+                best: ['ENFP', 'ENTP'], 
+                good: ['INFJ', 'ENTJ', 'INTP'], 
+                caution: ['ESFP', 'ESTP'] 
+            },
+            'INTP': { 
+                best: ['ENTJ', 'ENFJ'], 
+                good: ['INTJ', 'ENTP', 'INFJ'], 
+                caution: ['ESFJ', 'ISFJ'] 
+            },
+            'ENTJ': { 
+                best: ['INTP', 'INFJ'], 
+                good: ['INTJ', 'ENFJ', 'ENTP'], 
+                caution: ['ISFP', 'ESFP'] 
+            },
+            'ENTP': { 
+                best: ['INFJ', 'INTJ'], 
+                good: ['ENFP', 'INTP', 'ENFJ'], 
+                caution: ['ISFJ', 'ISTJ'] 
+            },
+            'ISTJ': { 
+                best: ['ESFP', 'ESTP'], 
+                good: ['ISFJ', 'ESTJ', 'ESFJ'], 
+                caution: ['ENFP', 'ENTP'] 
+            },
+            'ISFJ': { 
+                best: ['ESFP', 'ESTP'], 
+                good: ['ISTJ', 'ESFJ', 'ISFP'], 
+                caution: ['ENTP', 'ENFP'] 
+            },
+            'ESTJ': { 
+                best: ['ISTP', 'ISFP'], 
+                good: ['ISTJ', 'ESFJ', 'ENTJ'], 
+                caution: ['INFP', 'ENFP'] 
+            },
+            'ESFJ': { 
+                best: ['ISTP', 'ISFP'], 
+                good: ['ISFJ', 'ESTJ', 'ENFJ'], 
+                caution: ['INTP', 'ENTP'] 
+            },
+            'ISTP': { 
+                best: ['ESTJ', 'ESFJ'], 
+                good: ['ISFP', 'ESTP', 'ISTJ'], 
+                caution: ['ENFJ', 'INFJ'] 
+            },
+            'ISFP': { 
+                best: ['ESTJ', 'ESFJ'], 
+                good: ['INFP', 'ISTP', 'ISFJ'], 
+                caution: ['ENTJ', 'INTJ'] 
+            },
+            'ESTP': { 
+                best: ['ISFJ', 'ISTJ'], 
+                good: ['ESFP', 'ISTP', 'ESTJ'], 
+                caution: ['INFJ', 'ENFJ'] 
+            },
+            'ESFP': { 
+                best: ['ISTJ', 'ISFJ'], 
+                good: ['ESTP', 'ISFP', 'ENFP'], 
+                caution: ['INTJ', 'ENTJ'] 
+            }
+        };
     </script>
-</body>
-</html>

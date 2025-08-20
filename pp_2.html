@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>참사랑 영성 진단</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4ecdc4;
+            --warning-color: #ffecd2;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 90vw;
+            width: 100%;
+            margin: 0 auto;
+            padding: 5vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 5vw;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 5vw;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .title {
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2vw;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 4vw;
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50px;
+            height: clamp(8px, 2vw, 12px);
+            overflow: hidden;
+            margin-bottom: 4vw;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), var(--accent-color));
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            width: 0%;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 50vh;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .question-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: clamp(20px, 5vw, 40px);
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 600px;
+            margin: 4vw auto;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            transform: translateY(20px);
+            animation: slideInUp 0.6s ease forwards;
+        }
+
+        @keyframes slideInUp {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .question-text {
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: clamp(15px, 4vw, 30px);
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(10px, 3vw, 15px);
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: clamp(12px, 3vw, 20px);
+            background: rgba(255,255,255,0.7);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+
+        .option-label:hover::before {
+            left: 100%;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: clamp(8px, 2vw, 15px);
+            transform: scale(clamp(1, 0.3vw + 1, 1.2));
+            accent-color: var(--primary-color);
+        }
+
+        .option-label span {
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            color: var(--text-primary);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .option-label.selected {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: var(--accent-color);
+            transform: scale(1.02);
+        }
+
+        .option-label.selected span {
+            color: white;
+        }
+
+        .result-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            width: 100%;
+            max-width: 800px;
+            padding: clamp(20px, 5vw, 40px);
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: clamp(20px, 5vw, 30px);
+            margin: clamp(10px, 3vw, 20px) 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .mbti-type {
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: 800;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .mbti-title {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: clamp(10px, 3vw, 20px);
+        }
+
+        .mbti-description {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            text-align: center;
+            margin-bottom: clamp(15px, 4vw, 30px);
+        }
+
+        .mbti-dichotomy {
+            margin-bottom: clamp(15px, 4vw, 25px);
+        }
+
+        .mbti-dichotomy-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: clamp(4px, 1.5vw, 8px);
+            font-weight: 600;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            color: var(--text-secondary);
+        }
+
+        .mbti-bar-wrapper {
+            display: flex;
+            height: clamp(15px, 4vw, 25px);
+            border-radius: 15px;
+            overflow: hidden;
+            background: #f7fafc;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .mbti-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .mbti-bar.e { background: linear-gradient(90deg, #ff6b6b, #ffa8a8); }
+        .mbti-bar.i { background: linear-gradient(90deg, #4ecdc4, #7fdbda); }
+        .mbti-bar.s { background: linear-gradient(90deg, #45b7d1, #86d3f4); }
+        .mbti-bar.n { background: linear-gradient(90deg, #96ceb4, #c7e9d0); }
+        .mbti-bar.t { background: linear-gradient(90deg, #feca57, #ffd93d); }
+        .mbti-bar.f { background: linear-gradient(90deg, #ff9ff3, #f368e0); }
+        .mbti-bar.j { background: linear-gradient(90deg, #a55eea, #d1a3e4); }
+        .mbti-bar.p { background: linear-gradient(90deg, #26de81, #7bed9f); }
+
+        .mbti-bar-text {
+            color: white;
+            font-weight: 600;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .strengths-weaknesses {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: clamp(10px, 3vw, 20px);
+            margin: clamp(15px, 4vw, 30px) 0;
+        }
+
+        .trait-list {
+            background: rgba(255,255,255,0.8);
+            padding: clamp(15px, 4vw, 20px);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .trait-list h3 {
+            margin-bottom: clamp(10px, 3vw, 15px);
+            color: var(--primary-color);
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+        }
+
+        .trait-list ul {
+            list-style: none;
+        }
+
+        .trait-list li {
+            padding: clamp(5px, 2vw, 8px) 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+
+        .trait-list li:last-child {
+            border-bottom: none;
+        }
+
+        .heaven-score {
+            text-align: center;
+            margin: clamp(15px, 4vw, 30px) 0;
+        }
+
+        .score-circle {
+            width: clamp(80px, 20vw, 120px);
+            height: clamp(80px, 20vw, 120px);
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0deg, var(--accent-color) 180deg, #e2e8f0 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto clamp(10px, 3vw, 20px);
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            width: clamp(50px, 15vw, 80px);
+            height: clamp(50px, 15vw, 80px);
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .score-text {
+            position: relative;
+            z-index: 1;
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .growth-tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: clamp(10px, 3vw, 20px);
+            margin: clamp(15px, 4vw, 30px) 0;
+        }
+
+        .growth-tip-card {
+            background: white;
+            padding: clamp(15px, 4vw, 25px);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .growth-tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .growth-tip-card i {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin-bottom: clamp(10px, 3vw, 15px);
+            color: var(--primary-color);
+        }
+
+        .growth-tip-card h3 {
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            margin-bottom: clamp(5px, 2vw, 10px);
+            color: var(--text-primary);
+        }
+
+        .growth-tip-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+
+        .daily-practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: clamp(10px, 3vw, 20px);
+            margin: clamp(15px, 4vw, 30px) 0;
+        }
+
+        .daily-practice-card {
+            background: white;
+            padding: clamp(15px, 4vw, 25px);
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-practice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-color);
+        }
+
+        .daily-practice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 30px);
+            border-radius: 25px;
+            font-size: clamp(1rem, 3vw, 1.1rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: clamp(15px, 4vw, 30px) auto;
+            display: block;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+        }
+
+        .section-title {
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: clamp(20px, 6vw, 40px) 0 clamp(10px, 3vw, 20px);
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .question-counter {
+            position: absolute;
+            top: clamp(10px, 3vw, 20px);
+            right: clamp(10px, 3vw, 20px);
+            background: rgba(255,255,255,0.9);
+            padding: clamp(5px, 2vw, 10px) clamp(8px, 2.5vw, 15px);
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+
+        .loading-animation {
+            display: none;
+            text-align: center;
+            margin: clamp(20px, 6vw, 40px) 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: clamp(30px, 10vw, 50px);
+            height: clamp(30px, 10vw, 50px);
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto clamp(10px, 3vw, 20px);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: clamp(5px, 2vw, 10px);
+            height: clamp(5px, 2vw, 10px);
+            background: var(--accent-color);
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced Media Queries */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 3vw;
+            }
+            .header {
+                padding: 3vw;
+            }
+            .title {
+                font-size: clamp(1.6rem, 5vw, 2rem);
+            }
+            .question-card {
+                padding: clamp(15px, 4vw, 20px);
+            }
+            .section-title {
+                font-size: clamp(1.2rem, 4vw, 1.5rem);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2vw;
+                justify-content: flex-start;
+            }
+            .header {
+                padding: 4vw;
+                margin-bottom: 3vw;
+            }
+            .title {
+                font-size: clamp(1.4rem, 6vw, 1.8rem);
+                line-height: 1.3;
+            }
+            .subtitle {
+                font-size: clamp(0.8rem, 4vw, 1rem);
+            }
+            .question-text {
+                font-size: clamp(0.9rem, 5vw, 1.1rem);
+            }
+            .options-group {
+                gap: clamp(8px, 3vw, 10px);
+            }
+            .option-label {
+                padding: clamp(10px, 4vw, 15px);
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+            .option-label span {
+                font-size: clamp(0.8rem, 4vw, 0.9rem);
+            }
+            .strengths-weaknesses {
+                grid-template-columns: 1fr;
+            }
+            .growth-tips-grid,
+            .daily-practice-grid {
+                grid-template-columns: 1fr;
+            }
+            .result-section {
+                padding: 3vw;
+            }
+            .result-card {
+                padding: clamp(15px, 4vw, 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+            .container {
+                padding: 1vw;
+            }
+            .title {
+                font-size: clamp(1.2rem, 7vw, 1.5rem);
+            }
+            .question-text {
+                font-size: clamp(0.8rem, 5vw, 1rem);
+            }
+            .option-label {
+                font-size: clamp(0.7rem, 4.5vw, 0.9rem);
+                padding: clamp(8px, 4vw, 12px);
+                flex-wrap: wrap;
+            }
+            .option-label input[type="radio"] {
+                margin-right: 8px;
+            }
+            .score-circle {
+                width: clamp(60px, 20vw, 90px);
+                height: clamp(60px, 20vw, 90px);
+            }
+            .score-text {
+                font-size: clamp(0.8rem, 5vw, 1.2rem);
+            }
+            .section-title {
+                font-size: clamp(1rem, 6vw, 1.3rem);
+            }
+            .mbti-bar-wrapper {
+                height: clamp(12px, 5vw, 15px);
+            }
+            .mbti-bar-text {
+                font-size: clamp(0.6rem, 3vw, 0.7rem);
+            }
+            .question-counter {
+                font-size: clamp(0.7rem, 4vw, 0.8rem);
+            }
+        }
+
+        @media (max-width: 320px) {
+            .option-label {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .option-label input[type="radio"] {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">
+                <i class="fas fa-heart" style="color: var(--accent-color);"></i>
+                참사랑 영성 진단
+            </h1>
+            <p class="subtitle">나의 참사랑 영성 진단</p>
+            <div class="progress-container">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="question-counter" id="question-counter">1 / 26</div>
+        </div>
+
+        <div id="quiz-container" class="quiz-container">
+            <!-- 질문들이 여기에 동적으로 생성됩니다 -->
+        </div>
+
+        <div class="loading-animation" id="loading-animation">
+            <div class="loading-spinner"></div>
+            <p style="color: white; font-size: clamp(0.9rem, 3vw, 1.1rem);">결과를 분석하고 있습니다...</p>
+        </div>
+
+        <div id="result-section" class="result-section">
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-star"></i>
+                    영적 성향 분석 결과
+                </div>
+                
+                <div style="text-align: center; margin: clamp(15px, 4vw, 30px) 0;">
+                    <div class="mbti-type" id="spiritual-mbti-type">MBTI</div>
+                    <h2 class="mbti-title" id="spiritual-mbti-title">성향 제목</h2>
+                    <p class="mbti-description" id="spiritual-mbti-description">성향 설명</p>
+                </div>
+
+                <div id="mbti-progress-container"></div>
+
+                <div class="strengths-weaknesses">
+                    <div class="trait-list">
+                        <h3><i class="fas fa-thumbs-up"></i> 강점</h3>
+                        <ul id="mbti-strengths"></ul>
+                    </div>
+                    <div class="trait-list">
+                        <h3><i class="fas fa-exclamation-triangle"></i> 주의점</h3>
+                        <ul id="mbti-weaknesses"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-heart"></i>
+                    참사랑 스타일
+                </div>
+                <h3 id="love-style-summary">사랑 스타일</h3>
+                <p id="love-style-description">사랑 스타일 설명</p>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title" id="heart-title">
+                    <i class="fas fa-users"></i>
+                    심정권 분석
+                </div>
+                <p id="heart-description">심정권 설명</p>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    하늘 친화도
+                </div>
+                <div class="heaven-score">
+                    <div class="score-circle" id="heaven-score-circle">
+                        <div class="score-text" id="heaven-score-text">0%</div>
+                    </div>
+                    <p>당신의 현재 하늘 친화도입니다</p>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-seedling"></i>
+                    성장 가이드
+                </div>
+                <div class="growth-tips-grid" id="growth-tips-grid"></div>
+            </div>
+
+            <div class="result-card">
+                <div class="section-title">
+                    <i class="fas fa-calendar-day"></i>
+                    일일 실천 가이드
+                </div>
+                <div class="daily-practice-grid" id="daily-practice-grid"></div>
+            </div>
+
+            <button class="restart-btn" onclick="restartQuiz()">
+                <i class="fas fa-redo"></i>
+                다시 진단하기
+            </button>
+        </div>
+    </div>
+
+    <script>
+        class SpiritualQuiz {
+            constructor() {
+                this.questions = [
+                    { type: 'love', text: '1. 가족이나 친구가 힘들어할 때, 당신은 어떻게 하나요?', options: [
+                        { value: 'giving', label: '함께 문제를 해결할 방법을 논리적으로 찾아요.' },
+                        { value: 'growing', label: '상대방의 마음을 먼저 공감하고 정서적으로 위로해요.' },
+                        { value: 'receiving', label: '필요한 것이 무엇인지 구체적으로 물어보고 도와줘요.' }
+                    ]},
+                    { type: 'love', text: '2. 의견이 다를 때, 당신의 태도는 어때요?', options: [
+                        { value: 'giving', label: '상대방을 위해 내 의견을 양보하고 조화를 택해요.' },
+                        { value: 'growing', label: '논리적인 근거를 제시하며 합리적인 결론을 도출해요.' },
+                        { value: 'receiving', label: '굳이 논쟁하기보다 상황에 맡기고 유연하게 넘어가요.' }
+                    ]},
+                    { type: 'love', text: '3. 사랑하는 사람에게 가장 중요한 건 뭐라고 생각해요?', options: [
+                        { value: 'giving', label: '미래의 비전을 함께 꿈꾸고 달성해 나가는 거예요.' },
+                        { value: 'growing', label: '상대방에게 필요한 것을 먼저 파악하고 채워주는 거예요.' },
+                        { value: 'receiving', label: '현재의 모습을 있는 그대로 받아주고 인정해 주는 거예요.' }
+                    ]},
+                    { type: 'love', text: '4. 공동체에서 중요한 결정을 해야 할 때, 당신의 모습은?', options: [
+                        { value: 'giving', label: '모두의 감정을 고려하여 평화로운 합의를 이끌어내요.' },
+                        { value: 'growing', label: '체계적인 계획을 세우고 목표를 향해 이성적으로 이끌어요.' },
+                        { value: 'receiving', label: '자유롭게 의견을 제시하되, 흐름에 맡기는 편이에요.' }
+                    ]},
+                    { type: 'love', text: '5. 봉사를 하는 이유는 뭔가요?', options: [
+                        { value: 'giving', label: '타인에게 힘이 되고 싶고, 따뜻한 마음을 나누고 싶어서예요.' },
+                        { value: 'growing', label: '하늘의 뜻을 실현하는 사명감과 원칙 때문이에요.' },
+                        { value: 'receiving', label: '마음의 평화와 내적인 보람을 느끼고 싶어서예요.' }
+                    ]},
+                    { type: 'love', text: '6. 당신이 생각하는 참사랑이란?', options: [
+                        { value: 'giving', label: '모든 것을 주고도 행복한, 조건 없는 사랑이에요.' },
+                        { value: 'growing', label: '함께 성장하며 더 큰 비전과 가치를 만들어가는 사랑이에요.' },
+                        { value: 'receiving', label: '있는 그대로를 받아들이고 포용하는 넓은 사랑이에요.' }
+                    ]},
+                    { type: 'love', text: '7. 가까운 사람과 다툴 때, 어떤 생각을 하나요?', options: [
+                        { value: 'giving', label: '먼저 양보하고 화해해서 관계를 회복하고 싶어요.' },
+                        { value: 'growing', label: '문제를 명확히 분석하고 합리적인 해결책을 찾고 싶어요.' },
+                        { value: 'receiving', label: '감정 소모를 줄이기 위해, 일단 서로의 시간을 가져요.' }
+                    ]},
+                    { type: 'love', text: '8. 새로운 사람을 만날 때, 당신의 태도는?', options: [
+                        { value: 'giving', label: '먼저 다가가 말을 걸고 관계를 적극적으로 맺으려 해요.' },
+                        { value: 'growing', label: '관찰하며 저 사람이 어떤 사람인지 논리적으로 파악하려 해요.' },
+                        { value: 'receiving', label: '상대방이 다가올 때까지 기다리는 편이고 조용히 지켜봐요.' }
+                    ]},
+                    { type: 'love', text: '9. 당신에게 "행복"이란 어떤 의미인가요?', options: [
+                        { value: 'giving', label: '사랑하는 사람들과 함께하는 시간에 느껴져요.' },
+                        { value: 'growing', label: '목표를 달성하고 성장하는 과정에서 느껴져요.' },
+                        { value: 'receiving', label: '새로운 경험이나 순간적인 즐거움을 느낄 때 느껴져요.' }
+                    ]},
+                    { type: 'love', text: '10. 당신에게 이상적인 세상은 어떤 모습인가요?', options: [
+                        { value: 'giving', label: '모두가 서로를 위하며 따뜻한 가족처럼 지내는 세상이에요.' },
+                        { value: 'growing', label: '명확한 원칙과 질서 속에서 모두가 발전하는 세상이에요.' },
+                        { value: 'receiving', label: '자유롭게 개성을 존중하며 살아가는 세상이에요.' }
+                    ]},
+                    { type: 'heart', text: '11. 새로운 걸 배울 때, 당신은 어떤 태도를 가지나요?', options: [
+                        { value: 'child', label: '궁금한 마음으로 순수하게 배우고 즐겨요.' },
+                        { value: 'sibling', label: '친구들과 협력하며 함께 배우고 성장해요.' },
+                        { value: 'spouse', label: '가장 소중한 사람과 함께 깊이 배우고 나누려 해요.' },
+                        { value: 'parent', label: '내가 먼저 배우고 다른 사람들을 가르쳐주고 싶어요.' }
+                    ]},
+                    { type: 'heart', text: '12. 누군가 실수했을 때, 당신은 어떻게 하나요?', options: [
+                        { value: 'child', label: '나도 조심해야겠다고 생각하고 조용히 지켜봐요.' },
+                        { value: 'sibling', label: '함께 머리를 맞대고 해결 방법을 찾아봐요.' },
+                        { value: 'spouse', label: '따뜻하게 위로하며 정서적인 상처를 치유해줘요.' },
+                        { value: 'parent', label: '잘못된 점을 명확히 알려주고 바른 길로 이끌어줘요.' }
+                    ]},
+                    { type: 'heart', text: '13. 기쁜 일이 생겼을 때, 당신은 어떤 행동을 하나나요?', options: [
+                        { value: 'child', label: '그저 진심으로 감사하며 기뻐해요.' },
+                        { value: 'sibling', label: '친구들과 함께 축하하며 흥겹게 즐겨요.' },
+                        { value: 'spouse', label: '가장 가까운 사람과 그 기쁨을 깊이 나눠요.' },
+                        { value: 'parent', label: '기쁨을 다른 사람들과 나누며 베풀고 싶어요.' }
+                    ]},
+                    { type: 'heart', text: '14. 부모님을 대할 때, 어떤 마음인가요?', options: [
+                        { value: 'child', label: '부모님의 사랑에 감사하며 순종하고 싶어요.' },
+                        { value: 'sibling', label: '형제들과 함께 화목하게 부모님을 모시고 싶어요.' },
+                        { value: 'spouse', label: '배우자와 함께 정성껏 부모님을 모시는 사람이에요.' },
+                        { value: 'parent', label: '부모님이 나를 키우신 것처럼 돌봐드리고 싶어요.' }
+                    ]},
+                    { type: 'heart', text: '15. 가진 걸 나누고 싶을 때, 어떤 마음인가요?', options: [
+                        { value: 'child', label: '순수한 마음으로 나누고 싶어요.' },
+                        { value: 'sibling', label: '나눔을 통해 함께하는 공동체를 만들고 싶어요.' },
+                        { value: 'spouse', label: '가장 소중한 사람과 깊이 나누고 싶어요.' },
+                        { value: 'parent', label: '내가 먼저 솔선수범하여 베풀고 싶어요.' }
+                    ]},
+                    { type: 'heart', text: '16. 진정한 효자는 어떤 사람일까요?', options: [
+                        { value: 'child', label: '부모님께 순종하며 사랑을 느끼게 해드리는 사람이에요.' },
+                        { value: 'sibling', label: '형제들과 화목하여 부모님을 기쁘게 해드리는 사람이에요.' },
+                        { value: 'spouse', label: '배우자와 함께 정성껏 부모님을 모시는 사람이에요.' },
+                        { value: 'parent', label: '부모의 마음으로 부모님을 위로하는 사람이에요.' }
+                    ]},
+                    { type: 'heart', text: '17. 이상적인 가정은 어떤 모습일까요?', options: [
+                        { value: 'child', label: '사랑과 순종이 넘치는 따뜻한 가정이요.' },
+                        { value: 'sibling', label: '함께 협력하며 성장하는 활기찬 가정이요.' },
+                        { value: 'spouse', label: '부부가 서로 존중하고 깊은 사랑을 나누는 가정이요.' },
+                        { value: 'parent', label: '자녀를 사랑으로 양육하고 이끌어주는 가정이요.' }
+                    ]},
+                    { type: 'heart', text: '18. 가장 소중한 인간관계는 뭐라고 생각하나요?', options: [
+                        { value: 'child', label: '나를 낳아주신 부모님과의 관계요.' },
+                        { value: 'sibling', label: '함께 성장하는 형제나 친구들과의 관계요.' },
+                        { value: 'spouse', label: '평생을 함께할 배우자와의 관계요.' },
+                        { value: 'parent', label: '내가 책임지고 사랑해야 할 자녀와의 관계요.' }
+                    ]},
+                    { type: 'heart', text: '19. 용서란 어떤 의미일까요?', options: [
+                        { value: 'child', label: '내 잘못을 인정하고 상대방에게 받아들여지는 거예요.' },
+                        { value: 'sibling', label: '상대를 이해하며 함께 화해하는 과정을 겪는 거예요.' },
+                        { value: 'spouse', label: '사랑하는 사람의 잘못을 덮어주고 포용하는 거예요.' },
+                        { value: 'parent', label: '자식의 허물을 품어주는 부모의 깊은 마음이에요.' }
+                    ]},
+                    { type: 'heart', text: '20. 하늘부모님은 당신에게 어떤 분인가요?', options: [
+                        { value: 'child', label: '나를 순수하게 사랑하시는 나의 부모님이에요.' },
+                        { value: 'sibling', label: '모두를 평등하게 사랑하시는 공적인 분이에요.' },
+                        { value: 'spouse', label: '가장 깊은 사랑을 나누고 싶은 대상이에요.' },
+                        { value: 'parent', label: '나를 성장시키고 이끌어주시는 분이에요.' }
+                    ]},
+                    { type: 'heaven', text: '21. 어려운 일이 있을 때, 기도를 먼저 하나요?', options: [
+                        { value: '5', label: '항상 그래요. 기도를 통해 해결책을 찾고 실천해요.' },
+                        { value: '4', label: '자주 그래요. 기도가 저에게 힘이 되고 평안을 줘요.' },
+                        { value: '3', label: '가끔 그래요. 기도를 통해 마음의 위안을 얻어요.' },
+                        { value: '2', label: '별로 안 그래요. 스스로 해결하려 노력하는 편이에요.' },
+                        { value: '1', label: '거의 안 해요. 기도는 형식적인 의식이라고 생각해요.' }
+                    ]},
+                    { type: 'heaven', text: '22. 말씀을 얼마나 자주 읽나요?', options: [
+                        { value: '5', label: '매일 읽으며 말씀의 뜻을 깊이 새겨요.' },
+                        { value: '4', label: '자주 읽고, 중요하다고 생각하는 부분을 기억해요.' },
+                        { value: '3', label: '일주일에 1~2번 정도 읽는 편이에요.' },
+                        { value: '2', label: '가끔 필요할 때만 읽어요.' },
+                        { value: '1', label: '거의 읽지 않아요.' }
+                    ]},
+                    { type: 'heaven', text: '23. 봉사나 헌신 활동에 대한 당신의 생각은?', options: [
+                        { value: '5', label: '당연한 사명이라 생각하고 적극적으로 참여해요.' },
+                        { value: '4', label: '공동체에 기여하는 보람 있는 일이라 생각해요.' },
+                        { value: '3', label: '상황이 허락할 때만 참여하는 편이에요.' },
+                        { value: '2', label: '자발적으로 참여하기는 힘들어요.' },
+                        { value: '1', label: '필요성을 크게 느끼지 못해요.' }
+                    ]},
+                    { type: 'heaven', text: '24. 당신에게 기도란 어떤 의미인가요?', options: [
+                        { value: '5', label: '하늘과 소통하는, 가장 중요하고 깊은 시간이에요.' },
+                        { value: '4', label: '나의 마음을 정리하고 다짐하는 시간이에요.' },
+                        { value: '3', label: '마음이 힘들 때 위로받는 시간이에요.' },
+                        { value: '2', label: '잠깐의 위안을 얻는 개인적인 시간이에요.' },
+                        { value: '1', label: '특별히 의미를 두지 않아요.' }
+                    ]},
+                    { type: 'heaven', text: '25. 영적인 성장을 위해 중요한 건 뭐라고 생각하나요?', options: [
+                        { value: '5', label: '하늘부모님을 중심으로 한 삶의 목표를 세우는 거예요.' },
+                        { value: '4', label: '꾸준한 말씀 훈독과 기도예요.' },
+                        { value: '3', label: '봉사나 헌신을 통해 사랑을 실천하는 거예요.' },
+                        { value: '2', label: '나 자신의 성장에 집중하는 거예요.' },
+                        { value: '1', label: '영적인 경험을 많이 쌓는 거예요.' }
+                    ]},
+                    { type: 'heaven', text: '26. 당신이 꿈꾸는 세상은 어떤 모습인가요?', options: [
+                        { value: '5', label: '하늘의 뜻이 이루어지는 평화로운 세상이에요.' },
+                        { value: '4', label: '모두가 서로를 이해하고 돕는 사회예요.' },
+                        { value: '3', label: '개인의 자유와 개성이 존중되는 세상이에요.' },
+                        { value: '2', label: '성공과 효율을 추구하는 경쟁적인 세상이에요.' },
+                        { value: '1', label: '현실적인 삶의 만족이 가장 중요한 세상이에요.' }
+                    ]}
+                ];
+                
+                this.currentQuestionIndex = 0;
+                this.userChoices = new Map();
+                this.isTransitioning = false;
+                
+                this.initializeElements();
+                this.bindEvents();
+                this.renderQuestion(0);
+            }
+
+            initializeElements() {
+                this.quizContainer = document.getElementById('quiz-container');
+                this.resultSection = document.getElementById('result-section');
+                this.progressFill = document.getElementById('progress-fill');
+                this.questionCounter = document.getElementById('question-counter');
+                this.loadingAnimation = document.getElementById('loading-animation');
+            }
+
+            bindEvents() {
+                // 키보드 이벤트 추가
+                document.addEventListener('keydown', (e) => {
+                    if (this.currentQuestionIndex < this.questions.length && !this.isTransitioning) {
+                        const num = parseInt(e.key);
+                        if (num >= 1 && num <= this.questions[this.currentQuestionIndex].options.length) {
+                            this.selectOption(num - 1);
+                        }
+                    }
+                });
+            }
+
+            selectOption(optionIndex) {
+                const question = this.questions[this.currentQuestionIndex];
+                const value = question.options[optionIndex].value;
+                this.userChoices.set(this.currentQuestionIndex, value);
+                
+                // 시각적 피드백
+                const options = document.querySelectorAll('.option-label');
+                options[optionIndex].classList.add('selected');
+                
+                this.updateProgress();
+                this.nextQuestion();
+            }
+
+            renderQuestion(index) {
+                if (index >= this.questions.length) {
+                    this.showResults();
+                    return;
+                }
+
+                const questionData = this.questions[index];
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                
+                questionCard.innerHTML = `
+                    <div class="question-text">${questionData.text}</div>
+                    <div class="options-group">
+                        ${questionData.options.map((option, idx) => `
+                            <label class="option-label" data-option-index="${idx}">
+                                <input type="radio" name="question-${index}" value="${option.value}" required>
+                                <span>${option.label}</span>
+                                <small style="color: #888; margin-left: auto;">${idx + 1}</small>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+
+                this.quizContainer.innerHTML = '';
+                this.quizContainer.appendChild(questionCard);
+
+                // 이벤트 리스너 추가
+                const radioButtons = questionCard.querySelectorAll('input[type="radio"]');
+                const optionLabels = questionCard.querySelectorAll('.option-label');
+                
+                radioButtons.forEach((radio, idx) => {
+                    radio.addEventListener('change', () => {
+                        if (!this.isTransitioning) {
+                            this.selectOption(idx);
+                        }
+                    });
+                });
+
+                optionLabels.forEach((label, idx) => {
+                    label.addEventListener('click', (e) => {
+                        if (!this.isTransitioning) {
+                            e.preventDefault();
+                            const radio = label.querySelector('input');
+                            radio.checked = true;
+                            this.selectOption(idx);
+                        }
+                    });
+                });
+
+                this.updateQuestionCounter();
+            }
+
+            nextQuestion() {
+                if (this.isTransitioning) return;
+                this.isTransitioning = true;
+
+                setTimeout(() => {
+                    this.currentQuestionIndex++;
+                    this.renderQuestion(this.currentQuestionIndex);
+                    this.isTransitioning = false;
+                }, 600);
+            }
+
+            updateProgress() {
+                const progress = ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
+                this.progressFill.style.width = `${progress}%`;
+            }
+
+            updateQuestionCounter() {
+                this.questionCounter.textContent = `${this.currentQuestionIndex + 1} / ${this.questions.length}`;
+            }
+
+            showResults() {
+                this.quizContainer.style.transition = 'opacity 0.5s ease';
+                this.quizContainer.style.opacity = '0';
+                this.loadingAnimation.style.display = 'block';
+                this.loadingAnimation.style.opacity = '1';
+                
+                setTimeout(() => {
+                    this.quizContainer.style.display = 'none';
+                    this.loadingAnimation.style.opacity = '0';
+                    setTimeout(() => {
+                        this.loadingAnimation.style.display = 'none';
+                        this.resultSection.style.display = 'block';
+                        setTimeout(() => {
+                            this.resultSection.style.opacity = '1';
+                            this.calculateAndDisplayResults();
+                            this.createCelebration();
+                        }, 100);
+                    }, 500);
+                }, 2000);
+            }
+
+            calculateAndDisplayResults() {
+                const results = this.calculateMBTI();
+                const loveStyle = this.calculateLoveStyle();
+                const heartStyle = this.calculateHeartStyle();
+                const heavenScore = this.calculateHeavenScore();
+
+                this.displayMBTIResults(results);
+                this.displayLoveStyle(loveStyle);
+                this.displayHeartStyle(heartStyle);
+                this.displayHeavenScore(heavenScore);
+                this.displayGrowthGuide(results.type, loveStyle);
+            }
+
+            calculateMBTI() {
+                const mbtiCounts = { 'E': 0, 'I': 0, 'S': 0, 'N': 0, 'T': 0, 'F': 0, 'J': 0, 'P': 0 };
+                
+                // 개선된 MBTI 계산 로직
+                const loveQuestions = this.questions.slice(0, 10);
+                loveQuestions.forEach((q, index) => {
+                    const choice = this.userChoices.get(index);
+                    if (choice) {
+                        switch(index) {
+                            case 0: // 문제 해결 방식
+                                if (choice === 'giving') { mbtiCounts['T']++; mbtiCounts['J']++; }
+                                else if (choice === 'growing') { mbtiCounts['F']++; mbtiCounts['E']++; }
+                                else if (choice === 'receiving') { mbtiCounts['S']++; mbtiCounts['P']++; }
+                                break;
+                            case 1: // 의견 충돌
+                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['I']++; }
+                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['J']++; }
+                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
+                                break;
+                            case 2: // 사랑의 가치
+                                if (choice === 'giving') { mbtiCounts['N']++; mbtiCounts['J']++; }
+                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['T']++; }
+                                else if (choice === 'receiving') { mbtiCounts['F']++; mbtiCounts['P']++; }
+                                break;
+                            case 3: // 공동체 결정
+                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
+                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['T']++; }
+                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
+                                break;
+                            case 4: // 봉사 이유
+                                if (choice === 'giving') { mbtiCounts['E']++; mbtiCounts['F']++; }
+                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['N']++; }
+                                else if (choice === 'receiving') { mbtiCounts['I']++; mbtiCounts['P']++; }
+                                break;
+                            case 5: // 참사랑 정의
+                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['J']++; }
+                                else if (choice === 'growing') { mbtiCounts['N']++; mbtiCounts['T']++; }
+                                else if (choice === 'receiving') { mbtiCounts['I']++; mbtiCounts['F']++; }
+                                break;
+                            case 6: // 다툼 해결
+                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
+                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['J']++; }
+                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
+                                break;
+                            case 7: // 새로운 사람
+                                if (choice === 'giving') { mbtiCounts['E']++; mbtiCounts['F']++; }
+                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['I']++; }
+                                else if (choice === 'receiving') { mbtiCounts['I']++; mbtiCounts['P']++; }
+                                break;
+                            case 8: // 행복의 의미
+                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
+                                else if (choice === 'growing') { mbtiCounts['J']++; mbtiCounts['N']++; }
+                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['S']++; }
+                                break;
+                            case 9: // 이상적 세상
+                                if (choice === 'giving') { mbtiCounts['F']++; mbtiCounts['E']++; }
+                                else if (choice === 'growing') { mbtiCounts['T']++; mbtiCounts['J']++; }
+                                else if (choice === 'receiving') { mbtiCounts['P']++; mbtiCounts['I']++; }
+                                break;
+                        }
+                    }
+                });
+
+                // 심정권 질문도 MBTI에 영향
+                const heartQuestions = this.questions.slice(10, 20);
+                heartQuestions.forEach((q, index) => {
+                    const choice = this.userChoices.get(index + 10);
+                    if (choice) {
+                        if (choice === 'child') { mbtiCounts['F']++; mbtiCounts['I']++; }
+                        else if (choice === 'sibling') { mbtiCounts['E']++; mbtiCounts['P']++; }
+                        else if (choice === 'spouse') { mbtiCounts['I']++; mbtiCounts['F']++; }
+                        else if (choice === 'parent') { mbtiCounts['J']++; mbtiCounts['E']++; }
+                    }
+                });
+
+                const mbti_E_I = mbtiCounts['E'] >= mbtiCounts['I'] ? 'E' : 'I';
+                const mbti_S_N = mbtiCounts['S'] >= mbtiCounts['N'] ? 'S' : 'N';
+                const mbti_T_F = mbtiCounts['T'] >= mbtiCounts['F'] ? 'T' : 'F';
+                const mbti_J_P = mbtiCounts['J'] >= mbtiCounts['P'] ? 'J' : 'P';
+                
+                return {
+                    type: mbti_E_I + mbti_S_N + mbti_T_F + mbti_J_P,
+                    counts: mbtiCounts
+                };
+            }
+
+            calculateLoveStyle() {
+                const loveCounts = { 'giving': 0, 'growing': 0, 'receiving': 0 };
+                const loveQuestions = this.questions.slice(0, 10);
+                
+                loveQuestions.forEach((q, index) => {
+                    const choice = this.userChoices.get(index);
+                    if (choice) loveCounts[choice]++;
+                });
+                
+                return Object.keys(loveCounts).reduce((a, b) => 
+                    loveCounts[a] > loveCounts[b] ? a : b, 'giving'
+                );
+            }
+
+            calculateHeartStyle() {
+                const heartCounts = { 'child': 0, 'sibling': 0, 'spouse': 0, 'parent': 0 };
+                const heartQuestions = this.questions.slice(10, 20);
+                
+                heartQuestions.forEach((q, index) => {
+                    const choice = this.userChoices.get(index + 10);
+                    if (choice) heartCounts[choice]++;
+                });
+                
+                return Object.keys(heartCounts).reduce((a, b) => 
+                    heartCounts[a] > heartCounts[b] ? a : b, 'child'
+                );
+            }
+
+            calculateHeavenScore() {
+                let heavenScore = 0;
+                const heavenQuestions = this.questions.filter(q => q.type === 'heaven');
+                
+                heavenQuestions.forEach((q, index) => {
+                    const choice = this.userChoices.get(index + 20);
+                    if (choice) heavenScore += parseInt(choice, 10);
+                });
+                
+                return (heavenScore / (heavenQuestions.length * 5)) * 100;
+            }
+
+            displayMBTIResults(results) {
+                const mbtiDetails = this.getMBTIDetails(results.type);
+                
+                document.getElementById('spiritual-mbti-type').textContent = results.type;
+                document.getElementById('spiritual-mbti-title').textContent = mbtiDetails.name;
+                document.getElementById('spiritual-mbti-description').textContent = mbtiDetails.description;
+                
+                const strengthsList = document.getElementById('mbti-strengths');
+                const weaknessesList = document.getElementById('mbti-weaknesses');
+                
+                if (strengthsList) {
+                    strengthsList.innerHTML = mbtiDetails.strengths
+                        .map(s => `<li><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 8px;"></i>${s}</li>`)
+                        .join('');
+                }
+                
+                if (weaknessesList) {
+                    weaknessesList.innerHTML = mbtiDetails.weaknesses
+                        .map(w => `<li><i class="fas fa-info-circle" style="color: var(--warning-color); margin-right: 8px;"></i>${w}</li>`)
+                        .join('');
+                }
+
+                this.displayMBTIProgress(results.counts);
+            }
+
+            displayMBTIProgress(counts) {
+                const container = document.getElementById('mbti-progress-container');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                const dichotomies = [
+                    { id: 'EI', labels: ['외향성 (E)', '내향성 (I)'], type1: 'E', type2: 'I', desc: '에너지 방향성' },
+                    { id: 'SN', labels: ['감각형 (S)', '직관형 (N)'], type1: 'S', type2: 'N', desc: '정보 인식 방식' },
+                    { id: 'TF', labels: ['사고형 (T)', '감정형 (F)'], type1: 'T', type2: 'F', desc: '판단 기준' },
+                    { id: 'JP', labels: ['판단형 (J)', '인식형 (P)'], type1: 'J', type2: 'P', desc: '생활 양식' }
+                ];
+
+                dichotomies.forEach(d => {
+                    const total = counts[d.type1] + counts[d.type2];
+                    if (total === 0) return;
+
+                    const percent1 = Math.round((counts[d.type1] / total) * 100);
+                    const percent2 = 100 - percent1;
+                    
+                    const dichotomyDiv = document.createElement('div');
+                    dichotomyDiv.className = 'mbti-dichotomy fade-in';
+                    dichotomyDiv.innerHTML = `
+                        <div class="mbti-dichotomy-title">
+                            <span>${d.labels[0]}</span>
+                            <span>${d.labels[1]}</span>
+                        </div>
+                        <div class="mbti-bar-wrapper">
+                            <div class="mbti-bar ${d.type1.toLowerCase()}" style="width: ${percent1}%">
+                                <span class="mbti-bar-text">${percent1}%</span>
+                            </div>
+                            <div class="mbti-bar ${d.type2.toLowerCase()}" style="width: ${percent2}%">
+                                <span class="mbti-bar-text">${percent2}%</span>
+                            </div>
+                        </div>
+                        <p style="text-align: center; margin-top: 8px; color: var(--text-secondary); font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
+                            ${d.desc}
+                        </p>
+                    `;
+                    container.appendChild(dichotomyDiv);
+                });
+            }
+
+            displayLoveStyle(style) {
+                const loveDetails = this.getLoveStyleDetails(style);
+                const summaryEl = document.getElementById('love-style-summary');
+                const descEl = document.getElementById('love-style-description');
+                
+                if (summaryEl) summaryEl.textContent = loveDetails.summary;
+                if (descEl) descEl.textContent = loveDetails.description;
+            }
+
+            displayHeartStyle(style) {
+                const heartDetails = this.getHeartStyleDetails(style);
+                const titleEl = document.getElementById('heart-title');
+                const descEl = document.getElementById('heart-description');
+                
+                if (titleEl) titleEl.innerHTML = `<i class="fas fa-users"></i> 심정권 분석 결과: ${heartDetails.name}`;
+                if (descEl) descEl.textContent = heartDetails.description;
+            }
+
+            displayHeavenScore(score) {
+                const scoreText = document.getElementById('heaven-score-text');
+                const scoreCircle = document.getElementById('heaven-score-circle');
+                
+                if (scoreText && scoreCircle) {
+                    // 애니메이션으로 점수 표시
+                    let currentScore = 0;
+                    const targetScore = Math.round(score);
+                    const increment = targetScore / 50;
+                    
+                    const animateScore = () => {
+                        if (currentScore < targetScore) {
+                            currentScore += increment;
+                            scoreText.textContent = `${Math.round(currentScore)}%`;
+                            requestAnimationFrame(animateScore);
+                        } else {
+                            scoreText.textContent = `${targetScore}%`;
+                        }
+                    };
+                    
+                    setTimeout(animateScore, 500);
+                    
+                    // 원형 진행바 애니메이션
+                    const angle = (score / 100) * 360;
+                    scoreCircle.style.background = `conic-gradient(var(--primary-color) 0deg, var(--accent-color) ${angle}deg, #e2e8f0 ${angle}deg)`;
+                }
+            }
+
+            displayGrowthGuide(mbti, loveStyle) {
+                const growthTips = this.getGrowthTips(mbti, loveStyle);
+                const dailyPractices = this.getDailyPractices(mbti, loveStyle);
+                
+                const tipsContainer = document.getElementById('growth-tips-grid');
+                const practicesContainer = document.getElementById('daily-practice-grid');
+                
+                if (tipsContainer) {
+                    tipsContainer.innerHTML = growthTips.map(tip => `
+                        <div class="growth-tip-card fade-in">
+                            <i class="fas fa-${tip.icon}" style="color: ${tip.color};"></i>
+                            <h3>${tip.title}</h3>
+                            <p>${tip.description}</p>
+                        </div>
+                    `).join('');
+                }
+                
+                if (practicesContainer) {
+                    practicesContainer.innerHTML = dailyPractices.map(practice => `
+                        <div class="daily-practice-card fade-in">
+                            <i class="fas fa-${practice.icon}" style="color: ${practice.color}; font-size: clamp(1.5rem, 5vw, 2rem); margin-bottom: clamp(10px, 3vw, 15px);"></i>
+                            <h3>${practice.title}</h3>
+                            <p>${practice.description}</p>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            createCelebration() {
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                document.body.appendChild(celebration);
+
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.backgroundColor = ['#667eea', '#764ba2', '#f093fb', '#4ecdc4'][Math.floor(Math.random() * 4)];
+                    celebration.appendChild(confetti);
+                }
+
+                setTimeout(() => {
+                    document.body.removeChild(celebration);
+                }, 4000);
+            }
+
+            getMBTIDetails(type) {
+                const mbtiDetails = {
+                    'ISTJ': {
+                        name: '진실하고 신뢰할 수 있는 수호자',
+                        description: '신뢰와 안정감을 중요하게 여기는 신중한 사랑을 추구합니다. 약속을 잘 지키고 책임감이 강해 믿음직한 파트너가 될 가능성이 높습니다.',
+                        strengths: ['진실하고 믿음직한', '책임감이 강한', '안정적인 관계 선호', '현실적이고 신중한'],
+                        weaknesses: ['융통성이 부족할 수 있음', '감정 표현에 어려움']
+                    },
+                    'ISTP': {
+                        name: '쿨하고 자유로운 모험가',
+                        description: '자유롭고 즉흥적인 연애를 즐깁니다. 구속받는 것을 싫어하고 새로운 경험을 통해 관계를 발전시키는 것을 좋아합니다.',
+                        strengths: ['자유로운 영혼', '즉흥적인 관계 선호', '문제 해결에 능숙', '실용적인 애정 표현'],
+                        weaknesses: ['감정적인 교류를 힘들어함', '계획을 싫어함']
+                    },
+                    'ISFJ': {
+                        name: '헌신적이고 따뜻한 보호자',
+                        description: '상대방에게 헌신적이고 따뜻한 사랑을 베풉니다. 상대방의 작은 변화도 놓치지 않고 배려하며, 안정적인 관계를 중요하게 생각합니다.',
+                        strengths: ['헌신적이고 따뜻한', '세심한 배려', '갈등 회피', '안정적인 관계 추구'],
+                        weaknesses: ['자신의 의견을 잘 표현하지 못함', '스트레스를 혼자 감당']
+                    },
+                    'ISFP': {
+                        name: '섬세하고 감성적인 예술가',
+                        description: '섬세한 감성과 깊은 공감 능력을 가진 로맨티스트입니다. 특별한 이벤트를 좋아하며, 현재의 감정에 충실한 연애를 합니다.',
+                        strengths: ['감성적이고 로맨틱한', '현재를 즐기는', '아름다움을 추구', '깊은 공감 능력'],
+                        weaknesses: ['미래 계획에 약함', '변화에 대한 두려움']
+                    },
+                    'INFJ': {
+                        name: '이상적인 사랑을 꿈꾸는 옹호자',
+                        description: '진정한 사랑과 깊은 의미를 추구하는 이상주의자입니다. 상대방과의 정신적인 교감을 가장 중요하게 생각하며, 영혼의 동반자를 찾습니다.',
+                        strengths: ['이상적인 사랑 추구', '깊은 정신적 교감', '헌신적인', '미래 지향적인'],
+                        weaknesses: ['비현실적인 기대를 가질 수 있음', '혼자만의 시간이 필요']
+                    },
+                    'INFP': {
+                        name: '몽상적이고 순수한 중재자',
+                        description: '순수하고 몽상적인 사랑을 꿈꿉니다. 상대방을 있는 그대로 받아들이고 포용하는 넓은 마음을 가졌습니다.',
+                        strengths: ['순수한 사랑 추구', '개인의 가치관 중시', '포용적인', '내면의 감정에 집중'],
+                        weaknesses: ['결정 내리기를 힘들어함', '현실적인 문제에 약함']
+                    },
+                    'INTJ': {
+                        name: '전략적이고 분석적인 건축가',
+                        description: '연애에서도 전략적이고 분석적인 접근을 합니다. 완벽한 관계를 위해 끊임없이 노력하며, 상대방과의 깊은 대화를 통해 관계를 발전시킵니다.',
+                        strengths: ['전략적이고 분석적인', '완벽주의적', '깊은 대화를 선호', '이성적인 판단'],
+                        weaknesses: ['감정 표현에 서투름', '너무 논리적일 수 있음']
+                    },
+                    'INTP': {
+                        name: '지적 호기심이 많은 논리학자',
+                        description: '지적이고 호기심이 많아 연인과의 관계에서도 새로운 지식이나 아이디어를 탐구하는 것을 즐깁니다.',
+                        strengths: ['지적인 호기심', '새로운 아이디어 탐구', '논리적인 대화 선호', '자유를 중시'],
+                        weaknesses: ['감정적인 교류에 어려움', '관계의 깊이를 어려워함']
+                    },
+                    'ESTP': {
+                        name: '열정적이고 솔직한 연예인',
+                        description: '에너지가 넘치고 열정적인 사랑을 추구합니다. 솔직하고 직설적인 표현을 하며, 흥미진진한 모험과 경험을 통해 관계를 풍요롭게 만듭니다.',
+                        strengths: ['열정적이고 에너지 넘치는', '솔직하고 직설적인', '즉흥적이고 모험적인', '현실적인'],
+                        weaknesses: ['장기적인 계획에 약함', '충동적일 수 있음']
+                    },
+                    'ESTJ': {
+                        name: '계획적이고 신뢰성 있는 경영자',
+                        description: '계획적이고 신뢰성 있는 연애를 추구합니다. 관계의 안정과 발전을 위해 노력하며, 책임감이 강해 믿을 수 있는 파트너가 됩니다.',
+                        strengths: ['계획적이고 신뢰성 있는', '책임감이 강한', '안정적인 관계 추구', '실용적인'],
+                        weaknesses: ['감정적인 공감에 약함', '지나치게 통제하려 할 수 있음']
+                    },
+                    'ESFP': {
+                        name: '매력적이고 사교적인 연예인',
+                        description: '사람들과 어울리는 것을 좋아하고 매력이 넘치는 연애를 합니다. 현재의 감정에 충실하고, 즐거움과 재미를 추구합니다.',
+                        strengths: ['사교적이고 매력적인', '현재를 즐기는', '즐거움을 추구', '즉흥적인'],
+                        weaknesses: ['깊은 관계를 어려워함', '지루함을 견디지 못함']
+                    },
+                    'ESFJ': {
+                        name: '친절하고 헌신적인 영사',
+                        description: '친절하고 헌신적인 사랑을 베풀며, 주변 사람들과의 조화를 중요하게 생각합니다. 상대방의 감정을 잘 헤아리고, 사랑을 표현하는 데 적극적입니다.',
+                        strengths: ['친절하고 헌신적인', '상대방의 감정을 잘 파악', '사회적인 조화 중시', '애정 표현에 적극적인'],
+                        weaknesses: ['거절을 어려워함', '타인의 시선을 신경 씀']
+                    },
+                    'ENFP': {
+                        name: '열정적이고 영감을 주는 활동가',
+                        description: '호기심이 많고 열정적인 사랑을 추구합니다. 상대방에게 영감을 주고, 관계를 끊임없이 새롭고 흥미롭게 만듭니다.',
+                        strengths: ['열정적이고 영감을 주는', '호기심이 많은', '새로운 경험을 추구', '자유로운'],
+                        weaknesses: ['지나치게 낙관적일 수 있음', '마무리가 부족할 수 있음']
+                    },
+                    'ENFJ': {
+                        name: '따뜻하고 책임감 강한 주인공',
+                        description: '따뜻하고 책임감 있는 사랑을 베풉니다. 상대방의 성장을 돕고, 긍정적인 영향을 주려 노력합니다.',
+                        strengths: ['따뜻하고 책임감 있는', '성장을 돕는', '뛰어난 소통 능력', '깊은 공감'],
+                        weaknesses: ['자신을 돌보는 것을 소홀히 함', '타인의 감정에 지나치게 몰입']
+                    },
+                    'ENTP': {
+                        name: '토론을 즐기는 변론가',
+                        description: '지적인 대화와 토론을 통해 관계를 발전시키는 것을 좋아합니다. 새로운 아이디어를 끊임없이 제안하며, 흥미진진하고 예측 불가능한 연애를 즐깁니다.',
+                        strengths: ['지적인 대화 선호', '새로운 아이디어 탐구', '흥미진진한 관계 추구', '자유로운'],
+                        weaknesses: ['감정적인 공감에 약함', '상대방을 지치게 할 수 있음']
+                    },
+                    'ENTJ': {
+                        name: '미래를 계획하는 통솔자',
+                        description: '미래를 계획하고 관계를 주도적으로 이끌어가는 리더형입니다. 목표를 설정하고 함께 성장하는 것을 중요하게 생각합니다.',
+                        strengths: ['미래 지향적인', '주도적인', '성장하는 관계 추구', '목표 지향적인'],
+                        weaknesses: ['지나치게 통제하려 할 수 있음', '감정적인 교류에 약함']
+                    }
+                };
+                return mbtiDetails[type] || {
+                    name: '독특한 영성 유형',
+                    description: '당신만의 특별한 영성 여정을 걸어가고 있습니다.',
+                    strengths: ['개성이 강한', '독립적인'],
+                    weaknesses: ['균형을 찾는 것이 필요']
+                };
+            }
+
+            getLoveStyleDetails(style) {
+                const loveStyleDetails = {
+                    'giving': {
+                        summary: '아낌없이 주는 사랑',
+                        description: '상대방에게 헌신적이고 따뜻한 사랑을 베풉니다. 상대방의 행복을 자신의 행복처럼 느끼며, 조건 없는 사랑을 주고 싶어 합니다.',
+                    },
+                    'growing': {
+                        summary: '함께 성장하는 사랑',
+                        description: '상대방과 함께 성장하고 발전하는 것을 중요하게 생각합니다. 서로에게 긍정적인 영향을 주고받으며, 미래를 함께 만들어가는 것에 큰 의미를 둡니다.',
+                    },
+                    'receiving': {
+                        summary: '있는 그대로를 받아들이는 사랑',
+                        description: '상대방을 있는 그대로 존중하고 포용합니다. 갈등보다는 평화를 추구하며, 상대방의 자유를 존중해 줍니다.',
+                    }
+                };
+                return loveStyleDetails[style] || loveStyleDetails['giving'];
+            }
+            
+            getHeartStyleDetails(style) {
+                const heartStyleDetails = {
+                    'child': {
+                        name: '자녀의 심정',
+                        description: '순수하고 감사하는 마음으로 사랑을 받아들이고 순종합니다. 사랑을 받는 존재로서의 기쁨을 중요하게 생각합니다.',
+                    },
+                    'sibling': {
+                        name: '형제의 심정',
+                        description: '함께 협력하고 성장하며, 공동체 속에서 사랑을 나누는 것을 중요하게 생각합니다. 서로를 동등한 존재로 여기고 함께 즐거움을 추구합니다.',
+                    },
+                    'spouse': {
+                        name: '부부의 심정',
+                        description: '가장 깊고 친밀한 사랑을 추구합니다. 상대방과 하나가 되어 영원한 사랑을 이루는 것을 중요하게 생각합니다.',
+                    },
+                    'parent': {
+                        name: '부모의 심정',
+                        description: '사랑을 베풀고 희생하는 것에 큰 의미를 둡니다. 상대방을 책임지고 이끌어주며, 무조건적인 사랑을 주고 싶어 합니다.',
+                    }
+                };
+                return heartStyleDetails[style] || heartStyleDetails['child'];
+            }
+
+            getGrowthTips(mbti, loveStyle) {
+                const baseTips = [
+                    { icon: 'book-open', color: '#667eea', title: '매일 말씀 훈독', description: '하늘부모님의 마음을 이해하고 자신의 영적 기준을 세우는 데 도움을 줍니다.' },
+                    { icon: 'praying-hands', color: '#764ba2', title: '기도 생활 습관화', description: '매일의 기도를 통해 하늘부모님과 소통하고 자신의 마음을 돌아보는 시간을 가지세요.' }
+                ];
+
+                const mbtiTips = {
+                    'I': { icon: 'heart', color: '#f093fb', title: '내면의 목소리 경청', description: '혼자만의 시간을 가지며 깊은 묵상과 기도를 통해 내면의 영성을 키워보세요.' },
+                    'E': { icon: 'users', color: '#4ecdc4', title: '공동체와의 소통', description: '다양한 사람들과 진심으로 소통하며 사랑을 나누는 기회를 만들어 보세요.' },
+                    'P': { icon: 'calendar-check', color: '#feca57', title: '계획적인 실천', description: '일상의 작은 목표들을 세우고 꾸준히 실천하며 성취감을 느껴보세요.' },
+                    'J': { icon: 'leaf', color: '#26de81', title: '유연성 기르기', description: '때로는 계획에 없던 일들을 받아들이며 유연함을 기르는 연습을 해보세요.' }
+                };
+
+                const loveStyleTips = {
+                    'giving': { icon: 'hand-holding-heart', color: '#ff6b6b', title: '자기 사랑 실천', description: '타인뿐만 아니라 자신에게도 헌신하고 사랑하는 법을 배우는 것이 중요합니다.' },
+                    'growing': { icon: 'seedling', color: '#45b7d1', title: '감정 교류 늘리기', description: '논리적 성장과 함께 감정적인 교류도 늘려 더욱 균형 잡힌 관계를 만들어보세요.' },
+                    'receiving': { icon: 'gift', color: '#a55eea', title: '적극적 표현', description: '받기만 하는 것이 아니라 때로는 적극적으로 사랑을 표현하는 연습을 해보세요.' }
+                };
+
+                const tips = [...baseTips];
+                
+                if (mbtiTips[mbti[0]]) tips.push(mbtiTips[mbti[0]]);
+                if (mbtiTips[mbti[3]]) tips.push(mbtiTips[mbti[3]]);
+                if (loveStyleTips[loveStyle]) tips.push(loveStyleTips[loveStyle]);
+
+                return tips;
+            }
+
+            getDailyPractices(mbti, loveStyle) {
+                const basePractices = [
+                    { icon: 'sun', color: '#f7b733', title: '아침 훈독', description: '하루를 시작하며 말씀을 통해 하늘부모님의 뜻을 새기고, 하루의 방향을 정하세요.' },
+                    { icon: 'moon', color: '#5a67d8', title: '저녁 기도', description: '하루를 마무리하며 있었던 일들을 감사하며 기도하고, 내일을 다짐하세요.' }
+                ];
+
+                const personalizedPractices = [];
+                
+                if (mbti.startsWith('E')) {
+                    personalizedPractices.push({ 
+                        icon: 'users', 
+                        color: '#48bb78', 
+                        title: '참된 소통', 
+                        description: '다양한 사람들과 진심으로 소통하며 사랑을 나누는 기회를 만들어 보세요.' 
+                    });
+                } else {
+                    personalizedPractices.push({ 
+                        icon: 'user', 
+                        color: '#feb47b', 
+                        title: '깊은 묵상', 
+                        description: '조용히 혼자만의 시간을 가지며 자신과 하늘부모님과의 관계를 깊이 생각해 보세요.' 
+                    });
+                }
+
+                if (loveStyle === 'giving') {
+                    personalizedPractices.push({ 
+                        icon: 'heart-handshake', 
+                        color: '#ff9ff3', 
+                        title: '균형 있는 사랑', 
+                        description: '남을 돕는 것만큼 자신도 돌보며 균형 있는 사랑을 실천해보세요.' 
+                    });
+                } else if (loveStyle === 'growing') {
+                    personalizedPractices.push({ 
+                        icon: 'chart-line', 
+                        color: '#96ceb4', 
+                        title: '목표 설정', 
+                        description: '영적 성장을 위한 구체적인 목표를 세우고 단계별로 실천해보세요.' 
+                    });
+                } else {
+                    personalizedPractices.push({ 
+                        icon: 'dove', 
+                        color: '#c7e9d0', 
+                        title: '평화로운 실천', 
+                        description: '마음의 평화를 유지하며 자연스럽게 사랑을 실천하는 방법을 찾아보세요.' 
+                    });
+                }
+
+                return [...basePractices, ...personalizedPractices];
+            }
+
+            restart() {
+                this.currentQuestionIndex = 0;
+                this.userChoices.clear();
+                this.isTransitioning = false;
+                
+                this.progressFill.style.width = '0%';
+                this.questionCounter.textContent = '1 / 26';
+                
+                this.resultSection.style.opacity = '0';
+                setTimeout(() => {
+                    this.resultSection.style.display = 'none';
+                    this.quizContainer.style.display = 'flex';
+                    this.quizContainer.style.opacity = '1';
+                    this.renderQuestion(0);
+                    document.querySelector('.subtitle').textContent = `나의 참사랑 영성 진단`;
+                }, 500);
+            }
+        }
+
+        // 전역 변수로 퀴즈 인스턴스 생성
+        let spiritualQuiz;
+
+        // 페이지 로드 시 퀴즈 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            spiritualQuiz = new SpiritualQuiz();
+        });
+
+        // 다시 시작 함수
+        function restartQuiz() {
+            if (spiritualQuiz) {
+                spiritualQuiz.restart();
+            }
+        }
+
+        // 추가 인터랙션 효과
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor');
+            if (!cursor) {
+                const newCursor = document.createElement('div');
+                newCursor.className = 'cursor';
+                newCursor.style.cssText = `
+                    position: fixed;
+                    width: 20px;
+                    height: 20px;
+                    background: radial-gradient(circle, rgba(255,255,255,0.8), transparent);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 9999;
+                    transition: transform 0.1s ease;
+                `;
+                document.body.appendChild(newCursor);
+            }
+            
+            const cursorEl = document.querySelector('.cursor');
+            if (cursorEl) {
+                cursorEl.style.left = e.clientX - 10 + 'px';
+                cursorEl.style.top = e.clientY - 10 + 'px';
+            }
+        });
+
+        // 스크롤 애니메이션 효과
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.1s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // 결과 카드들에 옵저버 적용
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultCards = document.querySelectorAll('.result-card');
+            resultCards.forEach(card => observer.observe(card));
+        });
+
+        // 음성 피드백 (선택사항)
+        function playSuccessSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+            oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+            oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // 다크모드 토글 (선택사항)
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+
+        // 결과 저장 및 공유 기능
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '참사랑 영성 진단 결과',
+                    text: `나의 영적 성향을 확인해보세요!`,
+                    url: window.location.href
+                });
+            } else {
+                // 폴백: 클립보드에 복사
+                const resultText = `참사랑 영성 진단 결과를 확인했습니다!\n${window.location.href}`;
+                navigator.clipboard.writeText(resultText).then(() => {
+                    alert('결과가 클립보드에 복사되었습니다!');
+                });
+            }
+        }
+
+        // 인쇄 및 PDF 저장 기능
+        function printResults() {
+            window.print();
+        }
+
+        // 접근성 개선
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+
+        document.addEventListener('mousedown', () => {
+            document.body.classList.remove('keyboard-navigation');
+        });
+
+        // 성능 최적화를 위한 디바운스 함수
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // 반응형 처리를 위한 리사이즈 이벤트
+        const handleResize = debounce(() => {
+            const container = document.querySelector('.container');
+            if (window.innerWidth < 768) {
+                container.classList.add('mobile');
+            } else {
+                container.classList.remove('mobile');
+            }
+        }, 250);
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // 초기 실행
+
+        // 추가 CSS for enhanced UX
+        const additionalStyles = document.createElement('style');
+        additionalStyles.textContent = `
+            .keyboard-navigation *:focus {
+                outline: 2px solid var(--accent-color);
+                outline-offset: 2px;
+            }
+
+            .mobile .question-card {
+                padding: clamp(10px, 5vw, 25px);
+            }
+
+            .mobile .title {
+                font-size: clamp(1.2rem, 6vw, 1.8rem);
+            }
+
+            .mobile .option-label {
+                padding: clamp(8px, 4vw, 15px);
+            }
+
+            .share-buttons {
+                display: flex;
+                gap: clamp(10px, 3vw, 15px);
+                justify-content: center;
+                margin: clamp(15px, 4vw, 30px) 0;
+                flex-wrap: wrap;
+            }
+
+            .share-btn {
+                background: white;
+                border: 2px solid var(--primary-color);
+                color: var(--primary-color);
+                padding: clamp(8px, 3vw, 12px) clamp(15px, 4vw, 20px);
+                border-radius: 25px;
+                cursor: pointer;
+                transition: var(--transition);
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: clamp(0.9rem, 3vw, 1rem);
+            }
+
+            .share-btn:hover {
+                background: var(--primary-color);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            }
+
+            .tooltip {
+                position: relative;
+                display: inline-block;
+            }
+
+            .tooltip .tooltiptext {
+                visibility: hidden;
+                width: 200px;
+                background-color: rgba(0,0,0,0.8);
+                color: white;
+                text-align: center;
+                border-radius: 8px;
+                padding: 8px;
+                position: absolute;
+                z-index: 1;
+                bottom: 125%;
+                left: 50%;
+                margin-left: -100px;
+                opacity: 0;
+                transition: opacity 0.3s;
+                font-size: 0.9rem;
+            }
+
+            .tooltip:hover .tooltiptext {
+                visibility: visible;
+                opacity: 1;
+            }
+
+            .pulse {
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+
+            .glow {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                *, *::before, *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+            }
+
+            /* 다크모드 스타일 */
+            .dark-mode {
+                --bg-gradient: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+                --text-primary: #e2e8f0;
+                --text-secondary: #cbd5e0;
+            }
+
+            .dark-mode .question-card,
+            .dark-mode .result-card,
+            .dark-mode .trait-list,
+            .dark-mode .growth-tip-card,
+            .dark-mode .daily-practice-card {
+                background: rgba(45, 55, 72, 0.95);
+                color: #e2e8f0;
+            }
+
+            .dark-mode .option-label {
+                background: rgba(45, 55, 72, 0.8);
+                color: #e2e8f0;
+            }
+
+            .error-message {
+                background: #fed7d7;
+                color: #c53030;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+                border-left: 4px solid #c53030;
+                display: none;
+            }
+
+            .success-message {
+                background: #c6f6d5;
+                color: #22543d;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+                border-left: 4px solid #22543d;
+                display: none;
+            }
+        `;
+        document.head.appendChild(additionalStyles);
+    </script>
+
+    <!-- 공유 버튼들을 결과 섹션에 추가 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultSection = document.getElementById('result-section');
+            if (resultSection) {
+                const shareButtons = document.createElement('div');
+                shareButtons.className = 'share-buttons';
+                shareButtons.innerHTML = `
+                    <button class="share-btn" onclick="shareResults()">
+                        <i class="fas fa-share-alt"></i>
+                        결과 공유하기
+                    </button>
+                    <button class="share-btn" onclick="printResults()">
+                        <i class="fas fa-print"></i>
+                        결과 저장하기
+                    </button>
+                `;
+                resultSection.appendChild(shareButtons);
+            }
+        });
+    </script>
+</body>
+</html>
