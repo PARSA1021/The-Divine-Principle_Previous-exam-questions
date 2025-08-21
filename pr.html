@@ -804,49 +804,46 @@
         class EnhancedSpiritualQuiz {
             constructor() {
                 this.questions = [
-                    // 기존 질문들 + 새로운 질문들 (총 35개)
-                    { question: "새로운 사람들을 만나거나, 여러 사람과 함께하는 활동에 참여하는 것을 즐깁니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
-                    { question: "자신의 감정이나 개인적인 이야기를 타인에게 쉽게 털어놓는 편입니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
-                    { question: "현재의 순간과 현실적인 것에 더 집중하고, 미래에 대한 계획은 구체적으로 세웁니다.", type: "SN", choices: [{ score: { S: 2, N: 0 } }, { score: { S: 0, N: 2 } }] },
-                    { question: "계획을 미리 세우고 그 계획에 따라 행동하는 것을 선호합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
-                    { question: "결정하기 전에 모든 가능성과 이론적 배경을 신중하게 탐구하는 경향이 있습니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
-                    { question: "옳고 그름을 판단할 때, 객관적인 논리와 원칙을 가장 중요하게 생각합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
-                    { question: "갑작스러운 제안이나 즉흥적인 행동을 즐기는 편입니다.", type: "JP", choices: [{ score: { J: 0, P: 2 } }, { score: { J: 2, P: 0 } }] },
-                    { question: "많은 사람들과 함께 있을 때보다 혼자 있거나 소수의 친한 사람들과 함께 있을 때 에너지를 얻습니다.", type: "EI", choices: [{ score: { E: 0, I: 2 } }, { score: { E: 2, I: 0 } }] },
-                    { question: "사람들의 감정을 파악하고 공감하는 것을 잘합니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
-                    { question: "새로운 아이디어를 구상하거나 상상하는 것을 좋아합니다. 현실적이지 않아도 괜찮습니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
-                    { question: "일정을 정해놓고 계획대로 움직일 때 마음이 편합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
-                    { question: "먼저 나서서 사람들에게 말을 거는 것을 어려워하지 않습니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
-                    { question: "결정을 내릴 때, 관련자들의 감정적 반응을 먼저 고려합니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
-                    { question: "과거의 경험이나 실질적인 데이터에 기반하여 판단하는 편입니다.", type: "SN", choices: [{ score: { S: 2, N: 0 } }, { score: { S: 0, N: 2 } }] },
-                    { question: "어떤 일을 시작하기 전에 충분히 준비하고 계획을 세우는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
-                    { question: "새로운 환경이나 사람들과 빠르게 적응하는 편입니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
-                    { question: "비판에 대해 개인적인 공격으로 받아들이기보다, 논리적인 피드백으로 수용하려고 노력합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
-                    { question: "미래에 대한 가능성이나 잠재력에 대해 깊이 생각하는 것을 즐깁니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
-                    { question: "계획이 틀어지면 유연하게 대처하기보다 스트레스를 받는 편입니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
-                    { question: "복잡하고 어려운 문제를 해결하는 과정에서 희열을 느낍니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
-                    { question: "주어진 시간 안에 여러 가지 일을 동시에 처리하는 것을 선호합니다.", type: "JP", choices: [{ score: { J: 0, P: 2 } }, { score: { J: 2, P: 0 } }] },
-                    { question: "일상생활에서 새로운 것들을 시도하고 경험하는 것을 좋아합니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
-                    { question: "다른 사람의 감정을 헤아리고 배려하는 것을 중요하게 생각합니다.", type: "TF", choices: [{ score: { T: 0, F: 2 } }, { score: { T: 2, F: 0 } }] },
-                    { question: "혼자 있는 시간에 새로운 아이디어를 얻고 영감을 받는 편입니다.", type: "EI", choices: [{ score: { E: 0, I: 2 } }, { score: { E: 2, I: 0 } }] },
-                    { question: "대화할 때 자신의 생각을 논리적으로 설득하는 편입니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
-                    { question: "미래에 대한 막연한 불안감보다 현재의 안정감을 더 중요하게 생각합니다.", type: "SN", choices: [{ score: { S: 2, N: 0 } }, { score: { S: 0, N: 2 } }] },
-                    { question: "해야 할 일을 미루지 않고 즉시 처리하는 편입니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
-                    
-                    // 새로운 질문들 (영성 관련 더 구체적)
-                    { question: "기도할 때 혼자 조용히 하는 것보다 여러 사람과 함께 하는 것을 더 좋아합니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
-                    { question: "영적인 결정을 내릴 때 감정과 직감보다 성경 말씀과 논리를 우선시합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
-                    { question: "전통적인 예배 방식보다 새롭고 창의적인 예배 방식을 선호합니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
-                    { question: "영적 훈련(기도, 성경읽기 등)을 정해진 시간에 규칙적으로 하는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
-                    { question: "영적인 깨달음을 얻을 때 다른 사람들과 나누고 토론하는 것을 즐깁니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
-                    { question: "신앙의 어려운 문제에 대해 감정적으로 접근하기보다 이성적으로 해결하려고 합니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
-                    { question: "미래의 천국이나 영원에 대해 구체적으로 상상하고 계획하는 것을 좋아합니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
-                    { question: "영적인 삶에서도 자유롭고 융통성 있게 사는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 0, P: 2 } }, { score: { J: 2, P: 0 } }] },
-                    { question: "봉사활동을 할 때 많은 사람들과 함께 하는 대규모 활동을 선호합니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] },
-                    { question: "영적인 문제에 직면했을 때 먼저 성경 구절을 찾아보고 논리적으로 해결책을 찾습니다.", type: "TF", choices: [{ score: { T: 2, F: 0 } }, { score: { T: 0, F: 2 } }] },
-                    { question: "영적 성장을 위해 철학적이고 추상적인 개념들을 탐구하는 것을 즐깁니다.", type: "SN", choices: [{ score: { S: 0, N: 2 } }, { score: { S: 2, N: 0 } }] },
-                    { question: "영적인 목표를 세우고 그것을 달성하기 위한 구체적인 계획을 수립하는 것을 좋아합니다.", type: "JP", choices: [{ score: { J: 2, P: 0 } }, { score: { J: 0, P: 2 } }] },
-                    { question: "영적인 고민이 있을 때 혼자 해결하기보다 다른 사람들과 상의하는 편입니다.", type: "EI", choices: [{ score: { E: 2, I: 0 } }, { score: { E: 0, I: 2 } }] }
+                    { question: "새로운 사람들을 만나거나, 여러 사람과 함께하는 활동에 참여하는 것을 즐깁니다.", type: "EI", choices: [{ score: { E: 3, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 0, I: 0 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 3 } }] },
+                    { question: "자신의 감정이나 개인적인 이야기를 타인에게 쉽게 털어놓는 편입니다.", type: "TF", choices: [{ score: { T: 0, F: 3 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 3, F: 0 } }] },
+                    { question: "현재의 순간과 현실적인 것에 더 집중하고, 미래에 대한 계획은 구체적으로 세웁니다.", type: "SN", choices: [{ score: { S: 3, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 0, N: 0 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 3 } }] },
+                    { question: "계획을 미리 세우고 그 계획에 따라 행동하는 것을 선호합니다.", type: "JP", choices: [{ score: { J: 3, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 0, P: 0 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 3 } }] },
+                    { question: "결정하기 전에 모든 가능성과 이론적 배경을 신중하게 탐구하는 경향이 있습니다.", type: "SN", choices: [{ score: { S: 0, N: 3 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 3, N: 0 } }] },
+                    { question: "옳고 그름을 판단할 때, 객관적인 논리와 원칙을 가장 중요하게 생각합니다.", type: "TF", choices: [{ score: { T: 3, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 0, F: 0 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 3 } }] },
+                    { question: "갑작스러운 제안이나 즉흥적인 행동을 즐기는 편입니다.", type: "JP", choices: [{ score: { J: 0, P: 3 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 3, P: 0 } }] },
+                    { question: "많은 사람들과 함께 있을 때보다 혼자 있거나 소수의 친한 사람들과 함께 있을 때 에너지를 얻습니다.", type: "EI", choices: [{ score: { E: 0, I: 3 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 3, I: 0 } }] },
+                    { question: "사람들의 감정을 파악하고 공감하는 것을 잘합니다.", type: "TF", choices: [{ score: { T: 0, F: 3 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 3, F: 0 } }] },
+                    { question: "새로운 아이디어를 구상하거나 상상하는 것을 좋아합니다. 현실적이지 않아도 괜찮습니다.", type: "SN", choices: [{ score: { S: 0, N: 3 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 3, N: 0 } }] },
+                    { question: "일정을 정해놓고 계획대로 움직일 때 마음이 편합니다.", type: "JP", choices: [{ score: { J: 3, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 0, P: 0 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 3 } }] },
+                    { question: "먼저 나서서 사람들에게 말을 거는 것을 어려워하지 않습니다.", type: "EI", choices: [{ score: { E: 3, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 0, I: 0 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 3 } }] },
+                    { question: "결정을 내릴 때, 관련자들의 감정적 반응을 먼저 고려합니다.", type: "TF", choices: [{ score: { T: 0, F: 3 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 3, F: 0 } }] },
+                    { question: "과거의 경험이나 실질적인 데이터에 기반하여 판단하는 편입니다.", type: "SN", choices: [{ score: { S: 3, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 0, N: 0 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 3 } }] },
+                    { question: "어떤 일을 시작하기 전에 충분히 준비하고 계획을 세우는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 3, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 0, P: 0 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 3 } }] },
+                    { question: "새로운 환경이나 사람들과 빠르게 적응하는 편입니다.", type: "EI", choices: [{ score: { E: 3, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 0, I: 0 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 3 } }] },
+                    { question: "비판에 대해 개인적인 공격으로 받아들이기보다, 논리적인 피드백으로 수용하려고 노력합니다.", type: "TF", choices: [{ score: { T: 3, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 0, F: 0 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 3 } }] },
+                    { question: "미래에 대한 가능성이나 잠재력에 대해 깊이 생각하는 것을 즐깁니다.", type: "SN", choices: [{ score: { S: 0, N: 3 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 3, N: 0 } }] },
+                    { question: "계획이 틀어지면 유연하게 대처하기보다 스트레스를 받는 편입니다.", type: "JP", choices: [{ score: { J: 3, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 0, P: 0 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 3 } }] },
+                    { question: "복잡하고 어려운 문제를 해결하는 과정에서 희열을 느낍니다.", type: "TF", choices: [{ score: { T: 3, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 0, F: 0 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 3 } }] },
+                    { question: "주어진 시간 안에 여러 가지 일을 동시에 처리하는 것을 선호합니다.", type: "JP", choices: [{ score: { J: 0, P: 3 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 3, P: 0 } }] },
+                    { question: "일상생활에서 새로운 것들을 시도하고 경험하는 것을 좋아합니다.", type: "SN", choices: [{ score: { S: 0, N: 3 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 3, N: 0 } }] },
+                    { question: "다른 사람의 감정을 헤아리고 배려하는 것을 중요하게 생각합니다.", type: "TF", choices: [{ score: { T: 0, F: 3 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 3, F: 0 } }] },
+                    { question: "혼자 있는 시간에 새로운 아이디어를 얻고 영감을 받는 편입니다.", type: "EI", choices: [{ score: { E: 0, I: 3 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 3, I: 0 } }] },
+                    { question: "대화할 때 자신의 생각을 논리적으로 설득하는 편입니다.", type: "TF", choices: [{ score: { T: 3, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 0, F: 0 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 3 } }] },
+                    { question: "미래에 대한 막연한 불안감보다 현재의 안정감을 더 중요하게 생각합니다.", type: "SN", choices: [{ score: { S: 3, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 0, N: 0 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 3 } }] },
+                    { question: "해야 할 일을 미루지 않고 즉시 처리하는 편입니다.", type: "JP", choices: [{ score: { J: 3, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 0, P: 0 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 3 } }] },
+                    { question: "기도할 때 혼자 조용히 하는 것보다 여러 사람과 함께 하는 것을 더 좋아합니다.", type: "EI", choices: [{ score: { E: 3, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 0, I: 0 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 3 } }] },
+                    { question: "영적인 결정을 내릴 때 감정과 직감보다 성경 말씀과 논리를 우선시합니다.", type: "TF", choices: [{ score: { T: 3, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 0, F: 0 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 3 } }] },
+                    { question: "전통적인 예배 방식보다 새롭고 창의적인 예배 방식을 선호합니다.", type: "SN", choices: [{ score: { S: 0, N: 3 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 3, N: 0 } }] },
+                    { question: "영적 훈련(기도, 성경읽기 등)을 정해진 시간에 규칙적으로 하는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 3, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 0, P: 0 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 3 } }] },
+                    { question: "영적인 깨달음을 얻을 때 다른 사람들과 나누고 토론하는 것을 즐깁니다.", type: "EI", choices: [{ score: { E: 3, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 0, I: 0 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 3 } }] },
+                    { question: "신앙의 어려운 문제에 대해 감정적으로 접근하기보다 이성적으로 해결하려고 합니다.", type: "TF", choices: [{ score: { T: 3, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 0, F: 0 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 3 } }] },
+                    { question: "미래의 천국이나 영원에 대해 구체적으로 상상하고 계획하는 것을 좋아합니다.", type: "SN", choices: [{ score: { S: 0, N: 3 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 3, N: 0 } }] },
+                    { question: "영적인 삶에서도 자유롭고 융통성 있게 사는 것을 중요하게 생각합니다.", type: "JP", choices: [{ score: { J: 0, P: 3 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 3, P: 0 } }] },
+                    { question: "봉사활동을 할 때 많은 사람들과 함께 하는 대규모 활동을 선호합니다.", type: "EI", choices: [{ score: { E: 3, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 0, I: 0 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 3 } }] },
+                    { question: "영적인 문제에 직면했을 때 먼저 성경 구절을 찾아보고 논리적으로 해결책을 찾습니다.", type: "TF", choices: [{ score: { T: 3, F: 0 } }, { score: { T: 1, F: 0 } }, { score: { T: 0, F: 0 } }, { score: { T: 0, F: 1 } }, { score: { T: 0, F: 3 } }] },
+                    { question: "영적 성장을 위해 철학적이고 추상적인 개념들을 탐구하는 것을 즐깁니다.", type: "SN", choices: [{ score: { S: 0, N: 3 } }, { score: { S: 0, N: 1 } }, { score: { S: 0, N: 0 } }, { score: { S: 1, N: 0 } }, { score: { S: 3, N: 0 } }] },
+                    { question: "영적인 목표를 세우고 그것을 달성하기 위한 구체적인 계획을 수립하는 것을 좋아합니다.", type: "JP", choices: [{ score: { J: 3, P: 0 } }, { score: { J: 1, P: 0 } }, { score: { J: 0, P: 0 } }, { score: { J: 0, P: 1 } }, { score: { J: 0, P: 3 } }] },
+                    { question: "영적인 고민이 있을 때 혼자 해결하기보다 다른 사람들과 상의하는 편입니다.", type: "EI", choices: [{ score: { E: 3, I: 0 } }, { score: { E: 1, I: 0 } }, { score: { E: 0, I: 0 } }, { score: { E: 0, I: 1 } }, { score: { E: 0, I: 3 } }] }
                 ];
 
                 this.currentQuestionIndex = 0;
@@ -888,6 +885,12 @@
                 this.spiritualJourney = document.getElementById('spiritual-journey');
                 this.prayerSection = document.getElementById('prayer-section');
                 this.famousQuotes = document.getElementById('famous-quotes');
+
+                // 새로 추가: 공유 및 저장 버튼 참조
+                this.restartButton = document.getElementById('restart-quiz'); // 재시작 버튼 (이미 있을 수 있음)
+                this.shareButton = document.getElementById('share-result');
+                this.savePdfButton = document.getElementById('save-pdf');
+                this.saveImageButton = document.getElementById('save-image');
             }
 
             bindEvents() {
@@ -898,6 +901,106 @@
                         this.handleChoice(choiceIndex);
                     }
                 });
+
+                // 새로 추가: 공유 및 저장 버튼 이벤트 바인드 (퀴즈 클릭 이벤트 밖으로 이동하여 한 번만 등록)
+                if (this.shareButton) {
+                    this.shareButton.addEventListener('click', () => this.handleShare());
+                }
+                if (this.saveImageButton) {
+                    this.saveImageButton.addEventListener('click', () => this.handleSaveImage());
+                }
+                if (this.savePdfButton) {
+                    this.savePdfButton.addEventListener('click', () => this.handleSavePdf());
+                }
+                if (this.restartButton) {
+                    this.restartButton.addEventListener('click', () => location.reload());
+                }
+            }
+
+            // 새로 추가: 공유 기능
+            handleShare() {
+                const mbtiType = this.getSpiritualMbtiType() || 'Unknown';
+                const shareData = {
+                    title: `내 영적 MBTI: ${mbtiType}`,
+                    text: `당신의 영적 성향은 ${mbtiType}입니다! 자세한 결과와 조언을 확인해보세요. #영성진단`,
+                    url: window.location.href
+                };
+
+                if (navigator.share) {
+                    navigator.share(shareData)
+                        .then(() => console.log('공유 성공'))
+                        .catch((error) => {
+                            console.error('공유 실패:', error);
+                            alert('공유를 지원하지 않는 브라우저입니다. URL을 복사해주세요.');
+                            this.copyToClipboard(window.location.href);
+                        });
+                } else {
+                    this.copyToClipboard(window.location.href);
+                    alert('URL이 클립보드에 복사되었습니다. 공유해주세요!');
+                }
+            }
+
+            // 도우미: 클립보드 복사
+            copyToClipboard(text) {
+                if (!navigator.clipboard) {
+                    console.error('클립보드 API가 지원되지 않습니다.');
+                    alert('클립보드 복사가 지원되지 않습니다.');
+                    return;
+                }
+                navigator.clipboard.writeText(text)
+                    .then(() => console.log('클립보드 복사 성공'))
+                    .catch(err => console.error('클립보드 복사 실패:', err));
+            }
+
+            // 새로 추가: 이미지 저장 기능 (html2canvas 필요)
+            handleSaveImage() {
+                const mbtiType = this.getSpiritualMbtiType() || 'Unknown';
+                if (!window.html2canvas) {
+                    console.error('html2canvas 라이브러리가 로드되지 않았습니다.');
+                    alert('이미지 저장 기능이 지원되지 않습니다. 라이브러리를 확인해주세요.');
+                    return;
+                }
+                if (!this.resultSection) {
+                    console.error('resultSection 요소를 찾을 수 없습니다.');
+                    alert('결과 섹션을 찾을 수 없습니다.');
+                    return;
+                }
+                html2canvas(this.resultSection, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    useCORS: true
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `spiritual-mbti-${mbtiType}-${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }).catch(err => {
+                    console.error('이미지 저장 실패:', err);
+                    alert('이미지 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+                });
+            }
+
+            // 새로 추가: PDF 저장 기능 (jspdf 필요)
+            handleSavePdf() {
+                const mbtiType = this.getSpiritualMbtiType() || 'Unknown';
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    console.error('jsPDF 라이브러리가 로드되지 않았습니다.');
+                    alert('PDF 저장 기능이 지원되지 않습니다. 라이브러리를 확인해주세요.');
+                    return;
+                }
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFontSize(18);
+                doc.text(`영적 MBTI: ${mbtiType}`, 10, 10);
+                doc.setFontSize(12);
+                if (this.spiritualMbtiDescription && this.spiritualMbtiDescription.textContent) {
+                    doc.text(this.spiritualMbtiDescription.textContent, 10, 20, { maxWidth: 180 });
+                } else {
+                    doc.text('결과 설명을 불러올 수 없습니다.', 10, 20);
+                }
+
+                doc.save(`spiritual-mbti-${mbtiType}-${Date.now()}.pdf`);
             }
 
             renderQuestion(index) {
@@ -917,7 +1020,16 @@
                             <i class="fas fa-check-circle"></i> 매우 그렇다
                         </button>
                         <button class="choice-btn" data-choice-index="1">
-                            <i class="fas fa-times-circle"></i> 그렇지 않다
+                            <i class="fas fa-check"></i> 그렇다
+                        </button>
+                        <button class="choice-btn" data-choice-index="2">
+                            <i class="fas fa-minus-circle"></i> 보통이다
+                        </button>
+                        <button class="choice-btn" data-choice-index="3">
+                            <i class="fas fa-times"></i> 그렇지 않다
+                        </button>
+                        <button class="choice-btn" data-choice-index="4">
+                            <i class="fas fa-times-circle"></i> 매우 그렇지 않다
                         </button>
                     </div>
                 `;
@@ -992,10 +1104,10 @@
                 };
 
                 let type = "";
-                type += (mbti.E > mbti.I) ? "E" : "I";
-                type += (mbti.S > mbti.N) ? "S" : "N";
-                type += (mbti.T > mbti.F) ? "T" : "F";
-                type += (mbti.J > mbti.P) ? "J" : "P";
+                type += (mbti.E > mbti.I) ? "E" : (mbti.E < mbti.I ? "I" : (Math.random() > 0.5 ? "E" : "I")); // 동점 시 랜덤 처리 업그레이드
+                type += (mbti.S > mbti.N) ? "S" : (mbti.S < mbti.N ? "N" : (Math.random() > 0.5 ? "S" : "N"));
+                type += (mbti.T > mbti.F) ? "T" : (mbti.T < mbti.F ? "F" : (Math.random() > 0.5 ? "T" : "F"));
+                type += (mbti.J > mbti.P) ? "J" : (mbti.J < mbti.P ? "P" : (Math.random() > 0.5 ? "J" : "P"));
 
                 return type;
             }
@@ -1071,8 +1183,8 @@
                     const rightType = dim.options[1].match(/\(([A-Z])\)/)[1];
                     const leftScore = this.userChoices[leftType];
                     const rightScore = this.userChoices[rightType];
-                    const total = leftScore + rightScore;
-                    const leftPercentage = total === 0 ? 50 : Math.round((leftScore / total) * 100);
+                    const total = leftScore + rightScore || 1; // 0 방지
+                    const leftPercentage = Math.round((leftScore / total) * 100);
                     const rightPercentage = 100 - leftPercentage;
 
                     const progressBarHTML = `
