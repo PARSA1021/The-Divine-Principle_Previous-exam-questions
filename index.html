@@ -128,7 +128,17 @@
                     <button onclick="searchMessages()" title="검색 실행" aria-label="검색 실행"><i class="fas fa-search" aria-hidden="true"></i> 검색</button>
                     <button class="clear-search" onclick="clearSearch()" title="검색 초기화" aria-label="검색 초기화"><i class="fas fa-times" aria-hidden="true"></i> 초기화</button>
                 </div>
-
+                
+                <div class="search-options">
+                    <label for="search-type-message">
+                        <input type="radio" id="search-type-message" name="search-type" value="message" checked>
+                        말씀 검색
+                    </label>
+                    <label for="search-type-title">
+                        <input type="radio" id="search-type-title" name="search-type" value="title">
+                        말씀 제목 검색
+                    </label>
+                </div>
                 <h2 class="section-title"><i class="fas fa-filter" aria-hidden="true"></i> 카테고리 필터</h2>
                 <div class="category-container" role="group" aria-label="카테고리 필터">
                 <button class="active" data-category="전체" aria-pressed="true">
@@ -218,6 +228,27 @@
                 </div>
                 <div id="qna-list" class="qna-list" role="list">
                 </div>
+            </div>
+        </section>
+
+        <section class="page" id="quiz-selection" role="region" aria-labelledby="quiz-selection-heading">
+            <header class="header">
+                <div class="logo-container">
+                    <img src="assets/images/1750916993134.png" alt="세계평화통일가정연합 로고" width="100" height="auto" loading="lazy">
+                </div>
+                <h1 id="quiz-selection-heading"><i class="fas fa-question-circle" aria-hidden="true"></i> 퀴즈 시작하기</h1>
+                <p class="tagline">말씀 퀴즈로 지식을 테스트하고, 영적 성장을 경험해 보세요.</p>
+            </header>
+        
+            <div class="divider" aria-hidden="true"></div>
+        
+            <div class="quiz-selection-container">
+                <button class="quiz-button blue" data-quiz-type="원리강론" aria-label="원리강론 퀴즈 시작">
+                    <i class="fas fa-school" aria-hidden="true"></i> 원리강론 퀴즈
+                </button>
+                <button class="quiz-button gold" data-quiz-type="성경" aria-label="성경 퀴즈 시작">
+                    <i class="fas fa-cross" aria-hidden="true"></i> 성경 퀴즈
+                </button>
             </div>
         </section>
     </main>

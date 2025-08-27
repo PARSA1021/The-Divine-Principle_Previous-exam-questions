@@ -612,6 +612,9 @@ const generateRandomMessage = () => {
  */
 const searchMessages = debounce((page = 1) => {
     const query = DOM.searchInput ? DOM.searchInput.value.trim() : '';
+    // 1. 검색 유형(message 또는 title)을 가져옵니다.
+    const searchType = document.querySelector('input[name="search-type"]:checked').value;
+
     if (DOM.searchLoading) DOM.searchLoading.style.display = 'flex'; // 로딩 표시
     updateProgressBar('20%'); // 진행 바 업데이트
     if (DOM.searchResults) {
@@ -632,13 +635,30 @@ const searchMessages = debounce((page = 1) => {
     if (query) {
         try {
             const queryRegex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+            
             filteredMessages = filteredMessages.map(msg => {
-                const matchCount = (msg.text.match(queryRegex) || []).length;
-                return { ...msg, matchCount };
-            }).filter(msg => msg.matchCount > 0); // 검색어 일치하는 메시지만 필터링
+                let totalMatchCount = 0;
+                let textMatchCount = 0;
+                let categoryMatchCount = 0;
+                let sourceMatchCount = 0;
+                
+                // 2. 검색 유형에 따라 검색 대상을 분기합니다.
+                if (searchType === 'message') {
+                    // '말씀 검색'일 경우, 본문에서만 검색
+                    textMatchCount = (msg.text.match(queryRegex) || []).length;
+                    totalMatchCount = textMatchCount;
+                } else if (searchType === 'title') {
+                    // '말씀 제목 검색'일 경우, 카테고리(제목)와 출처에서만 검색
+                    categoryMatchCount = (msg.category.match(queryRegex) || []).length;
+                    sourceMatchCount = (msg.source.match(queryRegex) || []).length;
+                    totalMatchCount = categoryMatchCount + sourceMatchCount;
+                }
+
+                return { ...msg, totalMatchCount, textMatchCount, categoryMatchCount, sourceMatchCount };
+            }).filter(msg => msg.totalMatchCount > 0); // 검색어 일치하는 메시지만 필터링
 
             // 검색어 일치 횟수 기준 정렬 (기본값)
-            filteredMessages.sort((a, b) => b.matchCount - a.matchCount);
+            filteredMessages.sort((a, b) => b.totalMatchCount - a.totalMatchCount);
         } catch (e) {
             console.warn('유효하지 않은 검색어 정규식:', e);
             // 사용자에게 유효하지 않은 검색어임을 알리고 검색을 중단
@@ -695,13 +715,17 @@ const searchMessages = debounce((page = 1) => {
             DOM.searchResults.style.display = 'block';
         } else if (paginatedMessages.length > 0) {
             DOM.searchResults.innerHTML = paginatedMessages.map(msg => {
-                const displayText = truncateText(msg.text, query); // 텍스트 축약 및 하이라이트
-                const matchCount = msg.matchCount || 0; // 일치 횟수
+                // 3. 검색 유형에 따라 하이라이트할 대상을 분기합니다.
+                const highlightedCategory = (searchType === 'title') ? highlightText(msg.category, query) : msg.category;
+                const highlightedSource = (searchType === 'title') ? highlightText(msg.source, query) : msg.source;
+                const displayText = (searchType === 'message') ? truncateText(msg.text, query) : truncateText(msg.text, '');
+
+                const matchCount = msg.totalMatchCount || 0; // 일치 횟수
                 return `
                     <div class="result-item fade-in" role="listitem" tabindex="0">
-                        <h3><i class="fas fa-book" aria-hidden="true"></i> ${msg.category}</h3>
+                        <h3><i class="fas fa-book" aria-hidden="true"></i> ${highlightedCategory}</h3>
                         <p>${displayText} ${matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</p>
-                        <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${msg.source}</p>
+                        <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${highlightedSource}</p>
                         <div class="action-buttons">
                             <button class="copy-button"
                                     onclick="copyMessageToClipboard(
