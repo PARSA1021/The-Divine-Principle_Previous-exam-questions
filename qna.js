@@ -5,7 +5,7 @@ const itemsPerPage = 10;
 async function fetchQnA() {
   try {
     document.getElementById('qna-list').innerHTML = '<p class="loading">로딩 중...</p>';
-    const response = await fetch('qna_data.json');
+    const response = await fetch('qna_data_2.json');
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     qnaData = await response.json();
     if (!Array.isArray(qnaData) || qnaData.length === 0) {

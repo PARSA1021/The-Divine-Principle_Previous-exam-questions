@@ -50,7 +50,7 @@
     --spacing-xs: 0.5rem;   /* 8px */
     --spacing-sm: 0.75rem;  /* 12px */
     --spacing-md: 1rem;     /* 16px */
-    --spacing-lg: 1.25rem;  /* 20px */
+    --spacing-lg: 1.8rem;  /* 20px */
     --spacing-xl: 1.875rem; /* 30px */
     --spacing-xxl: 2.5rem;  /* 40px */
 
@@ -1275,7 +1275,7 @@ body {
 }
 
 .qna-card .question {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--primary-color);
     margin-bottom: var(--spacing-md);
@@ -1318,14 +1318,14 @@ body {
 
 .qna-card .category-label {
     position: absolute;
-    top: var(--spacing-md);
+    top: 0.3rem;
     right: var(--spacing-md);
     background: linear-gradient(90deg, var(--primary-color) 0%, #6B7280 100%);
     color: #fff;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    padding: 0.4em 1em;
-    border-radius: 1.5em;
+    padding: 0.25em 0.7em;
+    border-radius: 1.2em;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     opacity: 0.95;
     letter-spacing: 0.02em;

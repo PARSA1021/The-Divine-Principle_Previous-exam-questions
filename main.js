@@ -198,66 +198,105 @@ const copyAccountNumber = async () => {
 };
 
 /**
- * 특정 메시지의 텍스트, 출처, 카테고리를 클립보드에 복사합니다.
- * 훈독 말씀 형식으로 복사할지 여부를 사용자에게 확인합니다.
- * @param {string} text - 복사할 메시지 텍스트
- * @param {string} source - 메시지의 출처
- * @param {string} category - 메시지의 카테고리
- * @param {HTMLElement} element - 복사 버튼이 속한 결과 항목 DOM 요소
- * @returns {Promise<void>}
+ * Copies a message to the clipboard with options for different formatting.
+ *
+ * @param {string} text - The main text content to be copied.
+ * @param {string} source - The source of the text (e.g., a book or person).
+ * @param {string} category - The category of the text.
+ * @param {HTMLElement} element - The DOM element associated with the copy action, used for visual feedback.
  */
 const copyMessageToClipboard = async (text, source, category, element) => {
     try {
         const today = new Date().toISOString().split('T')[0];
+        const previewText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
 
-        // 텍스트가 너무 길 경우를 대비해 미리보기는 일부만 보여줍니다.
-        const previewText = text.length > 50 ? text.substring(0, 50) + '...' : text;
+        /* --------------------------------------------------
+         * 1. 메시지 템플릿 (훈독용 vs 기본용)
+         * -------------------------------------------------- */
+        const templates = {
+            hundok: {
+                preview:
+`🌟 ${today} 훈독 말씀 🌟
+"${previewText}"`,
 
-        // 훈독 말씀 형식 미리보기
-        const hundokPreview =
-            `🌟${today} 훈독 말씀 🌟\n` +
-            `${previewText}\n\n` +
-            `📜 카테고리: ${category}\n` +
-            `📖 출처: ${source}`;
+                full:
+`📖 ───────────────────────
+🌟 ${today} 훈독 말씀 🌟
+─────────────────────────
 
-        // 기본 형식 미리보기
-        const defaultPreview =
-            `🌟 말씀 🌟\n` +
-            `${previewText}\n\n` +
-            `📜 카테고리: ${category}\n` +
-            `📖 출처: ${source}`;
+💬 말씀
+"${text}"
 
-        const confirmationMessage =
-            `✨ 어떤 형식으로 복사할까요? ✨\n\n` +
-            `------------------------------------\n` +
-            `✅ '확인' 버튼 선택 시 (훈독 말씀 형식)\n` +
-            `------------------------------------\n` +
-            `   ${hundokPreview}\n` +
-            `   (날짜와 '훈독 말씀' 문구가 포함됩니다.)\n\n` +
-            `------------------------------------\n` +
-            `❌ '취소' 버튼 선택 시 (기본 형식)\n` +
-            `------------------------------------\n` +
-            `   ${defaultPreview}\n` +
-            `   (간결한 말씀 내용만 복사됩니다.)\n\n` +
-            `두 형식 중 원하는 것을 선택해주세요!`;
+📜 카테고리 : ${category}
+📖 출처 : ${source}
+─────────────────────────
+🙏 함께 묵상해요`
+            },
+            basic: {
+                preview:
+`🌟 오늘의 말씀 🌟
+"${previewText}"`,
 
-        const useHundokFormat = confirm(confirmationMessage);
+                full:
+`📖 ───────────────────────
+🌟 오늘의 말씀 🌟
+─────────────────────────
 
-        const formattedText = useHundokFormat
-            ? `🌟${today} 훈독 말씀 🌟\n${text}\n\n📜 카테고리: ${category}\n📖 출처: ${source}\n——————————————————`
-            : `🌟 말씀 🌟\n${text}\n\n📜 카테고리: ${category}\n📖 출처: ${source}\n——————————————————`;
+💬 말씀
+"${text}"
 
-        await navigator.clipboard.writeText(formattedText);
-        showToast('말씀과 출처가 클립보드에 복사되었어요! 😊');
+📜 카테고리 : ${category}
+📖 출처 : ${source}
+─────────────────────────`
+            }
+        };
 
-        // 시각적 피드백
-        element.classList.add('copied');
-        setTimeout(() => element.classList.remove('copied'), 1000); // 1초 후 클래스 제거
+        /* --------------------------------------------------
+         * 2. 사용자 선택 프롬프트
+         * -------------------------------------------------- */
+        const confirmationPrompt =
+`✨ 어떤 형식으로 복사할까요? ✨
+
+─────────────────────────────
+✅ '확인' → 훈독 말씀 형식
+─────────────────────────────
+${templates.hundok.preview}
+(날짜와 '훈독 말씀' 문구 포함)
+
+─────────────────────────────
+❌ '취소' → 기본 형식
+─────────────────────────────
+${templates.basic.preview}
+(간결한 말씀 내용만 복사)
+
+👉 원하는 형식을 선택해주세요!`;
+
+        const useHundokFormat = confirm(confirmationPrompt);
+
+        /* --------------------------------------------------
+         * 3. 최종 메시지 선택
+         * -------------------------------------------------- */
+        const finalMessage = useHundokFormat
+            ? templates.hundok.full
+            : templates.basic.full;
+
+        /* --------------------------------------------------
+         * 4. 클립보드 복사 + 피드백
+         * -------------------------------------------------- */
+        await navigator.clipboard.writeText(finalMessage);
+        showToast('✅ 말씀과 출처가 클립보드에 복사되었어요!');
+
+        // 선택된 버튼에 시각적 효과
+        if (element) {
+            element.classList.add('copied');
+            setTimeout(() => element.classList.remove('copied'), 1000);
+        }
     } catch (err) {
         console.error('텍스트 복사 실패:', err);
-        showToast('복사에 실패했어요. 직접 선택해서 복사해 주세요. 😥');
+        showToast('❌ 복사에 실패했어요. 직접 선택해서 복사해 주세요.');
     }
 };
+
 /**
  * 사용자에게 알림 메시지를 표시합니다.
  * @param {string} message - 표시할 메시지 텍스트
