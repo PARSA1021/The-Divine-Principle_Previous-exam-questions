@@ -794,59 +794,111 @@ body {
     background-color: var(--hover-background);
 }
 
-/* 카테고리 버튼 */
+/* 카테고리 버튼 컨테이너 */
 .category-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--spacing-xs); /* 8px */
-    margin-top: var(--spacing-md); /* 16px */
-    width: 100%;
-    max-width: 55rem; /* 880px */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm, 0.6rem); /* 여백 조금 더 넓게 */
+  margin-top: var(--spacing-md, 1rem);
+  width: 100%;
+  max-width: 55rem; /* 880px */
+  padding: 0.5rem;
 }
 
+/* 버튼 공통 스타일 */
 .category-container button {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    padding: var(--spacing-xs) var(--spacing-md); /* 8px 16px */
-    border-radius: var(--border-radius-xl); /* 20px, 더 둥글게 */
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem; /* 5px */
-    white-space: nowrap;
-    outline-offset: 2px;
+  background: var(--background-color, #fff);
+  color: var(--text-color, #333);
+  border: 1px solid var(--border-color, #ddd);
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px; /* 완전 pill 버튼 */
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  outline-offset: 3px;
+
+  /* 부드러운 애니메이션 */
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease;
 }
 
+/* 아이콘 */
 .category-container button i {
-    font-size: 1rem;
-    color: var(--primary-color);
+  font-size: 1.05rem;
+  transition: transform 0.25s ease;
 }
 
+/* hover 효과 */
 .category-container button:hover {
-    background-color: var(--hover-background);
-    box-shadow: var(--shadow-light);
-    border-color: var(--primary-color);
+  background-color: var(--hover-background, #f7f7f7);
+  border-color: var(--primary-color, #4caf50);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
 }
 
+.category-container button:hover i {
+  transform: scale(1.1); /* 아이콘 확대 효과 */
+}
+
+/* 키보드 포커스 */
 .category-container button:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+  outline: 3px solid var(--primary-color, #4caf50);
+  outline-offset: 3px;
 }
 
+/* active 버튼 */
 .category-container button.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-    box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.3);
+  background: var(--primary-color, #4caf50);
+  color: #fff;
+  border-color: var(--primary-color, #4caf50);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb, 76, 175, 80), 0.4);
+  transform: translateY(-2px);
 }
 
 .category-container button.active i {
-    color: white;
+  color: #fff;
+  transform: scale(1.15);
+}
+
+.category-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem;
+  scrollbar-width: none; /* Firefox */
+}
+
+.category-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.category-scroll button {
+  flex: 0 0 auto;
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 2rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: 0.3s;
+}
+
+.category-scroll button.active {
+  background: linear-gradient(135deg, #2196F3, #21CBF3);
+  color: #fff;
+  border-color: transparent;
 }
 
 /* 검색 통계 */
