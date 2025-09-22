@@ -27,15 +27,15 @@ const CONSTANTS = {
 const CATEGORIES = {
     ALL: '전체',
     CHEON_SEONG_GYEONG: '천성경',
-    CHAM_BUMO_GYEONG : '참부모경',
+    CHAM_BUMO_GYEONG: '참부모경',
     CHAM_BUMO_NIM: '참부모님 말씀',
     CHAM_EOMEONIM: '참어머님 말씀',
     CHEON_SHIM_WON: '천심원',
     TRUE_FATHER_PRAYER: '참아버님 기도문',
-    THE_WILL_ROAD : '뜻 길',
-    COLLECTED_SERMONS : "말씀선집",
-    A_PEACE_LOVING_GLOBAL_CITIZEN : "평화를 사랑하는 세계인으로",
-    MOTHER_OF_PEACE : "평화의 어머니"
+    THE_WILL_ROAD: '뜻 길',
+    COLLECTED_SERMONS: "말씀선집",
+    A_PEACE_LOVING_GLOBAL_CITIZEN: "평화를 사랑하는 세계인으로",
+    MOTHER_OF_PEACE: "평화의 어머니"
 };
 
 /**
@@ -180,8 +180,14 @@ const scrollToResultsTop = () => {
  * body 요소에 'dark-mode' 클래스를 토글하고 localStorage에 상태를 저장합니다.
  */
 const toggleDarkMode = () => {
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    const html = document.documentElement;
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
 };
 
 /**
@@ -406,10 +412,10 @@ const categorizeMessage = (source) => {
         { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
         { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
         { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER },
-        { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD},
-        { key: '말씀선집', value: COLLECTED_SERMONS},
-        { key: '평화를 사랑하는 세계인으로', value:CATEGORIES.A_PEACE_LOVING_GLOBAL_CITIZEN},
-        { key: '평화의 어머니', value:CATEGORIES.MOTHER_OF_PEACE}
+        { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD },
+        { key: '말씀선집', value: COLLECTED_SERMONS },
+        { key: '평화를 사랑하는 세계인으로', value: CATEGORIES.A_PEACE_LOVING_GLOBAL_CITIZEN },
+        { key: '평화의 어머니', value: CATEGORIES.MOTHER_OF_PEACE }
     ];
     // 출처에 포함된 키워드를 찾아 해당하는 카테고리 반환, 없으면 '전체' 반환
     return categories.find(cat => source.includes(cat.key))?.value || CATEGORIES.ALL;
@@ -678,13 +684,13 @@ const searchMessages = debounce((page = 1) => {
     if (query) {
         try {
             const queryRegex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-            
+
             filteredMessages = filteredMessages.map(msg => {
                 let totalMatchCount = 0;
                 let textMatchCount = 0;
                 let categoryMatchCount = 0;
                 let sourceMatchCount = 0;
-                
+
                 // 2. 검색 유형에 따라 검색 대상을 분기합니다.
                 if (searchType === 'message') {
                     // '말씀 검색'일 경우, 본문에서만 검색
@@ -730,9 +736,9 @@ const searchMessages = debounce((page = 1) => {
             filteredMessages.sort((a, b) => a.textLength - b.textLength); // 길이 짧은순
             break;
         case CONSTANTS.SORT_ORDER.LENGTH_DESC:
-            filteredMessages.sort((a, b) => b.textLength - a.textLength); // 길이 긴순
+            filteredMessages.sort((a, b) => b.textLength - b.textLength); // 길이 긴순
             break;
-        // CONSTANTS.SORT_ORDER.DEFAULT (검색 일치 횟수)는 이미 위에서 처리됨
+            // CONSTANTS.SORT_ORDER.DEFAULT (검색 일치 횟수)는 이미 위에서 처리됨
     }
 
 
@@ -987,7 +993,7 @@ const initializeApp = () => {
             // 현재 포커스된 요소가 suggestion 내부에 있는지 확인
             const activeEl = document.activeElement;
             if (activeEl && activeEl.closest('.suggestion') === activeEl) {
-                 currentIndex = Array.from(suggestions).findIndex(s => s === activeEl);
+                currentIndex = Array.from(suggestions).findIndex(s => s === activeEl);
             } else if (activeEl && activeEl.closest('.suggestion span') === activeEl) {
                 currentIndex = Array.from(suggestions).findIndex(s => s.querySelector('span') === activeEl);
             } else if (activeEl && activeEl.closest('.suggestion button') === activeEl) {
@@ -1133,9 +1139,13 @@ const initializeApp = () => {
         DOM.randomMessageButton.addEventListener('click', generateRandomMessage);
     }
 
-    // localStorage에서 다크 모드 설정 로드
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('dark-mode');
+    // 로컬 스토리지에서 테마 설정 로드 및 적용
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+        // 기본 테마 설정 (로컬 스토리지에 값이 없을 경우)
+        document.documentElement.setAttribute('data-theme', 'light');
     }
 
     // 애플리케이션 시작 시 기본 페이지 표시
