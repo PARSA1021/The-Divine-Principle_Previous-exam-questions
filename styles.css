@@ -1,12 +1,12 @@
 /*
- * styles.css - PC 환경에 최적화된 웹사이트 디자인
+ * styles.css - 모바일과 PC에서 동일한 직관적 UI 제공
  *
  * 개선사항:
- * 1. PC에서 더 넓은 화면 활용과 시원한 레이아웃
- * 2. 그리드 시스템 개선으로 콘텐츠 배치 최적화
- * 3. 더 큰 여백과 간격으로 가독성 향상
- * 4. 카드와 컴포넌트의 더 세련된 배치
- * 5. 사이드바 네비게이션 개선
+ * 1. 모든 디바이스에서 단일 컬럼 중심 레이아웃 통일
+ * 2. PC에서도 모바일과 동일한 네비게이션 구조 유지
+ * 3. PC에서는 글자 크기와 여백만 확대하여 가독성 향상
+ * 4. 복잡한 그리드 레이아웃 제거로 직관적 사용성 개선
+ * 5. 모든 컴포넌트의 일관된 중앙 정렬 및 단순 배치
  */
 
 /* ==========================================================================  
@@ -42,16 +42,16 @@
   --quiz-green: #34a853;
   --quiz-green-rgb: 52, 168, 83;
 
-  /* PC 최적화 간격 */
+  /* 통일된 간격 (모바일 기준) */
   --spacing-xs: 0.5rem;
   --spacing-sm: 0.75rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
-  --spacing-xxl: 3rem;
-  --spacing-xxxl: 4rem;
+  --spacing-xxl: 2.5rem;
+  --spacing-xxxl: 3rem;
 
-  /* 보더-반경 */
+  /* 보더 반경 */
   --border-radius-sm: 0.375rem;
   --border-radius-md: 0.5rem;
   --border-radius-lg: 0.75rem;
@@ -89,7 +89,7 @@
 }
 
 /* ==========================================================================
-   기본 및 레이아웃 스타일
+   기본 및 레이아웃 스타일 - 통일된 단일 컬럼
    ========================================================================== */
 html {
   font-size: 16px;
@@ -118,10 +118,10 @@ body {
 }
 
 /* ==========================================================================
-   PC 최적화: 메인 레이아웃 시스템
+   통일된 레이아웃 시스템 - 모바일과 PC 동일
    ========================================================================== */
 
-/* 모바일: 기본 플렉스 레이아웃 */
+/* 모든 디바이스에서 동일한 플렉스 레이아웃 */
 .app-layout {
   display: flex;
   flex-direction: column;
@@ -139,43 +139,21 @@ body {
   flex-direction: column;
   align-items: center;
   padding: var(--spacing-lg);
-  max-width: 78rem;
+  max-width: 52rem; /* 모바일 기준으로 통일 */
   margin: 0 auto;
   width: 100%;
 }
 
-/* PC: 사이드바 + 메인 콘텐츠 그리드 */
+/* PC: 가독성을 위한 여백과 폰트 크기만 확대 */
 @media (min-width: 1024px) {
-  .app-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    grid-template-rows: 1fr auto;
-    grid-template-areas: 
-      "sidebar main"
-      "sidebar footer";
-    min-height: 100vh;
-    gap: 0;
-  }
-  
-  .nav-bar {
-    grid-area: sidebar;
-  }
-  
-  .main-content {
-    grid-area: main;
-    overflow-y: auto;
-    padding: var(--spacing-xxxl) var(--spacing-xxl);
-    max-width: none;
-  }
-  
-  .footer {
-    grid-area: footer;
+  body {
+    font-size: 18px;
+    line-height: 1.8;
   }
   
   .page-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0;
+    padding: var(--spacing-xxl);
+    max-width: 60rem; /* PC에서 약간 확대하되 단일 컬럼 유지 */
   }
 }
 
@@ -183,20 +161,13 @@ body {
   display: none;
   width: 100%;
   animation: fadeIn 0.6s ease-out;
-  padding-bottom: 6rem;
+  padding-bottom: 5rem; /* 하단 네비게이션 공간 */
 }
 
 .page.active {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* PC에서 페이지 하단 여백 제거 */
-@media (min-width: 1024px) {
-  .page {
-    padding-bottom: 0;
-  }
 }
 
 .section-title {
@@ -208,26 +179,28 @@ body {
   font-weight: 700;
 }
 
-.section-description {
-  text-align: center;
-  color: var(--text-color);
-  margin-bottom: var(--spacing-xl);
-  font-size: 1.15rem;
-  max-width: 55rem;
-  opacity: 0.9;
-}
-
-/* PC에서 더 큰 제목과 설명 */
+/* PC: 더 큰 제목 */
 @media (min-width: 1024px) {
   .section-title {
     font-size: 2.5rem;
     margin-top: var(--spacing-xxl);
     margin-bottom: var(--spacing-lg);
   }
-  
+}
+
+.section-description {
+  text-align: center;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-xl);
+  font-size: 1.15rem;
+  max-width: 90%;
+  opacity: 0.9;
+}
+
+/* PC: 더 큰 설명 */
+@media (min-width: 1024px) {
   .section-description {
-    font-size: 1.25rem;
-    max-width: 70rem;
+    font-size: 1.3rem;
     margin-bottom: var(--spacing-xxl);
     line-height: 1.8;
   }
@@ -248,16 +221,16 @@ body {
   border-radius: 1px;
 }
 
-/* PC에서 더 긴 구분선 */
+/* PC: 약간 더 긴 구분선 */
 @media (min-width: 1024px) {
   .divider {
-    max-width: 60rem;
+    max-width: 50rem;
     margin: var(--spacing-xxxl) auto;
   }
 }
 
 /* ==========================================================================
-   헤더 스타일 - PC 최적화
+   헤더 스타일 - PC와 모바일 동일
    ========================================================================== */
 .header {
   text-align: center;
@@ -265,7 +238,7 @@ body {
   margin-bottom: var(--spacing-lg);
 }
 
-/* PC에서 더 웅장한 헤더 */
+/* PC: 더 큰 여백 */
 @media (min-width: 1024px) {
   .header {
     padding: var(--spacing-xxl) 0;
@@ -288,7 +261,7 @@ body {
   height: auto;
 }
 
-/* PC에서 더 큰 로고 */
+/* PC: 더 큰 로고 */
 @media (min-width: 1024px) {
   .header img {
     width: 9rem;
@@ -309,7 +282,7 @@ body {
   letter-spacing: -0.05rem;
 }
 
-/* PC에서 더 큰 제목 */
+/* PC: 더 큰 제목 */
 @media (min-width: 1024px) {
   .header h1 {
     font-size: 4rem;
@@ -326,33 +299,32 @@ body {
   opacity: 0.9;
 }
 
-/* PC에서 더 큰 태그라인 */
+/* PC: 더 큰 태그라인 */
 @media (min-width: 1024px) {
   .tagline {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     margin-bottom: var(--spacing-xxl);
   }
 }
 
 .header p {
-  max-width: 55rem;
+  max-width: 90%;
   margin: var(--spacing-sm) auto;
   font-size: 1.05rem;
   color: var(--text-color);
   opacity: 0.85;
 }
 
-/* PC에서 더 큰 헤더 텍스트 */
+/* PC: 더 큰 헤더 텍스트 */
 @media (min-width: 1024px) {
   .header p {
-    max-width: 70rem;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     margin: var(--spacing-lg) auto;
   }
 }
 
 /* ==========================================================================
-   내비게이션 바 - PC 사이드바 최적화
+   내비게이션 바 - 모든 디바이스에서 하단 고정 유지
    ========================================================================== */
 .nav-bar {
   display: flex;
@@ -370,21 +342,11 @@ body {
   min-height: 60px;
 }
 
-/* PC: 사이드바 변환 */
+/* PC: 더 큰 패딩과 높이 */
 @media (min-width: 1024px) {
   .nav-bar {
-    position: static;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    width: 280px;
-    height: 100vh;
-    border-top: none;
-    border-right: 1px solid var(--border-color);
-    padding: var(--spacing-xxl) var(--spacing-lg);
-    gap: var(--spacing-md);
-    background: linear-gradient(135deg, var(--card-background) 0%, var(--hover-background) 100%);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+    padding: var(--spacing-lg) 0;
+    min-height: 80px;
   }
 }
 
@@ -406,29 +368,13 @@ body {
   font-weight: 500;
 }
 
-/* PC: 사이드바 버튼 스타일 */
+/* PC: 더 큰 버튼 */
 @media (min-width: 1024px) {
   .nav-bar button, .nav-bar a {
-    flex: none;
-    width: 100%;
-    justify-content: flex-start;
-    flex-direction: row;
-    text-align: left;
     padding: var(--spacing-lg) var(--spacing-xl);
-    border-radius: var(--border-radius-lg);
     font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: var(--spacing-sm);
-    min-height: 56px;
-    box-shadow: var(--shadow-light);
-    background: var(--card-background);
-    border: 1px solid var(--border-color);
-  }
-  
-  .nav-bar button i, .nav-bar a i {
-    font-size: 1.4rem;
-    margin-right: var(--spacing-lg);
-    width: 24px;
+    min-height: 60px;
+    gap: var(--spacing-sm);
   }
 }
 
@@ -438,34 +384,20 @@ body {
   border-radius: var(--border-radius-sm);
 }
 
-/* PC: 사이드바 호버 효과 */
-@media (min-width: 1024px) {
-  .nav-bar button:hover, .nav-bar a:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateX(8px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--primary-color);
-  }
-}
-
 .nav-bar button.active, .nav-bar a.active {
   background: var(--primary-color);
   color: white;
 }
 
-/* PC: 활성 버튼 스타일 */
-@media (min-width: 1024px) {
-  .nav-bar button.active, .nav-bar a.active {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #5a9df7 100%);
-    transform: translateX(12px);
-    box-shadow: var(--shadow-strong);
-    border-color: var(--primary-color);
-  }
-}
-
 .nav-bar button i, .nav-bar a i {
   font-size: 1.2rem;
+}
+
+/* PC: 더 큰 아이콘 */
+@media (min-width: 1024px) {
+  .nav-bar button i, .nav-bar a i {
+    font-size: 1.5rem;
+  }
 }
 
 .dark-mode-toggle {
@@ -480,26 +412,11 @@ body {
   min-width: auto;
 }
 
-/* PC: 다크모드 토글 사이드바 하단에 위치 */
+/* PC: 더 큰 다크모드 토글 */
 @media (min-width: 1024px) {
   .dark-mode-toggle {
-    margin-top: auto;
-    width: 100%;
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius-lg);
-    background: var(--card-background);
-    border: 1px solid var(--border-color);
-    font-size: 1.1rem;
-    box-shadow: var(--shadow-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-md);
-  }
-  
-  .dark-mode-toggle::after {
-    content: "다크 모드";
-    font-weight: 600;
+    padding: 1rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -509,43 +426,29 @@ body {
   transform: rotate(180deg);
 }
 
-/* PC: 다크모드 토글 호버 */
-@media (min-width: 1024px) {
-  .dark-mode-toggle:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateX(8px) rotate(180deg);
-    box-shadow: var(--shadow-medium);
-  }
-}
-
 .dark-mode-toggle:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
 
 /* ==========================================================================
-   퀴즈 선택 섹션 - PC 최적화
+   퀴즈 선택 섹션 - 단일 컬럼 중심 배치
    ========================================================================== */
 .quiz-selection .button-container, .quiz-selection-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: var(--spacing-lg);
-  flex-wrap: wrap;
   margin-top: var(--spacing-lg);
   width: 100%;
-  max-width: 60rem;
+  max-width: 100%;
 }
 
-/* PC: 더 큰 간격과 3열 그리드 */
+/* PC: 더 큰 간격 */
 @media (min-width: 1024px) {
   .quiz-selection .button-container, .quiz-selection-container {
-    gap: var(--spacing-xxl);
+    gap: var(--spacing-xl);
     margin-top: var(--spacing-xxl);
-    max-width: none;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
   }
 }
 
@@ -564,7 +467,9 @@ body {
   gap: var(--spacing-sm);
   text-align: center;
   box-shadow: var(--shadow-medium);
-  min-width: 12.5rem;
+  min-width: 14rem;
+  width: 100%;
+  max-width: 20rem;
   justify-content: center;
   outline-offset: 3px;
   min-height: 44px;
@@ -576,14 +481,14 @@ body {
     padding: var(--spacing-xl) var(--spacing-xxl);
     font-size: 1.4rem;
     min-width: 18rem;
-    min-height: 80px;
+    max-width: 25rem;
+    min-height: 70px;
     border-radius: var(--border-radius-xl);
-    flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
   }
   
   .quiz-button i {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
   }
 }
 
@@ -608,8 +513,8 @@ body {
 /* PC: 더 역동적인 호버 효과 */
 @media (min-width: 1024px) {
   .quiz-button:hover {
-    transform: translateY(-8px) scale(1.05);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -658,35 +563,27 @@ body {
 }
 
 /* ==========================================================================
-   격려 메시지 & 후원 섹션 - PC 최적화
+   격려 메시지 & 후원 섹션 - 단일 컬럼 유지
    ========================================================================== */
 .encouragement-card, .donation-section {
   background-color: var(--card-background);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-medium);
   padding: var(--spacing-xl);
-  max-width: 55rem;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: var(--spacing-lg) auto;
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
+  width: 100%;
 }
 
-/* PC: 더 큰 카드와 2열 배치 */
+/* PC: 더 큰 카드 */
 @media (min-width: 1024px) {
   .encouragement-card, .donation-section {
     padding: var(--spacing-xxl);
-    max-width: none;
-    margin: var(--spacing-xxl) 0;
+    margin: var(--spacing-xxl) auto;
     border-radius: var(--border-radius-xl);
-  }
-  
-  .cards-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: var(--spacing-xxl);
-    align-items: start;
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 55rem;
   }
 }
 
@@ -721,13 +618,13 @@ body {
 /* PC: 더 큰 카드 텍스트 */
 @media (min-width: 1024px) {
   .card-text {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     margin-bottom: var(--spacing-lg);
   }
 }
 
 .donation-section {
-  max-width: 20rem;
+  max-width: 100%;
   text-align: center;
 }
 
@@ -788,7 +685,7 @@ body {
 }
 
 /* ==========================================================================
-   말씀 DB 섹션 - PC 최적화
+   말씀 DB 섹션 - 단일 컬럼 유지
    ========================================================================== */
 .search-container {
   background-color: var(--card-background);
@@ -796,7 +693,7 @@ body {
   box-shadow: var(--shadow-medium);
   padding: var(--spacing-xl);
   width: 100%;
-  max-width: 60rem;
+  max-width: 100%;
   margin-bottom: var(--spacing-xl);
   border: 1px solid var(--border-color);
   display: flex;
@@ -809,9 +706,9 @@ body {
 @media (min-width: 1024px) {
   .search-container {
     padding: var(--spacing-xxl);
-    max-width: 80rem;
     margin-bottom: var(--spacing-xxl);
     border-radius: var(--border-radius-xl);
+    max-width: 55rem;
   }
 }
 
@@ -824,7 +721,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 40rem;
+  max-width: 100%;
   margin-bottom: var(--spacing-md);
   position: relative;
   box-shadow: var(--shadow-light);
@@ -834,11 +731,10 @@ body {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* PC: 더 큰 검색박스 */
+/* PC: 가로 배치로 변경하되 여전히 단순하게 */
 @media (min-width: 1024px) {
   .search-box {
     flex-direction: row;
-    max-width: 60rem;
     margin-bottom: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
     min-height: 60px;
@@ -1058,30 +954,28 @@ body {
   background-color: var(--hover-background);
 }
 
-/* 카테고리 필터 */
+/* 카테고리 필터 - 단일 컬럼 가로 스크롤 */
 .category-container, .qna-filter {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   gap: var(--spacing-sm);
   margin: var(--spacing-md) 0;
   width: 100%;
-  max-width: 55rem;
-  padding: 0.5rem;
+  max-width: 100%;
+  padding: var(--spacing-sm);
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-/* PC: 더 큰 간격과 3행 그리드 */
+/* PC: 더 큰 간격 */
 @media (min-width: 1024px) {
   .category-container, .qna-filter {
     gap: var(--spacing-lg);
-    margin: var(--spacing-xxl) 0;
-    max-width: none;
+    margin: var(--spacing-lg) 0;
     padding: var(--spacing-lg);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    overflow-x: visible;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
 
@@ -1113,12 +1007,9 @@ body {
 @media (min-width: 1024px) {
   .category-container button, .qna-filter button {
     padding: var(--spacing-lg) var(--spacing-xl);
-    font-size: 1.2rem;
-    min-height: 56px;
+    font-size: 1.1rem;
+    min-height: 50px;
     border-radius: var(--border-radius-xl);
-    justify-content: center;
-    white-space: normal;
-    text-align: center;
   }
 }
 
@@ -1130,7 +1021,7 @@ body {
 /* PC: 더 큰 아이콘 */
 @media (min-width: 1024px) {
   .category-container button i, .qna-filter button i {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 }
 
@@ -1144,7 +1035,7 @@ body {
 /* PC: 더 역동적인 호버 효과 */
 @media (min-width: 1024px) {
   .category-container button:hover, .qna-filter button:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: var(--shadow-medium);
   }
 }
@@ -1169,8 +1060,8 @@ body {
 /* PC: 더 강한 활성 효과 */
 @media (min-width: 1024px) {
   .category-container button.active, .qna-filter button.active {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.4);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.4);
   }
 }
 
@@ -1185,6 +1076,7 @@ body {
   gap: var(--spacing-md);
   margin: var(--spacing-md) 0;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* PC: 더 큰 간격 */
@@ -1226,7 +1118,7 @@ body {
   }
 }
 
-/* 정렬 & 랜덤 컨테이너 */
+/* 정렬 & 랜덤 컨테이너 - 단일 컬럼 유지 */
 .sort-and-random-container {
   display: flex;
   flex-direction: column;
@@ -1236,15 +1128,11 @@ body {
   margin-top: var(--spacing-lg);
 }
 
-/* PC: 가로 배치와 더 큰 간격 */
+/* PC: 더 큰 간격 */
 @media (min-width: 1024px) {
   .sort-and-random-container {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--spacing-xxl);
+    gap: var(--spacing-lg);
     margin-top: var(--spacing-xxl);
-    max-width: 80rem;
   }
 }
 
@@ -1257,6 +1145,8 @@ body {
   font-size: 1rem;
   cursor: pointer;
   min-width: 200px;
+  width: 100%;
+  max-width: 300px;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -1266,7 +1156,7 @@ body {
   .form-group select {
     padding: var(--spacing-lg) var(--spacing-xl);
     font-size: 1.2rem;
-    min-width: 300px;
+    max-width: 400px;
     border-radius: var(--border-radius-lg);
   }
 }
@@ -1289,7 +1179,7 @@ body {
   box-shadow: 0 3px 8px rgba(var(--quiz-green-rgb), 0.3);
   min-height: 44px;
   width: 100%;
-  max-width: 250px;
+  max-width: 300px;
 }
 
 /* PC: 더 큰 랜덤 버튼 */
@@ -1298,7 +1188,7 @@ body {
     padding: var(--spacing-lg) var(--spacing-xxl);
     font-size: 1.2rem;
     min-height: 56px;
-    max-width: 350px;
+    max-width: 400px;
     border-radius: var(--border-radius-lg);
   }
 }
@@ -1312,8 +1202,8 @@ body {
 /* PC: 더 역동적인 호버 */
 @media (min-width: 1024px) {
   #random-message-button:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 16px rgba(var(--quiz-green-rgb), 0.5);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(var(--quiz-green-rgb), 0.5);
   }
 }
 
@@ -1419,21 +1309,20 @@ body {
   }
 }
 
-/* 검색 결과 */
+/* 검색 결과 - 단일 컬럼 유지 */
 .search-results {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
   width: 100%;
-  max-width: 60rem;
+  max-width: 100%;
   margin-top: var(--spacing-xl);
 }
 
-/* PC: 더 넓은 결과 영역과 큰 간격 */
+/* PC: 더 큰 간격 */
 @media (min-width: 1024px) {
   .search-results {
     gap: var(--spacing-xxl);
-    max-width: 85rem;
     margin-top: var(--spacing-xxl);
   }
 }
@@ -1466,8 +1355,8 @@ body {
 /* PC: 더 역동적인 호버 */
 @media (min-width: 1024px) {
   .result-item:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -1775,7 +1664,7 @@ body {
 @media (min-width: 1024px) {
   .result-item.random-message {
     border-width: 3px;
-    box-shadow: 0 12px 32px rgba(var(--quiz-green-rgb), 0.35);
+    box-shadow: 0 10px 24px rgba(var(--quiz-green-rgb), 0.35);
   }
 }
 
@@ -1823,7 +1712,7 @@ body {
 /* PC: 더 역동적인 페이지 버튼 호버 */
 @media (min-width: 1024px) {
   .next-page-button:hover, .back-to-top.result-top:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-3px) scale(1.02);
   }
 }
 
@@ -1833,19 +1722,12 @@ body {
 }
 
 /* ==========================================================================
-   Q&A 섹션 - PC 최적화
+   Q&A 섹션 - 단일 컬럼 유지
    ========================================================================== */
 .qna-container {
   width: 100%;
-  max-width: 52rem;
+  max-width: 100%;
   margin: 0 auto;
-}
-
-/* PC: 더 넓은 Q&A 컨테이너 */
-@media (min-width: 1024px) {
-  .qna-container {
-    max-width: 90rem;
-  }
 }
 
 .qna-list {
@@ -1856,11 +1738,9 @@ body {
   padding: var(--spacing-md);
 }
 
-/* PC: 그리드 레이아웃과 더 큰 간격 */
+/* PC: 더 큰 간격 */
 @media (min-width: 1024px) {
   .qna-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: var(--spacing-xxl);
     padding: var(--spacing-xxl);
   }
@@ -1891,14 +1771,14 @@ body {
 .qna-card:hover {
   box-shadow: var(--shadow-strong);
   border-color: var(--primary-color);
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-3px) scale(1.01);
 }
 
 /* PC: 더 역동적인 Q&A 카드 호버 */
 @media (min-width: 1024px) {
   .qna-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -1983,7 +1863,7 @@ body {
 
 .qna-card .category-label {
   position: absolute;
-  top: 0.3rem;
+  top: var(--spacing-sm);
   right: var(--spacing-md);
   background: linear-gradient(90deg, var(--primary-color) 0%, #6B7280 100%);
   color: #fff;
@@ -2002,322 +1882,8 @@ body {
   .qna-card .category-label {
     font-size: 0.9rem;
     padding: 0.3em 0.8em;
-    top: var(--spacing-sm);
-    right: var(--spacing-sm);
-  }
-  
-  .qna-filter {
-    gap: var(--spacing-xs);
-    padding: var(--spacing-sm);
-    max-width: 98vw;
-  }
-  
-  .qna-filter button {
-    font-size: 0.95rem;
-    padding: 0.6em 1.2em;
-  }
-}
-
-/* 소형 모바일 디바이스 (480px 미만) */
-@media (max-width: 480px) {
-  html {
-    font-size: 14px;
-  }
-  
-  .page-container {
-    padding: var(--spacing-sm);
-  }
-  
-  .header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .tagline {
-    font-size: 1rem;
-  }
-  
-  .section-title {
-    font-size: 1.6rem;
-  }
-  
-  .quiz-button, .donation-button {
-    font-size: 1rem;
-    padding: var(--spacing-sm) var(--spacing-lg);
-    width: 100%;
-  }
-  
-  .result-item {
-    padding: var(--spacing-md);
-  }
-  
-  .result-item h3 {
-    font-size: 1.1rem;
-    gap: 0.2rem;
-  }
-  
-  .result-item h3 i {
-    font-size: 1.2rem;
-  }
-  
-  .result-item p {
-    font-size: 0.95rem;
-  }
-  
-  .copy-button, .listen-button {
-    font-size: 0.85rem;
-    padding: 0.4rem 0.6rem;
-  }
-  
-  .toggle-text {
-    font-size: 0.9rem;
-  }
-  
-  .footer {
-    padding: var(--spacing-sm) 0;
-    font-size: 0.85rem;
-  }
-  
-  .back-to-top {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.3rem;
-    bottom: var(--spacing-lg);
-    right: var(--spacing-lg);
-  }
-  
-  .toast {
-    padding: 0.6rem 0.8rem;
-    font-size: 0.9rem;
-  }
-  
-  .search-box input, .search-box button {
-    font-size: 1rem;
-    padding: 0.5rem 0.7rem;
-  }
-  
-  .search-box .icon-button {
-    padding: 0.5rem;
-  }
-  
-  .category-container button, .qna-filter button {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.8rem;
-  }
-  
-  #sort-select, #random-message-button {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.8rem;
-  }
-  
-  .qna-filter {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .qna-filter button {
-    font-size: 0.9rem;
-    padding: 0.6em 1em;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .hero {
-    padding: var(--spacing-xl) var(--spacing-md);
-    max-width: 98vw;
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .hero-title {
-    font-size: 2rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.05rem;
-  }
-  
-  .hero-features {
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-  
-  .hero-features li {
-    font-size: 1rem;
-    padding: var(--spacing-md);
-    min-width: 0;
-  }
-  
-  .hero-buttons {
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-  
-  .hero-buttons .quiz-button {
-    font-size: 1rem;
-    padding: var(--spacing-md) var(--spacing-lg);
-    min-width: 0;
-  }
-}
-
-/* ==========================================================================
-   접근성: 모션 감소 설정
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  
-  .qna-card,
-  .qna-card:hover,
-  .qna-filter button,
-  .qna-filter button:hover,
-  .qna-filter button.active,
-  .qna-filter button:active,
-  .quiz-button:hover,
-  .result-item:hover,
-  .nav-bar button:hover,
-  .category-container button:hover,
-  .back-to-top:hover {
-    transition: none;
-    transform: none;
-  }
-}
-
-/* ==========================================================================
-   PC 전용 추가 최적화 (1200px 이상)
-   ========================================================================== */
-@media (min-width: 1200px) {
-  body {
-    line-height: 1.8;
-    font-size: 18px; /* 더 큰 기본 폰트 */
-  }
-
-  .main-content {
-    padding: var(--spacing-xxxl);
-  }
-
-  .section-description {
-    font-size: 1.4rem;
-    max-width: 90rem;
-  }
-
-  .search-container {
-    max-width: 100rem;
-  }
-
-  .search-box {
-    max-width: 70rem;
-  }
-
-  .encouragement-card,
-  .donation-section {
-    max-width: none;
-  }
-
-  .cards-container {
-    max-width: 1400px;
-    gap: var(--spacing-xxxl);
-  }
-
-  .qna-list {
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  }
-
-  .search-results {
-    max-width: 100rem;
-  }
-}
-
-/* ==========================================================================
-   울트라와이드 화면 최적화 (1400px 이상)
-   ========================================================================== */
-@media (min-width: 1400px) {
-  .app-layout {
-    grid-template-columns: 320px 1fr;
-  }
-  
-  .nav-bar {
-    width: 320px;
-    padding: var(--spacing-xxxl) var(--spacing-xxl);
-  }
-  
-  .main-content {
-    padding: var(--spacing-xxxl) var(--spacing-xxxl);
-  }
-  
-  .page-container {
-    max-width: 1600px;
-  }
-  
-  .hero {
-    padding: var(--spacing-xxxl);
-  }
-  
-  .qna-list {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xxxl);
-  }
-  
-  .quiz-selection .button-container, 
-  .quiz-selection-container {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xxxl);
-    max-width: 1200px;
-    margin: var(--spacing-xxxl) auto;
-  }
-  
-  .category-container, .qna-filter {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-}
-
-/* ==========================================================================
-   고해상도 디스플레이 최적화
-   ========================================================================== */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .header img {
-    image-rendering: -webkit-optimize-contrast;
-  }
-  
-  .spinner {
-    border-width: 3px;
-  }
-  
-  @media (min-width: 1024px) {
-    .spinner {
-      border-width: 4px;
-    }
-  }
-}
-
-/* ==========================================================================
-   다크 모드에서 PC 추가 최적화
-   ========================================================================== */
-@media (min-width: 1024px) {
-  [data-theme="dark"] .nav-bar {
-    background: linear-gradient(135deg, var(--card-background) 0%, #2a2b2e 100%);
-  }
-  
-  [data-theme="dark"] .search-container,
-  [data-theme="dark"] .encouragement-card,
-  [data-theme="dark"] .donation-section,
-  [data-theme="dark"] .qna-card {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  }
-  
-  [data-theme="dark"] .result-item:hover {
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-  }
-}
     top: var(--spacing-lg);
-    right: var(--spacing-xl);
-    font-size: 1rem;
-    padding: 0.4em 1em;
-    border-radius: 1.5em;
+    right: var(--spacing-lg);
   }
 }
 
@@ -2333,7 +1899,7 @@ body {
 }
 
 /* ==========================================================================
-   영성 MBTI nav-button - PC 최적화
+   영성 MBTI nav-button - 통일된 스타일
    ========================================================================== */
 .nav-button {
   display: inline-flex;
@@ -2414,7 +1980,7 @@ body {
 }
 
 /* ==========================================================================
-   푸터 스타일 - PC 최적화
+   푸터 스타일 - 통일된 스타일
    ========================================================================== */
 .footer {
   width: 100%;
@@ -2501,34 +2067,8 @@ body {
   outline-offset: 2px;
 }
 
-/* PC: 결과 맨 위 버튼 (static) */
-@media (min-width: 1024px) {
-  .back-to-top.result-top {
-    position: static;
-    margin-top: var(--spacing-lg);
-    margin-bottom: 0;
-    opacity: 1;
-    display: block;
-    width: fit-content;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-xl);
-    padding: var(--spacing-xs) var(--spacing-md);
-    font-size: 1rem;
-    box-shadow: var(--shadow-light);
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .back-to-top.result-top:hover {
-    background-color: var(--hover-background);
-    color: var(--primary-color);
-    box-shadow: var(--shadow-medium);
-  }
-}
-
 /* ==========================================================================
-   토스트 메시지 - PC 최적화
+   토스트 메시지 - 통일된 스타일
    ========================================================================== */
 .toast {
   position: fixed;
@@ -2633,11 +2173,11 @@ body {
 }
 
 /* ==========================================================================
-   Hero Section - PC 최적화
+   Hero Section - 통일된 단일 컬럼
    ========================================================================== */
 .hero {
   width: 100%;
-  max-width: 52rem;
+  max-width: 100%;
   margin: 0 auto var(--spacing-xl) auto;
   background: linear-gradient(120deg, #e0f2fe 0%, #f8fafc 100%);
   border-radius: var(--border-radius-xl);
@@ -2652,7 +2192,6 @@ body {
 /* PC: 더 웅장한 히어로 섹션 */
 @media (min-width: 1024px) {
   .hero {
-    max-width: none;
     margin: 0 auto var(--spacing-xxxl) auto;
     padding: var(--spacing-xxxl) var(--spacing-xxl);
     border-radius: var(--border-radius-xl);
@@ -2704,9 +2243,6 @@ body {
   .hero-subtitle {
     font-size: 1.8rem;
     margin-bottom: var(--spacing-xxl);
-    max-width: 80rem;
-    margin-left: auto;
-    margin-right: auto;
     line-height: 1.7;
   }
 }
@@ -2716,16 +2252,15 @@ body {
   padding: 0;
   margin: 0 0 var(--spacing-xl) 0;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   gap: var(--spacing-lg);
 }
 
-/* PC: 그리드 레이아웃 */
+/* PC: 가로 배치로 변경하되 단순하게 */
 @media (min-width: 1024px) {
   .hero-features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    flex-direction: row;
+    justify-content: center;
     gap: var(--spacing-xxl);
     margin-bottom: var(--spacing-xxl);
   }
@@ -2743,33 +2278,34 @@ body {
   align-items: center;
   gap: var(--spacing-sm);
   margin-bottom: 0;
-  min-width: 13rem;
   transition: box-shadow 0.2s, transform 0.2s;
+  width: 100%;
 }
 
 /* PC: 더 큰 히어로 기능 */
 @media (min-width: 1024px) {
   .hero-features li {
-    padding: var(--spacing-xxl);
-    font-size: 1.4rem;
-    min-width: 0;
+    padding: var(--spacing-xl) var(--spacing-xxl);
+    font-size: 1.3rem;
     flex-direction: column;
     text-align: center;
     border-radius: var(--border-radius-xl);
     gap: var(--spacing-lg);
+    flex: 1;
+    max-width: none;
   }
 }
 
 .hero-features li:hover {
   box-shadow: var(--shadow-strong);
-  transform: translateY(-2px) scale(1.03);
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* PC: 더 역동적인 히어로 기능 호버 */
 @media (min-width: 1024px) {
   .hero-features li:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -2783,7 +2319,7 @@ body {
 /* PC: 더 큰 히어로 아이콘 */
 @media (min-width: 1024px) {
   .hero-icon {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-right: 0;
     margin-bottom: var(--spacing-sm);
   }
@@ -2791,15 +2327,17 @@ body {
 
 .hero-buttons {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   gap: var(--spacing-lg);
   margin-top: var(--spacing-lg);
-  flex-wrap: wrap;
+  align-items: center;
 }
 
-/* PC: 더 큰 히어로 버튼 그룹 */
+/* PC: 가로 배치 */
 @media (min-width: 1024px) {
   .hero-buttons {
+    flex-direction: row;
+    justify-content: center;
     gap: var(--spacing-xxl);
     margin-top: var(--spacing-xxl);
   }
@@ -2809,6 +2347,8 @@ body {
   font-size: 1.18rem;
   padding: var(--spacing-md) var(--spacing-xl);
   min-width: 11rem;
+  width: 100%;
+  max-width: 18rem;
   border-radius: var(--border-radius-xl);
   font-weight: 700;
   box-shadow: var(--shadow-medium);
@@ -2818,51 +2358,39 @@ body {
 /* PC: 더 큰 히어로 버튼 */
 @media (min-width: 1024px) {
   .hero-buttons .quiz-button {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     padding: var(--spacing-xl) var(--spacing-xxl);
-    min-width: 18rem;
-    min-height: 80px;
+    min-width: 15rem;
+    max-width: 20rem;
+    min-height: 70px;
     border-radius: var(--border-radius-xl);
+    width: auto;
   }
 }
 
 .hero-buttons .quiz-button:hover {
   box-shadow: var(--shadow-strong);
-  transform: translateY(-2px) scale(1.04);
+  transform: translateY(-2px) scale(1.03);
 }
 
 /* PC: 더 역동적인 히어로 버튼 호버 */
 @media (min-width: 1024px) {
   .hero-buttons .quiz-button:hover {
-    transform: translateY(-6px) scale(1.06);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
   }
 }
 
 /* ==========================================================================
-   모바일 전용 스타일 유지 (768px 미만)
+   소형 모바일 디바이스 (480px 미만)
    ========================================================================== */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   html {
-    font-size: 15px;
+    font-size: 14px;
   }
   
   .page-container {
-    padding: var(--spacing-md);
-  }
-  
-  .nav-bar {
-    flex-direction: row;
-    padding: var(--spacing-sm) 0;
-  }
-  
-  .nav-bar button, .nav-bar a {
-    font-size: 0.85rem;
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
-  
-  .dark-mode-toggle {
-    margin: 0 var(--spacing-md);
+    padding: var(--spacing-sm);
   }
   
   .header h1 {
@@ -2873,47 +2401,68 @@ body {
     font-size: 1.1rem;
   }
   
-  .quiz-selection .button-container {
-    flex-direction: column;
-    align-items: center;
+  .section-title {
+    font-size: 1.8rem;
   }
   
-  .quiz-button {
-    width: 90%;
-    max-width: 22rem;
-  }
-  
-  .search-box {
-    flex-wrap: wrap;
-    padding: 0 var(--spacing-xs);
-    height: auto;
-  }
-  
-  .search-box input {
+  .quiz-button, .donation-button {
+    font-size: 1rem;
+    padding: var(--spacing-sm) var(--spacing-lg);
     width: 100%;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: var(--spacing-xs);
-    padding: var(--spacing-sm) var(--spacing-xs);
+    max-width: none;
   }
   
-  .search-box button {
-    flex-grow: 1;
+  .result-item {
+    padding: var(--spacing-md);
+  }
+  
+  .result-item h3 {
+    font-size: 1.2rem;
+    gap: 0.2rem;
+  }
+  
+  .result-item h3 i {
+    font-size: 1.3rem;
+  }
+  
+  .result-item p {
+    font-size: 1rem;
+  }
+  
+  .copy-button, .listen-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .toggle-text {
+    font-size: 0.9rem;
+  }
+  
+  .footer {
     padding: var(--spacing-sm) 0;
-    border-radius: 0;
+    font-size: 0.9rem;
   }
   
-  .search-box .clear-search {
-    border-right: 1px solid var(--border-color);
+  .back-to-top {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.3rem;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
   }
   
-  .search-suggestions {
-    top: calc(100% + var(--spacing-sm));
-    border-radius: var(--border-radius-md);
+  .toast {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
   }
   
-  .category-container, .qna-filter {
-    flex-direction: row;
-    gap: 0.4rem;
+  .search-box input, .search-box button {
+    font-size: 1rem;
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .search-box .icon-button {
+    padding: 0.6rem;
   }
   
   .category-container button, .qna-filter button {
@@ -2921,48 +2470,78 @@ body {
     font-size: 0.85rem;
   }
   
-  .sort-and-random-container {
-    align-items: stretch;
-  }
-  
   #sort-select, #random-message-button {
-    width: calc(100% - var(--spacing-md));
-    margin-left: var(--spacing-xs);
-    margin-right: var(--spacing-xs);
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
   }
   
-  .result-item {
-    padding: var(--spacing-lg);
+  .hero {
+    padding: var(--spacing-xl) var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
   }
   
-  .result-item h3 {
-    font-size: 1.25rem;
+  .hero-title {
+    font-size: 2.2rem;
   }
   
-  .result-item p {
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .hero-features li {
     font-size: 1rem;
-  }
-  
-  .donation-section {
-    max-width: 100%;
-  }
-  
-  .qna-list {
-    max-width: 98vw;
-    gap: var(--spacing-md);
-    padding: var(--spacing-sm);
-  }
-  
-  .qna-card {
-    padding: var(--spacing-lg);
-  }
-  
-  .qna-card .question {
-    font-size: 1.15rem;
-  }
-  
-  .qna-card .answer {
-    font-size: 1rem;
-    margin-left: 1.5rem;
     padding: var(--spacing-md);
   }
+  
+  .hero-buttons .quiz-button {
+    font-size: 1rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+/* ==========================================================================
+   접근성: 모션 감소 설정
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .qna-card,
+  .qna-card:hover,
+  .qna-filter button,
+  .qna-filter button:hover,
+  .qna-filter button.active,
+  .qna-filter button:active,
+  .quiz-button:hover,
+  .result-item:hover,
+  .nav-bar button:hover,
+  .category-container button:hover,
+  .back-to-top:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   다크 모드에서 추가 최적화
+   ========================================================================== */
+@media (min-width: 1024px) {
+  [data-theme="dark"] .search-container,
+  [data-theme="dark"] .encouragement-card,
+  [data-theme="dark"] .donation-section,
+  [data-theme="dark"] .qna-card {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  [data-theme="dark"] .result-item:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  }
+}
