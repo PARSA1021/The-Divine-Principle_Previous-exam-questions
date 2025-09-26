@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,6 +85,35 @@
             color: var(--text-secondary);
             margin-bottom: var(--spacing-sm);
         }
+        
+        /* 홈 버튼 스타일 조정 */
+        .home-btn {
+            display: inline-flex; /* 텍스트와 아이콘 정렬을 위해 flex 사용 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: center; /* 가로 중앙 정렬 */
+            width: 100%; /* 너비는 100%로 유지 */
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem; /* 폰트 크기 약간 키움 */
+            font-weight: 700;
+            color: white;
+            /* 기존 primary-color와 secondary-color를 활용한 그라데이션 */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius-md); /* 기존 버튼들과 유사한 둥근 모서리 */
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: var(--spacing-md);
+            text-decoration: none; /* 링크 밑줄 제거 */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* 입체감 있는 그림자 */
+            gap: 0.8rem; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .home-btn:hover {
+            transform: translateY(-4px); /* 호버 시 약간 위로 올라오는 효과 */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 강화 */
+        }
+        /* /홈 버튼 스타일 조정 */
+
 
         .progress-container {
             width: 100%;
@@ -336,7 +367,7 @@
         .trait-card h3 {
             font-size: 1.2rem;
             color: var(--primary-color);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -673,9 +704,14 @@
                 참사랑 영성 진단
             </h1>
             <p class="subtitle">당신의 영적 여정을 발견하는 완전한 가이드</p>
+            
+            <a href="index.html" class="home-btn">
+                <i class="fas fa-home"></i> 홈으로 돌아가기
+            </a>
             <div class="progress-container">
                 <div class="progress-fill" id="progress-fill"></div>
             </div>
+
             <div class="question-counter" id="question-counter">1 / 35</div>
         </header>
 
