@@ -215,52 +215,62 @@ const copyAccountNumber = async () => {
  */
 const copyMessageToClipboard = async (text, source, category, element) => {
     try {
-        const today = new Date().toISOString().split('T')[0];
+        // [날짜 오류 수정 유지] KST (로컬 시간) 기준으로 날짜를 안전하게 추출
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const today = `${year}-${month}-${day}`;
+        
         const previewText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
 
         /* --------------------------------------------------
-         * 1. 메시지 템플릿 (훈독용 vs 기본용)
+         * 1. 메시지 템플릿 (훈독용 vs 기본용) - 메신저 공유 최적화
          * -------------------------------------------------- */
         const templates = {
             hundok: {
+                // Confirm 창에 표시될 간략 버전
                 preview:
-`🌟 ${today} 훈독 말씀 🌟
+`📅 ${today} 훈독 말씀
 "${previewText}"`,
 
+                // 클립보드에 복사될 최종 버전 (훈독용)
                 full:
-`📖 ───────────────────────
-🌟 ${today} 훈독 말씀 🌟
-─────────────────────────
+`[말씀 공유] 📖 **훈독 말씀**
+───────────────────
+📅 날짜: ${today}
 
-💬 말씀
+💬 **오늘의 말씀**
 "${text}"
 
-📜 카테고리 : ${category}
-📖 출처 : ${source}
-─────────────────────────
-🙏 함께 묵상해요`
+📚 **출처 정보**
+- 카테고리: ${category}
+- 출처: ${source}
+───────────────────`
             },
             basic: {
+                // Confirm 창에 표시될 간략 버전
                 preview:
-`🌟 오늘의 말씀 🌟
+`💡 오늘의 말씀
 "${previewText}"`,
 
+                // 클립보드에 복사될 최종 버전 (기본용)
                 full:
-`📖 ───────────────────────
-🌟 오늘의 말씀 🌟
-─────────────────────────
+`[말씀 공유] 💡 **오늘의 말씀**
+───────────────────
 
-💬 말씀
+💬 **말씀 내용**
 "${text}"
 
-📜 카테고리 : ${category}
-📖 출처 : ${source}
-─────────────────────────`
+📚 **출처 정보**
+- 카테고리: ${category}
+- 출처: ${source}
+───────────────────`
             }
         };
 
         /* --------------------------------------------------
-         * 2. 사용자 선택 프롬프트
+         * 2. 사용자 선택 프롬프트 (수정된 Preview 반영)
          * -------------------------------------------------- */
         const confirmationPrompt =
 `✨ 어떤 형식으로 복사할까요? ✨
@@ -269,13 +279,13 @@ const copyMessageToClipboard = async (text, source, category, element) => {
 ✅ '확인' → 훈독 말씀 형식
 ─────────────────────────────
 ${templates.hundok.preview}
-(날짜와 '훈독 말씀' 문구 포함)
+(날짜 포함)
 
 ─────────────────────────────
 ❌ '취소' → 기본 형식
 ─────────────────────────────
 ${templates.basic.preview}
-(간결한 말씀 내용만 복사)
+(간결한 말씀 내용만)
 
 👉 원하는 형식을 선택해주세요!`;
 
