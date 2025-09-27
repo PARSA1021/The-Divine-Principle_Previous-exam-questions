@@ -29,7 +29,20 @@
 </head>
 
 <body>
-  <!-- 네비게이션 -->
+  
+  <div id="google_translate_element" style="padding: 10px; text-align: right; background-color: var(--background-color-light, #ffffff); border-bottom: 1px solid var(--border-color, #e0e0e0);"></div>
+
+  <script type="text/javascript">
+      function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+              pageLanguage: 'ko', // 웹페이지의 기본 언어는 한국어(ko)입니다.
+              layout: google.translate.TranslateElement.InlineLayout.SIMPLE, // 위젯 스타일 (간단한 드롭다운)
+              autoDisplay: true // 페이지 언어와 다를 경우 번역 배너 자동 표시
+          }, 'google_translate_element');
+      }
+  </script>
+
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <nav class="nav-bar" aria-label="메인 내비게이션">
     <button data-page="home" class="active" aria-current="page"><i class="fas fa-home" aria-hidden="true"></i> 홈</button>
     <button data-page="workbook"><i class="fas fa-book-open" aria-hidden="true"></i> 말씀 DB</button>
@@ -38,10 +51,8 @@
     <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="다크 모드 전환"><i class="fas fa-moon" aria-hidden="true"></i> 다크 모드</button>
   </nav>
 
-  <!-- 메인 콘텐츠 -->
   <main class="page-container">
 
-    <!-- 홈 -->
     <section class="page active" id="home" role="region" aria-labelledby="home-heading">
       <header class="header">
         <div class="logo-container">
@@ -55,7 +66,6 @@
 
       <div class="divider" aria-hidden="true"></div>
 
-      <!-- 퀴즈 선택 -->
       <section class="quiz-selection" aria-labelledby="quiz-selection-heading">
         <h2 id="quiz-selection-heading" class="section-title">
           <i class="fas fa-question-circle" aria-hidden="true"></i> 퀴즈 시작하기
@@ -73,7 +83,6 @@
 
       <div class="divider" aria-hidden="true"></div>
 
-      <!-- 격려 메시지 -->
       <section class="encouragement-section" aria-labelledby="encouragement-heading">
         <div class="encouragement-card">
           <h2 id="encouragement-heading" class="card-title">
@@ -90,7 +99,6 @@
 
       <div class="divider" aria-hidden="true"></div>
 
-      <!-- 후원 섹션 -->
       <section class="donation-section bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl shadow-md max-w-xs mx-auto text-center border border-blue-200" role="complementary" aria-labelledby="donation-heading">
         <h2 id="donation-heading" class="text-xl font-extrabold text-blue-800 mb-2 flex items-center justify-center">
           <i class="fas fa-heart text-red-500 mr-2 text-xl" aria-hidden="true"></i> TruePath, 함께 꿈꾸는 선한 영향력
@@ -118,7 +126,6 @@
       </section>
     </section>
 
-    <!-- 말씀 DB -->
     <section class="page" id="workbook" role="region" aria-labelledby="workbook-heading">
       <header class="header">
         <div class="logo-container">
@@ -135,7 +142,6 @@
         <h2 class="section-title"><i class="fas fa-search" aria-hidden="true"></i> 말씀 검색</h2>
         <p class="section-description">찾고 싶은 말씀의 키워드나 구절을 입력해 보세요.</p>
 
-        <!-- 검색 박스 -->
         <div class="search-box">
           <label for="search-input" class="sr-only">검색어 입력</label>
           <input type="text" id="search-input" placeholder="예: 평화, 사랑, 천국, 말씀" aria-label="검색어 입력 필드" autocomplete="off">
@@ -148,7 +154,6 @@
           </button>
         </div>
 
-        <!-- 검색 옵션 -->
         <div class="search-options">
           <label for="search-type-message">
             <input type="radio" id="search-type-message" name="search-type" value="message" checked> 말씀 검색
@@ -158,7 +163,6 @@
           </label>
         </div>
 
-        <!-- 카테고리 필터 -->
         <h2 class="section-title">
           <i class="fas fa-filter" aria-hidden="true"></i> 카테고리 필터
         </h2>
@@ -199,7 +203,6 @@
           </button>
         </div>
 
-        <!-- 정렬 & 랜덤 버튼 -->
         <div class="sort-and-random-container" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; justify-content: space-between; align-items: center;">
           <div class="form-group" style="flex-grow: 1; min-width: 180px;">
             <label for="sort-select" class="sr-only">말씀 정렬 기준 선택</label>
@@ -217,18 +220,15 @@
         <div id="search-stats" class="search-stats" style="display: none;" role="status" aria-live="polite"></div>
       </div>
 
-      <!-- 로딩 표시 -->
       <div id="search-loading" class="loading" style="display: none;" aria-live="assertive" aria-atomic="true">
         <div class="spinner" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="검색 중"></div>
         검색 중...
         <div class="progress-bar"><div></div></div>
       </div>
 
-      <!-- 검색 결과 -->
       <div id="search-results" class="search-results" style="display: none;" role="list"></div>
     </section>
 
-    <!-- Q&A -->
     <section class="page" id="qna" role="region" aria-labelledby="qna-heading">
       <header class="header">
         <div class="logo-container">
@@ -257,7 +257,6 @@
       </div>
     </section>
 
-    <!-- 퀴즈 선택 별도 페이지 -->
     <section class="page" id="quiz-selection" role="region" aria-labelledby="quiz-selection-heading">
       <header class="header">
         <div class="logo-container">
@@ -280,17 +279,14 @@
     </section>
   </main>
 
-  <!-- 푸터 -->
   <footer class="footer" role="contentinfo">
     <p>© 2025 <span class="brand">TruePath</span>. All rights reserved.</p>
   </footer>
 
-  <!-- 맨 위로 이동 버튼 -->
   <button class="back-to-top" onclick="scrollToTop()" aria-label="페이지 맨 위로 이동">
     <i class="fas fa-arrow-up" aria-hidden="true"></i>
   </button>
 
-  <!-- 스크립트 -->
   <script src="main.js" defer></script>
   <script src="qna.js" defer></script>
 </body>
