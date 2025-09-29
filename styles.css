@@ -2501,6 +2501,82 @@ body {
   }
 }
 
+/* ===============================
+   Google Translate 위젯 스타일
+   =============================== */
+
+/* 공통 스타일 (모바일 퍼스트) */
+#translate-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background: var(--card-background);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-light);
+}
+
+#translate-container label {
+  margin-right: var(--spacing-xs);
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
+#google_translate_element select {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.9rem;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--background-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#google_translate_element select:hover {
+  border-color: var(--primary-color);
+  background: var(--hover-background);
+}
+
+/* PC 버전 (1024px 이상) */
+@media (min-width: 1024px) {
+  #translate-container {
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+
+  #translate-container label {
+    font-size: 1rem;
+    margin-right: var(--spacing-sm);
+  }
+
+  #google_translate_element select {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+    min-width: 180px;
+    border-radius: var(--border-radius-lg);
+  }
+}
+
+/* 소형 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  #translate-container {
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: var(--spacing-xs);
+  }
+
+  #translate-container label {
+    margin-bottom: var(--spacing-xs);
+    font-size: 0.8rem;
+  }
+
+  #google_translate_element select {
+    width: 100%;
+    font-size: 0.85rem;
+  }
+}
+
 /* ==========================================================================
    접근성: 모션 감소 설정
    ========================================================================== */
