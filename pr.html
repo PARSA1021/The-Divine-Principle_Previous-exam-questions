@@ -699,6 +699,27 @@
 <body>
     <main class="container">
         <header class="header">
+            <!-- 번역 위젯 -->
+            <div id="translate-container">
+                <label for="google_translate_element">🌐 언어 선택:</label>
+                <div id="google_translate_element"></div>
+            </div>
+
+            <!-- Google Translate 초기화 -->
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                new google.translate.TranslateElement(
+                    {
+                    pageLanguage: 'ko',
+                    includedLanguages: 'en,ja,zh-CN,ko,fa,es,fr,de,it,ru,ar,pt',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                    autoDisplay: false
+                    },
+                    'google_translate_element'
+                );
+                }
+            </script>
+            <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
             <h1 class="title">
                 <i class="fas fa-heart" style="color: var(--accent-color);"></i>
                 참사랑 영성 진단
@@ -708,12 +729,14 @@
             <a href="index.html" class="home-btn">
                 <i class="fas fa-home"></i> 홈으로 돌아가기
             </a>
+            
             <div class="progress-container">
                 <div class="progress-fill" id="progress-fill"></div>
             </div>
 
             <div class="question-counter" id="question-counter">1 / 35</div>
         </header>
+        
 
         <section id="quiz-container" class="quiz-container"></section>
 
