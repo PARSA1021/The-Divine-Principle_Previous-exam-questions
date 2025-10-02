@@ -35,7 +35,8 @@ const CATEGORIES = {
     THE_WILL_ROAD: '뜻 길',
     COLLECTED_SERMONS: "말씀선집",
     A_PEACE_LOVING_GLOBAL_CITIZEN: "평화를 사랑하는 세계인으로",
-    MOTHER_OF_PEACE: "평화의 어머니"
+    MOTHER_OF_PEACE: "평화의 어머니",
+    PYEONG_HWA_GYEONG: "평화경"
 };
 
 /**
@@ -418,6 +419,7 @@ const categorizeMessage = (source) => {
     const categories = [
         { key: '천성경', value: CATEGORIES.CHEON_SEONG_GYEONG },
         { key: '참부모경', value: CATEGORIES.CHAM_BUMO_GYEONG },
+        { key: '평화경', value: CATEGORIES.PYEONG_HWA_GYEONG },
         { key: '참부모님 말씀', value: CATEGORIES.CHAM_BUMO_NIM },
         { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
         { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
