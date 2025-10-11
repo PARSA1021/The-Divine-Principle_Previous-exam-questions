@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>원리강론 퀴즈</title>
+    <title>원리강론 퀴즈 - 업그레이드</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap">
     <style>
+        /*
+         * ======================================================================
+         * 🎨 CORE STYLES & VARIABLES (Minimal changes, mostly additions)
+         * ======================================================================
+         */
         :root {
             --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -21,8 +26,12 @@
             --primary-purple: #7c3aed;
             --primary-indigo: #6366f1;
             --primary-pink: #ec4899;
-            --primary-emerald: #10b981;
-            --primary-amber: #f59e0b;
+            --primary-emerald: #10b981; /* Success Green */
+            --primary-amber: #f59e0b; /* Warning Amber */
+            --primary-red: #ef4444; /* Error Red */
+            --color-accent: var(--primary-purple); /* For live selection highlight */
+            --color-accent-light: rgba(124, 58, 237, 0.3);
+
             --option-bg: #f1f5f9;
             --option-hover: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
             --correct-bg: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
@@ -54,6 +63,10 @@
             --primary-pink: #f472b6;
             --primary-emerald: #34d399;
             --primary-amber: #fbbf24;
+            --primary-red: #f87171;
+            --color-accent: var(--primary-purple); 
+            --color-accent-light: rgba(168, 85, 247, 0.3);
+
             --option-bg: rgba(51, 65, 85, 0.5);
             --option-hover: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(139, 92, 246, 0.1));
             --correct-bg: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.2));
@@ -65,12 +78,8 @@
             --shadow-strong: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* Base styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
@@ -81,566 +90,232 @@
             color: var(--text-primary);
             font-size: var(--base-font-size);
             font-weight: 400;
-            -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-secondary);
-            opacity: 0.1;
-            z-index: -1;
-            animation: gradientShift 8s ease-in-out infinite alternate;
+        /* ------------------ Header & Theme Toggle ------------------ */
+        header {
+            width: 100%;
+            max-width: 600px;
+            padding: var(--base-padding) 0;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 20px;
         }
-
-        @keyframes gradientShift {
-            0% { opacity: 0.1; transform: scale(1); }
-            100% { opacity: 0.2; transform: scale(1.05); }
+        .logo-container {
+            height: 50px;
+            margin-bottom: 10px;
         }
-
+        .logo-container img {
+            height: 100%;
+            width: auto;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: var(--shadow-soft);
+        }
+        h1 {
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
         .theme-toggle-container {
-            position: fixed;
-            top: var(--base-padding);
-            right: var(--base-padding);
+            position: absolute;
+            top: 20px;
+            right: 20px;
             z-index: 1000;
         }
-
         .theme-toggle {
             background: var(--card-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 50%;
-            width: 56px;
-            height: 56px;
-            font-size: 1.6rem;
-            cursor: pointer;
-            color: var(--primary-purple);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(10deg);
-            box-shadow: var(--shadow-medium);
-            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
-            color: white;
-        }
-
-        header {
-            margin: calc(var(--base-margin) * 1.5) 0 var(--base-margin) 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .logo-container {
-            position: relative;
-            margin-bottom: calc(var(--base-margin) / var(--golden-ratio));
-        }
-
-        .logo-container::before {
-            content: '';
-            position: absolute;
-            inset: -8px;
-            background: linear-gradient(45deg, var(--primary-purple), var(--primary-indigo), var(--primary-pink));
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: logoGlow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes logoGlow {
-            0% { transform: scale(1); opacity: 0.3; }
-            100% { transform: scale(1.1); opacity: 0.5; }
-        }
-
-        .logo-container img {
-            position: relative;
-            width: clamp(60px, 12vw, 80px);
-            height: auto;
-            border-radius: 50%;
-            box-shadow: var(--shadow-medium);
-            animation: fadeIn 1s ease-in;
-            user-select: none;
-            -webkit-user-drag: none;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-        }
-
-        h1 {
-            font-size: clamp(1.8rem, 7vw, 2.2rem);
-            font-weight: 700;
-            color: var(--text-accent);
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            display: inline-block;
-            letter-spacing: -0.02em;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-purple), var(--primary-indigo), var(--primary-pink));
-            border-radius: 2px;
-            animation: underlineGlow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes underlineGlow {
-            0% { opacity: 0.7; transform: scaleX(1); }
-            100% { opacity: 1; transform: scaleX(1.05); }
-        }
-
-        #progress {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: calc(var(--base-padding) * 1.2);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-soft);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: calc(var(--base-padding) * 0.8);
-            font-size: clamp(1rem, 3.5vw, 1.2rem);
-            margin-bottom: var(--base-margin);
             border: 1px solid var(--card-border);
-            font-weight: 500;
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-medium);
         }
 
+        /* ------------------ Progress Bar ------------------ */
+        #progress {
+            width: 90%;
+            max-width: 600px;
+            margin: var(--base-margin) 0;
+            padding: var(--base-padding);
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-medium);
+            flex-shrink: 0;
+        }
         .progress-info {
             display: flex;
             justify-content: space-between;
-            width: 100%;
-            color: var(--text-secondary);
-            font-weight: 600;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-accent);
         }
-
         .progress-bar-container {
             width: 100%;
-            height: 20px;
-            background: var(--progress-bg);
-            border-radius: 10px;
+            height: 10px;
+            background-color: var(--progress-bg);
+            border-radius: 5px;
             overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary-purple), var(--primary-indigo), var(--primary-pink));
-            border-radius: 10px;
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(90deg, var(--primary-indigo), var(--primary-purple));
+            transition: width 0.4s ease;
+            border-radius: 5px;
         }
 
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
+        /* ------------------ Quiz Main Content ------------------ */
+        main {
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        #loading {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-top: 50px;
         }
-
         #quiz-container {
             width: 90%;
-            max-width: 800px;
+            max-width: 600px;
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: calc(var(--base-padding) * 1.5);
             border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-medium);
-            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: var(--base-margin);
+            box-shadow: var(--shadow-strong);
+            display: none; /* Hidden by default, shown by JS */
+            flex-direction: column;
             margin-bottom: var(--base-margin);
-            display: none;
-            overflow: hidden;
+            transition: all 0.4s ease;
+            min-height: 400px;
+            outline: none; /* For JS focus management */
+        }
+        .question-text {
+            font-size: clamp(1.1rem, 5vw, 1.4rem);
+            font-weight: 600;
+            margin-bottom: var(--base-margin);
+            line-height: var(--golden-ratio);
+            color: var(--text-accent);
+            text-align: justify;
+        }
+
+        /* ------------------ Options ------------------ */
+        #options-container {
             display: flex;
             flex-direction: column;
-            border: 1px solid var(--card-border);
-            height: auto;
-            min-height: clamp(350px, 60vh, 700px);
+            gap: 12px;
+            margin-bottom: var(--base-margin);
         }
-
-        .question-text {
-            font-size: clamp(1.1rem, 4.5vw, 1.4rem);
-            font-weight: 600;
-            color: var(--text-accent);
-            text-align: left;
-            padding: calc(var(--base-padding) * 1.2);
-            line-height: 1.6;
-            flex-shrink: 0;
-            max-width: 100%;
-            letter-spacing: -0.01em;
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
-            border-radius: var(--border-radius);
-            margin-bottom: calc(var(--base-padding) * 0.8);
-        }
-
-        .question-text strong {
-            color: var(--primary-purple);
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Styles for fill-in-the-blank feedback */
-        .question-text span.incorrect-fill { /* Existing: For showing correct answer when user's answer is wrong */
-            color: var(--primary-emerald); /* Green as a hint */
-            text-decoration: underline;
-            font-weight: 700;
-        }
-        .question-text span.correct-fill-in-place { /* New: Correct word in correct position (when order was wrong overall) */
-            color: var(--primary-emerald);
-            font-weight: 700;
-            text-decoration: none;
-        }
-        .question-text span.incorrect-order-fill { /* New: Correct word but wrong order */
-            color: var(--primary-amber);
-            font-weight: 700;
-            text-decoration: underline wavy 2px var(--primary-amber); /* Wavy underline for order error */
-        }
-
-
-        #options-container {
-            flex-grow: 1;
-            flex-shrink: 1;
-            overflow-y: auto; /* Changed from hidden to auto for scroll */
-            padding: calc(var(--base-padding) * 0.8);
-            max-height: unset;
-            -webkit-overflow-scrolling: touch;
-        }
-
         .option {
+            position: relative;
+            background-color: var(--option-bg);
+            padding: var(--base-padding);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--card-border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-soft);
             display: flex;
             align-items: center;
-            padding: calc(var(--base-padding) * 1.2);
-            margin: calc(var(--base-margin) / 2) 0;
-            background: var(--option-bg);
-            border: 2px solid transparent;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            min-height: 56px;
-            position: relative;
-            overflow: hidden;
+            min-height: 50px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none; /* Managed by :focus below */
         }
-
-        .option::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--option-hover);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .option:hover::before {
-            opacity: 1;
-        }
-
-        .option:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: var(--shadow-soft);
+        .option:focus, .option:hover {
+            box-shadow: 0 0 0 3px var(--primary-purple);
             border-color: var(--primary-purple);
+            transform: scale(1.02);
+            background: var(--option-hover);
         }
-
-        .option:active {
-            transform: translateY(0) scale(0.98);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(99, 102, 241, 0.2));
-        }
-
-        .option input {
-            margin-right: calc(var(--base-padding) * 1.2);
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            accent-color: var(--primary-purple);
-            position: relative;
-            z-index: 1;
-        }
-
         .option label {
-            flex: 1;
-            font-size: clamp(1rem, 3.8vw, 1.2rem);
-            color: var(--text-primary);
+            /* Text content within the option div */
+            flex-grow: 1;
             cursor: pointer;
             font-weight: 500;
-            position: relative;
-            z-index: 1;
         }
-
+        /* Hide the native checkbox visually */
+        .option input {
+            display: none; 
+        }
         .option.selected {
             border-color: var(--primary-purple);
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(99, 102, 241, 0.15)); /* More subtle highlight */
-            box-shadow: 0 0 25px rgba(124, 58, 237, 0.3); /* Slightly stronger glow */
-            animation: pulseSelection 0.3s ease-out; /* New subtle pulse animation */
+            background-color: rgba(124, 58, 237, 0.1);
         }
 
-        @keyframes pulseSelection {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-            100% { transform: scale(1); }
-        }
-
-        .option.correct {
-            background: var(--correct-bg);
-            border-color: var(--primary-emerald);
-            animation: correctPulse 0.6s ease;
-        }
-
-        .option.incorrect {
-            background: var(--incorrect-bg);
-            border-color: #ef4444;
-            animation: incorrectPulse 0.6s ease;
-        }
-
-        /* New class for correct content but wrong order on the option itself */
-        .option.correct-content-wrong-order {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 214, 0, 0.15)); /* Amber/yellowish */
-            border-color: var(--primary-amber);
-            animation: incorrectPulse 0.6s ease; /* Use similar pulse for consistency */
-        }
-
-
-        @keyframes correctPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 rgba(16, 185, 129, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-            100% { transform: scale(1); box-shadow: 0 0 0 rgba(16, 185, 129, 0.4); }
-        }
-
-        @keyframes incorrectPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
-            100% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
-        }
-
+        /* ------------------ Explanation ------------------ */
         .explanation {
-            font-size: clamp(0.95rem, 3.2vw, 1.1rem);
-            color: var(--text-primary);
             background: var(--explanation-bg);
-            padding: calc(var(--base-padding) * 1.2);
+            padding: var(--base-padding);
             border-radius: var(--border-radius);
-            text-align: left;
-            margin-top: calc(var(--base-margin) / 2);
-            box-shadow: var(--shadow-soft);
-            animation: fadeIn 0.6s ease-in;
-            flex-shrink: 0;
-            overflow-y: auto;
-            line-height: 1.6;
-            border: 1px solid var(--card-border);
-            max-height: 20vh;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: calc(var(--base-margin) * 0.8);
             margin-top: var(--base-margin);
-            flex-wrap: wrap;
-        }
-
-        button {
-            padding: calc(var(--base-padding) * 1.2) calc(var(--base-padding) * 2);
-            font-size: clamp(1rem, 3.8vw, 1.2rem);
-            font-weight: 600;
-            border-radius: var(--border-radius);
-            border: none;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            min-width: 160px;
-            justify-content: center;
-            box-shadow: var(--shadow-soft);
-            -webkit-tap-highlight-color: transparent;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent, rgba(255, 255, 255, 0.2));
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-
-        button:hover:not(:disabled)::before {
-            transform: translateX(100%);
-        }
-
-        button.purple {
-            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
-            color: white;
-        }
-
-        button.pink {
-            background: linear-gradient(135deg, var(--primary-pink), #f97316);
-            color: white;
-        }
-
-        button.emerald {
-            background: linear-gradient(135deg, var(--primary-emerald), #059669);
-            color: white;
-        }
-
-        button.amber { /* New style for home button */
-            background: linear-gradient(135deg, var(--primary-amber), #facc15);
-            color: white;
-        }
-
-        button:hover:not(:disabled) {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: var(--shadow-medium);
-        }
-
-        button:active:not(:disabled) {
-            transform: translateY(0) scale(0.95);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
-            opacity: 0.8;
-        }
-
-        button:disabled {
-            background: linear-gradient(135deg, #d1d5db, #9ca3af);
-            cursor: not-allowed;
-            opacity: 0.6;
-            transform: none;
-            box-shadow: none; /* No shadow when disabled */
-        }
-
-        .loading {
-            font-size: clamp(1.2rem, 4.5vw, 1.4rem);
+            border-left: 5px solid var(--primary-purple);
+            font-size: 0.95rem;
             color: var(--text-primary);
-            margin: var(--base-margin) 0;
+            line-height: 1.6;
+            font-style: italic;
+            box-shadow: var(--shadow-soft);
+            outline: none; /* For JS focus management */
+        }
+
+        /* ------------------ Buttons ------------------ */
+        .button-container {
+            width: 90%;
+            max-width: 600px;
+            margin: var(--base-margin) 0 40px 0;
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-weight: 500;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            flex-shrink: 0;
         }
-
-        .loading i {
-            color: var(--primary-purple);
-        }
-
-        #error-message {
-            font-size: clamp(0.95rem, 3.2vw, 1.1rem);
-            margin-top: calc(var(--base-margin) / 2);
-            color: #ef4444;
-            flex: 0;
-            font-weight: 500;
-            text-align: center;
-            padding: calc(var(--base-padding) * 0.8);
-            background: rgba(239, 68, 68, 0.1);
+        button {
+            flex: 1 1 45%;
+            padding: 15px 10px;
+            border: none;
             border-radius: var(--border-radius);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            animation: fadeIn 0.3s ease-in-out;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-medium);
+            text-align: center;
+        }
+        button i {
+            margin-right: 8px;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        button.purple { background-color: var(--primary-purple); color: white; }
+        button.pink { background-color: var(--primary-pink); color: white; }
+        button.emerald { background-color: var(--primary-emerald); color: white; }
+        button.amber { background-color: var(--primary-amber); color: white; }
+
+        button:not(:disabled):hover, button:not(:disabled):focus {
+            transform: translateY(-2px);
+            opacity: 0.9;
+            box-shadow: var(--shadow-strong);
+            outline: none;
+        }
+        button.active { /* Touch active state */
+            transform: translateY(1px) scale(0.98);
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            :root {
-                --base-font-size: clamp(14px, 3.5vw, 16px);
-                --base-padding: clamp(10px, 2.5vw, 14px);
-                --border-radius: 12px;
-                --border-radius-lg: 16px;
-            }
-            
-            .theme-toggle {
-                width: 48px;
-                height: 48px;
-                font-size: 1.4rem;
-            }
-            
-            #quiz-container {
-                width: 95%;
-                padding: calc(var(--base-padding) * 1.2);
-                min-height: clamp(300px, 55vh, 600px);
-            }
-        }
-
-        @media (max-width: 480px) {
-            :root {
-                --base-font-size: clamp(12px, 3vw, 14px);
-                --base-padding: clamp(8px, 2vw, 12px);
-            }
-            
-            .theme-toggle {
-                width: 44px;
-                height: 44px;
-                font-size: 1.2rem;
-            }
-            
-            #quiz-container {
-                width: calc(100% - (var(--base-padding) * 2));
-                margin: 0 var(--base-padding);
-                padding: var(--base-padding);
-                min-height: clamp(250px, 50vh, 500px);
-            }
-            
-            button {
-                width: 100%;
-                min-width: 0;
-                padding: calc(var(--base-padding) * 1) calc(var(--base-padding) * 1.5);
-                font-size: clamp(0.9rem, 3.5vw, 1.1rem);
-            }
-
-            .option {
-                padding: var(--base-padding);
-                min-height: 50px;
-            }
-
-            .option input {
-                width: 20px;
-                height: 20px;
-                margin-right: var(--base-padding);
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(40px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Confetti effect (simple CSS based) */
+        /* ------------------ Confetti ------------------ */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -648,72 +323,214 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: 2000;
             overflow: hidden;
-            z-index: 9999;
         }
         .confetti {
             position: absolute;
             width: 10px;
             height: 10px;
-            background-color: var(--primary-emerald);
+            background-color: var(--primary-purple);
             opacity: 0;
-            border-radius: 50%;
-            animation: confetti-fall 3s ease-out forwards;
-            filter: blur(0.5px);
-            mix-blend-mode: screen; /* For cool blending effect */
+            animation: confetti-fall linear infinite;
         }
-        .confetti:nth-child(2n) { background-color: var(--primary-purple); }
-        .confetti:nth-child(3n) { background-color: var(--primary-pink); }
-        .confetti:nth-child(4n) { background-color: var(--primary-indigo); }
-        .confetti:nth-child(5n) { background-color: var(--primary-amber); }
-        
+        .confetti:nth-child(2n) { background-color: var(--primary-pink); }
+        .confetti:nth-child(3n) { background-color: var(--primary-emerald); }
+        .confetti:nth-child(4n) { background-color: var(--primary-amber); }
+
         @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100px) rotateZ(0deg) scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotateZ(720deg) scale(1);
-                opacity: 0;
-            }
+            0% { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; }
+        }
+        
+        /*
+         * ======================================================================
+         * ✨ UX & A11Y IMPROVEMENT STYLES (New/Modified)
+         * ======================================================================
+         */
+
+        .question-text .instruction {
+            display: block;
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 5px;
+        }
+
+        /* --- Fill-in-the-Blank Live Feedback (User Selection) --- */
+        .question-text span.live-fill-in {
+            font-weight: 700;
+            color: var(--color-accent); /* 강조색 */
+            border-bottom: 3px solid var(--color-accent);
+            padding: 0 4px;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        /* --- Fill-in-the-Blank Answer Feedback (After Check) --- */
+        
+        /* 1. Exact Match (Correct content and order) */
+        .question-text span.fill-in-exact {
+            font-weight: 700;
+            color: var(--primary-emerald);
+            border-bottom: 3px solid var(--primary-emerald);
+            padding: 0 4px;
+        }
+
+        /* 2. Correct word in the correct position (Partial success in 'Order Wrong' state) */
+        .question-text span.fill-in-correct-position {
+            font-weight: 700;
+            color: #ffffff;
+            background-color: var(--primary-emerald);
+            border-bottom: 3px solid var(--primary-emerald);
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+
+        /* 3. Correct word but wrong position (Order Wrong state - shows user's selection with warning) */
+        .question-text span.fill-in-incorrect-order {
+            font-weight: 700;
+            color: var(--primary-amber);
+            border-bottom: 3px dashed var(--primary-amber); /* Dashed underline for order error */
+            padding: 0 4px;
+        }
+
+        /* 4. Incorrect Content (Shows the correct answer as a hint) */
+        .question-text span.fill-in-wrong-answer {
+            font-weight: 700;
+            color: var(--primary-red); 
+            border-bottom: 3px solid var(--primary-red);
+            padding: 0 4px;
+        }
+
+        /* --- Selection Badge (UX) --- */
+        .selection-badge {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            min-width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo));
+            color: white;
+            border-radius: 50%;
+            font-size: 1rem;
+            font-weight: 700;
+            z-index: 10;
+            pointer-events: none; 
+            display: none; 
+            box-shadow: var(--shadow-soft);
+            transform: scale(0);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .option.selected .selection-badge {
+            display: block; 
+            transform: scale(1); /* Pop-in effect */
+        }
+
+        /* --- Option Visual Feedback (After Check) --- */
+        
+        /* Correct Content & Order */
+        .option.correct {
+            background: var(--correct-bg);
+            border-color: var(--primary-emerald);
+            box-shadow: 0 0 10px var(--primary-emerald);
+        }
+
+        /* Correct Content, Wrong Order (User's choice that was one of the correct words) */
+        .option.correct-content-wrong-order {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15));
+            border-color: var(--primary-amber);
+            box-shadow: 0 0 10px var(--primary-amber);
+        }
+
+        /* User chose a wrong option */
+        .option.incorrect {
+            background: var(--incorrect-bg);
+            border-color: var(--primary-red);
+            box-shadow: 0 0 10px var(--primary-red);
+            text-decoration: line-through;
+            opacity: 0.8;
+        }
+
+        /* Correct option that the user MISSED */
+        .option.missed-correct {
+            border: 2px dashed var(--primary-emerald); 
+            background-color: var(--option-bg); /* Keep background subtle */
+            opacity: 0.7;
+        }
+        
+        /* --- Integrated Feedback Message Area (Replacing #error-message) --- */
+        #feedback-message-area {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: 600;
+            padding: 15px;
+            margin: var(--base-margin) 0;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+            display: none;
+            flex-shrink: 0;
+        }
+
+        .feedback-success {
+            background-color: #d1fae5; 
+            border-color: var(--primary-emerald);
+            color: #065f46;
+        }
+
+        .feedback-warning {
+            background-color: #fffbeb; 
+            border-color: var(--primary-amber);
+            color: #b45309;
+        }
+
+        .feedback-error {
+            background-color: #fee2e2; 
+            border-color: var(--primary-red);
+            color: #991b1b;
+        }
+        
+        [data-theme="dark"] .feedback-success { background-color: #065f46; border-color: var(--primary-emerald); color: #d1fae5; }
+        [data-theme="dark"] .feedback-warning { background-color: #b45309; border-color: var(--primary-amber); color: #fffbeb; }
+        [data-theme="dark"] .feedback-error { background-color: #991b1b; border-color: var(--primary-red); color: #fee2e2; }
+
+        /* Final message styling */
+        .final-message {
+            text-align: center;
+            padding: 40px 20px !important;
+        }
+
+        /* Visually Hidden Utility for ARIA (Accessibility) */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
 
 
-        /* Focus States */
-        button:focus, .option:focus-within, .theme-toggle:focus {
-            outline: 3px solid var(--primary-purple);
-            outline-offset: 2px;
-            border-radius: var(--border-radius); /* Ensure consistent outline shape */
-        }
-
-        /* High Contrast Mode */
-        @media (prefers-contrast: high) {
-            :root {
-                --bg-primary: #ffffff;
-                --bg-secondary: #000000;
-                --text-primary: #000000;
-                --card-bg: #ffffff;
-                --option-bg: #f0f0f0;
-                --correct-bg: #00ff00;
-                --incorrect-bg: #ff0000;
+        /* ------------------ Media Queries ------------------ */
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+                gap: 12px;
+                padding: 0 5%;
             }
-            [data-theme="dark"] {
-                --bg-primary: #000000;
-                --bg-secondary: #ffffff;
-                --text-primary: #ffffff;
-                --card-bg: #000000;
-                --option-bg: #333333;
-                --correct-bg: #00ff00;
-                --incorrect-bg: #ff0000;
+            button {
+                flex: 1 1 100%;
             }
-        }
-
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+            .theme-toggle-container {
+                top: 10px;
+                right: 10px;
             }
         }
     </style>
@@ -746,7 +563,12 @@
 
     <main>
         <div id="loading" class="loading"><i class="fas fa-spinner fa-spin"></i> 로딩 중...</div>
-        <div id="quiz-container" role="region" aria-label="퀴즈 내용" tabindex="-1"> <div class="question-text" id="question-text"></div>
+        
+        <div id="quiz-container" role="region" aria-label="퀴즈 내용" tabindex="-1"> 
+            <div class="question-text" id="question-text"></div>
+            
+            <div id="feedback-message-area" role="status" aria-live="polite"></div>
+
             <div id="options-container"></div>
             <div id="explanation" class="explanation" style="display: none;"></div>
         </div>
@@ -756,391 +578,470 @@
         <button id="check-answer" class="purple" aria-label="정답 확인" title="선택한 답을 확인합니다." disabled><i class="fas fa-check"></i> 정답 확인</button>
         <button id="next-question" class="pink" style="display: none;" aria-label="다음 문제로 이동"><i class="fas fa-arrow-right"></i> 다음 문제</button>
         <button id="restart-quiz" class="emerald" style="display: none;" aria-label="퀴즈 다시 시작"><i class="fas fa-redo"></i> 다시 시작</button>
-        <button id="go-home" class="amber" style="display: none;" aria-label="홈으로 가기"><i class="fas fa-home"></i> 홈으로</button> </div>
+        <button id="go-home" class="amber" style="display: none;" aria-label="홈으로 가기"><i class="fas fa-home"></i> 홈으로</button> 
+    </div>
 
-    <div id="error-message" style="display: none;" role="alert"></div>
-    <div id="confetti-container" class="confetti-container"></div> <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        let currentQuestionIndex = 0;
-        let questions = [];
-        let score = 0;
-        let originalQuestionText = ""; // Stores the base question text without instructions
-        let selectedOptionElementsInOrder = []; // Track selected option DOM elements in order of selection
-        let blanksRequired = 0; // To store the number of blanks for the current question
+    <div id="confetti-container" class="confetti-container"></div> 
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let currentQuestionIndex = 0;
+            let questions = [];
+            let score = 0;
+            let originalQuestionText = ""; 
+            let selectedOptionElementsInOrder = []; // Track selected option DOM elements in order of selection
+            let blanksRequired = 0; 
+            let quizStarted = false;
 
-        const themeToggle = document.getElementById("theme-toggle");
-        const body = document.body;
-        const savedTheme = localStorage.getItem("theme") || "light";
-        body.setAttribute("data-theme", savedTheme);
-        themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
+            // --- DOM Elements ---
+            const themeToggle = document.getElementById("theme-toggle");
+            const body = document.body;
+            const checkAnswerBtn = document.getElementById("check-answer");
+            const nextQuestionBtn = document.getElementById("next-question");
+            const restartQuizBtn = document.getElementById("restart-quiz");
+            const goHomeBtn = document.getElementById("go-home");
+            const questionTextElement = document.getElementById("question-text");
+            const optionsContainer = document.getElementById("options-container");
+            const explanationElement = document.getElementById("explanation");
+            // **CHANGED**: Using the new integrated feedback area
+            const feedbackMessageArea = document.getElementById("feedback-message-area"); 
+            const quizContainer = document.getElementById("quiz-container");
+            const highestScoreDisplay = document.getElementById("highest-score-display");
+            const currentScoreDisplay = document.getElementById("score");
 
-        const checkAnswerBtn = document.getElementById("check-answer");
-        const nextQuestionBtn = document.getElementById("next-question");
-        const restartQuizBtn = document.getElementById("restart-quiz");
-        const goHomeBtn = document.getElementById("go-home");
-        const questionTextElement = document.getElementById("question-text");
-        const optionsContainer = document.getElementById("options-container");
-        const explanationElement = document.getElementById("explanation");
-        const errorMessage = document.getElementById("error-message");
-        const quizContainer = document.getElementById("quiz-container");
-        const highestScoreDisplay = document.getElementById("highest-score-display");
 
-        displayHighestScore();
+            // --- Initialization and Theme Handling ---
 
-        function displayHighestScore() {
-            const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
-            highestScoreDisplay.textContent = `최고 점수: ${highestScore}`;
-        }
-
-        themeToggle.addEventListener("click", () => {
-            const currentTheme = body.getAttribute("data-theme");
-            const newTheme = currentTheme === "light" ? "dark" : "light";
-            body.setAttribute("data-theme", newTheme);
-            localStorage.setItem("theme", newTheme);
-            themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
-            if (navigator.vibrate) navigator.vibrate(50);
-        });
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            function initializeTheme() {
+                const savedTheme = localStorage.getItem("theme") || "light";
+                body.setAttribute("data-theme", savedTheme);
+                themeToggle.innerHTML = `<i class="fas fa-${savedTheme === "dark" ? "sun" : "moon"}"></i>`;
             }
-            return array;
-        }
+            
+            initializeTheme();
+            displayHighestScore();
+            
+            // --- Utility Functions ---
 
-        function triggerConfetti() {
-            const confettiContainer = document.getElementById('confetti-container');
-            confettiContainer.innerHTML = '';
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = `${Math.random() * 100}vw`;
-                confetti.style.animationDelay = `${Math.random() * 1.5}s`;
-                confetti.style.animationDuration = `${2 + Math.random() * 1}s`;
-                confettiContainer.appendChild(confetti);
+            function displayHighestScore() {
+                const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
+                highestScoreDisplay.textContent = `최고 점수: ${highestScore}`;
             }
-            setTimeout(() => {
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function triggerVibration(pattern) {
+                if (navigator.vibrate) navigator.vibrate(pattern);
+            }
+
+            function triggerConfetti() {
+                const confettiContainer = document.getElementById('confetti-container');
                 confettiContainer.innerHTML = '';
-            }, 3000);
-        }
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.animationDelay = `${Math.random() * 1.5}s`;
+                    confetti.style.animationDuration = `${2 + Math.random() * 1}s`;
+                    confettiContainer.appendChild(confetti);
+                }
+                setTimeout(() => {
+                    confettiContainer.innerHTML = '';
+                }, 3000);
+            }
 
-        fetch("assets/data/divine_pr.json")
-            .then(response => {
-                if (!response.ok) throw new Error("JSON 파일 로드 실패");
-                return response.json();
-            })
-            .then(data => {
-                questions = data;
-                shuffleArray(questions);
-                document.getElementById("total-questions").textContent = questions.length;
-                quizContainer.style.display = "flex";
-                document.getElementById("loading").style.display = "none";
-                loadQuestion(currentQuestionIndex);
-                updateProgressBar(currentQuestionIndex + 1, questions.length);
-            })
-            .catch(error => {
-                console.error("JSON 파일 로드 실패:", error);
-                errorMessage.textContent = "퀴즈 데이터를 불러오지 못했습니다. 다시 시도해주세요.";
-                errorMessage.style.display = "block";
-                document.getElementById("loading").style.display = "none";
-            });
+            /**
+             * Shows a feedback message (success, error, or info).
+             * @param {string} message The message text.
+             * @param {string} type 'success', 'error', 'warning', or 'info'.
+             */
+            function showFeedback(message, type = 'info') {
+                feedbackMessageArea.textContent = message;
+                feedbackMessageArea.className = 'feedback-message'; // Reset classes
+                feedbackMessageArea.classList.add(`feedback-${type}`);
+                feedbackMessageArea.style.display = "block";
+                feedbackMessageArea.setAttribute('aria-live', 'polite'); 
+            }
 
-        function loadQuestion(index) {
-            const currentQuestion = questions[index];
+            function clearFeedback() {
+                feedbackMessageArea.textContent = "";
+                feedbackMessageArea.style.display = "none";
+                feedbackMessageArea.setAttribute('aria-live', 'off');
+            }
 
-            setTimeout(() => {
-                quizContainer.scrollTo({ top: 0, behavior: 'smooth' });
-                quizContainer.focus();
-            }, 100);
+            // --- Quiz Logic: Data Fetching ---
 
-            selectedOptionElementsInOrder = []; // Reset selected options for the new question
-
-            blanksRequired = currentQuestion.answers.length;
-            originalQuestionText = currentQuestion.question; // Store just the question
-            questionTextElement.innerHTML = `${originalQuestionText} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`; // Add instruction
-
-            optionsContainer.innerHTML = "";
-            
-            let shuffledOptions = currentQuestion.options.map((option, idx) => ({ option, originalIndex: idx }));
-            shuffleArray(shuffledOptions);
-
-            shuffledOptions.forEach((item, i) => {
-                const optionDiv = document.createElement("div");
-                optionDiv.classList.add("option");
-                optionDiv.innerHTML = `
-                    <input type="checkbox" name="answer" id="option${i}" value="${item.originalIndex}" aria-label="${item.option}">
-                    <label for="option${i}">${item.option}</label>
-                `;
-                optionDiv.addEventListener("click", (e) => {
-                    const checkbox = optionDiv.querySelector('input');
-
-                    if (e.target.tagName !== "INPUT") {
-                        checkbox.checked = !checkbox.checked;
-                    }
-
-                    if (checkbox.checked) {
-                        if (!selectedOptionElementsInOrder.includes(optionDiv)) {
-                            selectedOptionElementsInOrder.push(optionDiv);
-                        }
-                    } else {
-                        selectedOptionElementsInOrder = selectedOptionElementsInOrder.filter(el => el !== optionDiv);
-                    }
-
-                    updateLiveBlanksDisplay(); // Update the displayed blanks based on ordered selections
-                    optionDiv.classList.toggle("selected", checkbox.checked);
-                    if (navigator.vibrate) navigator.vibrate(50);
-                    updateCheckButtonState();
+            // NOTE: Ensure assets/data/divine_pr.json exists and is accessible.
+            fetch("assets/data/divine_pr.json")
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    questions = data;
+                    if (questions.length === 0) throw new Error("퀴즈 데이터가 비어 있습니다.");
+                    shuffleArray(questions);
+                    document.getElementById("total-questions").textContent = questions.length;
+                    quizContainer.style.display = "flex";
+                    document.getElementById("loading").style.display = "none";
+                    loadQuestion(currentQuestionIndex);
+                    updateProgressBar(currentQuestionIndex + 1, questions.length);
+                    quizStarted = true;
+                })
+                .catch(error => {
+                    console.error("JSON 파일 로드 실패:", error);
+                    showFeedback("퀴즈 데이터를 불러오지 못했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.", 'error');
+                    document.getElementById("loading").style.display = "none";
                 });
+
+            // --- Quiz Logic: Question Loading ---
+
+            function loadQuestion(index) {
+                const currentQuestion = questions[index];
                 
-                optionsContainer.appendChild(optionDiv);
-            });
+                // Accessibility: Scroll to top of quiz container and focus for context change
+                setTimeout(() => {
+                    quizContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                    quizContainer.setAttribute('tabindex', '-1');
+                    quizContainer.focus();
+                    quizContainer.removeAttribute('tabindex');
+                }, 100);
 
-            explanationElement.style.display = "none";
-            checkAnswerBtn.style.display = "block";
-            nextQuestionBtn.style.display = "none";
-            restartQuizBtn.style.display = "none";
-            goHomeBtn.style.display = "inline-block";
-            errorMessage.style.display = "none";
-            updateCheckButtonState();
-        }
+                selectedOptionElementsInOrder = []; 
+                clearFeedback(); 
 
-        // Function called during user selection to display their current choices
-        function updateLiveBlanksDisplay() {
-            const actualSelectedTextsInOrder = selectedOptionElementsInOrder
-                .filter(optionDiv => optionDiv.querySelector('input').checked)
-                .map(optionDiv => optionDiv.querySelector('label').textContent);
-            
-            let currentBlanksHtml = originalQuestionText; // Start with the clean question text
-            let blankIndex = 0;
-
-            currentBlanksHtml = currentBlanksHtml.replace(/___/g, () => {
-                if (blankIndex < actualSelectedTextsInOrder.length) {
-                    return `<strong>${actualSelectedTextsInOrder[blankIndex++]}</strong>`;
-                }
-                return '___';
-            });
-
-            questionTextElement.innerHTML = `${currentBlanksHtml} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`;
-        }
-
-        function updateCheckButtonState() {
-            const selectedCount = document.querySelectorAll('input[name="answer"]:checked').length;
-            if (selectedCount === blanksRequired) {
-                checkAnswerBtn.disabled = false;
-                checkAnswerBtn.removeAttribute("title");
-            } else {
-                checkAnswerBtn.disabled = true;
-                checkAnswerBtn.setAttribute("title", `${blanksRequired}개의 답을 선택해야 합니다. (현재 ${selectedCount}개 선택)`);
-            }
-        }
-
-        function updateProgressBar(current, total) {
-            const progressBar = document.getElementById("progress-bar");
-            const percentage = (current / total) * 100;
-            progressBar.style.width = `${percentage}%`;
-            document.getElementById("current-question").textContent = current;
-            document.getElementById("score").textContent = `점수: ${score}`;
-        }
-
-        checkAnswerBtn.addEventListener("click", () => {
-            const selectedCheckboxes = document.querySelectorAll('input[name="answer"]:checked');
-            const currentQuestion = questions[currentQuestionIndex];
-            
-            if (selectedCheckboxes.length !== blanksRequired) {
-                errorMessage.textContent = `${blanksRequired}개의 답을 선택해주세요! (현재 ${selectedCheckboxes.length}개 선택)`;
-                errorMessage.style.display = "block";
-                if (navigator.vibrate) navigator.vibrate(200);
-                return;
-            }
-
-            const userSelectedAnswersInOrder = selectedOptionElementsInOrder
-                .filter(optionDiv => optionDiv.querySelector('input').checked)
-                .map(optionDiv => optionDiv.querySelector('label').textContent);
-
-            const correctAnswers = currentQuestion.answers; 
-
-            // Check for exact match (content and order)
-            const isExactMatch = JSON.stringify(userSelectedAnswersInOrder) === JSON.stringify(correctAnswers);
-
-            // Check if content matches regardless of order
-            const userSelectedAnswersSorted = [...userSelectedAnswersInOrder].sort();
-            const correctAnswersSorted = [...correctAnswers].sort();
-            const isContentMatch = JSON.stringify(userSelectedAnswersSorted) === JSON.stringify(correctAnswersSorted);
-
-            // Disable options and checkboxes
-            document.querySelectorAll(".option").forEach((optionDiv) => {
-                optionDiv.style.pointerEvents = "none";
-                optionDiv.querySelector('input').disabled = true;
-            });
-
-            let feedbackType = "content_wrong"; // Default feedback type
-
-            if (isExactMatch) {
-                score++;
-                errorMessage.textContent = "정답입니다! 🎉";
-                errorMessage.style.color = "#10b981";
-                triggerConfetti();
-                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-                feedbackType = "exact";
-            } else if (isContentMatch) { // Content is correct, but order is wrong
-                errorMessage.textContent = "아쉽지만 순서가 틀렸습니다. 😔 다시 확인해보세요.";
-                errorMessage.style.color = "#f59e0b"; // Amber color for "order wrong"
-                if (navigator.vibrate) navigator.vibrate(200);
-                feedbackType = "order_wrong";
-            } else { // Content is incorrect
-                errorMessage.textContent = "오답입니다. 😔";
-                errorMessage.style.color = "#ef4444";
-                if (navigator.vibrate) navigator.vibrate(200);
-                feedbackType = "content_wrong";
-            }
-
-            errorMessage.style.display = "block";
-
-            // Update question text to show detailed feedback in blanks
-            displayAnswerFeedbackInBlanks(userSelectedAnswersInOrder, correctAnswers, feedbackType);
-
-            // Apply visual feedback to options themselves
-            document.querySelectorAll(".option").forEach((optionDiv) => {
-                const optionText = optionDiv.querySelector('label').textContent;
-                const isOptionChecked = optionDiv.querySelector('input').checked;
+                blanksRequired = currentQuestion.answers.length;
+                originalQuestionText = currentQuestion.question; 
                 
-                // Clear any previous selection highlight (e.g., .selected)
-                optionDiv.classList.remove("selected");
+                // Initial question text with clear instruction
+                questionTextElement.innerHTML = `${originalQuestionText} <span class="instruction">(${blanksRequired}개의 빈칸을 순서대로 채우세요)</span>`; 
+                questionTextElement.setAttribute('aria-label', `현재 질문: ${originalQuestionText}. ${blanksRequired}개의 빈칸을 순서대로 채우세요.`);
 
-                if (feedbackType === "exact") {
-                    if (isOptionChecked && correctAnswers.includes(optionText)) {
-                        optionDiv.classList.add("correct");
-                    }
-                } else if (feedbackType === "order_wrong") {
-                    if (isOptionChecked) { // All selected options contain correct words
-                        optionDiv.classList.add("correct-content-wrong-order");
-                    }
-                } else { // content_wrong (some words are wrong, or too many/few)
-                    if (isOptionChecked) {
-                        if (!correctAnswers.includes(optionText)) {
-                             optionDiv.classList.add("incorrect");
-                        } else {
-                            optionDiv.classList.add("correct-content-wrong-order");
+                optionsContainer.innerHTML = "";
+                
+                let shuffledOptions = currentQuestion.options.map((option, idx) => ({ option, originalIndex: idx }));
+                shuffleArray(shuffledOptions);
+
+                shuffledOptions.forEach((item, i) => {
+                    const optionDiv = document.createElement("div");
+                    optionDiv.classList.add("option");
+                    optionDiv.setAttribute("role", "checkbox"); // ARIA role
+                    optionDiv.setAttribute("aria-checked", "false"); // ARIA state
+                    optionDiv.setAttribute("tabindex", "0"); // Make div focusable for keyboard navigation
+                    optionDiv.setAttribute("aria-label", item.option); // ARIA label
+
+                    // Using hidden input only for technical compatibility, but managing state on the div
+                    optionDiv.innerHTML = `
+                        <input type="checkbox" class="visually-hidden" name="answer" id="option${i}" value="${item.originalIndex}" aria-hidden="true">
+                        <span class="option-text">${item.option}</span>
+                        <span class="selection-badge" aria-hidden="true"></span>
+                    `;
+
+                    optionDiv.addEventListener("click", () => handleOptionSelection(optionDiv));
+                    // Handle keyboard activation
+                    optionDiv.addEventListener("keydown", (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleOptionSelection(optionDiv);
                         }
-                    }
-                }
-            });
-            
-            explanationElement.textContent = currentQuestion.explanation;
-            explanationElement.style.display = "block";
+                    });
+                    
+                    optionsContainer.appendChild(optionDiv);
+                });
 
-            checkAnswerBtn.style.display = "none";
-            nextQuestionBtn.style.display = "block";
-            nextQuestionBtn.focus();
-            updateProgressBar(currentQuestionIndex + 1, questions.length);
-
-            const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
-            if (score > highestScore) {
-                localStorage.setItem('highestQuizScore', score);
-                displayHighestScore();
-            }
-        });
-
-        // New function to display feedback in the blanks based on the answer result
-        function displayAnswerFeedbackInBlanks(userSelectedAnswers, correctAnswers, feedbackType) {
-            let finalBlanksHtml = originalQuestionText; // Start with the clean question text
-            let blankIdx = 0;
-
-            finalBlanksHtml = finalBlanksHtml.replace(/___/g, () => {
-                // Ensure we don't go out of bounds for userSelectedAnswers if fewer were picked
-                const currentUserWord = userSelectedAnswers[blankIdx] !== undefined ? userSelectedAnswers[blankIdx] : null; 
-                const currentCorrectWord = correctAnswers[blankIdx];
-                let displayHtml = '';
-
-                if (feedbackType === "exact") {
-                    displayHtml = `<strong>${currentUserWord}</strong>`;
-                } else if (feedbackType === "order_wrong") {
-                    // Check if the word at this blank position is correct
-                    if (currentUserWord === currentCorrectWord) {
-                        displayHtml = `<span class="correct-fill-in-place">${currentUserWord}</span>`; // Correct word in correct position
-                    } else {
-                        // Word is correct but in wrong position. Display user's word if available, else blank.
-                        displayHtml = `<span class="incorrect-order-fill">${currentUserWord || '___'}</span>`;
-                    }
-                } else { // content_wrong
-                    // If the user's current word for this blank matches the correct one, show user's word (strong).
-                    // Otherwise, show the correct word with 'incorrect-fill' style as a hint.
-                    if (currentUserWord === currentCorrectWord) {
-                         displayHtml = `<strong>${currentUserWord}</strong>`;
-                    } else {
-                         displayHtml = `<span class="incorrect-fill">${currentCorrectWord}</span>`; // Show correct answer as hint
-                    }
-                }
-                blankIdx++;
-                return displayHtml;
-            });
-
-            questionTextElement.innerHTML = `${finalBlanksHtml} (${blanksRequired}개의 빈칸을 순서대로 채우세요)`;
-        }
-
-        nextQuestionBtn.addEventListener("click", () => {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                loadQuestion(currentQuestionIndex);
-                updateProgressBar(currentQuestionIndex + 1, questions.length);
-            } else {
-                const finalScoreMessage = `퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}`;
-                quizContainer.innerHTML = `<div class="question-text">${finalScoreMessage}</div>`;
-                quizContainer.focus();
-
-                nextQuestionBtn.style.display = "none";
-                restartQuizBtn.style.display = "block";
-                goHomeBtn.style.display = "block";
-                restartQuizBtn.focus();
-                errorMessage.style.display = "none";
                 explanationElement.style.display = "none";
+                checkAnswerBtn.style.display = "block";
+                nextQuestionBtn.style.display = "none";
+                restartQuizBtn.style.display = "none";
+                goHomeBtn.style.display = "inline-block";
+                updateCheckButtonState();
+            }
+
+            function handleOptionSelection(optionDiv) {
+                const checkbox = optionDiv.querySelector('input');
+                const isCurrentlyChecked = optionDiv.getAttribute("aria-checked") === "true";
+
+                if (isCurrentlyChecked) {
+                    // Unselect
+                    optionDiv.setAttribute("aria-checked", "false");
+                    checkbox.checked = false;
+                    optionDiv.classList.remove("selected");
+                    selectedOptionElementsInOrder = selectedOptionElementsInOrder.filter(el => el !== optionDiv);
+                } else {
+                    // Select
+                    if (selectedOptionElementsInOrder.length < blanksRequired) {
+                        optionDiv.setAttribute("aria-checked", "true");
+                        checkbox.checked = true;
+                        optionDiv.classList.add("selected");
+                        selectedOptionElementsInOrder.push(optionDiv);
+                        triggerVibration(50);
+                    } else {
+                        showFeedback(`더 이상 선택할 수 없습니다. ${blanksRequired}개만 선택 가능합니다.`, 'warning');
+                        triggerVibration(200);
+                    }
+                }
+
+                updateLiveBlanksDisplay(); // Update the displayed blanks based on ordered selections
+                updateSelectionBadges(); // Update the numbers on the options
+                updateCheckButtonState();
+            }
+
+            // Function: Update the badge numbers on selected options (A11Y: aria-posinset/aria-setsize)
+            function updateSelectionBadges() {
+                document.querySelectorAll('.option').forEach(optionDiv => {
+                    optionDiv.querySelector('.selection-badge').textContent = '';
+                    optionDiv.removeAttribute("aria-posinset");
+                    optionDiv.removeAttribute("aria-setsize");
+                });
+
+                selectedOptionElementsInOrder.forEach((optionDiv, index) => {
+                    const badge = optionDiv.querySelector('.selection-badge');
+                    // Display 1-based index
+                    const position = index + 1;
+                    badge.textContent = position;
+                    optionDiv.setAttribute("aria-posinset", position); 
+                    optionDiv.setAttribute("aria-setsize", blanksRequired); 
+                });
+            }
+
+            // Function called during user selection to display their current choices
+            function updateLiveBlanksDisplay() {
+                const actualSelectedTextsInOrder = selectedOptionElementsInOrder
+                    .map(optionDiv => optionDiv.querySelector('.option-text').textContent);
                 
+                let currentBlanksHtml = originalQuestionText; 
+                let blankIndex = 0;
+
+                currentBlanksHtml = currentBlanksHtml.replace(/___/g, () => {
+                    if (blankIndex < actualSelectedTextsInOrder.length) {
+                        // Use a dedicated class for live selection display
+                        return `<span class="live-fill-in">${actualSelectedTextsInOrder[blankIndex++]}</span>`;
+                    }
+                    return '___';
+                });
+
+                questionTextElement.innerHTML = `${currentBlanksHtml} <span class="instruction">(${blanksRequired}개의 빈칸을 순서대로 채우세요)</span>`;
+            }
+
+            function updateCheckButtonState() {
+                const selectedCount = selectedOptionElementsInOrder.length;
+                if (selectedCount === blanksRequired) {
+                    checkAnswerBtn.disabled = false;
+                    checkAnswerBtn.removeAttribute("title");
+                } else {
+                    checkAnswerBtn.disabled = true;
+                    checkAnswerBtn.setAttribute("title", `${blanksRequired}개의 답을 선택해야 합니다. (현재 ${selectedCount}개 선택)`);
+                }
+            }
+
+            function updateProgressBar(current, total) {
+                const progressBar = document.getElementById("progress-bar");
+                const percentage = (current / total) * 100;
+                progressBar.style.width = `${percentage}%`;
+                document.getElementById("current-question").textContent = current;
+                currentScoreDisplay.textContent = `점수: ${score}`;
+            }
+
+            // --- Quiz Logic: Answer Checking ---
+
+            checkAnswerBtn.addEventListener("click", () => {
+                const currentQuestion = questions[currentQuestionIndex];
+                const userSelectedAnswersInOrder = selectedOptionElementsInOrder
+                    .map(optionDiv => optionDiv.querySelector('.option-text').textContent);
+                const correctAnswers = currentQuestion.answers; 
+                
+                if (userSelectedAnswersInOrder.length !== blanksRequired) {
+                    showFeedback(`${blanksRequired}개의 답을 선택해야 합니다.`, 'error');
+                    triggerVibration(200);
+                    return;
+                }
+
+                const isExactMatch = JSON.stringify(userSelectedAnswersInOrder) === JSON.stringify(correctAnswers);
+
+                // Check if content matches regardless of order
+                const userSelectedAnswersSorted = [...userSelectedAnswersInOrder].sort();
+                const correctAnswersSorted = [...correctAnswers].sort();
+                const isContentMatch = JSON.stringify(userSelectedAnswersSorted) === JSON.stringify(correctAnswersSorted);
+
+                // Disable options
+                document.querySelectorAll(".option").forEach((optionDiv) => {
+                    optionDiv.style.pointerEvents = "none";
+                    optionDiv.setAttribute('tabindex', '-1');
+                });
+
+                let feedbackType;
+
+                if (isExactMatch) {
+                    score++;
+                    showFeedback("정답입니다! 🎉 순서까지 완벽해요!", 'success');
+                    triggerConfetti();
+                    triggerVibration([100, 50, 100]);
+                    feedbackType = "exact";
+                } else if (isContentMatch) { 
+                    showFeedback("아쉽지만 순서가 틀렸습니다. 😔 정답과 순서를 다시 확인해보세요.", 'warning');
+                    triggerVibration(200);
+                    feedbackType = "order_wrong";
+                } else { 
+                    showFeedback("오답입니다. 😔 정답을 확인하고 학습해보세요.", 'error');
+                    triggerVibration(200);
+                    feedbackType = "content_wrong";
+                }
+
+                // Apply visual feedback to question text and options
+                displayAnswerFeedbackInBlanks(userSelectedAnswersInOrder, correctAnswers, feedbackType);
+                applyOptionVisualFeedback(currentQuestion, feedbackType);
+                
+                // Show Explanation and focus on it for A11Y
+                explanationElement.textContent = currentQuestion.explanation;
+                explanationElement.style.display = "block";
+                explanationElement.setAttribute('tabindex', '0');
+                explanationElement.focus();
+                explanationElement.removeAttribute('tabindex');
+
+                checkAnswerBtn.style.display = "none";
+                nextQuestionBtn.style.display = "block";
+                nextQuestionBtn.focus();
+                updateProgressBar(currentQuestionIndex + 1, questions.length);
+
                 const highestScore = parseInt(localStorage.getItem('highestQuizScore') || '0');
                 if (score > highestScore) {
                     localStorage.setItem('highestQuizScore', score);
+                    displayHighestScore();
                 }
+            });
+
+            // Function to apply visual feedback to the option blocks
+            function applyOptionVisualFeedback(currentQuestion, feedbackType) {
+                const correctAnswers = currentQuestion.answers; 
+
+                document.querySelectorAll(".option").forEach((optionDiv) => {
+                    const optionText = optionDiv.querySelector('.option-text').textContent;
+                    const isOptionChecked = optionDiv.getAttribute("aria-checked") === "true";
+                    
+                    optionDiv.classList.remove("selected", "correct", "incorrect", "correct-content-wrong-order", "missed-correct");
+                    optionDiv.querySelector('.selection-badge').style.display = 'none'; // Hide badge after checking
+
+                    if (feedbackType === "exact") {
+                        if (isOptionChecked) optionDiv.classList.add("correct");
+                    } else if (feedbackType === "order_wrong") {
+                        if (isOptionChecked) optionDiv.classList.add("correct-content-wrong-order");
+                    } else { // content_wrong
+                        if (correctAnswers.includes(optionText)) {
+                            // Correct options were missed (not selected)
+                            if (!isOptionChecked) {
+                                optionDiv.classList.add("missed-correct");
+                            } else {
+                                // User selected a correct word, but missed others/got order wrong (fallback state)
+                                optionDiv.classList.add("correct-content-wrong-order");
+                            }
+                        } else if (isOptionChecked) {
+                            optionDiv.classList.add("incorrect"); // User selected a definitively wrong option
+                        }
+                    }
+                });
+            }
+
+            // Function to display feedback in the blanks based on the answer result
+            function displayAnswerFeedbackInBlanks(userSelectedAnswers, correctAnswers, feedbackType) {
+                let finalBlanksHtml = originalQuestionText; 
+                let blankIdx = 0;
+
+                finalBlanksHtml = finalBlanksHtml.replace(/___/g, () => {
+                    const currentUserWord = userSelectedAnswers[blankIdx]; 
+                    const currentCorrectWord = correctAnswers[blankIdx];
+                    let displayHtml = '';
+
+                    if (feedbackType === "exact") {
+                        displayHtml = `<span class="fill-in-exact">${currentUserWord}</span>`;
+                    } else if (feedbackType === "order_wrong") {
+                        if (currentUserWord === currentCorrectWord) {
+                            displayHtml = `<span class="fill-in-correct-position">${currentUserWord}</span>`; 
+                        } else {
+                            // Show user's word with an "incorrect order" style
+                            displayHtml = `<span class="fill-in-incorrect-order" title="정답: ${currentCorrectWord}">${currentUserWord || '___'}</span>`;
+                        }
+                    } else { // content_wrong
+                        // Show the correct word as a hint
+                        displayHtml = `<span class="fill-in-wrong-answer" title="정답">${currentCorrectWord}</span>`; 
+                    }
+                    blankIdx++;
+                    return displayHtml;
+                });
+
+                questionTextElement.innerHTML = `${finalBlanksHtml} <span class="instruction">(${blanksRequired}개의 빈칸을 순서대로 채우세요)</span>`;
+            }
+
+            // --- Quiz Logic: Navigation ---
+
+            nextQuestionBtn.addEventListener("click", () => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    loadQuestion(currentQuestionIndex);
+                    updateProgressBar(currentQuestionIndex + 1, questions.length);
+                } else {
+                    endQuiz();
+                }
+            });
+
+            function endQuiz() {
+                const finalScoreMessage = `퀴즈 완료! 수고하셨습니다!<br>최종 점수: ${score} / ${questions.length}`;
+                
+                // Completely replace quiz content with final message
+                const finalContent = `
+                    <div class="question-text final-message">${finalScoreMessage}</div>
+                `;
+                quizContainer.innerHTML = finalContent;
+                quizContainer.setAttribute('tabindex', '-1');
+                quizContainer.focus();
+                quizContainer.removeAttribute('tabindex');
+                
+                nextQuestionBtn.style.display = "none";
+                checkAnswerBtn.style.display = "none";
+                restartQuizBtn.style.display = "block";
+                goHomeBtn.style.display = "block";
+                restartQuizBtn.focus();
+                clearFeedback();
+                explanationElement.style.display = "none";
+                
                 displayHighestScore();
             }
-        });
 
-        restartQuizBtn.addEventListener("click", () => {
-            currentQuestionIndex = 0;
-            score = 0;
-            shuffleArray(questions);
-            selectedOptionElementsInOrder = [];
-            quizContainer.style.display = "flex";
-            loadQuestion(currentQuestionIndex);
-            updateProgressBar(currentQuestionIndex + 1, questions.length);
-            displayHighestScore();
-        });
-
-        goHomeBtn.addEventListener("click", () => {
-            window.location.href = "/";
-        });
-
-
-        document.querySelectorAll('button, .option').forEach(element => {
-            element.addEventListener('touchstart', function() {
-                this.classList.add('active');
+            restartQuizBtn.addEventListener("click", () => {
+                // The most robust way to fully reset the DOM and JS state is a reload
+                location.reload(); 
             });
-            element.addEventListener('touchend', function() {
-                this.classList.remove('active');
+
+            goHomeBtn.addEventListener("click", () => {
+                window.location.href = "/";
             });
-            element.addEventListener('keydown', function(e) {
-                if (e.key === ' ' && (this.tagName === 'BUTTON' || this.classList.contains('option'))) {
-                    e.preventDefault();
-                }
-                if (e.key === 'Enter' || e.key === ' ') {
-                    if (this.classList.contains('option')) {
-                        this.click();
-                    } else {
-                        this.click();
-                    }
-                }
+            
+            // --- Event Listeners and Theme Toggle ---
+
+            themeToggle.addEventListener("click", () => {
+                const currentTheme = body.getAttribute("data-theme");
+                const newTheme = currentTheme === "light" ? "dark" : "light";
+                body.setAttribute("data-theme", newTheme);
+                localStorage.setItem("theme", newTheme);
+                themeToggle.innerHTML = `<i class="fas fa-${newTheme === "dark" ? "sun" : "moon"}"></i>`;
+                triggerVibration(50);
+            });
+
+            // Ensure buttons handle touch/keyboard focus properly (touch active state)
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.classList.add('active');
+                }, {passive: true});
+                button.addEventListener('touchend', function() {
+                    this.classList.remove('active');
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
 </html>

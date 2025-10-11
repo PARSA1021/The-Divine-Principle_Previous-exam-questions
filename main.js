@@ -33,6 +33,7 @@ const CATEGORIES = {
     CHEON_SHIM_WON: '천심원',
     TRUE_FATHER_PRAYER: '참아버님 기도문',
     THE_WILL_ROAD: '뜻 길',
+    THE_CHEON_IL_GUK_WILL_ROAD : '천일국시대 뜻 길',
     COLLECTED_SERMONS: "말씀선집",
     A_PEACE_LOVING_GLOBAL_CITIZEN: "평화를 사랑하는 세계인으로",
     MOTHER_OF_PEACE: "평화의 어머니",
@@ -370,6 +371,7 @@ const categorizeMessage = (source) => {
         { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
         { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER },
         { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD },
+        { key : "천일국시대 뜻 길",value : THE_CHEON_IL_GUK_WILL_ROAD},
         { key: '말씀선집', value: COLLECTED_SERMONS },
         { key: '평화를 사랑하는 세계인으로', value: CATEGORIES.A_PEACE_LOVING_GLOBAL_CITIZEN },
         { key: '평화의 어머니', value: CATEGORIES.MOTHER_OF_PEACE }
