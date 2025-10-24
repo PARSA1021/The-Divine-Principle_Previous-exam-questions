@@ -10,6 +10,7 @@ const CONSTANTS = {
     ACCOUNT_HOLDER: '국민은행 020602-04-230715 (예금주: 문성민)', // 계좌 정보
     PAGES: { HOME: 'home', WORKBOOK: 'workbook', QUIZ_SELECTION: 'quiz-selection' }, // 페이지 이름 정의 추가
     MAX_TEXT_LENGTH: 1000, // 텍스트 최대 길이 (이 길이보다 짧으면 축약하지 않음)
+    MAX_PREVIEW_LENGTH: 150, // ✅ 새로운 말씀 목록에서 사용할 미리보기 텍스트의 최대 길이
     MAX_SEARCH_HISTORY: 10, // 검색 기록 최대 저장 개수
     SCROLL_DURATION: 600, // 스크롤 애니메이션 시간 (ms)
     HEADER_OFFSET: 80, // 고정 헤더 높이 조정 (스크롤 시 상단 여백)
@@ -18,6 +19,9 @@ const CONSTANTS = {
         LENGTH_ASC: 'length_asc', // 길이 짧은순
         LENGTH_DESC: 'length_desc' // 길이 긴순
     },
+    // ✅ 로컬 스토리지 키
+    LAST_MESSAGE_COUNT_KEY: 'lastMessageCount', // 마지막으로 확인한 메시지 개수 저장 키
+    NEW_MESSAGES_KEY: 'newlyAddedMessages',     // 새로 추가된 메시지 배열 저장 키
 };
 
 /**
@@ -68,6 +72,7 @@ const state = {
     searchHistory: JSON.parse(localStorage.getItem('searchHistory')) || [], // 검색 기록 배열
     currentPage: 1, // 현재 페이지 번호
     currentSortOrder: CONSTANTS.SORT_ORDER.DEFAULT, // 현재 정렬 순서
+    newlyAddedMessages: JSON.parse(sessionStorage.getItem(CONSTANTS.NEW_MESSAGES_KEY)) || [], // 새로 추가된 메시지 임시 저장
 };
 
 /**
@@ -88,6 +93,8 @@ const DOM = {
     sortSelect: document.getElementById('sort-select'), // 정렬 선택 드롭다운
     randomMessageButton: document.getElementById('random-message-button'), // 랜덤 말씀 보기 버튼
     quizButtons: document.querySelectorAll('.quiz-selection-container button'), // 퀴즈 선택 버튼들 추가
+    // 홈 페이지에 '새 말씀' 버튼을 위한 컨테이너 (HTML에 해당 ID가 있다고 가정)
+    homePageButtonsContainer: document.getElementById('home-page-buttons'),
 };
 
 /**
@@ -222,7 +229,7 @@ const copyMessageToClipboard = async (text, source, category, element) => {
         const sourceElement = element.querySelector(".source");
         const categoryElement = element.querySelector("h3");
 
-        const translatedText = textElement ? textElement.innerText.trim() : text;
+        const translatedText = textElement ? (textElement.querySelector('.full-text') ? textElement.querySelector('.full-text').innerText.trim() : textElement.querySelector('.truncated-text') ? textElement.querySelector('.truncated-text').innerText.trim() : textElement.innerText.trim()) : text;
         const translatedSource = sourceElement ? sourceElement.innerText.trim() : source;
         const translatedCategory = categoryElement ? categoryElement.innerText.trim() : category;
 
@@ -243,7 +250,7 @@ const copyMessageToClipboard = async (text, source, category, element) => {
 "${translatedText}"
 
 📚 출처 정보
-- 카테고리: ${translatedCategory}
+- 카테고리: ${translatedCategory.replace(/<span.*?>NEW<\/span>/i, '').trim()}
 - 출처: ${translatedSource}
 ───────────────────`;
 
@@ -304,6 +311,155 @@ const showToast = (message) => {
     setTimeout(() => closeToast(), CONSTANTS.TOAST_DURATION);
 };
 
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+// ✅ 새로 추가된 말씀 확인 관련 함수
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * 로드된 메시지 데이터의 변경 사항을 확인하고 사용자에게 알립니다.
+ * @param {Array<Object>} newMessages - 새로 로드된 전체 메시지 배열
+ */
+const checkForNewMessages = (newMessages) => {
+    // 마지막으로 저장된 메시지 개수 가져오기
+    const lastCount = parseInt(localStorage.getItem(CONSTANTS.LAST_MESSAGE_COUNT_KEY) || '0', 10);
+    const newCount = newMessages.length;
+
+    if (newCount > lastCount && lastCount !== 0) {
+        const addedCount = newCount - lastCount;
+        showToast(`🎉 새로운 말씀 ${addedCount}개가 추가되었습니다!`);
+        
+        // 새로 추가된 메시지 식별 (배열 길이 차이만큼 마지막 메시지를 가져옴)
+        state.newlyAddedMessages = newMessages.slice(lastCount, newCount);
+        sessionStorage.setItem(CONSTANTS.NEW_MESSAGES_KEY, JSON.stringify(state.newlyAddedMessages));
+
+        // 홈 페이지에 '새 말씀 보기' 버튼 동적으로 추가
+        renderNewMessageButton(addedCount);
+    } else if (newCount < lastCount) {
+         // 삭제된 경우도 알림
+        const deletedCount = lastCount - newCount;
+        if (deletedCount > 0) {
+            showToast(`⚠️ 말씀 ${deletedCount}개가 삭제되거나 변경되었습니다.`);
+        }
+    }
+
+    // 현재 개수를 로컬 스토리지에 저장 (다음 비교를 위해)
+    localStorage.setItem(CONSTANTS.LAST_MESSAGE_COUNT_KEY, newCount.toString());
+};
+
+/**
+ * 홈 페이지에 '새 말씀 보기' 버튼을 렌더링합니다.
+ * @param {number} count - 새로 추가된 메시지 개수
+ */
+const renderNewMessageButton = (count) => {
+    if (DOM.homePageButtonsContainer && count > 0) {
+        // 기존 버튼이 있다면 제거 (중복 방지)
+        const existingButton = document.getElementById('view-new-messages-button');
+        if (existingButton) existingButton.remove();
+
+        const newButtonHTML = `
+            <button id="view-new-messages-button" class="quiz-button blue fade-in" 
+                    onclick="showNewMessagesPage()" 
+                    aria-label="새롭게 추가된 말씀 ${count}개 확인"
+                    style="margin-bottom: 20px;">
+                <i class="fas fa-magic" aria-hidden="true"></i> 새 말씀 ${count}개 확인하기
+            </button>
+        `;
+        // 기존 콘텐츠 앞에 추가
+        DOM.homePageButtonsContainer.insertAdjacentHTML('afterbegin', newButtonHTML);
+    }
+};
+
+/**
+ * 긴 텍스트를 목록에서 보여줄 짧은 미리보기 형태로 축약합니다.
+ * @param {string} text - 원본 메시지 텍스트
+ * @returns {string} - 축약된 텍스트
+ */
+const truncateTextForPreview = (text) => {
+    const previewLength = CONSTANTS.MAX_PREVIEW_LENGTH;
+    const cleanText = text.replace(/<br\s*\/?>/gi, ' ').trim(); // HTML 줄 바꿈 제거
+
+    if (cleanText.length <= previewLength) {
+        return cleanText;
+    }
+
+    // 첫 문장이나 일정 길이로 자르고 말줄임표를 추가
+    let truncated = cleanText.substring(0, previewLength);
+    
+    // 마지막 단어가 잘리지 않도록 공백 뒤에서 자르기
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 0) {
+        truncated = truncated.substring(0, lastSpace);
+    }
+
+    return `${truncated}...`;
+};
+
+/**
+ * 새롭게 추가된 말씀을 보여주는 임시 페이지 또는 영역으로 이동합니다.
+ * 이 함수는 'workbook' 페이지로 전환하고 필터링된 결과를 보여주도록 간소화했습니다.
+ */
+const showNewMessagesPage = () => {
+    // 1. 'workbook' 페이지로 전환
+    showPage(CONSTANTS.PAGES.WORKBOOK);
+
+    // 2. 검색 입력 초기화 및 카테고리 '전체' 설정
+    if (DOM.searchInput) DOM.searchInput.value = '';
+    state.currentCategory = CATEGORIES.ALL;
+
+    // 3. 새로운 메시지만 표시
+    if (DOM.searchResults && DOM.searchStats) {
+        DOM.searchStats.style.display = 'block';
+        DOM.searchStats.innerHTML = `🌟 새롭게 추가된 말씀 ${state.newlyAddedMessages.length}개`;
+        
+        DOM.searchResults.innerHTML = state.newlyAddedMessages.map(msg => {
+            // ✅ 개선: 전체 텍스트 대신 미리보기 텍스트를 표시
+            const previewText = truncateTextForPreview(msg.text); 
+            
+            // 전체 텍스트를 숨겨진 영역에 저장하여 복사/확장 기능에 대비
+            const fullTextHTML = `<span class="full-text" style="display: none;">${msg.text}</span>`;
+            
+            return `
+                <div class="result-item new-message-item fade-in" role="listitem" tabindex="0" style="border-left: 5px solid var(--color-blue); margin-top: 10px;">
+                    <h3><i class="fas fa-star" aria-hidden="true"></i> ${msg.category} <span class="new-tag">NEW</span></h3>
+                    <p>
+                        <span class="truncated-text">${previewText}</span>
+                        ${fullTextHTML}
+                    </p>
+                    <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${msg.source}</p>
+                    <div class="action-buttons">
+                        <button class="copy-button"
+                                onclick="copyMessageToClipboard(
+                                    '${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                    '${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                    '${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
+                                    this.closest('.result-item')
+                                )"
+                                aria-label="${msg.category} 말씀과 출처 복사">
+                            <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        DOM.searchResults.style.display = 'flex';
+        scrollToResultsTop();
+
+        // 4. 세션 스토리지 초기화 및 홈 버튼 제거 (새 말씀 확인 완료 처리)
+        // **주의**: 사용자가 다른 검색이나 카테고리 이동을 할 때까지 새 말씀 목록을 유지하려면,
+        // 이 초기화 코드를 제거하고 searchMessages() 시작 부분에서만 초기화해야 합니다.
+        // 여기서는 '확인하기' 버튼 클릭 시 바로 임시 목록을 보여주고, 완료되었다고 가정합니다.
+        // (searchMessages 시작 시 초기화 로직은 그대로 유지)
+        
+        // 홈 페이지의 버튼만 제거
+        document.getElementById('view-new-messages-button')?.remove();
+    }
+};
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 /**
  * messages.json 파일에서 메시지 데이터를 로드합니다.
  * 로딩 상태와 진행률을 사용자에게 표시합니다.
@@ -321,7 +477,13 @@ const loadMessages = async () => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        state.messages = await response.json();
+        const newMessages = await response.json(); // 새로 로드된 메시지를 변수에 저장
+
+        // ✅ 새 말씀 확인 로직 실행 (상태 업데이트 전)
+        checkForNewMessages(newMessages);
+
+        state.messages = newMessages; // 상태 업데이트
+
         updateProgressBar('100%');
 
         // 메시지 로드 후 카테고리 자동 지정 및 텍스트 길이 속성 추가
@@ -371,8 +533,8 @@ const categorizeMessage = (source) => {
         { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
         { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER },
         { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD },
-        { key : "천일국시대 뜻 길",value : THE_CHEON_IL_GUK_WILL_ROAD},
-        { key: '말씀선집', value: COLLECTED_SERMONS },
+        { key : "천일국시대 뜻 길",value : CATEGORIES.THE_CHEON_IL_GUK_WILL_ROAD || '천일국시대 뜻 길' }, 
+        { key: '말씀선집', value: CATEGORIES.COLLECTED_SERMONS || '말씀선집' }, 
         { key: '평화를 사랑하는 세계인으로', value: CATEGORIES.A_PEACE_LOVING_GLOBAL_CITIZEN },
         { key: '평화의 어머니', value: CATEGORIES.MOTHER_OF_PEACE }
     ];
@@ -619,6 +781,13 @@ const generateRandomMessage = () => {
  * @param {number} [page=1] - 현재 페이지 번호 (기본값: 1)
  */
 const searchMessages = debounce((page = 1) => {
+    // 임시로 새 메시지를 보여주는 상태를 일반 검색/필터링 시작 시 초기화
+    if (state.newlyAddedMessages.length > 0 && page === 1) {
+        state.newlyAddedMessages = [];
+        sessionStorage.removeItem(CONSTANTS.NEW_MESSAGES_KEY);
+        document.getElementById('view-new-messages-button')?.remove();
+    }
+    
     const query = DOM.searchInput ? DOM.searchInput.value.trim() : '';
     // 1. 검색 유형(message 또는 title)을 가져옵니다.
     const searchType = document.querySelector('input[name="search-type"]:checked').value;
@@ -695,7 +864,8 @@ const searchMessages = debounce((page = 1) => {
             filteredMessages.sort((a, b) => a.textLength - b.textLength); // 길이 짧은순
             break;
         case CONSTANTS.SORT_ORDER.LENGTH_DESC:
-            filteredMessages.sort((a, b) => b.textLength - b.textLength); // 길이 긴순
+            // 원본 코드는 잘못된 정렬을 하고 있어 수정합니다.
+            filteredMessages.sort((a, b) => b.textLength - a.textLength); // 길이 긴순
             break;
             // CONSTANTS.SORT_ORDER.DEFAULT (검색 일치 횟수)는 이미 위에서 처리됨
     }
@@ -802,6 +972,11 @@ const clearSearch = () => {
         DOM.sortSelect.value = CONSTANTS.SORT_ORDER.DEFAULT;
     }
 
+    // 새 말씀 상태 초기화
+    state.newlyAddedMessages = [];
+    sessionStorage.removeItem(CONSTANTS.NEW_MESSAGES_KEY);
+    document.getElementById('view-new-messages-button')?.remove();
+
     // 검색 결과 및 통계, 제안 숨기기
     if (DOM.searchResults) {
         DOM.searchResults.innerHTML = '';
@@ -851,7 +1026,12 @@ const showPage = (pageId) => {
         if (state.messages.length === 0) {
             loadMessages().then(() => searchMessages());
         } else {
-            searchMessages(); // 이미 로드되었다면 바로 검색 실행
+            // 새 메시지 확인 중인 상태가 아니라면 일반 검색 실행
+            if (state.newlyAddedMessages.length === 0) {
+                searchMessages();
+            } else {
+                // showNewMessagesPage()가 호출된 상태가 유지되도록 여기서 searchMessages()를 호출하지 않음
+            }
         }
         // 검색 입력 필드로 포커스 이동
         setTimeout(() => DOM.searchInput?.focus(), CONSTANTS.SCROLL_DURATION);
@@ -1109,6 +1289,11 @@ const initializeApp = () => {
 
     // 애플리케이션 시작 시 기본 페이지 표시
     showPage(CONSTANTS.PAGES.HOME);
+
+    // ✅ 시작 시 세션 스토리지에 새 말씀이 남아있다면 홈 페이지에 버튼 렌더링
+    if (state.newlyAddedMessages.length > 0) {
+        renderNewMessageButton(state.newlyAddedMessages.length);
+    }
 };
 
 // DOMContentLoaded 이벤트 발생 시 initializeApp 함수 실행
