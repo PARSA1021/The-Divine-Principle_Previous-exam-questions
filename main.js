@@ -1,62 +1,33 @@
 /**
  * 애플리케이션 상수 정의
- * - 애플리케이션 전반에서 사용되는 고정된 값을 저장합니다.
  */
 const CONSTANTS = {
-    RESULTS_PER_PAGE: 10, // 한 페이지에 표시할 검색 결과 수
-    DEBOUNCE_DELAY: 300, // 검색 입력 지연 시간 (ms)
-    TOAST_DURATION: 3000, // 알림 메시지 표시 시간 (ms)
-    ACCOUNT_NUMBER: '02060204230715', // 계좌 번호
-    ACCOUNT_HOLDER: '국민은행 020602-04-230715 (예금주: 문성민)', // 계좌 정보
-    PAGES: { HOME: 'home', WORKBOOK: 'workbook', QUIZ_SELECTION: 'quiz-selection' }, // 페이지 이름 정의 추가
-    MAX_TEXT_LENGTH: 1000, // 텍스트 최대 길이 (이 길이보다 짧으면 축약하지 않음)
-    MAX_PREVIEW_LENGTH: 150, // ✅ 새로운 말씀 목록에서 사용할 미리보기 텍스트의 최대 길이
-    MAX_SEARCH_HISTORY: 10, // 검색 기록 최대 저장 개수
-    SCROLL_DURATION: 600, // 스크롤 애니메이션 시간 (ms)
-    HEADER_OFFSET: 80, // 고정 헤더 높이 조정 (스크롤 시 상단 여백)
-    SORT_ORDER: { // 정렬 순서 상수 정의
-        DEFAULT: 'default', // 기본 (검색 일치 횟수)
-        LENGTH_ASC: 'length_asc', // 길이 짧은순
-        LENGTH_DESC: 'length_desc' // 길이 긴순
-    },
-    // ✅ 로컬 스토리지 키
-    LAST_MESSAGE_COUNT_KEY: 'lastMessageCount', // 마지막으로 확인한 메시지 개수 저장 키
-    NEW_MESSAGES_KEY: 'newlyAddedMessages',     // 새로 추가된 메시지 배열 저장 키
+    RESULTS_PER_PAGE: 10,
+    DEBOUNCE_DELAY: 300,
+    TOAST_DURATION: 3000,
+    ACCOUNT_NUMBER: '02060204230715',
+    ACCOUNT_HOLDER: '국민은행 020602-04-230715 (예금주: 문성민)',
+    PAGES: { HOME: 'home', WORKBOOK: 'workbook', QUIZ_SELECTION: 'quiz-selection' },
+    MAX_TEXT_LENGTH: 1000,
+    MAX_PREVIEW_LENGTH: 150,
+    MAX_SEARCH_HISTORY: 10,
+    SCROLL_DURATION: 600,
+    HEADER_OFFSET: 80,
+    SORT_ORDER: { DEFAULT: 'default', LENGTH_ASC: 'length_asc', LENGTH_DESC: 'length_desc' },
+    STORAGE: { LAST_MESSAGE_COUNT: 'lastMessageCount', NEW_MESSAGES: 'newlyAddedMessages' }
 };
 
-/**
- * 카테고리 상수 정의
- * - 하드코딩된 카테고리 문자열을 관리합니다.
- */
 const CATEGORIES = {
-    ALL: '전체',
-    CHEON_SEONG_GYEONG: '천성경',
-    CHAM_BUMO_GYEONG: '참부모경',
-    CHAM_BUMO_NIM: '참부모님 말씀',
-    CHAM_EOMEONIM: '참어머님 말씀',
-    CHEON_SHIM_WON: '천심원',
-    TRUE_FATHER_PRAYER: '참아버님 기도문',
-    THE_WILL_ROAD: '뜻 길',
-    THE_CHEON_IL_GUK_WILL_ROAD : '천일국시대 뜻 길',
-    COLLECTED_SERMONS: "말씀선집",
-    A_PEACE_LOVING_GLOBAL_CITIZEN: "평화를 사랑하는 세계인으로",
-    MOTHER_OF_PEACE: "평화의 어머니",
-    PYEONG_HWA_GYEONG: "평화경"
+    ALL: '전체', CHEON_SEONG_GYEONG: '천성경', CHAM_BUMO_GYEONG: '참부모경',
+    CHAM_BUMO_NIM: '참부모님 말씀', CHAM_EOMEONIM: '참어머님 말씀',
+    CHEON_SHIM_WON: '천심원', TRUE_FATHER_PRAYER: '참아버님 기도문',
+    THE_WILL_ROAD: '뜻 길', THE_CHEON_IL_GUK_WILL_ROAD: '천일국시대 뜻 길',
+    COLLECTED_SERMONS: '말씀선 집', A_PEACE_LOVING_GLOBAL_CITIZEN: '평화를 사랑하는 세계인으로',
+    MOTHER_OF_PEACE: '평화의 어머니', PYEONG_HWA_GYEONG: '평화경'
 };
 
-/**
- * 퀴즈 유형 상수 정의
- * - 퀴즈 관련 하드코딩된 문자열을 관리합니다.
- */
-const QUIZ_TYPES = {
-    DIVINE_PRINCIPLE: '원리강론',
-    BIBLE: '성경'
-};
+const QUIZ_TYPES = { DIVINE_PRINCIPLE: '원리강론', BIBLE: '성경' };
 
-/**
- * 퀴즈 페이지 매핑
- * - 퀴즈 유형에 따른 HTML 파일 경로를 정의합니다.
- */
 const QUIZ_PAGES = {
     [QUIZ_TYPES.DIVINE_PRINCIPLE]: 'divine.html',
     [QUIZ_TYPES.BIBLE]: 'bible.html'
@@ -64,44 +35,40 @@ const QUIZ_PAGES = {
 
 /**
  * 전역 상태 관리
- * - 애플리케이션의 현재 상태를 저장하고 관리합니다.
  */
 const state = {
-    messages: [], // 메시지 데이터 배열
-    currentCategory: localStorage.getItem('currentCategory') || CATEGORIES.ALL, // 현재 선택된 카테고리
-    searchHistory: JSON.parse(localStorage.getItem('searchHistory')) || [], // 검색 기록 배열
-    currentPage: 1, // 현재 페이지 번호
-    currentSortOrder: CONSTANTS.SORT_ORDER.DEFAULT, // 현재 정렬 순서
-    newlyAddedMessages: JSON.parse(sessionStorage.getItem(CONSTANTS.NEW_MESSAGES_KEY)) || [], // 새로 추가된 메시지 임시 저장
+    messages: [],
+    currentCategory: localStorage.getItem('currentCategory') || CATEGORIES.ALL,
+    searchHistory: JSON.parse(localStorage.getItem('searchHistory')) || [],
+    currentPage: 1,
+    currentSortOrder: CONSTANTS.SORT_ORDER.DEFAULT,
+    newlyAddedMessages: JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.NEW_MESSAGES)) || []
 };
 
 /**
- * DOM 요소 캐싱
- * - 자주 사용되는 HTML 요소를 캐싱하여 성능을 최적화합니다.
+ * DOM 캐싱 (필요한 것만 선택)
  */
-const DOM = {
-    searchInput: document.getElementById('search-input'), // 검색 입력 필드
-    searchResults: document.getElementById('search-results'), // 검색 결과 표시 영역
-    searchStats: document.getElementById('search-stats'), // 검색 통계 표시 영역
-    searchLoading: document.getElementById('search-loading'), // 로딩 표시 영역
-    searchSuggestions: document.getElementById('search-suggestions'), // 검색 제안 목록
-    progressBar: document.querySelector('.progress-bar div'), // 진행 바
-    categoryButtons: document.querySelectorAll('.category-container button'), // 카테고리 버튼들
-    navButtons: document.querySelectorAll('.nav-bar button[data-page]'), // 네비게이션 버튼들
-    backToTop: document.querySelector('.back-to-top'), // 맨 위로 이동 버튼
-    clearSearch: document.getElementById('clear-search'), // 검색 초기화 버튼
-    sortSelect: document.getElementById('sort-select'), // 정렬 선택 드롭다운
-    randomMessageButton: document.getElementById('random-message-button'), // 랜덤 말씀 보기 버튼
-    quizButtons: document.querySelectorAll('.quiz-selection-container button'), // 퀴즈 선택 버튼들 추가
-    // 홈 페이지에 '새 말씀' 버튼을 위한 컨테이너 (HTML에 해당 ID가 있다고 가정)
-    homePageButtonsContainer: document.getElementById('home-page-buttons'),
-};
+const getDOMElements = () => ({
+    searchInput: document.getElementById('search-input'),
+    searchResults: document.getElementById('search-results'),
+    searchStats: document.getElementById('search-stats'),
+    searchLoading: document.getElementById('search-loading'),
+    searchSuggestions: document.getElementById('search-suggestions'),
+    progressBar: document.querySelector('.progress-bar div'),
+    categoryButtons: document.querySelectorAll('.category-container button'),
+    navButtons: document.querySelectorAll('.nav-bar button[data-page]'),
+    backToTop: document.querySelector('.back-to-top'),
+    clearSearch: document.getElementById('clear-search'),
+    sortSelect: document.getElementById('sort-select'),
+    randomMessageButton: document.getElementById('random-message-button'),
+    quizButtons: document.querySelectorAll('.quiz-selection-container button'),
+    homePageButtonsContainer: document.getElementById('home-page-buttons')
+});
+
+let DOM = {};
 
 /**
- * 디바운스 유틸리티 함수
- * @param {Function} func - 실행할 함수
- * @param {number} delay - 지연 시간 (ms)
- * @returns {Function} - 디바운스된 함수
+ * 유틸리티 함수
  */
 const debounce = (func, delay) => {
     let timeout;
@@ -111,331 +78,381 @@ const debounce = (func, delay) => {
     };
 };
 
-/**
- * 진행 바 업데이트
- * @param {string} percentage - 진행 퍼센트 (예: '20%')
- * @param {number} [resetDelay] - 초기화 지연 시간 (ms). 지정된 경우, 해당 시간 후 진행 바를 0으로 초기화합니다.
- */
 const updateProgressBar = (percentage, resetDelay) => {
     if (DOM.progressBar) {
         DOM.progressBar.style.width = percentage;
         if (resetDelay) {
-            setTimeout(() => DOM.progressBar.style.width = '0', resetDelay);
+            setTimeout(() => { DOM.progressBar.style.width = '0'; }, resetDelay);
         }
     }
 };
 
-/**
- * 부드러운 스크롤 애니메이션
- * @param {number} targetY - 목표 스크롤 위치 (Y 좌표)
- * @param {number} duration - 애니메이션 지속 시간 (ms)
- */
 const smoothScroll = (targetY, duration) => {
     const startY = window.scrollY;
     const distance = targetY - startY;
     const startTime = performance.now();
-
-    // Quad easing 함수
-    // t: 현재 시간 (0~1), b: 시작 값, c: 변화량, d: 총 시간
     const easeInOutQuad = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
     const animation = currentTime => {
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        const ease = easeInOutQuad(progress);
-        window.scrollTo(0, startY + distance * ease);
-
-        if (progress < 1) {
-            requestAnimationFrame(animation);
-        }
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        window.scrollTo(0, startY + distance * easeInOutQuad(progress));
+        if (progress < 1) requestAnimationFrame(animation);
     };
     requestAnimationFrame(animation);
 };
 
-/**
- * 지정된 위치 또는 요소로 부드럽게 스크롤
- * @param {number|HTMLElement} target - 스크롤 목표 (Y 좌표 또는 HTMLElement)
- * @param {number} duration - 애니메이션 지속 시간 (ms)
- */
 const smoothScrollTo = (target, duration) => {
-    let targetY;
-    if (typeof target === 'number') {
-        targetY = target;
-    } else if (target instanceof HTMLElement) {
-        // 요소의 상단 위치를 계산하고 고정 헤더 높이를 조정
-        targetY = target.getBoundingClientRect().top + window.scrollY - CONSTANTS.HEADER_OFFSET;
-    } else {
-        return; // 유효하지 않은 타겟일 경우 함수 종료
-    }
-    smoothScroll(targetY, duration);
+    let targetY = typeof target === 'number' ? target :
+        target instanceof HTMLElement ? target.getBoundingClientRect().top + window.scrollY - CONSTANTS.HEADER_OFFSET : 0;
+    if (targetY) smoothScroll(targetY, duration);
 };
 
-/**
- * 페이지 맨 위로 부드럽게 이동합니다.
- */
 const scrollToTop = () => smoothScrollTo(0, CONSTANTS.SCROLL_DURATION);
+const scrollToResultsTop = () => DOM.searchResults && smoothScrollTo(DOM.searchResults, CONSTANTS.SCROLL_DURATION);
 
-/**
- * 검색 결과 영역의 상단으로 부드럽게 이동합니다.
- */
-const scrollToResultsTop = () => {
-    if (DOM.searchResults) {
-        smoothScrollTo(DOM.searchResults, CONSTANTS.SCROLL_DURATION);
-    }
-};
-
-/**
- * 다크 모드를 전환합니다.
- * body 요소에 'dark-mode' 클래스를 토글하고 localStorage에 상태를 저장합니다.
- */
 const toggleDarkMode = () => {
     const html = document.documentElement;
-    if (html.getAttribute('data-theme') === 'dark') {
-        html.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-    } else {
-        html.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-    }
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
 };
 
 /**
- * 계좌 번호를 클립보드에 복사합니다.
- * 성공 시 토스트 메시지를 표시하고, 실패 시 에러 메시지를 표시합니다.
- * @returns {Promise<void>}
+ * 복사 기능
  */
-const copyAccountNumber = async () => {
+const copyToClipboard = async (text, message) => {
     try {
-        await navigator.clipboard.writeText(CONSTANTS.ACCOUNT_NUMBER);
-        showToast('계좌번호가 복사되었습니다!');
+        await navigator.clipboard.writeText(text);
+        showToast(message);
+        return true;
     } catch (err) {
-        console.error('계좌번호 복사 실패:', err);
-        showToast(`계좌번호 복사 실패: ${CONSTANTS.ACCOUNT_HOLDER}. 직접 복사해 주세요.`);
+        console.error('복사 실패:', err);
+        return false;
     }
 };
 
-/**
- * Copies a message to the clipboard with options for different formatting.
- *
- * @param {string} text - The main text content to be copied.
- * @param {string} source - The source of the text (e.g., a book or person).
- * @param {string} category - The category of the text.
- * @param {HTMLElement} element - The DOM element associated with the copy action, used for visual feedback.
- */
-const copyMessageToClipboard = async (text, source, category, element) => {
-    try {
-        // 화면에 번역되어 표시되는 텍스트들을 DOM에서 추출
-        const textElement = element.querySelector("p");
-        const sourceElement = element.querySelector(".source");
-        const categoryElement = element.querySelector("h3");
+const copyAccountNumber = async () => {
+    const success = await copyToClipboard(CONSTANTS.ACCOUNT_NUMBER, '계좌번호가 복사되었습니다!');
+    if (!success) {
+        showToast(`계좌번호 복사 실패: ${CONSTANTS.ACCOUNT_HOLDER}. 직접 복사해주세요.`);
+    }
+};
 
-        const translatedText = textElement ? (textElement.querySelector('.full-text') ? textElement.querySelector('.full-text').innerText.trim() : textElement.querySelector('.truncated-text') ? textElement.querySelector('.truncated-text').innerText.trim() : textElement.innerText.trim()) : text;
-        const translatedSource = sourceElement ? sourceElement.innerText.trim() : source;
-        const translatedCategory = categoryElement ? categoryElement.innerText.trim() : category;
+const extractTextElements = (element) => ({
+    text: element.querySelector('.full-text')?.innerText ||
+           element.querySelector('.truncated-text')?.innerText ||
+           element.querySelector('p')?.innerText || '',
+    source: element.querySelector('.source')?.innerText || '',
+    category: element.querySelector('h3')?.innerText || ''
+});
 
-        // 날짜 처리
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const today = `${year}-${month}-${day}`;
-
-        // 복사할 최종 메시지 (번역된 상태 그대로)
-        const finalMessage =
-`[말씀 공유] 📖
+const formatMessageForClipboard = (text, source, category) => {
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    return `[말씀 공유] 📖
 ───────────────────
 📅 ${today}
 
 💬 말씀:
-"${translatedText}"
+"${text}"
 
 📚 출처 정보
-- 카테고리: ${translatedCategory.replace(/<span.*?>NEW<\/span>/i, '').trim()}
-- 출처: ${translatedSource}
+- 카테고리: ${category.replace(/<span.*?>NEW<\/span>/i, '').trim()}
+- 출처: ${source}
 ───────────────────`;
+};
 
-        // 클립보드 복사
-        await navigator.clipboard.writeText(finalMessage);
-        showToast('✅ 현재 화면에 보이는 번역 텍스트가 클립보드에 복사되었습니다!');
-        
-        // 시각적 피드백
-        if (element) {
-            element.classList.add('copied');
-            setTimeout(() => element.classList.remove('copied'), 1000);
-        }
-    } catch (err) {
-        console.error('복사 실패:', err);
-        showToast('❌ 복사에 실패했어요. 직접 선택해서 복사해 주세요.');
+const copyMessageToClipboard = async (text, source, category, element) => {
+    const extracted = extractTextElements(element);
+    const finalMessage = formatMessageForClipboard(extracted.text || text, extracted.source || source, extracted.category || category);
+
+    const success = await copyToClipboard(finalMessage, '✅ 현재 화면에 보이는 번역 텍스트가 클립보드에 복사되었습니다!');
+    
+    if (success && element) {
+        element.classList.add('copied');
+        setTimeout(() => element.classList.remove('copied'), 1000);
+    } else if (!success) {
+        showToast('❌ 복사에 실패했어요. 직접 선택해서 복사해주세요.');
     }
 };
 
 /**
- * 사용자에게 알림 메시지를 표시합니다.
- * @param {string} message - 표시할 메시지 텍스트
+ * 토스트 메시지
  */
 const showToast = (message) => {
-    // 이미 토스트가 있으면 기존 토스트를 제거하고 새 토스트를 띄웁니다.
-    const existingToast = document.querySelector('.toast');
-    if (existingToast) {
-        existingToast.remove();
-    }
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
 
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.innerHTML = `
-        <span>${message}</span>
-        <button class="close-toast" aria-label="알림 닫기">✕</button>
-    `;
+    toast.innerHTML = `<span>${message}</span><button class="close-toast" aria-label="알림 닫기">✕</button>`;
     toast.setAttribute('role', 'alert');
-    toast.setAttribute('aria-live', 'assertive'); // 스크린 리더가 즉시 알림을 읽도록 설정
+    toast.setAttribute('aria-live', 'assertive');
 
-    const closeButton = toast.querySelector('.close-toast');
     const closeToast = () => {
         toast.classList.remove('show');
-        // 애니메이션이 완료될 시간을 기다린 후 DOM에서 제거
         toast.addEventListener('transitionend', () => toast.remove(), { once: true });
     };
 
-    // 토스트 클릭 시 닫기 (영역 밖 클릭 포함)
     toast.addEventListener('click', closeToast);
-    closeButton.addEventListener('click', (e) => {
-        e.stopPropagation(); // 버튼 클릭이 토스트 전체 클릭으로 전파되지 않도록 방지
+    toast.querySelector('.close-toast').addEventListener('click', e => {
+        e.stopPropagation();
         closeToast();
     });
 
     document.body.appendChild(toast);
-
-    // CSS transition을 위한 약간의 지연 후 'show' 클래스 추가
     setTimeout(() => toast.classList.add('show'), 10);
-    // 일정 시간 후 자동으로 토스트 닫기
-    setTimeout(() => closeToast(), CONSTANTS.TOAST_DURATION);
+    setTimeout(closeToast, CONSTANTS.TOAST_DURATION);
 };
 
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
-// ✅ 새로 추가된 말씀 확인 관련 함수
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
-
 /**
- * 로드된 메시지 데이터의 변경 사항을 확인하고 사용자에게 알립니다.
- * @param {Array<Object>} newMessages - 새로 로드된 전체 메시지 배열
+ * 새 메시지 감지
  */
 const checkForNewMessages = (newMessages) => {
-    // 마지막으로 저장된 메시지 개수 가져오기
-    const lastCount = parseInt(localStorage.getItem(CONSTANTS.LAST_MESSAGE_COUNT_KEY) || '0', 10);
+    const lastCount = parseInt(localStorage.getItem(CONSTANTS.STORAGE.LAST_MESSAGE_COUNT) || '0', 10);
     const newCount = newMessages.length;
 
-    if (newCount > lastCount && lastCount !== 0) {
-        const addedCount = newCount - lastCount;
+    if (newCount === lastCount || lastCount === 0) {
+        localStorage.setItem(CONSTANTS.STORAGE.LAST_MESSAGE_COUNT, newCount.toString());
+        return;
+    }
+
+    const addedCount = newCount - lastCount;
+    if (newCount > lastCount) {
         showToast(`🎉 새로운 말씀 ${addedCount}개가 추가되었습니다!`);
-        
-        // 새로 추가된 메시지 식별 (배열 길이 차이만큼 마지막 메시지를 가져옴)
         state.newlyAddedMessages = newMessages.slice(lastCount, newCount);
-        sessionStorage.setItem(CONSTANTS.NEW_MESSAGES_KEY, JSON.stringify(state.newlyAddedMessages));
-
-        // 홈 페이지에 '새 말씀 보기' 버튼 동적으로 추가
+        sessionStorage.setItem(CONSTANTS.STORAGE.NEW_MESSAGES, JSON.stringify(state.newlyAddedMessages));
         renderNewMessageButton(addedCount);
-    } else if (newCount < lastCount) {
-         // 삭제된 경우도 알림
-        const deletedCount = lastCount - newCount;
-        if (deletedCount > 0) {
-            showToast(`⚠️ 말씀 ${deletedCount}개가 삭제되거나 변경되었습니다.`);
-        }
+    } else {
+        showToast(`⚠️ 말씀 ${lastCount - newCount}개가 삭제되거나 변경되었습니다.`);
     }
 
-    // 현재 개수를 로컬 스토리지에 저장 (다음 비교를 위해)
-    localStorage.setItem(CONSTANTS.LAST_MESSAGE_COUNT_KEY, newCount.toString());
+    localStorage.setItem(CONSTANTS.STORAGE.LAST_MESSAGE_COUNT, newCount.toString());
 };
 
-/**
- * 홈 페이지에 '새 말씀 보기' 버튼을 렌더링합니다.
- * @param {number} count - 새로 추가된 메시지 개수
- */
 const renderNewMessageButton = (count) => {
-    if (DOM.homePageButtonsContainer && count > 0) {
-        // 기존 버튼이 있다면 제거 (중복 방지)
-        const existingButton = document.getElementById('view-new-messages-button');
-        if (existingButton) existingButton.remove();
+    if (!DOM.homePageButtonsContainer || count <= 0) return;
 
-        const newButtonHTML = `
-            <button id="view-new-messages-button" class="quiz-button blue fade-in" 
-                    onclick="showNewMessagesPage()" 
-                    aria-label="새롭게 추가된 말씀 ${count}개 확인"
-                    style="margin-bottom: 20px;">
-                <i class="fas fa-magic" aria-hidden="true"></i> 새 말씀 ${count}개 확인하기
-            </button>
-        `;
-        // 기존 콘텐츠 앞에 추가
-        DOM.homePageButtonsContainer.insertAdjacentHTML('afterbegin', newButtonHTML);
-    }
+    document.getElementById('view-new-messages-button')?.remove();
+
+    const button = document.createElement('button');
+    button.id = 'view-new-messages-button';
+    button.className = 'quiz-button blue fade-in';
+    button.style.marginBottom = '20px';
+    button.innerHTML = `<i class="fas fa-magic" aria-hidden="true"></i> 새 말씀 ${count}개 확인하기`;
+    button.onclick = showNewMessagesPage;
+    button.setAttribute('aria-label', `새롭게 추가된 말씀 ${count}개 확인`);
+
+    DOM.homePageButtonsContainer.insertAdjacentElement('afterbegin', button);
 };
 
 /**
- * 긴 텍스트를 목록에서 보여줄 짧은 미리보기 형태로 축약합니다.
- * @param {string} text - 원본 메시지 텍스트
- * @returns {string} - 축약된 텍스트
+ * 텍스트 처리
  */
 const truncateTextForPreview = (text) => {
-    const previewLength = CONSTANTS.MAX_PREVIEW_LENGTH;
-    const cleanText = text.replace(/<br\s*\/?>/gi, ' ').trim(); // HTML 줄 바꿈 제거
+    const clean = text.replace(/<br\s*\/?>/gi, ' ').trim();
+    if (clean.length <= CONSTANTS.MAX_PREVIEW_LENGTH) return clean;
 
-    if (cleanText.length <= previewLength) {
-        return cleanText;
-    }
-
-    // 첫 문장이나 일정 길이로 자르고 말줄임표를 추가
-    let truncated = cleanText.substring(0, previewLength);
-    
-    // 마지막 단어가 잘리지 않도록 공백 뒤에서 자르기
+    let truncated = clean.substring(0, CONSTANTS.MAX_PREVIEW_LENGTH);
     const lastSpace = truncated.lastIndexOf(' ');
-    if (lastSpace > 0) {
-        truncated = truncated.substring(0, lastSpace);
-    }
-
+    if (lastSpace > 0) truncated = truncated.substring(0, lastSpace);
     return `${truncated}...`;
 };
 
+const highlightText = (text, query) => {
+    if (!query) return text;
+    try {
+        const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+    } catch (e) {
+        console.warn('유효하지 않은 정규식 쿼리:', e);
+        return text;
+    }
+};
+
+const truncateText = (text, query) => {
+    if (text.length <= CONSTANTS.MAX_TEXT_LENGTH) {
+        return highlightText(text, query);
+    }
+    return `
+        <span class="truncated-text">${highlightText(text, query)}</span>
+        <span class="full-text" style="display: none;">${highlightText(text, query)}</span>
+        <button class="toggle-text" onclick="toggleText(this)" aria-expanded="false">전체 보기</button>
+    `;
+};
+
+const toggleText = (button) => {
+    const resultItem = button.closest('.result-item');
+    if (!resultItem) return;
+
+    const truncated = resultItem.querySelector('.truncated-text');
+    const full = resultItem.querySelector('.full-text');
+    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+    if (truncated) truncated.style.display = isExpanded ? 'inline' : 'none';
+    if (full) full.style.display = isExpanded ? 'none' : 'inline';
+
+    button.textContent = isExpanded ? '전체 보기' : '접기';
+    button.setAttribute('aria-expanded', !isExpanded);
+};
+
 /**
- * 새롭게 추가된 말씀을 보여주는 임시 페이지 또는 영역으로 이동합니다.
- * 이 함수는 'workbook' 페이지로 전환하고 필터링된 결과를 보여주도록 간소화했습니다.
+ * 카테고리 결정
+ */
+const CATEGORY_KEYWORDS = [
+    { key: '천성경', value: CATEGORIES.CHEON_SEONG_GYEONG },
+    { key: '참부모경', value: CATEGORIES.CHAM_BUMO_GYEONG },
+    { key: '평화경', value: CATEGORIES.PYEONG_HWA_GYEONG },
+    { key: '참부모님 말씀', value: CATEGORIES.CHAM_BUMO_NIM },
+    { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
+    { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
+    { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER },
+    { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD },
+    { key: '천일국시대 뜻 길', value: CATEGORIES.THE_CHEON_IL_GUK_WILL_ROAD },
+    { key: '말씀선 집', value: CATEGORIES.COLLECTED_SERMONS },
+    { key: '평화를 사랑하는 세계인으로', value: CATEGORIES.A_PEACE_LOVING_GLOBAL_CITIZEN },
+    { key: '평화의 어머니', value: CATEGORIES.MOTHER_OF_PEACE }
+];
+
+const categorizeMessage = (source) => {
+    return CATEGORY_KEYWORDS.find(cat => source.includes(cat.key))?.value || CATEGORIES.ALL;
+};
+
+/**
+ * 검색 기록 관리
+ */
+const renderSearchSuggestions = () => {
+    const query = DOM.searchInput.value.trim().toLowerCase();
+    let html = '';
+
+    if (query && state.searchHistory.length > 0) {
+        html = state.searchHistory
+            .filter(q => q.toLowerCase().includes(query))
+            .map((q, i) => `
+                <div class="suggestion" role="option" tabindex="0">
+                    <span onclick="selectSuggestion('${q.replace(/'/g, "\\'")}')">${q}</span>
+                    <button class="delete-suggestion" onclick="deleteSearchHistory(${i})" aria-label="검색 기록 삭제: ${q}">✕</button>
+                </div>
+            `).join('');
+    }
+
+    if (state.searchHistory.length > 0 && DOM.searchSuggestions) {
+        html += `<div class="suggestion clear-all" role="button" tabindex="0" onclick="clearSearchHistory()" aria-label="모든 검색 기록 삭제">모든 검색 기록 삭제</div>`;
+    }
+
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.innerHTML = html;
+        const show = state.searchHistory.length > 0 && DOM.searchInput.value.trim() !== '';
+        DOM.searchSuggestions.style.display = show ? 'block' : 'none';
+        DOM.searchSuggestions.setAttribute('aria-hidden', !show);
+        DOM.searchSuggestions.setAttribute('role', 'listbox');
+    }
+};
+
+const deleteSearchHistory = (index) => {
+    state.searchHistory.splice(index, 1);
+    localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory));
+    renderSearchSuggestions();
+    showToast('검색 기록이 삭제되었습니다.');
+};
+
+const clearSearchHistory = () => {
+    state.searchHistory = [];
+    localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory));
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.style.display = 'none';
+        DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+    }
+    showToast('모든 검색 기록이 삭제되었습니다.');
+};
+
+const selectSuggestion = (query) => {
+    if (DOM.searchInput) {
+        DOM.searchInput.value = query;
+        DOM.searchInput.focus();
+    }
+    if (DOM.searchSuggestions) {
+        DOM.searchSuggestions.style.display = 'none';
+        DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
+    }
+    searchMessages();
+};
+
+/**
+ * 메시지 로드
+ */
+const loadMessages = async () => {
+    if (DOM.searchLoading) DOM.searchLoading.style.display = 'flex';
+    updateProgressBar('20%');
+
+    try {
+        const response = await fetch('messages.json', { cache: 'no-store' });
+        updateProgressBar('60%');
+
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        const newMessages = await response.json();
+        checkForNewMessages(newMessages);
+
+        state.messages = newMessages.map(msg => ({
+            ...msg,
+            category: msg.category || categorizeMessage(msg.source),
+            textLength: msg.text.length
+        }));
+
+        updateProgressBar('100%');
+    } catch (error) {
+        console.error('메시지 로드 실패:', error);
+        const errorMsg = error.message.includes('JSON') ?
+            '데이터 형식이 잘못되었습니다. 관리자에게 문의하세요.' :
+            '메시지 로드 실패. 네트워크를 확인하거나 나중에 다시 시도해주세요.';
+
+        if (DOM.searchResults) {
+            DOM.searchResults.innerHTML = `
+                <p class="no-results" role="alert" style="text-align: center; padding: 20px;">
+                    ${errorMsg}
+                    <button onclick="loadMessages()" aria-label="다시 시도" class="quiz-button blue" style="margin-top: 15px;">
+                        <i class="fas fa-sync-alt" aria-hidden="true"></i> 다시 시도
+                    </button>
+                </p>`;
+            DOM.searchResults.style.display = 'block';
+        }
+        showToast(errorMsg);
+    } finally {
+        setTimeout(() => {
+            if (DOM.searchLoading) DOM.searchLoading.style.display = 'none';
+            updateProgressBar('0', 300);
+        }, 300);
+    }
+};
+
+/**
+ * 새 메시지 페이지 표시
  */
 const showNewMessagesPage = () => {
-    // 1. 'workbook' 페이지로 전환
     showPage(CONSTANTS.PAGES.WORKBOOK);
 
-    // 2. 검색 입력 초기화 및 카테고리 '전체' 설정
     if (DOM.searchInput) DOM.searchInput.value = '';
     state.currentCategory = CATEGORIES.ALL;
 
-    // 3. 새로운 메시지만 표시
     if (DOM.searchResults && DOM.searchStats) {
         DOM.searchStats.style.display = 'block';
         DOM.searchStats.innerHTML = `🌟 새롭게 추가된 말씀 ${state.newlyAddedMessages.length}개`;
-        
+
         DOM.searchResults.innerHTML = state.newlyAddedMessages.map(msg => {
-            // ✅ 개선: 전체 텍스트 대신 미리보기 텍스트를 표시
-            const previewText = truncateTextForPreview(msg.text); 
-            
-            // 전체 텍스트를 숨겨진 영역에 저장하여 복사/확장 기능에 대비
-            const fullTextHTML = `<span class="full-text" style="display: none;">${msg.text}</span>`;
-            
+            const preview = truncateTextForPreview(msg.text);
+            const fullText = `<span class="full-text" style="display: none;">${msg.text}</span>`;
+
             return `
                 <div class="result-item new-message-item fade-in" role="listitem" tabindex="0" style="border-left: 5px solid var(--color-blue); margin-top: 10px;">
                     <h3><i class="fas fa-star" aria-hidden="true"></i> ${msg.category} <span class="new-tag">NEW</span></h3>
                     <p>
-                        <span class="truncated-text">${previewText}</span>
-                        ${fullTextHTML}
+                        <span class="truncated-text">${preview}</span>
+                        ${fullText}
                     </p>
                     <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${msg.source}</p>
                     <div class="action-buttons">
-                        <button class="copy-button"
-                                onclick="copyMessageToClipboard(
-                                    '${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                    '${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                    '${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                    this.closest('.result-item')
-                                )"
-                                aria-label="${msg.category} 말씀과 출처 복사">
+                        <button class="copy-button" onclick="copyMessageToClipboard('${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}','${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}','${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',this.closest('.result-item'))" aria-label="${msg.category} 말씀과 출처 복사">
                             <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
                         </button>
                     </div>
@@ -445,474 +462,115 @@ const showNewMessagesPage = () => {
 
         DOM.searchResults.style.display = 'flex';
         scrollToResultsTop();
-
-        // 4. 세션 스토리지 초기화 및 홈 버튼 제거 (새 말씀 확인 완료 처리)
-        // **주의**: 사용자가 다른 검색이나 카테고리 이동을 할 때까지 새 말씀 목록을 유지하려면,
-        // 이 초기화 코드를 제거하고 searchMessages() 시작 부분에서만 초기화해야 합니다.
-        // 여기서는 '확인하기' 버튼 클릭 시 바로 임시 목록을 보여주고, 완료되었다고 가정합니다.
-        // (searchMessages 시작 시 초기화 로직은 그대로 유지)
-        
-        // 홈 페이지의 버튼만 제거
         document.getElementById('view-new-messages-button')?.remove();
     }
 };
 
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 /**
- * messages.json 파일에서 메시지 데이터를 로드합니다.
- * 로딩 상태와 진행률을 사용자에게 표시합니다.
- * @returns {Promise<void>}
- */
-const loadMessages = async () => {
-    if (DOM.searchLoading) DOM.searchLoading.style.display = 'flex';
-    updateProgressBar('20%');
-
-    try {
-        const response = await fetch('messages.json', { cache: 'no-store' }); // 캐시 사용 안 함
-        updateProgressBar('60%');
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const newMessages = await response.json(); // 새로 로드된 메시지를 변수에 저장
-
-        // ✅ 새 말씀 확인 로직 실행 (상태 업데이트 전)
-        checkForNewMessages(newMessages);
-
-        state.messages = newMessages; // 상태 업데이트
-
-        updateProgressBar('100%');
-
-        // 메시지 로드 후 카테고리 자동 지정 및 텍스트 길이 속성 추가
-        state.messages = state.messages.map(msg => ({
-            ...msg,
-            category: msg.category || categorizeMessage(msg.source),
-            textLength: msg.text.length // 텍스트 길이 속성 추가
-        }));
-    } catch (error) {
-        console.error('메시지 로드 실패:', error);
-        let errorMessage = '메시지 로드 실패. 네트워크를 확인하거나 나중에 다시 시도해주세요.';
-        if (error.message.includes('JSON')) {
-            errorMessage = '데이터 형식이 잘못되었습니다. 관리자에게 문의하세요.';
-        }
-        if (DOM.searchResults) {
-            DOM.searchResults.innerHTML = `
-                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
-                    ${errorMessage}
-                    <button onclick="loadMessages()" aria-label="다시 시도" class="quiz-button blue" style="margin-top: 15px;">
-                        <i class="fas fa-sync-alt" aria-hidden="true"></i> 다시 시도
-                    </button>
-                </p>`;
-            DOM.searchResults.style.display = 'block';
-        }
-        showToast(errorMessage); // 사용자에게도 토스트 메시지로 알림
-    } finally {
-        // 로딩 완료 후 로딩 인디케이터 숨기기
-        setTimeout(() => {
-            if (DOM.searchLoading) DOM.searchLoading.style.display = 'none';
-            updateProgressBar('0', 300); // 진행 바 초기화
-        }, 300);
-    }
-};
-
-/**
- * 메시지 출처 문자열에 따라 적절한 카테고리를 지정합니다.
- * @param {string} source - 메시지의 출처 문자열
- * @returns {string} - 지정된 카테고리 이름 (CATEGORIES 객체에서 정의된 값 중 하나)
- */
-const categorizeMessage = (source) => {
-    const categories = [
-        { key: '천성경', value: CATEGORIES.CHEON_SEONG_GYEONG },
-        { key: '참부모경', value: CATEGORIES.CHAM_BUMO_GYEONG },
-        { key: '평화경', value: CATEGORIES.PYEONG_HWA_GYEONG },
-        { key: '참부모님 말씀', value: CATEGORIES.CHAM_BUMO_NIM },
-        { key: '참어머님 말씀', value: CATEGORIES.CHAM_EOMEONIM },
-        { key: '천심원', value: CATEGORIES.CHEON_SHIM_WON },
-        { key: '참아버님 기도문', value: CATEGORIES.TRUE_FATHER_PRAYER },
-        { key: '뜻 길', value: CATEGORIES.THE_WILL_ROAD },
-        { key : "천일국시대 뜻 길",value : CATEGORIES.THE_CHEON_IL_GUK_WILL_ROAD || '천일국시대 뜻 길' }, 
-        { key: '말씀선집', value: CATEGORIES.COLLECTED_SERMONS || '말씀선집' }, 
-        { key: '평화를 사랑하는 세계인으로', value: CATEGORIES.A_PEACE_LOVING_GLOBAL_CITIZEN },
-        { key: '평화의 어머니', value: CATEGORIES.MOTHER_OF_PEACE }
-    ];
-    // 출처에 포함된 키워드를 찾아 해당하는 카테고리 반환, 없으면 '전체' 반환
-    return categories.find(cat => source.includes(cat.key))?.value || CATEGORIES.ALL;
-};
-
-/**
- * 텍스트 내에서 검색어를 하이라이트합니다.
- * @param {string} text - 원본 텍스트
- * @param {string} query - 하이라이트할 검색어
- * @returns {string} - 검색어가 `<span class="highlight">` 태그로 감싸진 HTML 텍스트
- */
-const highlightText = (text, query) => {
-    if (!query) {
-        return text;
-    }
-    try {
-        // 특수 문자를 이스케이프하여 정규식 오류 방지
-        const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(escapedQuery, 'gi'); // 대소문자 구분 없이 전역 검색
-        return text.replace(regex, match => `<span class="highlight">${match}</span>`);
-    } catch (e) {
-        console.warn('유효하지 않은 정규식 쿼리:', e);
-        return text; // 오류 발생 시 원본 텍스트 반환
-    }
-};
-
-/**
- * 긴 텍스트를 축약하고, 검색어가 포함된 경우 해당 부분을 보여주며 전체 보기/접기 기능을 제공합니다.
- * @param {string} text - 원본 메시지 텍스트
- * @param {string} query - 검색어 (하이라이트에 사용)
- * @returns {string} - 축약되거나 전체 내용이 포함된 HTML 문자열
- */
-const truncateText = (text, query) => {
-    // 텍스트 길이가 너무 길지 않으면 축약하지 않음
-    if (text.length <= CONSTANTS.MAX_TEXT_LENGTH) {
-        return highlightText(text, query);
-    }
-
-    // 축약된 텍스트와 전체 텍스트를 담는 HTML 구조 반환
-    // truncated-text는 CSS의 line-clamp 속성으로 줄 수를 제한함 (CSS 필요)
-    return `
-        <span class="truncated-text">${highlightText(text, query)}</span>
-        <span class="full-text" style="display: none;">${highlightText(text, query)}</span>
-        <button class="toggle-text" onclick="toggleText(this)" aria-expanded="false" aria-label="전체 텍스트 보기">전체 보기</button>
-    `;
-};
-
-/**
- * "전체 보기" 버튼 클릭 시 텍스트를 확장하거나 축소합니다.
- * @param {HTMLElement} button - 클릭된 토글 버튼 요소
- */
-const toggleText = (button) => {
-    const resultItem = button.closest('.result-item');
-    if (!resultItem) return;
-
-    const truncatedText = resultItem.querySelector('.truncated-text');
-    const fullText = resultItem.querySelector('.full-text');
-    const isExpanded = button.getAttribute('aria-expanded') === 'true';
-
-    // 텍스트 표시 상태 토글
-    if (truncatedText) truncatedText.style.display = isExpanded ? 'inline' : 'none';
-    if (fullText) fullText.style.display = isExpanded ? 'none' : 'inline';
-
-    // 버튼 텍스트와 ARIA 속성 업데이트
-    button.textContent = isExpanded ? '전체 보기' : '접기';
-    button.setAttribute('aria-expanded', !isExpanded);
-    button.setAttribute('aria-label', isExpanded ? '전체 텍스트 보기' : '텍스트 접기');
-};
-
-/**
- * "모든 검색 기록 삭제" 버튼의 HTML을 생성합니다.
- * @returns {string} - 버튼의 HTML 문자열
- */
-const renderClearAllButton = () => `
-    <div class="suggestion clear-all" role="button" tabindex="0" onclick="clearSearchHistory()" aria-label="모든 검색 기록 삭제">
-        모든 검색 기록 삭제
-    </div>
-`;
-
-/**
- * 현재 검색어에 따라 검색 제안 목록을 렌더링하고 표시/숨김을 관리합니다.
- */
-const renderSearchSuggestions = () => {
-    const query = DOM.searchInput.value.trim().toLowerCase();
-    let html = '';
-
-    // 검색어가 있고, 검색 기록이 있는 경우 필터링된 기록 표시
-    if (query && state.searchHistory.length > 0) {
-        html = state.searchHistory
-            .filter(q => q.toLowerCase().includes(query))
-            .map((q, index) => `
-                <div class="suggestion" role="option" tabindex="0">
-                    <span onclick="selectSuggestion('${q.replace(/'/g, "\\'")}')">${q}</span>
-                    <button class="delete-suggestion" onclick="deleteSearchHistory(${index})" aria-label="검색 기록 삭제: ${q}">✕</button>
-                </div>
-            `).join('');
-    }
-
-    // 검색 기록이 있는 경우 "모든 검색 기록 삭제" 버튼 추가
-    if (state.searchHistory.length > 0 && DOM.searchSuggestions) {
-        html += renderClearAllButton();
-    }
-
-    if (DOM.searchSuggestions) {
-        DOM.searchSuggestions.innerHTML = html;
-        // 검색 제안 영역 표시 여부 결정
-        DOM.searchSuggestions.style.display = (state.searchHistory.length > 0 && DOM.searchInput.value.trim() !== '') ? 'block' : 'none';
-        DOM.searchSuggestions.setAttribute('aria-hidden', DOM.searchSuggestions.style.display === 'none');
-        DOM.searchSuggestions.setAttribute('role', 'listbox'); // 검색 제안 목록에 role="listbox" 추가
-    }
-};
-
-/**
- * 특정 검색 기록 항목을 삭제합니다.
- * @param {number} index - 삭제할 검색 기록의 인덱스
- */
-const deleteSearchHistory = (index) => {
-    state.searchHistory.splice(index, 1); // 배열에서 항목 제거
-    localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory)); // localStorage 업데이트
-    renderSearchSuggestions(); // 검색 제안 목록 다시 렌더링
-    showToast('검색 기록이 삭제되었습니다.');
-};
-
-/**
- * 모든 검색 기록을 삭제합니다.
- */
-const clearSearchHistory = () => {
-    state.searchHistory = []; // 검색 기록 초기화
-    localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory)); // localStorage 업데이트
-    if (DOM.searchSuggestions) {
-        DOM.searchSuggestions.style.display = 'none'; // 검색 제안 영역 숨김
-        DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
-    }
-    showToast('모든 검색 기록이 삭제되었습니다.');
-};
-
-/**
- * 검색 제안 항목을 선택하고, 해당 검색어로 메시지를 검색합니다.
- * @param {string} query - 선택된 검색어
- */
-const selectSuggestion = (query) => {
-    if (DOM.searchInput) {
-        DOM.searchInput.value = query; // 검색 입력 필드에 값 설정
-        DOM.searchInput.focus(); // 검색 입력 필드로 포커스 이동
-    }
-    if (DOM.searchSuggestions) {
-        DOM.searchSuggestions.style.display = 'none'; // 검색 제안 숨김
-        DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
-    }
-    searchMessages(); // 메시지 검색 실행
-};
-
-/**
- * 랜덤 말씀을 생성하여 표시합니다.
- */
-const generateRandomMessage = () => {
-    if (state.messages.length === 0) {
-        showToast('로딩된 말씀이 없습니다. 잠시 후 다시 시도해주세요.');
-        return;
-    }
-
-    // 현재 필터링된 메시지 중에서 랜덤 선택 (검색어나 카테고리 적용)
-    let availableMessages = state.messages;
-    const query = DOM.searchInput ? DOM.searchInput.value.trim() : '';
-
-    if (state.currentCategory !== CATEGORIES.ALL) {
-        availableMessages = availableMessages.filter(msg => msg.category === state.currentCategory);
-    }
-    if (query) {
-        availableMessages = availableMessages.filter(msg => msg.text.toLowerCase().includes(query.toLowerCase()));
-    }
-
-    if (availableMessages.length === 0) {
-        showToast('현재 조건에 맞는 랜덤 말씀이 없습니다.');
-        // 검색 필드가 비어있고 카테고리가 전체일 경우 다시 시도 버튼만 보이도록
-        if (query === '' && state.currentCategory === CATEGORIES.ALL) {
-            DOM.searchResults.innerHTML = `
-                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
-                    현재 조건에 맞는 랜덤 말씀이 없습니다.
-                    <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
-                        <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
-                    </button>
-                </p>
-            `;
-        } else {
-            // 다른 조건이 있을 경우, 검색 입력 초기화 및 전체 카테고리로 변경하는 버튼도 제공
-            DOM.searchResults.innerHTML = `
-                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
-                    현재 조건에 맞는 랜덤 말씀이 없습니다.
-                    <button class="quiz-button blue" onclick="clearSearch()" style="margin-top: 10px; margin-right: 10px;">
-                        <i class="fas fa-undo" aria-hidden="true"></i> 검색 초기화
-                    </button>
-                    <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
-                        <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
-                    </button>
-                </p>
-            `;
-        }
-        if (DOM.searchResults) DOM.searchResults.style.display = 'block';
-        if (DOM.searchStats) DOM.searchStats.style.display = 'none';
-        return;
-    }
-
-    const randomIndex = Math.floor(Math.random() * availableMessages.length);
-    const randomMessage = availableMessages[randomIndex];
-
-    if (DOM.searchResults) {
-        DOM.searchResults.innerHTML = `
-            <div class="result-item random-message fade-in" role="listitem" tabindex="0">
-                <h3><i class="fas fa-book" aria-hidden="true"></i> ${randomMessage.category}</h3>
-                <p>${highlightText(randomMessage.text, query)}</p>
-                <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${randomMessage.source}</p>
-                <div class="action-buttons">
-                    <button class="copy-button"
-                            onclick="copyMessageToClipboard(
-                                '${randomMessage.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                '${randomMessage.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                '${randomMessage.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                this.closest('.result-item')
-                            )"
-                            aria-label="${randomMessage.category} 말씀과 출처 복사">
-                        <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
-                    </button>
-                </div>
-                <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
-                    <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
-                </button>
-            </div>
-        `;
-        DOM.searchResults.style.display = 'flex';
-        DOM.searchResults.setAttribute('aria-live', 'polite');
-    }
-    if (DOM.searchStats) DOM.searchStats.style.display = 'none';
-    scrollToResultsTop(); // 랜덤 말씀 생성 후 결과 상단으로 스크롤
-    showToast('새로운 랜덤 말씀을 불러왔습니다!');
-};
-
-
-/**
- * 사용자 입력 또는 카테고리 선택에 따라 메시지를 검색하고 결과를 표시합니다.
- * 검색 결과는 페이지네이션이 적용됩니다.
- * @param {number} [page=1] - 현재 페이지 번호 (기본값: 1)
+ * 메시지 검색
  */
 const searchMessages = debounce((page = 1) => {
-    // 임시로 새 메시지를 보여주는 상태를 일반 검색/필터링 시작 시 초기화
     if (state.newlyAddedMessages.length > 0 && page === 1) {
         state.newlyAddedMessages = [];
-        sessionStorage.removeItem(CONSTANTS.NEW_MESSAGES_KEY);
+        sessionStorage.removeItem(CONSTANTS.STORAGE.NEW_MESSAGES);
         document.getElementById('view-new-messages-button')?.remove();
     }
-    
-    const query = DOM.searchInput ? DOM.searchInput.value.trim() : '';
-    // 1. 검색 유형(message 또는 title)을 가져옵니다.
-    const searchType = document.querySelector('input[name="search-type"]:checked').value;
 
-    if (DOM.searchLoading) DOM.searchLoading.style.display = 'flex'; // 로딩 표시
-    updateProgressBar('20%'); // 진행 바 업데이트
+    const query = DOM.searchInput?.value.trim() || '';
+    const searchType = document.querySelector('input[name="search-type"]:checked')?.value || 'message';
+
+    if (DOM.searchLoading) DOM.searchLoading.style.display = 'flex';
+    updateProgressBar('20%');
     if (DOM.searchResults) {
-        DOM.searchResults.innerHTML = ''; // 이전 결과 초기화
+        DOM.searchResults.innerHTML = '';
         DOM.searchResults.style.display = 'none';
     }
     if (DOM.searchStats) DOM.searchStats.style.display = 'none';
-    state.currentPage = page; // 현재 페이지 상태 업데이트
 
-    let filteredMessages = [...state.messages]; // 원본 메시지 배열을 수정하지 않도록 복사
+    state.currentPage = page;
+    let filtered = [...state.messages];
 
-    // 카테고리 필터링
     if (state.currentCategory !== CATEGORIES.ALL) {
-        filteredMessages = filteredMessages.filter(msg => msg.category === state.currentCategory);
+        filtered = filtered.filter(msg => msg.category === state.currentCategory);
     }
 
-    // 검색어 필터링 및 일치 횟수 계산
     if (query) {
         try {
             const queryRegex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
 
-            filteredMessages = filteredMessages.map(msg => {
-                let totalMatchCount = 0;
-                let textMatchCount = 0;
-                let categoryMatchCount = 0;
-                let sourceMatchCount = 0;
+            filtered = filtered.map(msg => {
+                let matchCount = 0;
 
-                // 2. 검색 유형에 따라 검색 대상을 분기합니다.
                 if (searchType === 'message') {
-                    // '말씀 검색'일 경우, 본문에서만 검색
-                    textMatchCount = (msg.text.match(queryRegex) || []).length;
-                    totalMatchCount = textMatchCount;
-                } else if (searchType === 'title') {
-                    // '말씀 제목 검색'일 경우, 카테고리(제목)와 출처에서만 검색
-                    categoryMatchCount = (msg.category.match(queryRegex) || []).length;
-                    sourceMatchCount = (msg.source.match(queryRegex) || []).length;
-                    totalMatchCount = categoryMatchCount + sourceMatchCount;
+                    matchCount = (msg.text.match(queryRegex) || []).length;
+                } else {
+                    const cat = (msg.category.match(queryRegex) || []).length;
+                    const src = (msg.source.match(queryRegex) || []).length;
+                    matchCount = cat + src;
                 }
 
-                return { ...msg, totalMatchCount, textMatchCount, categoryMatchCount, sourceMatchCount };
-            }).filter(msg => msg.totalMatchCount > 0); // 검색어 일치하는 메시지만 필터링
+                return { ...msg, matchCount };
+            }).filter(msg => msg.matchCount > 0);
 
-            // 검색어 일치 횟수 기준 정렬 (기본값)
-            filteredMessages.sort((a, b) => b.totalMatchCount - a.totalMatchCount);
+            filtered.sort((a, b) => b.matchCount - a.matchCount);
+
+            if (query && !state.searchHistory.includes(query)) {
+                state.searchHistory.unshift(query);
+                if (state.searchHistory.length > CONSTANTS.MAX_SEARCH_HISTORY) {
+                    state.searchHistory.pop();
+                }
+                localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory));
+            }
         } catch (e) {
             console.warn('유효하지 않은 검색어 정규식:', e);
-            // 사용자에게 유효하지 않은 검색어임을 알리고 검색을 중단
             if (DOM.searchResults) {
                 DOM.searchResults.innerHTML = '<p class="no-results" role="alert">유효하지 않은 검색어입니다. 특수문자를 확인해주세요.</p>';
                 DOM.searchResults.style.display = 'block';
             }
             if (DOM.searchLoading) DOM.searchLoading.style.display = 'none';
             updateProgressBar('0');
-            return; // 함수 종료
-        }
-
-        // 검색 기록 업데이트
-        if (query && !state.searchHistory.includes(query)) { // 빈 쿼리는 저장하지 않음
-            state.searchHistory.unshift(query); // 가장 최근 검색어를 맨 앞에 추가
-            if (state.searchHistory.length > CONSTANTS.MAX_SEARCH_HISTORY) {
-                state.searchHistory.pop(); // 최대 개수 초과 시 가장 오래된 것 삭제
-            }
-            localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory));
+            return;
         }
     }
 
-    // **정렬 순서 적용**
     switch (state.currentSortOrder) {
         case CONSTANTS.SORT_ORDER.LENGTH_ASC:
-            filteredMessages.sort((a, b) => a.textLength - b.textLength); // 길이 짧은순
+            filtered.sort((a, b) => a.textLength - b.textLength);
             break;
         case CONSTANTS.SORT_ORDER.LENGTH_DESC:
-            // 원본 코드는 잘못된 정렬을 하고 있어 수정합니다.
-            filteredMessages.sort((a, b) => b.textLength - a.textLength); // 길이 긴순
+            filtered.sort((a, b) => b.textLength - a.textLength);
             break;
-            // CONSTANTS.SORT_ORDER.DEFAULT (검색 일치 횟수)는 이미 위에서 처리됨
     }
 
-
-    const startTime = performance.now(); // 검색 시간 측정 시작
     updateProgressBar('60%');
 
-    // 페이지네이션 적용
-    const startIndex = (page - 1) * CONSTANTS.RESULTS_PER_PAGE;
-    const endIndex = startIndex + CONSTANTS.RESULTS_PER_PAGE;
-    const paginatedMessages = filteredMessages.slice(startIndex, endIndex);
+    const startIdx = (page - 1) * CONSTANTS.RESULTS_PER_PAGE;
+    const endIdx = startIdx + CONSTANTS.RESULTS_PER_PAGE;
+    const paginated = filtered.slice(startIdx, endIdx);
 
-    // 검색 결과 표시
     if (DOM.searchResults) {
-        if (filteredMessages.length === 0 && (query || state.currentCategory !== CATEGORIES.ALL)) {
+        if (filtered.length === 0 && (query || state.currentCategory !== CATEGORIES.ALL)) {
             DOM.searchResults.innerHTML = `
-                <p class="no-results" role="alert" style="text-align: center; padding: 20px; color: var(--text-color-secondary);">
+                <p class="no-results" role="alert" style="text-align: center; padding: 20px;">
                     검색 결과가 없습니다.
                     <button class="quiz-button blue" onclick="clearSearch()" style="margin-top: 15px;">
                         <i class="fas fa-undo" aria-hidden="true"></i> 검색 초기화
                     </button>
-                </p>
-            `;
+                </p>`;
             DOM.searchResults.style.display = 'block';
-        } else if (paginatedMessages.length > 0) {
-            DOM.searchResults.innerHTML = paginatedMessages.map(msg => {
-                // 3. 검색 유형에 따라 하이라이트할 대상을 분기합니다.
-                const highlightedCategory = (searchType === 'title') ? highlightText(msg.category, query) : msg.category;
-                const highlightedSource = (searchType === 'title') ? highlightText(msg.source, query) : msg.source;
-                const displayText = (searchType === 'message') ? truncateText(msg.text, query) : truncateText(msg.text, '');
+        } else if (paginated.length > 0) {
+            DOM.searchResults.innerHTML = paginated.map(msg => {
+                const highlightCat = searchType === 'title' ? highlightText(msg.category, query) : msg.category;
+                const highlightSrc = searchType === 'title' ? highlightText(msg.source, query) : msg.source;
+                const display = searchType === 'message' ? truncateText(msg.text, query) : truncateText(msg.text, '');
 
-                const matchCount = msg.totalMatchCount || 0; // 일치 횟수
                 return `
                     <div class="result-item fade-in" role="listitem" tabindex="0">
-                        <h3><i class="fas fa-book" aria-hidden="true"></i> ${highlightedCategory}</h3>
-                        <p>${displayText} ${matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${matchCount}회">${matchCount}</span>` : ''}</p>
-                        <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${highlightedSource}</p>
+                        <h3><i class="fas fa-book" aria-hidden="true"></i> ${highlightCat}</h3>
+                        <p>${display} ${msg.matchCount > 0 && query ? `<span class="match-count" aria-label="일치 횟수 ${msg.matchCount}회">${msg.matchCount}</span>` : ''}</p>
+                        <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${highlightSrc}</p>
                         <div class="action-buttons">
-                            <button class="copy-button"
-                                    onclick="copyMessageToClipboard(
-                                        '${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                        '${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                        '${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',
-                                        this.closest('.result-item')
-                                    )"
-                                    aria-label="${msg.category} 말씀과 출처 복사">
+                            <button class="copy-button" onclick="copyMessageToClipboard('${msg.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}','${msg.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}','${msg.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',this.closest('.result-item'))" aria-label="${msg.category} 말씀과 출처 복사">
                                 <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
                             </button>
                         </div>
@@ -920,64 +578,47 @@ const searchMessages = debounce((page = 1) => {
                 `;
             }).join('');
 
-            // 다음 페이지 버튼 추가
-            if (filteredMessages.length > endIndex) {
-                DOM.searchResults.innerHTML += `
-                    <button onclick="searchMessages(${page + 1})" class="quiz-button blue next-page-button" aria-label="다음 페이지">다음 페이지</button>
-                `;
+            if (filtered.length > endIdx) {
+                DOM.searchResults.innerHTML += `<button onclick="searchMessages(${page + 1})" class="quiz-button blue next-page-button" aria-label="다음 페이지">다음 페이지</button>`;
             }
-            // 검색 결과 맨 위로 이동 버튼 추가
-            DOM.searchResults.innerHTML += `
-                <button class="back-to-top result-top" onclick="scrollToResultsTop()" aria-label="검색 결과 맨 위로 이동" style="position: static; margin: 1rem auto; display: block; opacity: 1; pointer-events: auto;">
-                    <i class="fas fa-arrow-up" aria-hidden="true"></i> 맨 위로
-                </button>
-            `;
+            DOM.searchResults.innerHTML += `<button class="back-to-top result-top" onclick="scrollToResultsTop()" aria-label="검색 결과 맨 위로 이동" style="position: static; margin: 1rem auto; display: block; opacity: 1;"><i class="fas fa-arrow-up" aria-hidden="true"></i> 맨 위로</button>`;
             DOM.searchResults.style.display = 'flex';
-            DOM.searchResults.setAttribute('aria-live', 'polite'); // 스크린 리더에게 내용 변경 알림
+            DOM.searchResults.setAttribute('aria-live', 'polite');
         }
     }
 
-    const endTime = performance.now(); // 검색 시간 측정 종료
-    if (DOM.searchStats) {
+    if (DOM.searchStats && filtered.length > 0) {
         DOM.searchStats.style.display = 'block';
-        DOM.searchStats.innerHTML = `총 ${filteredMessages.length}개의 결과 (검색 시간: ${(endTime - startTime).toFixed(2)}ms)`;
+        DOM.searchStats.innerHTML = `총 ${filtered.length}개의 결과`;
     }
-    if (DOM.searchLoading) DOM.searchLoading.style.display = 'none'; // 로딩 표시 숨기기
-    updateProgressBar('100%');
-    setTimeout(() => updateProgressBar('0'), 300); // 진행 바 초기화
 
-    // 다음 페이지로 넘어갈 때 자동으로 화면 맨 위로 스크롤
-    if (page > 1) {
-        scrollToResultsTop();
-    }
-}, CONSTANTS.DEBOUNCE_DELAY); // 디바운스 적용
+    if (DOM.searchLoading) DOM.searchLoading.style.display = 'none';
+    updateProgressBar('100%');
+    setTimeout(() => updateProgressBar('0'), 300);
+
+    if (page > 1) scrollToResultsTop();
+}, CONSTANTS.DEBOUNCE_DELAY);
 
 /**
- * 검색 입력 필드와 현재 선택된 카테고리를 초기화합니다.
+ * 검색 초기화
  */
 const clearSearch = () => {
-    if (DOM.searchInput) DOM.searchInput.value = ''; // 검색 입력 필드 비우기
-    state.currentCategory = CATEGORIES.ALL; // 카테고리 '전체'로 초기화
-    localStorage.setItem('currentCategory', state.currentCategory); // localStorage 업데이트
+    if (DOM.searchInput) DOM.searchInput.value = '';
+    state.currentCategory = CATEGORIES.ALL;
+    localStorage.setItem('currentCategory', state.currentCategory);
 
-    // 카테고리 버튼의 활성 상태 초기화
     DOM.categoryButtons.forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-category') === CATEGORIES.ALL);
         btn.setAttribute('aria-current', btn.getAttribute('data-category') === CATEGORIES.ALL ? 'true' : 'false');
     });
 
-    // 정렬 순서 초기화
     state.currentSortOrder = CONSTANTS.SORT_ORDER.DEFAULT;
-    if (DOM.sortSelect) {
-        DOM.sortSelect.value = CONSTANTS.SORT_ORDER.DEFAULT;
-    }
+    if (DOM.sortSelect) DOM.sortSelect.value = CONSTANTS.SORT_ORDER.DEFAULT;
 
-    // 새 말씀 상태 초기화
     state.newlyAddedMessages = [];
-    sessionStorage.removeItem(CONSTANTS.NEW_MESSAGES_KEY);
+    sessionStorage.removeItem(CONSTANTS.STORAGE.NEW_MESSAGES);
     document.getElementById('view-new-messages-button')?.remove();
 
-    // 검색 결과 및 통계, 제안 숨기기
     if (DOM.searchResults) {
         DOM.searchResults.innerHTML = '';
         DOM.searchResults.style.display = 'none';
@@ -988,66 +629,114 @@ const clearSearch = () => {
         DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
     }
 
-    // 검색 초기화 버튼에 애니메이션 효과 추가
     DOM.clearSearch?.classList.add('shake');
     setTimeout(() => DOM.clearSearch?.classList.remove('shake'), 300);
 
-    searchMessages(); // 메시지 검색 다시 실행 (초기화된 상태로)
+    searchMessages();
     showToast('검색 조건이 초기화되었습니다.');
 };
 
 /**
- * 지정된 페이지를 활성화하고 다른 페이지는 비활성화합니다.
- * @param {string} pageId - 활성화할 페이지의 ID (예: 'home', 'workbook', 'quiz-selection')
+ * 랜덤 메시지 생성
+ */
+const generateRandomMessage = () => {
+    if (state.messages.length === 0) {
+        showToast('로드된 말씀이 없습니다. 잠시 후 다시 시도해주세요.');
+        return;
+    }
+
+    let available = state.messages;
+    const query = DOM.searchInput?.value.trim() || '';
+
+    if (state.currentCategory !== CATEGORIES.ALL) {
+        available = available.filter(msg => msg.category === state.currentCategory);
+    }
+    if (query) {
+        available = available.filter(msg => msg.text.toLowerCase().includes(query.toLowerCase()));
+    }
+
+    if (available.length === 0) {
+        const isFiltered = query !== '' || state.currentCategory !== CATEGORIES.ALL;
+        DOM.searchResults.innerHTML = `
+            <p class="no-results" role="alert" style="text-align: center; padding: 20px;">
+                현재 조건에 맞는 랜덤 말씀이 없습니다.
+                ${isFiltered ? `
+                    <button class="quiz-button blue" onclick="clearSearch()" style="margin-top: 10px; margin-right: 10px;">
+                        <i class="fas fa-undo" aria-hidden="true"></i> 검색 초기화
+                    </button>
+                ` : ''}
+                <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
+                    <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
+                </button>
+            </p>`;
+        if (DOM.searchResults) DOM.searchResults.style.display = 'block';
+        if (DOM.searchStats) DOM.searchStats.style.display = 'none';
+        return;
+    }
+
+    const random = available[Math.floor(Math.random() * available.length)];
+
+    if (DOM.searchResults) {
+        DOM.searchResults.innerHTML = `
+            <div class="result-item random-message fade-in" role="listitem" tabindex="0">
+                <h3><i class="fas fa-book" aria-hidden="true"></i> ${random.category}</h3>
+                <p>${highlightText(random.text, query)}</p>
+                <p class="source"><i class="fas fa-bookmark" aria-hidden="true"></i> ${random.source}</p>
+                <div class="action-buttons">
+                    <button class="copy-button" onclick="copyMessageToClipboard('${random.text.replace(/'/g, "\\'").replace(/"/g, '\\"')}','${random.source.replace(/'/g, "\\'").replace(/"/g, '\\"')}','${random.category.replace(/'/g, "\\'").replace(/"/g, '\\"')}',this.closest('.result-item'))" aria-label="${random.category} 말씀과 출처 복사">
+                        <i class="fas fa-copy" aria-hidden="true"></i> 복사하기
+                    </button>
+                </div>
+                <button class="quiz-button blue" onclick="generateRandomMessage()" style="margin-top: 10px;">
+                    <i class="fas fa-random" aria-hidden="true"></i> 다른 랜덤 말씀 보기
+                </button>
+            </div>`;
+        DOM.searchResults.style.display = 'flex';
+        DOM.searchResults.setAttribute('aria-live', 'polite');
+    }
+    if (DOM.searchStats) DOM.searchStats.style.display = 'none';
+    scrollToResultsTop();
+    showToast('새로운 랜덤 말씀을 불러왔습니다!');
+};
+
+/**
+ * 페이지 표시
  */
 const showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-        page.classList.remove('fade-in'); // 기존 fade-in 클래스 제거
+        page.classList.remove('active', 'fade-in');
     });
 
-    const activePage = document.querySelector(`#${pageId}`);
-    if (activePage) {
-        activePage.classList.add('active');
-        // 부드러운 전환을 위한 fade-in 클래스 추가
-        setTimeout(() => activePage.classList.add('fade-in'), 10);
+    const active = document.querySelector(`#${pageId}`);
+    if (active) {
+        active.classList.add('active');
+        setTimeout(() => active.classList.add('fade-in'), 10);
     }
 
-
-    // 네비게이션 버튼의 활성 상태 업데이트
-    DOM.navButtons.forEach(button => {
-        button.classList.toggle('active', button.getAttribute('data-page') === pageId);
-        button.setAttribute('aria-current', button.getAttribute('data-page') === pageId ? 'page' : 'false');
+    DOM.navButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-page') === pageId);
+        btn.setAttribute('aria-current', btn.getAttribute('data-page') === pageId ? 'page' : 'false');
     });
 
-    // 'workbook' 페이지로 이동 시 메시지 로드 및 검색 실행
     if (pageId === CONSTANTS.PAGES.WORKBOOK) {
-        // 메시지가 아직 로드되지 않았다면 로드 후 검색 실행
         if (state.messages.length === 0) {
             loadMessages().then(() => searchMessages());
-        } else {
-            // 새 메시지 확인 중인 상태가 아니라면 일반 검색 실행
-            if (state.newlyAddedMessages.length === 0) {
-                searchMessages();
-            } else {
-                // showNewMessagesPage()가 호출된 상태가 유지되도록 여기서 searchMessages()를 호출하지 않음
-            }
+        } else if (state.newlyAddedMessages.length === 0) {
+            searchMessages();
         }
-        // 검색 입력 필드로 포커스 이동
         setTimeout(() => DOM.searchInput?.focus(), CONSTANTS.SCROLL_DURATION);
     }
-    // 페이지 전환 시 맨 위로 스크롤
+
     scrollToTop();
 };
 
 /**
- * 지정된 퀴즈 유형에 해당하는 퀴즈 페이지로 이동합니다.
- * @param {string} quizType - 시작할 퀴즈의 유형 (예: '원리강론', '성경')
+ * 퀴즈 시작
  */
 const startQuiz = (quizType) => {
     const url = QUIZ_PAGES[quizType];
     if (url) {
-        window.location.href = url; // 해당 퀴즈 페이지로 리디렉션
+        window.location.href = url;
     } else {
         console.error('유효하지 않은 퀴즈 유형:', quizType);
         showToast('퀴즈를 시작할 수 없습니다. 다시 시도하세요.');
@@ -1055,53 +744,41 @@ const startQuiz = (quizType) => {
 };
 
 /**
- * 애플리케이션의 초기 설정을 수행하고 이벤트 리스너를 등록합니다.
+ * 이벤트 리스너 등록
  */
-const initializeApp = () => {
-    // 초기 카테고리 버튼 활성화
-    const initialCategoryButton = document.querySelector(`.category-container button[data-category="${state.currentCategory}"]`);
-    if (initialCategoryButton) {
-        initialCategoryButton.classList.add('active');
-        initialCategoryButton.setAttribute('aria-current', 'true');
-    }
-
-    // 네비게이션 버튼 클릭 이벤트 리스너
-    DOM.navButtons.forEach(button => {
-        button.addEventListener('click', () => showPage(button.getAttribute('data-page')));
+const attachEventListeners = () => {
+    // 네비게이션 버튼
+    DOM.navButtons.forEach(btn => {
+        btn.addEventListener('click', () => showPage(btn.getAttribute('data-page')));
     });
 
-    // 카테고리 버튼 클릭 이벤트 리스너
-    DOM.categoryButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // 모든 카테고리 버튼의 활성 상태 제거
-            DOM.categoryButtons.forEach(btn => {
-                btn.classList.remove('active');
-                btn.setAttribute('aria-current', 'false');
+    // 카테고리 버튼
+    DOM.categoryButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            DOM.categoryButtons.forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-current', 'false');
             });
-            // 클릭된 버튼 활성화
             this.classList.add('active');
             this.setAttribute('aria-current', 'true');
-            state.currentCategory = this.getAttribute('data-category'); // 현재 카테고리 상태 업데이트
-            localStorage.setItem('currentCategory', state.currentCategory); // localStorage 업데이트
-            searchMessages(); // 메시지 검색 다시 실행
-            scrollToResultsTop(); // 카테고리 변경 시 검색 결과 상단으로 스크롤
+            state.currentCategory = this.getAttribute('data-category');
+            localStorage.setItem('currentCategory', state.currentCategory);
+            searchMessages();
+            scrollToResultsTop();
         });
     });
 
-    // 퀴즈 선택 버튼 클릭 이벤트 리스너
-    if (DOM.quizButtons) {
-        DOM.quizButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                startQuiz(this.getAttribute('data-quiz-type'));
-            });
+    // 퀴즈 버튼
+    DOM.quizButtons?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            startQuiz(this.getAttribute('data-quiz-type'));
         });
-    }
+    });
 
-    // 검색 입력 필드 이벤트 리스너
+    // 검색 입력
     if (DOM.searchInput) {
-        DOM.searchInput.addEventListener('input', renderSearchSuggestions); // 입력 시 제안 렌더링
-        DOM.searchInput.addEventListener('focus', renderSearchSuggestions); // 포커스 시 제안 렌더링
-        // 블러 시 제안 숨기기 (약간의 딜레이를 주어 클릭 이벤트 처리 가능하게 함)
+        DOM.searchInput.addEventListener('input', renderSearchSuggestions);
+        DOM.searchInput.addEventListener('focus', renderSearchSuggestions);
         DOM.searchInput.addEventListener('blur', () => {
             setTimeout(() => {
                 if (DOM.searchSuggestions) {
@@ -1110,191 +787,171 @@ const initializeApp = () => {
                 }
             }, 200);
         });
-        // Enter 키 입력 시 검색 실행
         DOM.searchInput.addEventListener('keydown', e => {
             if (e.key === 'Enter') {
                 searchMessages();
                 if (DOM.searchSuggestions) {
-                    DOM.searchSuggestions.style.display = 'none'; // Enter 시 제안 숨김
+                    DOM.searchSuggestions.style.display = 'none';
                     DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
                 }
             }
         });
     }
 
-    // 검색 제안 목록 키보드 내비게이션
+    // 검색 제안 키보드 네비게이션
     if (DOM.searchSuggestions) {
         DOM.searchSuggestions.addEventListener('keydown', e => {
             const suggestions = DOM.searchSuggestions.querySelectorAll('.suggestion');
             if (suggestions.length === 0) return;
 
-            let currentIndex = -1;
-            // 현재 포커스된 요소가 suggestion 내부에 있는지 확인
-            const activeEl = document.activeElement;
-            if (activeEl && activeEl.closest('.suggestion') === activeEl) {
-                currentIndex = Array.from(suggestions).findIndex(s => s === activeEl);
-            } else if (activeEl && activeEl.closest('.suggestion span') === activeEl) {
-                currentIndex = Array.from(suggestions).findIndex(s => s.querySelector('span') === activeEl);
-            } else if (activeEl && activeEl.closest('.suggestion button') === activeEl) {
-                currentIndex = Array.from(suggestions).findIndex(s => s.querySelector('button') === activeEl);
+            let currentIdx = -1;
+            const active = document.activeElement;
+            
+            if (active?.closest('.suggestion') === active || 
+                active?.closest('.suggestion span')?.parentElement === active.parentElement ||
+                active?.closest('.suggestion button')?.parentElement === active.parentElement) {
+                currentIdx = Array.from(suggestions).findIndex(s => 
+                    s === active || s.querySelector('span') === active || s.querySelector('button') === active
+                );
             }
 
-
-            let nextIndex = currentIndex;
+            let nextIdx = currentIdx;
+            const handleSuggestionAction = (idx) => {
+                if (active?.classList.contains('delete-suggestion') || active?.closest('.delete-suggestion')) {
+                    const text = suggestions[idx].querySelector('span')?.textContent;
+                    const i = state.searchHistory.indexOf(text);
+                    if (i !== -1) deleteSearchHistory(i);
+                } else if (active?.classList.contains('clear-all') || active?.closest('.clear-all')) {
+                    clearSearchHistory();
+                } else {
+                    const text = suggestions[idx].querySelector('span')?.textContent || suggestions[idx].textContent;
+                    selectSuggestion(text);
+                }
+            };
 
             if (e.key === 'ArrowDown') {
-                nextIndex = (currentIndex + 1) % suggestions.length;
-                e.preventDefault(); // 스크롤 방지
+                nextIdx = (currentIdx + 1) % suggestions.length;
+                e.preventDefault();
             } else if (e.key === 'ArrowUp') {
-                nextIndex = (currentIndex - 1 + suggestions.length) % suggestions.length;
-                e.preventDefault(); // 스크롤 방지
+                nextIdx = (currentIdx - 1 + suggestions.length) % suggestions.length;
+                e.preventDefault();
             } else if (e.key === 'Enter') {
-                if (currentIndex >= 0) {
-                    // Enter 키가 눌린 요소에 따라 동작 분기
-                    if (activeEl.classList.contains('delete-suggestion') || activeEl.closest('.delete-suggestion')) {
-                        const textContent = suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent;
-                        const index = state.searchHistory.indexOf(textContent);
-                        if (index !== -1) {
-                            deleteSearchHistory(index);
-                        }
-                    } else if (activeEl.classList.contains('clear-all') || activeEl.closest('.clear-all')) {
-                        clearSearchHistory();
-                    } else {
-                        // 기본적으로 제안 선택
-                        selectSuggestion(suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent);
-                    }
+                if (currentIdx >= 0) {
+                    handleSuggestionAction(currentIdx);
                 } else if (DOM.searchInput.value.trim() !== '') {
-                    // 제안이 포커스되지 않은 상태에서 Enter 입력 시 검색 실행
                     searchMessages();
                     DOM.searchSuggestions.style.display = 'none';
                     DOM.searchSuggestions.setAttribute('aria-hidden', 'true');
                 }
                 e.preventDefault();
-            } else if (e.key === 'Delete' && currentIndex >= 0) {
-                // Delete 키로 검색 제안 삭제 (삭제 버튼이 아닌 제안 자체에서)
-                const textContent = suggestions[currentIndex].querySelector('span')?.textContent || suggestions[currentIndex].textContent;
-                const index = state.searchHistory.indexOf(textContent);
-                if (index !== -1) {
-                    deleteSearchHistory(index);
-                }
+            } else if (e.key === 'Delete' && currentIdx >= 0) {
+                const text = suggestions[currentIdx].querySelector('span')?.textContent;
+                const i = state.searchHistory.indexOf(text);
+                if (i !== -1) deleteSearchHistory(i);
                 e.preventDefault();
             }
 
-            if (nextIndex !== currentIndex) {
-                suggestions[nextIndex].focus(); // 다음/이전 제안으로 포커스 이동
+            if (nextIdx !== currentIdx) {
+                suggestions[nextIdx].focus();
             }
         });
     }
 
-
-    // 검색 결과 항목 키보드 내비게이션 (상하 방향키)
+    // 검색 결과 키보드 네비게이션
     if (DOM.searchResults) {
         DOM.searchResults.addEventListener('keydown', e => {
             const results = DOM.searchResults.querySelectorAll('.result-item');
             if (results.length === 0) return;
 
-            const currentIndex = Array.from(results).findIndex(r => r === document.activeElement);
-            let nextIndex = currentIndex;
+            const currentIdx = Array.from(results).findIndex(r => r === document.activeElement);
+            let nextIdx = currentIdx;
 
             if (e.key === 'ArrowDown') {
-                nextIndex = (currentIndex + 1) % results.length;
+                nextIdx = (currentIdx + 1) % results.length;
                 e.preventDefault();
             } else if (e.key === 'ArrowUp') {
-                nextIndex = (currentIndex - 1 + results.length) % results.length;
+                nextIdx = (currentIdx - 1 + results.length) % results.length;
                 e.preventDefault();
-            } else if (e.key === 'Enter' && currentIndex >= 0) {
-                // Enter 키로 검색 결과 항목 내의 첫 번째 버튼 (복사하기 버튼) 클릭
-                const copyButton = results[currentIndex].querySelector('.copy-button');
-                if (copyButton) {
-                    copyButton.click();
-                    e.preventDefault();
-                }
+            } else if (e.key === 'Enter' && currentIdx >= 0) {
+                results[currentIdx].querySelector('.copy-button')?.click();
+                e.preventDefault();
             }
 
-            if (nextIndex !== currentIndex) {
-                results[nextIndex].focus();
+            if (nextIdx !== currentIdx) {
+                results[nextIdx].focus();
             }
         });
     }
 
-    // 스크롤 이벤트 리스너 (맨 위로 버튼 표시/숨김)
+    // 스크롤 이벤트 (맨 위로 버튼)
     let scrollTimeout;
     window.addEventListener('scroll', () => {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
-            if (DOM.backToTop) {
-                // 스크롤 위치에 따라 버튼 표시 여부 결정
-                const shouldShow = window.scrollY > 300;
-                DOM.backToTop.classList.toggle('show', shouldShow);
-                DOM.backToTop.setAttribute('aria-hidden', !shouldShow);
-            }
-        }, 100); // 디바운스 적용
+            const show = window.scrollY > 300;
+            DOM.backToTop?.classList.toggle('show', show);
+            DOM.backToTop?.setAttribute('aria-hidden', !show);
+        }, 100);
     });
 
-    // 전역 키보드 단축키 설정
+    // 전역 단축키
     document.addEventListener('keydown', e => {
-        // Ctrl + /: 검색 입력 필드 포커스
         if (e.ctrlKey && e.key === '/') {
             e.preventDefault();
             DOM.searchInput?.focus();
-        }
-        // Ctrl + Enter: 검색 실행
-        if (e.ctrlKey && e.key === 'Enter') {
+        } else if (e.ctrlKey && e.key === 'Enter') {
             e.preventDefault();
             searchMessages();
-        }
-        // Ctrl + Backspace: 검색 초기화
-        if (e.ctrlKey && e.key === 'Backspace') {
+        } else if (e.ctrlKey && e.key === 'Backspace') {
             e.preventDefault();
             clearSearch();
         }
     });
 
-    // 모든 버튼에 Enter 또는 Space 키로 클릭 이벤트 발생하도록 처리 (접근성)
-    document.querySelectorAll('button').forEach(element => {
-        element.addEventListener('keydown', e => {
+    // 버튼 키보드 접근성
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                element.click();
+                btn.click();
             }
         });
     });
 
-    // 검색 초기화 버튼 클릭 이벤트
-    if (DOM.clearSearch) {
-        DOM.clearSearch.addEventListener('click', clearSearch);
+    // 개별 버튼 이벤트
+    DOM.clearSearch?.addEventListener('click', clearSearch);
+    DOM.randomMessageButton?.addEventListener('click', generateRandomMessage);
+    DOM.backToTop?.addEventListener('click', scrollToTop);
+
+    // 정렬 변경
+    DOM.sortSelect?.addEventListener('change', e => {
+        state.currentSortOrder = e.target.value;
+        searchMessages();
+    });
+};
+
+/**
+ * 애플리케이션 초기화
+ */
+const initializeApp = () => {
+    DOM = getDOMElements();
+
+    const initialBtn = document.querySelector(`.category-container button[data-category="${state.currentCategory}"]`);
+    if (initialBtn) {
+        initialBtn.classList.add('active');
+        initialBtn.setAttribute('aria-current', 'true');
     }
 
-    // **정렬 드롭다운 변경 이벤트**
-    if (DOM.sortSelect) {
-        DOM.sortSelect.addEventListener('change', (event) => {
-            state.currentSortOrder = event.target.value;
-            searchMessages(); // 정렬 순서 변경 시 메시지 재검색
-        });
-    }
+    attachEventListeners();
 
-    // **랜덤 말씀 보기 버튼 클릭 이벤트**
-    if (DOM.randomMessageButton) {
-        DOM.randomMessageButton.addEventListener('click', generateRandomMessage);
-    }
+    const theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
 
-    // 로컬 스토리지에서 테마 설정 로드 및 적용
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    } else {
-        // 기본 테마 설정 (로컬 스토리지에 값이 없을 경우)
-        document.documentElement.setAttribute('data-theme', 'light');
-    }
-
-    // 애플리케이션 시작 시 기본 페이지 표시
     showPage(CONSTANTS.PAGES.HOME);
 
-    // ✅ 시작 시 세션 스토리지에 새 말씀이 남아있다면 홈 페이지에 버튼 렌더링
     if (state.newlyAddedMessages.length > 0) {
         renderNewMessageButton(state.newlyAddedMessages.length);
     }
 };
 
-// DOMContentLoaded 이벤트 발생 시 initializeApp 함수 실행
 document.addEventListener('DOMContentLoaded', initializeApp);
